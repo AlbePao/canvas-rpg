@@ -1,0 +1,35 @@
+class Resources {
+  // Every image we want to download
+  toLoad = {
+    sky: '/sprites/sky.png',
+    ground: '/sprites/ground.png',
+    hero: '/sprites/hero.png',
+    shadow: '/sprites/shadow.png',
+  } as const;
+
+  // A bucket to keep all of our images
+  images: Record<
+    string,
+    {
+      image: HTMLImageElement;
+      isLoaded: boolean;
+    }
+  > = {};
+
+  constructor() {
+    Object.keys(this.toLoad).forEach((key) => {
+      const imageKey = key as keyof typeof this.toLoad;
+      const img = new Image();
+      img.src = this.toLoad[imageKey];
+      this.images[imageKey] = {
+        image: img,
+        isLoaded: false,
+      };
+      img.onload = () => {
+        this.images[imageKey].isLoaded = true;
+      };
+    });
+  }
+}
+
+export const resources = new Resources();
