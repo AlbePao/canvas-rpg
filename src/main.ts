@@ -1,4 +1,5 @@
 import { GameLoop } from './GameLoop';
+import { Input } from './Input';
 import { resources } from './Resource';
 import { Sprite } from './Sprite';
 import './style.css';
@@ -31,9 +32,25 @@ const shadow = new Sprite({
 });
 
 const heroPos = new Vector2(16 * 6, 16 * 5);
+const input = new Input();
 
 const update = () => {
-  // Updating entities in the game
+  if (input.direction === 'DOWN') {
+    heroPos.y += 1;
+    hero.frame = 0;
+  }
+  if (input.direction === 'UP') {
+    heroPos.y -= 1;
+    hero.frame = 6;
+  }
+  if (input.direction === 'LEFT') {
+    heroPos.x -= 1;
+    hero.frame = 9;
+  }
+  if (input.direction === 'RIGHT') {
+    heroPos.x += 1;
+    hero.frame = 3;
+  }
 };
 
 const draw = () => {
