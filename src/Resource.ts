@@ -1,20 +1,19 @@
+export interface Resource {
+  image: HTMLImageElement;
+  isLoaded: boolean;
+}
+
 class Resources {
   // Every image we want to download
   toLoad = {
     sky: '/sprites/sky.png',
     ground: '/sprites/ground.png',
-    hero: '/sprites/hero.png',
+    hero: '/sprites/hero-sheet.png',
     shadow: '/sprites/shadow.png',
   } as const;
 
   // A bucket to keep all of our images
-  images: Record<
-    string,
-    {
-      image: HTMLImageElement;
-      isLoaded: boolean;
-    }
-  > = {};
+  images: Record<string, Resource> = {};
 
   constructor() {
     Object.keys(this.toLoad).forEach((key) => {
