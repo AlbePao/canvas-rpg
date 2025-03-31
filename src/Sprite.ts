@@ -1,3 +1,4 @@
+import { Animations } from './Animations';
 import { Resource } from './Resource';
 import { Vector2 } from './Vector2';
 
@@ -9,6 +10,7 @@ export type SpriteConfig = {
   frame?: number;
   scale?: number;
   position?: Vector2;
+  animations?: Animations;
 };
 
 export class Sprite {
@@ -20,6 +22,7 @@ export class Sprite {
   frameMap = new Map();
   scale: number;
   position: Vector2;
+  animations: Animations | null;
 
   constructor({
     resource, // image we want to draw,
@@ -29,6 +32,7 @@ export class Sprite {
     frame, // which frame we want to show
     scale, // how large to draw this image
     position, // where to draw it (top left corner)
+    animations,
   }: SpriteConfig) {
     this.resource = resource;
     this.frameSize = frameSize ?? new Vector2(16, 16);
@@ -37,6 +41,7 @@ export class Sprite {
     this.frame = frame ?? 0;
     this.scale = scale ?? 1;
     this.position = position ?? new Vector2(0, 0);
+    this.animations = animations ?? null;
     this.buildFrameMap();
   }
 
@@ -48,6 +53,15 @@ export class Sprite {
         frameCount++;
       }
     }
+  }
+
+  step(delta: number) {
+    if (!this.animations) {
+      return;
+    }
+
+    this.animations.step(delta);
+    this.frame = this.animations.frame;
   }
 
   drawImage(ctx: CanvasRenderingContext2D, x: number, y: number) {
