@@ -1,7 +1,7 @@
-import { Sprite } from '../Sprite';
+import { GameObject } from '../GameObject';
 import { Vector2 } from '../Vector2';
 
-export function moveTowards(person: Sprite, destinationPosition: Vector2, speed: number) {
+export function moveTowards(person: GameObject, destinationPosition: Vector2, speed: number) {
   let distanceTravelX = destinationPosition.x - person.position.x;
   let distanceTravelY = destinationPosition.y - person.position.y;
 

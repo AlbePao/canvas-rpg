@@ -1,4 +1,5 @@
 import { Animations } from './Animations';
+import { GameObject } from './GameObject';
 import { Resource } from './Resource';
 import { Vector2 } from './Vector2';
 
@@ -13,7 +14,7 @@ export type SpriteConfig = {
   animations?: Animations;
 };
 
-export class Sprite {
+export class Sprite extends GameObject {
   resource: Resource;
   frameSize: Vector2;
   hFrames: number;
@@ -34,6 +35,7 @@ export class Sprite {
     position, // where to draw it (top left corner)
     animations,
   }: SpriteConfig) {
+    super({});
     this.resource = resource;
     this.frameSize = frameSize ?? new Vector2(16, 16);
     this.hFrames = hFrames ?? 1;
