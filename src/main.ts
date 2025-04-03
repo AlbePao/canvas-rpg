@@ -1,3 +1,4 @@
+import { events } from './Events';
 import { GameLoop } from './GameLoop';
 import { GameObject } from './GameObject';
 import { gridCells } from './helpers/grid';
@@ -36,6 +37,10 @@ mainScene.addChild(hero);
 
 // Add an input class the the main scene
 mainScene.input = new Input();
+
+events.on('HERO_POSITION', mainScene, (heroPosition) => {
+  console.log('HERO MOVED!', heroPosition);
+});
 
 // Establish update and draw loops
 const update = (delta: number) => {
