@@ -4,6 +4,7 @@ import { GameObject } from './GameObject';
 import { gridCells } from './helpers/grid';
 import { Input } from './Input';
 import { Hero } from './objects/Hero/Hero';
+import { Inventory } from './objects/Inventory/Inventory';
 import { Rod } from './objects/Rod/Rod';
 import { resources } from './Resource';
 import { Sprite } from './Sprite';
@@ -41,6 +42,8 @@ mainScene.addChild(camera);
 const rod = new Rod(gridCells(7), gridCells(6));
 mainScene.addChild(rod);
 
+const inventory = new Inventory();
+
 // Add an input class the the main scene
 mainScene.input = new Input();
 
@@ -53,6 +56,7 @@ const draw = () => {
   // Clear anything stale
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+  // Draw the sky
   skySprite.drawImage(ctx, 0, 0);
 
   // Save the current state
@@ -65,6 +69,9 @@ const draw = () => {
 
   // Restore to original state
   ctx.restore();
+
+  // Draw anything above the game world
+  inventory.draw(ctx, 0, 0);
 };
 
 // Start the game
