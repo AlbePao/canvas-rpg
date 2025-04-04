@@ -1,5 +1,4 @@
 import { events } from './Events';
-import { Input } from './Input';
 import { Vector2 } from './Vector2';
 
 export type GameObjectConfig = {
@@ -9,8 +8,6 @@ export type GameObjectConfig = {
 export class GameObject {
   position: Vector2;
   children: GameObject[] = [];
-  // TODO: deal with input attribute
-  input?: Input;
   parent: GameObject | null = null;
   hasReadyBeenCalled = false;
 

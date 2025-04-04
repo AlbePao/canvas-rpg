@@ -5,10 +5,10 @@ import { GameObject } from '../../GameObject';
 import { isSpaceFree } from '../../helpers/grid';
 import { moveTowards } from '../../helpers/moveTowards';
 import { Directions } from '../../Input';
-import { walls } from '../../levels/level1';
 import { resources } from '../../Resource';
 import { Sprite } from '../../Sprite';
 import { Vector2 } from '../../Vector2';
+import { Main } from '../Main/Main';
 import { ItemData } from '../Rod/Rod';
 import {
   PICK_UP_DOWN,
@@ -103,11 +103,11 @@ export class Hero extends GameObject {
   }
 
   tryMove(root: GameObject) {
-    const { input } = root;
-
-    if (!input) {
+    if (!(root instanceof Main)) {
       return;
     }
+
+    const { input, level } = root;
 
     if (!input.direction) {
       if (this.facingDirection === 'LEFT') {
@@ -153,7 +153,7 @@ export class Hero extends GameObject {
     this.facingDirection = input.direction ?? this.facingDirection;
 
     // Validation that the next destination is free
-    if (isSpaceFree(walls, nextX, nextY)) {
+    if (level && isSpaceFree(level.walls, nextX, nextY)) {
       this.destinationPosition.x = nextX;
       this.destinationPosition.y = nextY;
     }
