@@ -1,8 +1,10 @@
 import { Camera } from './Camera';
+import { events } from './Events';
 import { GameLoop } from './GameLoop';
 import { GameObject } from './GameObject';
 import { gridCells } from './helpers/grid';
 import { Input } from './Input';
+import { Exit } from './objects/Exit/Exit';
 import { Hero } from './objects/Hero/Hero';
 import { Inventory } from './objects/Inventory/Inventory';
 import { Rod } from './objects/Rod/Rod';
@@ -33,6 +35,9 @@ const groundSprite = new Sprite({
 });
 mainScene.addChild(groundSprite);
 
+const exit = new Exit(gridCells(6), gridCells(3));
+mainScene.addChild(exit);
+
 const hero = new Hero(gridCells(6), gridCells(5));
 mainScene.addChild(hero);
 
@@ -46,6 +51,10 @@ const inventory = new Inventory();
 
 // Add an input class the the main scene
 mainScene.input = new Input();
+
+events.on('HERO_EXITS', mainScene, () => {
+  console.log('change the map...');
+});
 
 // Establish update and draw loops
 const update = (delta: number) => {

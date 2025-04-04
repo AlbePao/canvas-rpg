@@ -6,11 +6,16 @@ export interface Resource {
 class Resources {
   // Every image we want to download
   toLoad = {
-    sky: '/sprites/sky.png',
-    ground: '/sprites/ground.png',
     hero: '/sprites/hero-sheet.png',
     shadow: '/sprites/shadow.png',
     rod: '/sprites/rod.png',
+    exit: '/sprites/exit.png',
+    // Outdoor
+    sky: '/sprites/sky.png',
+    ground: '/sprites/ground.png',
+    // Cave
+    cave: '/sprites/cave.png',
+    caveGround: '/sprites/cave-ground.png',
   } as const;
 
   // A bucket to keep all of our images

@@ -13,7 +13,7 @@ class Events {
   nextId = 0;
 
   // emit event
-  emit<T>(eventName: string, value: T) {
+  emit<T>(eventName: string, value?: T) {
     this.callbacks.forEach((stored) => {
       if (stored.eventName === eventName) {
         stored.callback(value);
