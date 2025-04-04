@@ -1,10 +1,10 @@
 import { GameObject } from './GameObject';
 
-interface EventCallback {
+interface EventCallback<T = any> {
   id: number;
   eventName: string;
   caller: GameObject;
-  callback: (value: unknown) => void;
+  callback: (value: T) => void;
 }
 
 // TODO: maybe treat as singleton?
@@ -22,7 +22,7 @@ class Events {
   }
 
   // subscribe to something happening
-  on(eventName: string, caller: any, callback: (value: unknown) => void) {
+  on<T>(eventName: string, caller: GameObject, callback: (value: T) => void) {
     this.nextId += 1;
     this.callbacks.push({
       id: this.nextId,
