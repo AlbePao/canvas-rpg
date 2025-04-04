@@ -12,6 +12,7 @@ export class GameObject {
   // TODO: deal with input attribute
   input?: Input;
   parent: GameObject | null = null;
+  hasReadyBeenCalled = false;
 
   constructor({ position }: GameObjectConfig) {
     this.position = position ?? new Vector2(0, 0);
@@ -21,8 +22,19 @@ export class GameObject {
     // Call updates on all children first
     this.children.forEach((child) => child.stepEntry(delta, root));
 
+    // Call read on the first frame
+    if (!this.hasReadyBeenCalled) {
+      this.hasReadyBeenCalled = true;
+      this.ready();
+    }
+
     // Call any implemented step code
     this.step(delta, root);
+  }
+
+  // Called before the first 'step'
+  ready() {
+    //
   }
 
   // Called once every frame
