@@ -1,3 +1,4 @@
+import { events } from './Events';
 import { Input } from './Input';
 import { Vector2 } from './Vector2';
 
@@ -8,7 +9,9 @@ export type GameObjectConfig = {
 export class GameObject {
   position: Vector2;
   children: GameObject[] = [];
+  // TODO: deal with input attribute
   input?: Input;
+  parent: GameObject | null = null;
 
   constructor({ position }: GameObjectConfig) {
     this.position = position ?? new Vector2(0, 0);
@@ -43,12 +46,20 @@ export class GameObject {
     // ...
   }
 
+  // Remove from the tree
+  destroy() {
+    this.children.forEach((child) => child.destroy());
+    this.parent?.removeChild(this);
+  }
+
   // Other Game Objects are nestable inside thi one
   addChild(gameObject: GameObject) {
+    gameObject.parent = this;
     this.children.push(gameObject);
   }
 
   removeChild(gameObject: GameObject) {
+    events.unsubscribe(gameObject);
     this.children = this.children.filter((g) => gameObject !== g);
   }
 }

@@ -4,6 +4,7 @@ import { GameObject } from './GameObject';
 import { gridCells } from './helpers/grid';
 import { Input } from './Input';
 import { Hero } from './objects/Hero/Hero';
+import { Rod } from './objects/Rod/Rod';
 import { resources } from './Resource';
 import { Sprite } from './Sprite';
 import './style.css';
@@ -36,6 +37,9 @@ mainScene.addChild(hero);
 
 const camera = new Camera();
 mainScene.addChild(camera);
+
+const rod = new Rod(gridCells(7), gridCells(6));
+mainScene.addChild(rod);
 
 // Add an input class the the main scene
 mainScene.input = new Input();

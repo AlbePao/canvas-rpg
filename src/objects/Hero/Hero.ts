@@ -9,7 +9,9 @@ import { walls } from '../../levels/level1';
 import { resources } from '../../Resource';
 import { Sprite } from '../../Sprite';
 import { Vector2 } from '../../Vector2';
+import { ItemData } from '../Rod/Rod';
 import {
+  PICK_UP_DOWN,
   STAND_DOWN,
   STAND_LEFT,
   STAND_RIGHT,
@@ -26,6 +28,8 @@ export class Hero extends GameObject {
   destinationPosition: Vector2;
   lastX?: number;
   lastY?: number;
+  itemPickUpTime = 0;
+  itemPickUpShell: GameObject | null = null;
 
   constructor(x: number, y: number) {
     super({
@@ -46,6 +50,7 @@ export class Hero extends GameObject {
       vFrames: 8,
       frame: 1,
       position: new Vector2(-8, -20),
+      // TODO: enforce animations keys names with union type
       animations: new Animations({
         walkDown: new FrameIndexPattern(WALK_DOWN),
         walkUp: new FrameIndexPattern(WALK_UP),
@@ -55,14 +60,25 @@ export class Hero extends GameObject {
         standUp: new FrameIndexPattern(STAND_UP),
         standLeft: new FrameIndexPattern(STAND_LEFT),
         standRight: new FrameIndexPattern(STAND_RIGHT),
+        pickUpDown: new FrameIndexPattern(PICK_UP_DOWN),
       }),
     });
     this.addChild(this.body);
 
     this.destinationPosition = this.position.duplicate();
+
+    events.on<ItemData>('HERO_PICKS_UP_ITEM', this, (data) => {
+      this.onPickUpItem(data);
+    });
   }
 
   step(delta: number, root: GameObject) {
+    // Lock movement if celebrating an item pickup
+    if (this.itemPickUpTime > 0) {
+      this.workOnItemPickUp(delta);
+      return;
+    }
+
     const distance = moveTowards(this, this.destinationPosition, 1);
     const hasArrived = distance <= 1;
 
@@ -140,5 +156,35 @@ export class Hero extends GameObject {
       this.destinationPosition.x = nextX;
       this.destinationPosition.y = nextY;
     }
+  }
+
+  onPickUpItem(data: ItemData) {
+    const { image, position } = data;
+    // Make sure we land right on the item
+    this.destinationPosition = position.duplicate();
+
+    // Start the pickup animation
+    this.itemPickUpTime = 500; // ms
+    this.itemPickUpShell = new GameObject({});
+    this.itemPickUpShell.addChild(
+      new Sprite({
+        resource: image,
+        position: new Vector2(0, -18),
+      }),
+    );
+    this.addChild(this.itemPickUpShell);
+  }
+
+  workOnItemPickUp(delta: number) {
+    this.itemPickUpTime -= delta;
+    this.body.animations?.play('pickUpDown');
+    if (this.itemPickUpTime <= 0) {
+      this.itemPickUpShell?.destroy();
+    }
+
+    // TODO: check for state machine
+    // this.state = 'PICKING_UP_ITEM'
+    // or
+    // this.state = 'IS_ATTACKING'
   }
 }
