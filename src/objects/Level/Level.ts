@@ -12,6 +12,7 @@ export class Level extends GameObject {
   background: Sprite | null = null;
   walls: Walls = new Set<WallCoords>();
 
+  // TODO: handle hero start position here
   constructor() {
     super({});
   }

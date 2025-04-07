@@ -10,6 +10,8 @@ export class GameObject {
   children: GameObject[] = [];
   parent: GameObject | null = null;
   hasReadyBeenCalled = false;
+  isSolid = false;
+  drawLayer: 'FLOOR' | null = null;
 
   constructor({ position }: GameObjectConfig) {
     this.position = position ?? new Vector2(0, 0);
@@ -48,7 +50,17 @@ export class GameObject {
     this.drawImage(ctx, drawPosX, drawPosY);
 
     // Pass on children
-    this.children.forEach((child) => child.draw(ctx, drawPosX, drawPosY));
+    this.getDrawChildrenOrdered().forEach((child) => child.draw(ctx, drawPosX, drawPosY));
+  }
+
+  getDrawChildrenOrdered() {
+    return [...this.children].sort((a, b) => {
+      if (b.drawLayer === 'FLOOR') {
+        return 1;
+      }
+
+      return a.position.y > b.position.y ? 1 : -1;
+    });
   }
 
   drawImage(ctx: CanvasRenderingContext2D, x: number, y: number) {
