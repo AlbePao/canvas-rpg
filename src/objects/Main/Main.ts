@@ -4,12 +4,14 @@ import { GameObject } from '../../GameObject';
 import { Input } from '../../Input';
 import { Inventory } from '../Inventory/Inventory';
 import { Level } from '../Level/Level';
+import { TextBox } from '../TextBox/TextBox';
 
 export class Main extends GameObject {
   level: Level | null = null;
   input = new Input();
   camera = new Camera();
   inventory = new Inventory();
+  textBox = new TextBox();
 
   constructor() {
     super({});
@@ -36,5 +38,6 @@ export class Main extends GameObject {
 
   drawForeground(ctx: CanvasRenderingContext2D) {
     this.inventory.draw(ctx, this.inventory.position.x, this.inventory.position.y);
+    this.textBox.draw(ctx, 0, 0);
   }
 }

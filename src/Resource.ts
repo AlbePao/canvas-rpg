@@ -18,6 +18,8 @@ class Resources {
     caveGround: '/sprites/cave-ground.png',
     // NPCs
     knight: '/sprites/knight-sheet-1.png',
+    // HUD
+    textBox: '/sprites/text-box.png',
   } as const;
 
   // A bucket to keep all of our images
