@@ -21,6 +21,7 @@ class Resources {
     // HUD
     textBox: '/sprites/text-box.png',
     fontWhite: '/sprites/sprite-font-white.png',
+    portraits: '/sprites/portraits-sheet.png',
   } as const;
 
   // A bucket to keep all of our images

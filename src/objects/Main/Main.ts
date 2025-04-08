@@ -4,6 +4,7 @@ import { GameObject } from '../../GameObject';
 import { Input } from '../../Input';
 import { Inventory } from '../Inventory/Inventory';
 import { Level } from '../Level/Level';
+import { Npc } from '../Npc/Npc';
 import { SpriteTextString } from '../SpriteTextString/SpriteTextString';
 
 export class Main extends GameObject {
@@ -25,17 +26,23 @@ export class Main extends GameObject {
     });
 
     // Launch text box handler
-    events.on('HERO_REQUESTS_ACTION', this, () => {
-      const textBox = new SpriteTextString('Howdy, friend!');
-      this.addChild(textBox);
+    events.on<GameObject>('HERO_REQUESTS_ACTION', this, (withObject) => {
+      if (withObject instanceof Npc) {
+        const content = withObject.getContent();
+        const textBox = new SpriteTextString({
+          portraitFrame: content.portraitFrame,
+          string: content.string,
+        });
+        this.addChild(textBox);
 
-      events.emit('START_TEXT_BOX');
+        events.emit('START_TEXT_BOX');
 
-      // unsubscribe from this text box after it's destroyed
-      const endingSub = events.on('END_TEXT_BOX', this, () => {
-        textBox.destroy();
-        events.off(endingSub);
-      });
+        // unsubscribe from this text box after it's destroyed
+        const endingSub = events.on('END_TEXT_BOX', this, () => {
+          textBox.destroy();
+          events.off(endingSub);
+        });
+      }
     });
   }
 

@@ -3,14 +3,26 @@ import { resources } from '../../Resource';
 import { Sprite } from '../../Sprite';
 import { Vector2 } from '../../Vector2';
 
+export type NpcTextConfig = {
+  portraitFrame: number;
+  content: string;
+};
+
 export class Npc extends GameObject {
-  constructor(x: number, y: number) {
+  textContent: string;
+  textPortraitFrame: number;
+
+  constructor(x: number, y: number, textConfig: NpcTextConfig) {
     super({
       position: new Vector2(x, y),
     });
 
     // Opt into being solid
     this.isSolid = true;
+
+    // Say something when talking
+    this.textContent = textConfig.content;
+    this.textPortraitFrame = textConfig.portraitFrame;
 
     // Shadow under feet
     const shadow = new Sprite({
@@ -29,5 +41,13 @@ export class Npc extends GameObject {
       position: new Vector2(-8, -20),
     });
     this.addChild(body);
+  }
+
+  getContent() {
+    // Maybe expand with story flag logic, etc
+    return {
+      portraitFrame: this.textPortraitFrame,
+      string: this.textContent,
+    };
   }
 }

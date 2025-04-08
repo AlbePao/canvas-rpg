@@ -16,7 +16,13 @@ type Char = {
   sprite: Sprite;
 };
 
+export type SpriteTextStringConfig = {
+  portraitFrame?: number;
+  string: string;
+};
+
 export class SpriteTextString extends GameObject {
+  portrait: Sprite;
   backdrop = new Sprite({
     resource: resources.images.textBox,
     frameSize: new Vector2(256, 64),
@@ -30,16 +36,17 @@ export class SpriteTextString extends GameObject {
   finalIndex = 0;
   timeUntilNextShow = this.textSpeed;
 
-  constructor(str?: string) {
+  constructor(config: SpriteTextStringConfig) {
     super({
       position: new Vector2(32, 112),
     });
 
+    // Draw on top layer
     this.drawLayer = 'HUD';
 
-    const content = str ?? 'Default text';
+    const content = config.string;
 
-    // Create an array of words
+    // Create an array of words (because it helps with line wrapping later)
     this.words = content.split(' ').map((word) => {
       // We need to know how wide this word is
       let wordWidth = 0;
@@ -70,6 +77,13 @@ export class SpriteTextString extends GameObject {
     });
 
     this.finalIndex = this.words.reduce((acc, word) => acc + word.chars.length, 0);
+
+    // Create a portrait
+    this.portrait = new Sprite({
+      resource: resources.images.portraits,
+      hFrames: 4,
+      frame: config.portraitFrame ?? 0,
+    });
   }
 
   step(delta: number, root: Main): void {
@@ -104,9 +118,12 @@ export class SpriteTextString extends GameObject {
     // Draw the backdrop
     this.backdrop.drawImage(ctx, drawPosX, drawPosY);
 
+    // Draw the portrait
+    this.portrait.drawImage(ctx, drawPosX + 6, drawPosY + 6);
+
     // Configurations options
-    const PADDING_LEFT = 7;
-    const PADDING_TOP = 7;
+    const PADDING_LEFT = 27;
+    const PADDING_TOP = 9;
     const LINE_WIDTH_MAX = 240;
     const LINE_VERTICAL_HEIGHT = 14;
 
