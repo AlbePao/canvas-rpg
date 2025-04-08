@@ -5,13 +5,15 @@ export type GameObjectConfig = {
   position?: Vector2;
 };
 
+type GameObjectDrawLayer = 'HUD' | 'FLOOR' | null;
+
 export class GameObject {
   position: Vector2;
   children: GameObject[] = [];
   parent: GameObject | null = null;
   hasReadyBeenCalled = false;
   isSolid = false;
-  drawLayer: 'FLOOR' | null = null;
+  drawLayer: GameObjectDrawLayer = null;
 
   constructor({ position }: GameObjectConfig) {
     this.position = position ?? new Vector2(0, 0);

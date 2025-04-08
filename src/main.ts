@@ -32,7 +32,8 @@ const draw = () => {
     ctx.translate(mainScene.camera.position.x, mainScene.camera.position.y);
   }
 
-  mainScene.draw(ctx, 0, 0);
+  // Draw objects in the mounted scene
+  mainScene.drawObjects(ctx);
 
   // Restore to original state
   ctx.restore();

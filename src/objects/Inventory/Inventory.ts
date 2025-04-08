@@ -28,6 +28,8 @@ export class Inventory extends GameObject {
       position: new Vector2(0, 1),
     });
 
+    this.drawLayer = 'HUD';
+
     // React to hero picking up an item
     events.on<ItemData>('HERO_PICKS_UP_ITEM', this, (data) => {
       this.nextId += 1;

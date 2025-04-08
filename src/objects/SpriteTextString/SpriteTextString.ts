@@ -22,10 +22,17 @@ export class SpriteTextString extends GameObject {
 
   words: Word[];
 
+  // Typewriter
+  showingIndex = 0;
+  textSpeed = 80;
+  timeUntilNextShow = this.textSpeed;
+
   constructor(str?: string) {
     super({
       position: new Vector2(32, 112),
     });
+
+    this.drawLayer = 'HUD';
 
     const content = str ?? 'Default text';
 
@@ -60,6 +67,18 @@ export class SpriteTextString extends GameObject {
     });
   }
 
+  step(delta: number, root: GameObject): void {
+    this.timeUntilNextShow -= delta;
+
+    if (this.timeUntilNextShow <= 0) {
+      // Increase amount of characters that are drawn
+      this.showingIndex += 1;
+
+      // Reset time counter for next character
+      this.timeUntilNextShow = this.textSpeed;
+    }
+  }
+
   drawImage(ctx: CanvasRenderingContext2D, drawPosX: number, drawPosY: number): void {
     // Draw the backdrop
     this.backdrop.drawImage(ctx, drawPosX, drawPosY);
@@ -73,6 +92,7 @@ export class SpriteTextString extends GameObject {
     // Initial position of cursor
     let cursorX = drawPosX + PADDING_LEFT;
     let cursorY = drawPosY + PADDING_TOP;
+    let currentShowingIndex = 0;
 
     this.words.forEach((word) => {
       // Decide if we can fit this next word on this next line
@@ -85,6 +105,11 @@ export class SpriteTextString extends GameObject {
 
       // Draw this whole segment of text
       word.chars.forEach((char) => {
+        // Stop here if we should not yet show the following character
+        if (currentShowingIndex > this.showingIndex) {
+          return;
+        }
+
         const { sprite, width } = char;
 
         const widthCharOffset = cursorX - 5;
@@ -95,6 +120,9 @@ export class SpriteTextString extends GameObject {
 
         // Plus 1px  between character
         cursorX += 1;
+
+        // Uptick the index we are counting
+        currentShowingIndex += 1;
       });
 
       // Move the cursor over
