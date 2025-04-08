@@ -20,6 +20,7 @@ class Resources {
     knight: '/sprites/knight-sheet-1.png',
     // HUD
     textBox: '/sprites/text-box.png',
+    fontWhite: '/sprites/sprite-font-white.png',
   } as const;
 
   // A bucket to keep all of our images

@@ -4,14 +4,14 @@ import { GameObject } from '../../GameObject';
 import { Input } from '../../Input';
 import { Inventory } from '../Inventory/Inventory';
 import { Level } from '../Level/Level';
-import { TextBox } from '../TextBox/TextBox';
+import { SpriteTextString } from '../SpriteTextString/SpriteTextString';
 
 export class Main extends GameObject {
   level: Level | null = null;
   input = new Input();
   camera = new Camera();
   inventory = new Inventory();
-  textBox = new TextBox();
+  textBox = new SpriteTextString('Hello! This is the content! This is the content! This is the content!');
 
   constructor() {
     super({});
