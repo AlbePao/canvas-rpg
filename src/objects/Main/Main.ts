@@ -2,6 +2,7 @@ import { Camera } from '../../Camera';
 import { events } from '../../Events';
 import { GameObject } from '../../GameObject';
 import { Input } from '../../Input';
+import { storyFlags } from '../../StoryFlags';
 import { Inventory } from '../Inventory/Inventory';
 import { Level } from '../Level/Level';
 import { Npc } from '../Npc/Npc';
@@ -29,6 +30,17 @@ export class Main extends GameObject {
     events.on<GameObject>('HERO_REQUESTS_ACTION', this, (withObject) => {
       if (withObject instanceof Npc) {
         const content = withObject.getContent();
+
+        if (!content) {
+          return;
+        }
+
+        // Potentially add a story flag
+        if (content.addsFlag) {
+          storyFlags.add(content.addsFlag);
+        }
+
+        // Show the textbox
         const textBox = new SpriteTextString({
           portraitFrame: content.portraitFrame,
           string: content.string,

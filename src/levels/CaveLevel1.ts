@@ -7,6 +7,7 @@ import { Npc } from '../objects/Npc/Npc';
 import { Rod } from '../objects/Rod/Rod';
 import { resources } from '../Resource';
 import { Sprite } from '../Sprite';
+import { TALKED_TO_A, TALKED_TO_B } from '../StoryFlags';
 import { Vector2 } from '../Vector2';
 import { OutdoorLevel1 } from './OutdoorLevel1';
 
@@ -38,13 +39,34 @@ export class CaveLevel1 extends Level {
     this.addChild(rod);
 
     const npc1 = new Npc(gridCells(5), gridCells(5), {
-      content: 'I am the first NPC!',
+      content: [
+        {
+          string: "I just can't stand that guy.",
+          requires: [TALKED_TO_B],
+          bypass: [TALKED_TO_A],
+          addsFlag: TALKED_TO_A,
+        },
+        {
+          string: 'He is just the worst!',
+          requires: [TALKED_TO_A],
+        },
+        {
+          string: 'Grumble grumble. Another day at work',
+          requires: [],
+        },
+      ],
       portraitFrame: 1,
     });
     this.addChild(npc1);
 
     const npc2 = new Npc(gridCells(8), gridCells(5), {
-      content: 'Ahhh I am another!',
+      content: [
+        {
+          string: 'What a beautiful day to work in the cave!',
+          requires: [],
+          addsFlag: TALKED_TO_B,
+        },
+      ],
       portraitFrame: 0,
     });
     this.addChild(npc2);

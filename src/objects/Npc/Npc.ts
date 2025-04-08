@@ -1,15 +1,23 @@
 import { GameObject } from '../../GameObject';
 import { resources } from '../../Resource';
 import { Sprite } from '../../Sprite';
+import { storyFlags } from '../../StoryFlags';
 import { Vector2 } from '../../Vector2';
 
 export type NpcTextConfig = {
   portraitFrame: number;
-  content: string;
+  content: NpcContent[];
+};
+
+export type NpcContent = {
+  string: string;
+  requires: string[];
+  bypass?: string[];
+  addsFlag?: string;
 };
 
 export class Npc extends GameObject {
-  textContent: string;
+  textContent: NpcContent[];
   textPortraitFrame: number;
 
   constructor(x: number, y: number, textConfig: NpcTextConfig) {
@@ -45,9 +53,17 @@ export class Npc extends GameObject {
 
   getContent() {
     // Maybe expand with story flag logic, etc
+    const match = storyFlags.getRelevantScenario(this.textContent);
+
+    if (!match) {
+      console.warn('No matches found in this list!', this.textContent);
+      return null;
+    }
+
     return {
       portraitFrame: this.textPortraitFrame,
-      string: this.textContent,
+      string: match.string,
+      addsFlag: match.addsFlag ?? null,
     };
   }
 }
