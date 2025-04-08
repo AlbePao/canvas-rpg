@@ -7,7 +7,6 @@ import './style.css';
 const canvas = document.querySelector<HTMLCanvasElement>('#game-canvas')!;
 const ctx = canvas.getContext('2d')!;
 
-// TODO: create a class MainScene that extends GameObject
 // Establish the root scene
 const mainScene = new Main();
 mainScene.setLevel(new CaveLevel1());
@@ -15,6 +14,7 @@ mainScene.setLevel(new CaveLevel1());
 // Establish update and draw loops
 const update = (delta: number) => {
   mainScene.stepEntry(delta, mainScene);
+  mainScene.input.update();
 };
 
 const draw = () => {

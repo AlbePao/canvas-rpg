@@ -30,6 +30,7 @@ export class Hero extends GameObject {
   lastY?: number;
   itemPickUpTime = 0;
   itemPickUpShell: GameObject | null = null;
+  isLocked = false;
 
   constructor(x: number, y: number) {
     super({
@@ -73,11 +74,32 @@ export class Hero extends GameObject {
     });
   }
 
-  step(delta: number, root: GameObject) {
+  ready(): void {
+    events.on('START_TEXT_BOX', this, () => {
+      this.isLocked = true;
+    });
+    events.on('END_TEXT_BOX', this, () => {
+      this.isLocked = false;
+    });
+  }
+
+  step(delta: number, root: Main) {
+    // Don't do anything when locked
+    if (this.isLocked) {
+      return;
+    }
+
     // Lock movement if celebrating an item pickup
     if (this.itemPickUpTime > 0) {
       this.workOnItemPickUp(delta);
       return;
+    }
+
+    // Check for input
+    const input = root.input;
+
+    if (input.getActionJustPressed('Space')) {
+      events.emit('HERO_REQUESTS_ACTION');
     }
 
     const distance = moveTowards(this, this.destinationPosition, 1);

@@ -1,7 +1,9 @@
+import { events } from '../../Events';
 import { GameObject } from '../../GameObject';
 import { resources } from '../../Resource';
 import { Sprite } from '../../Sprite';
 import { Vector2 } from '../../Vector2';
+import { Main } from '../Main/Main';
 import { getCharacterFrame, getCharacterWidth } from './spriteFontMap';
 
 type Word = {
@@ -25,6 +27,7 @@ export class SpriteTextString extends GameObject {
   // Typewriter
   showingIndex = 0;
   textSpeed = 80;
+  finalIndex = 0;
   timeUntilNextShow = this.textSpeed;
 
   constructor(str?: string) {
@@ -65,9 +68,27 @@ export class SpriteTextString extends GameObject {
         chars,
       };
     });
+
+    this.finalIndex = this.words.reduce((acc, word) => acc + word.chars.length, 0);
   }
 
-  step(delta: number, root: GameObject): void {
+  step(delta: number, root: Main): void {
+    // Listen for user input
+    const input = root.input;
+
+    if (input.getActionJustPressed('Space')) {
+      if (this.showingIndex < this.finalIndex) {
+        // Skip
+        this.showingIndex = this.finalIndex;
+
+        return;
+      }
+
+      // Done with the textbox
+      events.emit('END_TEXT_BOX');
+    }
+
+    // Word on typewriter
     this.timeUntilNextShow -= delta;
 
     if (this.timeUntilNextShow <= 0) {
