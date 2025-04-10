@@ -6,7 +6,7 @@ export const gridCells = (n: number) => {
 
 export const isSpaceFree = (walls: Walls, x: number, y: number) => {
   // Convert to string for easy lookup
-  const str = `${x},${y}` satisfies WallCoords;
+  const str: WallCoords = `${x},${y}`;
   // Check if walls has an entry at this spot
   const isWallPresent = walls.has(str);
   return !isWallPresent;
