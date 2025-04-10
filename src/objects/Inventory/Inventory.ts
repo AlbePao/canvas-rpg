@@ -5,8 +5,10 @@ import { Sprite } from '../../Sprite';
 import { Vector2 } from '../../Vector2';
 import { ItemData } from '../Rod/Rod';
 
+type UUID = `${string}-${string}-${string}-${string}-${string}`;
+
 export type GameItem = {
-  id: number; // TODO: use uuid
+  id: UUID;
   image: Resource;
 };
 
@@ -14,11 +16,11 @@ export class Inventory extends GameObject {
   nextId = 0;
   items: GameItem[] = [
     {
-      id: -1,
+      id: crypto.randomUUID(),
       image: resources.images.rod,
     },
     {
-      id: -2,
+      id: crypto.randomUUID(),
       image: resources.images.rod,
     },
   ];
@@ -32,9 +34,8 @@ export class Inventory extends GameObject {
 
     // React to hero picking up an item
     events.on<ItemData>('HERO_PICKS_UP_ITEM', this, (data) => {
-      this.nextId += 1;
       this.items.push({
-        id: this.nextId,
+        id: crypto.randomUUID(),
         image: data.image,
       });
       this.renderInventory();
@@ -63,7 +64,7 @@ export class Inventory extends GameObject {
     });
   }
 
-  removeFromInventory(id: number) {
+  removeFromInventory(id: UUID) {
     this.items = this.items.filter((item) => item.id !== id);
     this.renderInventory();
   }
