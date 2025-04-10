@@ -1,6 +1,7 @@
+import { Singleton } from './lib/Singleton';
 import { NpcContent } from './objects/Npc/Npc';
 
-class StoryFlags {
+class StoryFlags extends Singleton<StoryFlags>() {
   flags = new Map<string, boolean>();
 
   add(flag: string) {
@@ -38,4 +39,4 @@ class StoryFlags {
 export const TALKED_TO_A = 'TALKED_TO_A';
 export const TALKED_TO_B = 'TALKED_TO_B';
 
-export const storyFlags = new StoryFlags();
+export const storyFlags = StoryFlags.getInstance();

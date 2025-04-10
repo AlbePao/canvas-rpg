@@ -1,4 +1,5 @@
 import { GameObject } from './GameObject';
+import { Singleton } from './lib/Singleton';
 
 interface EventCallback<T = any> {
   id: number;
@@ -7,8 +8,7 @@ interface EventCallback<T = any> {
   callback: (value: T) => void;
 }
 
-// TODO: maybe treat as singleton?
-class Events {
+class Events extends Singleton<Events>() {
   callbacks: EventCallback[] = [];
   nextId = 0;
 
@@ -44,4 +44,4 @@ class Events {
   }
 }
 
-export const events = new Events();
+export const events = Events.getInstance();

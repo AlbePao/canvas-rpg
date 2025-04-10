@@ -1,9 +1,11 @@
+import { Singleton } from './lib/Singleton';
+
 export interface Resource {
   image: HTMLImageElement;
   isLoaded: boolean;
 }
 
-class Resources {
+class Resources extends Singleton<Resources>() {
   // Every image we want to download
   toLoad = {
     hero: '/sprites/hero-sheet.png',
@@ -28,6 +30,7 @@ class Resources {
   images: Record<string, Resource> = {};
 
   constructor() {
+    super();
     Object.keys(this.toLoad).forEach((key) => {
       const imageKey = key as keyof typeof this.toLoad;
       const img = new Image();
@@ -43,4 +46,4 @@ class Resources {
   }
 }
 
-export const resources = new Resources();
+export const resources = Resources.getInstance();
