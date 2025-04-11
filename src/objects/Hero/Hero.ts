@@ -51,7 +51,6 @@ export class Hero extends GameObject {
       vFrames: 8,
       frame: 1,
       position: new Vector2(-8, -20),
-      // TODO: enforce animations keys names with union type
       animations: new Animations({
         walkDown: new FrameIndexPattern(WALK_DOWN),
         walkUp: new FrameIndexPattern(WALK_UP),
