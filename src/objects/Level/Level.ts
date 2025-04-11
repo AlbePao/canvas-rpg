@@ -2,6 +2,7 @@ import { GameObject } from '../../GameObject';
 import { Sprite } from '../../Sprite';
 import { WallCoords, Walls } from '../../types/walls';
 import { Vector2 } from '../../Vector2';
+import { Hero } from '../Hero/Hero';
 
 export type LevelConfig = Partial<{
   heroPosition: Vector2;
@@ -12,8 +13,13 @@ export class Level extends GameObject {
   background: Sprite | null = null;
   walls: Walls = new Set<WallCoords>();
 
-  // TODO: handle hero start position here
-  constructor() {
+  constructor(config: LevelConfig) {
     super({});
+
+    if (config.heroPosition) {
+      this.heroStartPosition = config.heroPosition;
+      const hero = new Hero(this.heroStartPosition.x, this.heroStartPosition.y);
+      this.addChild(hero);
+    }
   }
 }

@@ -1,7 +1,6 @@
 import { events } from '../Events';
 import { gridCells } from '../helpers/grid';
 import { Exit } from '../objects/Exit/Exit';
-import { Hero } from '../objects/Hero/Hero';
 import { Level, LevelConfig } from '../objects/Level/Level';
 import { Npc } from '../objects/Npc/Npc';
 import { Rod } from '../objects/Rod/Rod';
@@ -20,7 +19,9 @@ export class CaveLevel1 extends Level {
   });
 
   constructor(config?: LevelConfig) {
-    super();
+    super({
+      heroPosition: config?.heroPosition ?? DEFAULT_HERO_POSITION,
+    });
 
     const groundSprite = new Sprite({
       resource: resources.images.caveGround,
@@ -30,10 +31,6 @@ export class CaveLevel1 extends Level {
 
     const exit = new Exit(gridCells(3), gridCells(5));
     this.addChild(exit);
-
-    this.heroStartPosition = config?.heroPosition ?? DEFAULT_HERO_POSITION;
-    const hero = new Hero(this.heroStartPosition.x, this.heroStartPosition.y);
-    this.addChild(hero);
 
     const rod = new Rod(gridCells(9), gridCells(6));
     this.addChild(rod);

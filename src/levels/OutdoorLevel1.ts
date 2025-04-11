@@ -1,7 +1,6 @@
 import { events } from '../Events';
 import { gridCells } from '../helpers/grid';
 import { Exit } from '../objects/Exit/Exit';
-import { Hero } from '../objects/Hero/Hero';
 import { Level, LevelConfig } from '../objects/Level/Level';
 import { Rod } from '../objects/Rod/Rod';
 import { resources } from '../Resource';
@@ -18,7 +17,9 @@ export class OutdoorLevel1 extends Level {
   });
 
   constructor(config?: LevelConfig) {
-    super();
+    super({
+      heroPosition: config?.heroPosition ?? DEFAULT_HERO_POSITION,
+    });
 
     const groundSprite = new Sprite({
       resource: resources.images.ground,
@@ -28,10 +29,6 @@ export class OutdoorLevel1 extends Level {
 
     const exit = new Exit(gridCells(6), gridCells(3));
     this.addChild(exit);
-
-    this.heroStartPosition = config?.heroPosition ?? DEFAULT_HERO_POSITION;
-    const hero = new Hero(this.heroStartPosition.x, this.heroStartPosition.y);
-    this.addChild(hero);
 
     const rod = new Rod(gridCells(7), gridCells(6));
     this.addChild(rod);
