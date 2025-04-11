@@ -39,7 +39,7 @@ export class GameObject {
   }
 
   // Called once every frame
-  step(delta: number, root: GameObject) {
+  step(_delta: number, _root: GameObject) {
     // ...
   }
 
@@ -65,7 +65,7 @@ export class GameObject {
     });
   }
 
-  drawImage(ctx: CanvasRenderingContext2D, x: number, y: number) {
+  drawImage(_ctx: CanvasRenderingContext2D, _x: number, _y: number) {
     // ...
   }
 
