@@ -1,3 +1,4 @@
+import { GRID_SIZE } from './constants';
 import { Directions } from './Input';
 
 export class Vector2 {
@@ -21,16 +22,16 @@ export class Vector2 {
     let { x, y } = this;
 
     if (direction === 'LEFT') {
-      x -= 16;
+      x -= GRID_SIZE;
     }
     if (direction === 'RIGHT') {
-      x += 16;
+      x += GRID_SIZE;
     }
     if (direction === 'UP') {
-      y -= 16;
+      y -= GRID_SIZE;
     }
     if (direction === 'DOWN') {
-      y += 16;
+      y += GRID_SIZE;
     }
 
     return new Vector2(x, y);

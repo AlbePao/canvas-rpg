@@ -1,18 +1,20 @@
 import { Animations } from './Animations';
+import { GRID_SIZE } from './constants';
 import { GameObject } from './GameObject';
 import { Resource } from './Resource';
 import { Vector2 } from './Vector2';
 
 export type SpriteConfig = {
   resource: Resource;
-  frameSize?: Vector2;
-  hFrames?: number;
-  vFrames?: number;
-  frame?: number;
-  scale?: number;
-  position?: Vector2;
-  animations?: Animations;
-};
+} & Partial<{
+  frameSize: Vector2;
+  hFrames: number;
+  vFrames: number;
+  frame: number;
+  scale: number;
+  position: Vector2;
+  animations: Animations;
+}>;
 
 export class Sprite extends GameObject {
   resource: Resource;
@@ -37,7 +39,7 @@ export class Sprite extends GameObject {
   }: SpriteConfig) {
     super({});
     this.resource = resource;
-    this.frameSize = frameSize ?? new Vector2(16, 16);
+    this.frameSize = frameSize ?? new Vector2(GRID_SIZE, GRID_SIZE);
     this.hFrames = hFrames ?? 1;
     this.vFrames = vFrames ?? 1;
     this.frame = frame ?? 0;

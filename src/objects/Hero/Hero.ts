@@ -1,4 +1,5 @@
 import { Animations } from '../../Animations';
+import { GRID_SIZE } from '../../constants';
 import { events } from '../../Events';
 import { FrameIndexPattern } from '../../FrameIndexPattern';
 import { GameObject } from '../../GameObject';
@@ -159,22 +160,21 @@ export class Hero extends GameObject {
 
     let nextX = this.destinationPosition.x;
     let nextY = this.destinationPosition.y;
-    const gridSize = 16;
 
     if (input.direction === 'DOWN') {
-      nextY += gridSize;
+      nextY += GRID_SIZE;
       this.body.animations?.play('walkDown');
     }
     if (input.direction === 'UP') {
-      nextY -= gridSize;
+      nextY -= GRID_SIZE;
       this.body.animations?.play('walkUp');
     }
     if (input.direction === 'LEFT') {
-      nextX -= gridSize;
+      nextX -= GRID_SIZE;
       this.body.animations?.play('walkLeft');
     }
     if (input.direction === 'RIGHT') {
-      nextX += gridSize;
+      nextX += GRID_SIZE;
       this.body.animations?.play('walkRight');
     }
 
