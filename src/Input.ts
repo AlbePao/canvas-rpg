@@ -8,6 +8,7 @@ export class Input {
   lastKeys: Record<string, boolean> = {};
 
   constructor() {
+    // TODO: when user only presses a key without holding it, simply turn the hero once instead of adding to the queue. This way we can have more responsive controls for quick taps, while still allowing holding keys for smoother movement
     document.addEventListener('keydown', (event) => {
       const { code } = event;
 
