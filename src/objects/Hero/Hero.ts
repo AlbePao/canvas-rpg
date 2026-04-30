@@ -9,8 +9,8 @@ import { Directions } from '../../Input';
 import { resources } from '../../Resource';
 import { Sprite } from '../../Sprite';
 import { Vector2 } from '../../Vector2';
+import { CollectibleItemData } from '../CollectibleItem/CollectibleItem';
 import { Main } from '../Main/Main';
-import { ItemData } from '../Rod/Rod';
 import {
   PICK_UP_DOWN,
   STAND_DOWN,
@@ -69,7 +69,7 @@ export class Hero extends GameObject {
     this.destinationPosition = this.position.duplicate();
 
     // React to picking up an item
-    events.on<ItemData>('HERO_PICKS_UP_ITEM', this, (data) => {
+    events.on<CollectibleItemData>('HERO_PICKS_UP_ITEM', this, (data) => {
       this.onPickUpItem(data);
     });
   }
@@ -192,8 +192,14 @@ export class Hero extends GameObject {
     }
   }
 
-  onPickUpItem(data: ItemData) {
-    const { image, position } = data;
+  onPickUpItem(data: CollectibleItemData) {
+    const { frame, position, shouldSkipPickupAnimation } = data;
+
+    // If the item has requested to skip the pickup animation, just move there without any celebration
+    if (shouldSkipPickupAnimation) {
+      return;
+    }
+
     // Make sure we land right on the item
     this.destinationPosition = position.duplicate();
 
@@ -202,8 +208,12 @@ export class Hero extends GameObject {
     this.itemPickUpShell = new GameObject({});
     this.itemPickUpShell.addChild(
       new Sprite({
-        resource: image,
-        position: new Vector2(0, -18),
+        resource: resources.images.items,
+        frameSize: new Vector2(16, 32),
+        hFrames: 10,
+        vFrames: 1,
+        frame,
+        position: new Vector2(0, -36),
       }),
     );
     this.addChild(this.itemPickUpShell);

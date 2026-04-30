@@ -1,27 +1,23 @@
 import { events } from '../../Events';
 import { GameObject } from '../../GameObject';
-import { Resource, resources } from '../../Resource';
+import { resources } from '../../Resource';
 import { Sprite } from '../../Sprite';
+import { UUID } from '../../types/uuid';
 import { Vector2 } from '../../Vector2';
-import { ItemData } from '../Rod/Rod';
+import { CollectibleItemData } from '../CollectibleItem/CollectibleItem';
 
-type UUID = `${string}-${string}-${string}-${string}-${string}`;
-
-export type GameItem = {
-  id: UUID;
-  image: Resource;
-};
+export type GameItem = Omit<CollectibleItemData, 'position' | 'shouldSkipPickupAnimation'>;
 
 export class Inventory extends GameObject {
   nextId = 0;
   items: GameItem[] = [
     {
       id: crypto.randomUUID(),
-      image: resources.images.rod,
+      frame: 4,
     },
     {
       id: crypto.randomUUID(),
-      image: resources.images.rod,
+      frame: 1,
     },
   ];
 
@@ -33,11 +29,8 @@ export class Inventory extends GameObject {
     this.drawLayer = 'HUD';
 
     // React to hero picking up an item
-    events.on<ItemData>('HERO_PICKS_UP_ITEM', this, (data) => {
-      this.items.push({
-        id: crypto.randomUUID(),
-        image: data.image,
-      });
+    events.on<CollectibleItemData>('HERO_PICKS_UP_ITEM', this, ({ id, frame }) => {
+      this.items.push({ id, frame });
       this.renderInventory();
     });
 
@@ -57,8 +50,12 @@ export class Inventory extends GameObject {
     // Draw fresh from the latest version of the list
     this.items.forEach((item, index) => {
       const sprite = new Sprite({
-        position: new Vector2(index * 12, 0),
-        resource: item.image,
+        resource: resources.images.items,
+        frameSize: new Vector2(16, 32),
+        hFrames: 10,
+        vFrames: 1,
+        frame: item.frame,
+        position: new Vector2(index * 16, -8),
       });
       this.addChild(sprite);
     });

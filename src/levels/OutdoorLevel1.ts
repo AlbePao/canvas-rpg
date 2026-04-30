@@ -1,8 +1,8 @@
 import { events } from '../Events';
 import { gridCells } from '../helpers/grid';
+import { CollectibleItem } from '../objects/CollectibleItem/CollectibleItem';
 import { Exit } from '../objects/Exit/Exit';
 import { Level, LevelConfig } from '../objects/Level/Level';
-import { Rod } from '../objects/Rod/Rod';
 import { resources } from '../Resource';
 import { Sprite } from '../Sprite';
 import { Vector2 } from '../Vector2';
@@ -30,8 +30,12 @@ export class OutdoorLevel1 extends Level {
     const exit = new Exit(gridCells(6), gridCells(3));
     this.addChild(exit);
 
-    const rod = new Rod(gridCells(7), gridCells(6));
-    this.addChild(rod);
+    const hammer = new CollectibleItem({
+      item: 'hammer1',
+      x: gridCells(7),
+      y: gridCells(6),
+    });
+    this.addChild(hammer);
 
     this.walls.add('64,48'); // Tree
 

@@ -1,9 +1,9 @@
 import { events } from '../Events';
 import { gridCells } from '../helpers/grid';
+import { CollectibleItem } from '../objects/CollectibleItem/CollectibleItem';
 import { Exit } from '../objects/Exit/Exit';
 import { Level, LevelConfig } from '../objects/Level/Level';
 import { Npc } from '../objects/Npc/Npc';
-import { Rod } from '../objects/Rod/Rod';
 import { resources } from '../Resource';
 import { Sprite } from '../Sprite';
 import { TALKED_TO_A, TALKED_TO_B } from '../StoryFlags';
@@ -32,7 +32,19 @@ export class CaveLevel1 extends Level {
     const exit = new Exit(gridCells(3), gridCells(5));
     this.addChild(exit);
 
-    const rod = new Rod(gridCells(9), gridCells(6));
+    const heart = new CollectibleItem({
+      item: 'heart',
+      x: gridCells(10),
+      y: gridCells(3),
+      shouldSkipPickupAnimation: true,
+    });
+    this.addChild(heart);
+
+    const rod = new CollectibleItem({
+      item: 'rod2',
+      x: gridCells(9),
+      y: gridCells(6),
+    });
     this.addChild(rod);
 
     const npc1 = new Npc(gridCells(5), gridCells(5), {
