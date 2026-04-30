@@ -9,7 +9,8 @@ import { Directions } from '../../Input';
 import { resources } from '../../Resource';
 import { Sprite } from '../../Sprite';
 import { Vector2 } from '../../Vector2';
-import { CollectibleItemData, createCollectibleItemSprite } from '../CollectibleItem/CollectibleItem';
+import { CollectibleItemData } from '../CollectibleItem/CollectibleItem';
+import { createItemSprite } from '../Item/Item';
 import { Main } from '../Main/Main';
 import {
   PICK_UP_DOWN,
@@ -206,7 +207,7 @@ export class Hero extends GameObject {
     // Start the pickup animation
     this.itemPickUpTime = 500; // ms
     this.itemPickUpShell = new GameObject({});
-    this.itemPickUpShell.addChild(createCollectibleItemSprite(frame, new Vector2(0, -36)));
+    this.itemPickUpShell.addChild(createItemSprite(frame, new Vector2(0, -36)));
     this.addChild(this.itemPickUpShell);
   }
 

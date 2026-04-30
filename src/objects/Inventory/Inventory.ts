@@ -2,7 +2,8 @@ import { events } from '../../Events';
 import { GameObject } from '../../GameObject';
 import { UUID } from '../../types/uuid';
 import { Vector2 } from '../../Vector2';
-import { CollectibleItemData, createCollectibleItemSprite } from '../CollectibleItem/CollectibleItem';
+import { CollectibleItemData } from '../CollectibleItem/CollectibleItem';
+import { createItemSprite } from '../Item/Item';
 
 export type GameItem = Omit<CollectibleItemData, 'position' | 'shouldSkipPickupAnimation'>;
 
@@ -47,7 +48,7 @@ export class Inventory extends GameObject {
 
     // Draw fresh from the latest version of the list
     this.items.forEach((item, index) => {
-      const sprite = createCollectibleItemSprite(item.frame, new Vector2(index * 16, -8));
+      const sprite = createItemSprite(item.frame, new Vector2(index * 16, -8));
       this.addChild(sprite);
     });
   }

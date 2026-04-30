@@ -1,71 +1,22 @@
 import { events } from '../../Events';
-import { GameObject } from '../../GameObject';
-import { resources } from '../../Resource';
-import { Sprite } from '../../Sprite';
-import { UUID } from '../../types/uuid';
 import { Vector2 } from '../../Vector2';
+import { createItemSprite, Item, ItemConfig, ItemData, ITEMS_SPRITE_FRAME } from '../Item/Item';
 
-export type Item =
-  | 'hammer1'
-  | 'hammer2'
-  | 'slingshot1'
-  | 'slingshot2'
-  | 'rod1'
-  | 'rod2'
-  | 'potion1'
-  | 'potion2'
-  | 'heart'
-  | 'sword';
-
-type ItemsSpriteFrame = Record<Item, number>;
-
-const ITEMS_SPRITE_FRAME: ItemsSpriteFrame = {
-  hammer1: 0,
-  hammer2: 1,
-  slingshot1: 2,
-  slingshot2: 3,
-  rod1: 4,
-  rod2: 5,
-  potion1: 6,
-  potion2: 7,
-  heart: 8,
-  sword: 9,
-};
-
-export type CollectibleItemData = {
-  id: UUID;
-  frame: number;
-  position: Vector2;
+export type CollectibleItemData = ItemData & {
   shouldSkipPickupAnimation: boolean;
 };
 
-export interface CollectibleItemConfig {
-  item: Item;
-  x: number;
-  y: number;
+export type CollectibleItemConfig = ItemConfig & {
   shouldSkipPickupAnimation?: boolean;
-}
+};
 
-export function createCollectibleItemSprite(frame: number, position: Vector2) {
-  return new Sprite({
-    resource: resources.images.items,
-    frameSize: new Vector2(16, 32),
-    hFrames: 10,
-    vFrames: 1,
-    frame,
-    position,
-  });
-}
-
-export class CollectibleItem extends GameObject {
+export class CollectibleItem extends Item {
   data: CollectibleItemData;
 
   constructor(config: CollectibleItemConfig) {
     const { item, x, y, shouldSkipPickupAnimation } = config;
 
-    super({
-      position: new Vector2(x, y),
-    });
+    super({ item, x, y });
     const frame = ITEMS_SPRITE_FRAME[item];
 
     this.data = {
@@ -75,7 +26,7 @@ export class CollectibleItem extends GameObject {
       shouldSkipPickupAnimation: shouldSkipPickupAnimation ?? false,
     };
 
-    const sprite = createCollectibleItemSprite(frame, new Vector2(0, -20));
+    const sprite = createItemSprite(frame, new Vector2(0, -20));
     this.addChild(sprite);
   }
 
