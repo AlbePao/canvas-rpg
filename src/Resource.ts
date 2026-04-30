@@ -5,9 +5,24 @@ export interface Resource {
   isLoaded: boolean;
 }
 
+export type ImageKeys =
+  | 'hero'
+  | 'shadow'
+  | 'rod'
+  | 'items'
+  | 'exit'
+  | 'sky'
+  | 'ground'
+  | 'cave'
+  | 'caveGround'
+  | 'knight'
+  | 'textBox'
+  | 'fontWhite'
+  | 'portraits';
+
 class Resources extends Singleton<Resources>() {
   // Every image we want to download
-  toLoad = {
+  private _toLoad: Record<ImageKeys, string> = {
     hero: '/sprites/hero-sheet.png',
     shadow: '/sprites/shadow.png',
     rod: '/sprites/rod.png',
@@ -28,14 +43,14 @@ class Resources extends Singleton<Resources>() {
   } as const;
 
   // A bucket to keep all of our images
-  images: Record<string, Resource> = {};
+  images: Record<ImageKeys, Resource> = {} as Record<ImageKeys, Resource>;
 
   constructor() {
     super();
-    Object.keys(this.toLoad).forEach((key) => {
-      const imageKey = key as keyof typeof this.toLoad;
+    Object.keys(this._toLoad).forEach((key) => {
+      const imageKey = key as ImageKeys;
       const img = new Image();
-      img.src = this.toLoad[imageKey];
+      img.src = this._toLoad[imageKey];
       this.images[imageKey] = {
         image: img,
         isLoaded: false,
