@@ -1,5 +1,6 @@
 import { events } from '../Events';
 import { gridCells } from '../helpers/grid';
+import { Chest } from '../objects/Chest/Chest';
 import { CollectibleItem } from '../objects/CollectibleItem/CollectibleItem';
 import { Exit } from '../objects/Exit/Exit';
 import { Level, LevelConfig } from '../objects/Level/Level';
@@ -46,6 +47,15 @@ export class CaveLevel1 extends Level {
       y: gridCells(6),
     });
     this.addChild(rod);
+
+    const chest = new Chest({
+      x: gridCells(4),
+      y: gridCells(3),
+      lootData: {
+        item: 'sword',
+      },
+    });
+    this.addChild(chest);
 
     const npc1 = new Npc(gridCells(5), gridCells(5), {
       content: [

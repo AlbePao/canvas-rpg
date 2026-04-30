@@ -10,6 +10,7 @@ export type ImageKeys =
   | 'shadow'
   | 'rod'
   | 'items'
+  | 'chest'
   | 'exit'
   | 'sky'
   | 'ground'
@@ -27,6 +28,7 @@ class Resources extends Singleton<Resources>() {
     shadow: '/sprites/shadow.png',
     rod: '/sprites/rod.png',
     items: '/sprites/items.png',
+    chest: '/sprites/chest.png',
     exit: '/sprites/exit.png',
     // Outdoor
     sky: '/sprites/sky.png',
