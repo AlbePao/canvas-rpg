@@ -1,30 +1,16 @@
 import { FrameIndexPattern } from './FrameIndexPattern';
 
-const ANIMATION_FRAMES = [
-  'walkDown',
-  'walkUp',
-  'walkLeft',
-  'walkRight',
-  'standDown',
-  'standUp',
-  'standLeft',
-  'standRight',
-  'pickUpDown',
-] as const;
-
-type AnimationFrame = (typeof ANIMATION_FRAMES)[number];
-
-export type AnimationPattern = Record<AnimationFrame, FrameIndexPattern>;
+export type AnimationPattern<T extends string | number | symbol> = Record<T, FrameIndexPattern>;
 
 const objectKeys = <T extends object>(obj: T): (keyof T)[] => {
   return Object.keys(obj) as (keyof T)[];
 };
 
-export class Animations {
-  patterns: AnimationPattern;
-  activeKey: AnimationFrame;
+export class Animations<T extends string | number | symbol> {
+  patterns: AnimationPattern<T>;
+  activeKey: T;
 
-  constructor(patterns: AnimationPattern) {
+  constructor(patterns: AnimationPattern<T>) {
     this.patterns = patterns;
     this.activeKey = objectKeys(this.patterns)[0];
   }
@@ -33,7 +19,7 @@ export class Animations {
     return this.patterns[this.activeKey].frame;
   }
 
-  play(key: AnimationFrame, startAtTime = 0) {
+  play(key: T, startAtTime = 0) {
     // Already playing this one
     if (this.activeKey === key) {
       return;

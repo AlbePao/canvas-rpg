@@ -13,7 +13,7 @@ export type SpriteConfig = {
   frame: number;
   scale: number;
   position: Vector2;
-  animations: Animations;
+  animations: Animations<string | number | symbol>;
 }>;
 
 export class Sprite extends GameObject {
@@ -25,7 +25,7 @@ export class Sprite extends GameObject {
   frameMap = new Map();
   scale: number;
   position: Vector2;
-  animations: Animations | null;
+  animations: Animations<string | number | symbol> | null;
 
   constructor({
     resource, // image we want to draw,

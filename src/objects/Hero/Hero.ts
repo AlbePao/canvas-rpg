@@ -24,6 +24,20 @@ import {
   WALK_UP,
 } from './heroAnimations';
 
+const ANIMATION_FRAMES = [
+  'walkDown',
+  'walkUp',
+  'walkLeft',
+  'walkRight',
+  'standDown',
+  'standUp',
+  'standLeft',
+  'standRight',
+  'pickUpDown',
+] as const;
+
+type HeroAnimationFrame = (typeof ANIMATION_FRAMES)[number];
+
 export class Hero extends GameObject {
   facingDirection: Directions = 'DOWN';
   body: Sprite;
@@ -53,7 +67,7 @@ export class Hero extends GameObject {
       vFrames: 8,
       frame: 1,
       position: new Vector2(-8, -20),
-      animations: new Animations({
+      animations: new Animations<HeroAnimationFrame>({
         walkDown: new FrameIndexPattern(WALK_DOWN),
         walkUp: new FrameIndexPattern(WALK_UP),
         walkLeft: new FrameIndexPattern(WALK_LEFT),
