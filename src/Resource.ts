@@ -27,8 +27,8 @@ class Resources extends Singleton<Resources>() {
     hero: '/sprites/hero-sheet.png',
     shadow: '/sprites/shadow.png',
     rod: '/sprites/rod.png',
-    items: '/sprites/items.png',
-    chest: '/sprites/chest.png',
+    items: '/sprites/items-sheet.png',
+    chest: '/sprites/chest-sheet.png',
     exit: '/sprites/exit.png',
     // Outdoor
     sky: '/sprites/sky.png',
