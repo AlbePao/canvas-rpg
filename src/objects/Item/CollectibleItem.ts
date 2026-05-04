@@ -1,15 +1,8 @@
 import { events } from '../../Events';
 import { detectOverlap } from '../../helpers/detectOverlap';
 import { Vector2 } from '../../Vector2';
-import { Item, ItemConfig, ItemData, ITEMS_SPRITE_FRAME } from '../Item/Item';
-
-export type CollectibleItemData = ItemData & {
-  shouldSkipPickupAnimation: boolean;
-};
-
-export type CollectibleItemConfig = ItemConfig & {
-  shouldSkipPickupAnimation?: boolean;
-};
+import { Item } from './Item';
+import { CollectibleItemConfig, CollectibleItemData, ITEMS_SPRITE_FRAME } from './item.types';
 
 export class CollectibleItem extends Item {
   data: CollectibleItemData;

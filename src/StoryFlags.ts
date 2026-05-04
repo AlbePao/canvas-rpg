@@ -1,5 +1,5 @@
 import { Singleton } from './lib/Singleton';
-import { NpcContent } from './objects/Npc/Npc';
+import { NpcContent } from './objects/Npc';
 
 class StoryFlags extends Singleton<StoryFlags>() {
   flags = new Map<string, boolean>();

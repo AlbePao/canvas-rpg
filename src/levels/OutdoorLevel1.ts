@@ -1,8 +1,8 @@
 import { events } from '../Events';
 import { gridCells } from '../helpers/grid';
-import { CollectibleItem } from '../objects/CollectibleItem/CollectibleItem';
-import { Exit } from '../objects/Exit/Exit';
-import { Level, LevelConfig } from '../objects/Level/Level';
+import { Exit } from '../objects/Exit';
+import { CollectibleItem } from '../objects/Item';
+import { Level, LevelConfig } from '../objects/Level';
 import { resources } from '../Resource';
 import { Sprite } from '../Sprite';
 import { Vector2 } from '../Vector2';

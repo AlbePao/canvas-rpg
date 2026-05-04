@@ -1,6 +1,6 @@
 import { events } from './Events';
 import { GameObject } from './GameObject';
-import { Level } from './objects/Level/Level';
+import { Level } from './objects/Level';
 import { Vector2 } from './Vector2';
 
 export class Camera extends GameObject {

@@ -1,8 +1,9 @@
 import { GRID_SIZE } from '../../constants/gridSize';
 import { alignToGrid } from '../../helpers/alignToGrid';
 import { isSpaceFree } from '../../helpers/grid';
-import { Main } from '../Main/Main';
-import { Hero, HeroConfig } from './Hero';
+import { Main } from '../Main';
+import { Hero } from './Hero';
+import { HeroConfig } from './hero.types';
 
 export class HeroSnappedMovement extends Hero {
   constructor(config: HeroConfig) {

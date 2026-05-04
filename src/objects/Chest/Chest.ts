@@ -2,22 +2,9 @@ import { events } from '../../Events';
 import { GameObject } from '../../GameObject';
 import { resources } from '../../Resource';
 import { Sprite } from '../../Sprite';
-import { GameObjectBaseConfig } from '../../types/gameObjectBaseConfig';
 import { Vector2 } from '../../Vector2';
-import { CollectibleItemData } from '../CollectibleItem/CollectibleItem';
-import { ItemKey, ITEMS_SPRITE_FRAME } from '../Item/Item';
-
-export type ChestStatus = 'OPEN' | 'CLOSED';
-
-export type ChestConfig = GameObjectBaseConfig & {
-  status?: ChestStatus;
-  lootConfig: LootConfig;
-};
-
-export interface LootConfig {
-  // Expand this in the future to support random loot of item or multiple items
-  item: ItemKey;
-}
+import { CollectibleItemData, ITEMS_SPRITE_FRAME } from '../Item';
+import { ChestConfig, ChestStatus } from './chest.types';
 
 export class Chest extends GameObject {
   status: ChestStatus = 'CLOSED';

@@ -1,11 +1,11 @@
 import { events } from '../Events';
 import { gridCells } from '../helpers/grid';
-import { Chest } from '../objects/Chest/Chest';
-import { CollectibleItem } from '../objects/CollectibleItem/CollectibleItem';
-import { Enemy } from '../objects/Enemy/Enemy';
-import { Exit } from '../objects/Exit/Exit';
-import { Level, LevelConfig } from '../objects/Level/Level';
-import { Npc } from '../objects/Npc/Npc';
+import { Chest } from '../objects/Chest';
+import { Enemy } from '../objects/Enemy';
+import { Exit } from '../objects/Exit';
+import { CollectibleItem } from '../objects/Item';
+import { Level, LevelConfig } from '../objects/Level';
+import { Npc } from '../objects/Npc';
 import { resources } from '../Resource';
 import { Sprite } from '../Sprite';
 import { TALKED_TO_A, TALKED_TO_B } from '../StoryFlags';

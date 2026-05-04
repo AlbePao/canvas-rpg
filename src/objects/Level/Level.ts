@@ -2,12 +2,8 @@ import { GameObject } from '../../GameObject';
 import { Sprite } from '../../Sprite';
 import { WallCoords, Walls } from '../../types/walls';
 import { Vector2 } from '../../Vector2';
-import { Hero } from '../Hero/Hero';
-
-export type LevelConfig = Partial<{
-  heroPosition: Vector2;
-}>;
-export type MainLevelConfig = { id: string } & LevelConfig;
+import { Hero } from '../Hero';
+import { MainLevelConfig } from './level.types';
 
 export class Level extends GameObject {
   heroStartPosition?: Vector2;

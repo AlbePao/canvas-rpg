@@ -3,18 +3,10 @@ import { FrameIndexPattern } from '../../FrameIndexPattern';
 import { GameObject } from '../../GameObject';
 import { resources } from '../../Resource';
 import { Sprite } from '../../Sprite';
-import { GameObjectBaseConfig } from '../../types/gameObjectBaseConfig';
 import { Vector2 } from '../../Vector2';
-import { Level } from '../Level/Level';
+import { Level } from '../Level';
+import { EnemyAnimationFrame, EnemyConfig } from './enemy.types';
 import { HIT_1, HIT_2, HOVER_1, HOVER_2, HOVER_3, HOVER_4 } from './enemyAnimations';
-
-export type EnemyConfig = GameObjectBaseConfig & {
-  health?: number;
-};
-
-const ANIMATION_FRAMES = ['hover1', 'hover2', 'hover3', 'hover4', 'hit1', 'hit2'] as const;
-
-type EnemyAnimationFrame = (typeof ANIMATION_FRAMES)[number];
 
 export class Enemy extends GameObject {
   health: number;

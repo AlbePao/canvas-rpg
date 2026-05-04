@@ -3,10 +3,10 @@ import { events } from '../../Events';
 import { GameObject } from '../../GameObject';
 import { Input } from '../../Input';
 import { storyFlags } from '../../StoryFlags';
-import { Inventory } from '../Inventory/Inventory';
-import { Level } from '../Level/Level';
-import { Npc } from '../Npc/Npc';
-import { SpriteTextString } from '../SpriteTextString/SpriteTextString';
+import { Inventory } from '../Inventory';
+import { Level } from '../Level';
+import { Npc } from '../Npc';
+import { SpriteTextString } from '../SpriteTextString';
 
 export class Main extends GameObject {
   level: Level | null = null;

@@ -3,13 +3,12 @@ import { GameObject } from '../../GameObject';
 import { createItemSprite } from '../../helpers/createItemSprite';
 import { UUID } from '../../types/uuid';
 import { Vector2 } from '../../Vector2';
-import { CollectibleItemData } from '../CollectibleItem/CollectibleItem';
-
-export type GameItem = Omit<CollectibleItemData, 'position' | 'shouldSkipPickupAnimation'>;
+import { CollectibleItemData } from '../Item';
+import { InventoryItem } from './inventory.types';
 
 export class Inventory extends GameObject {
   nextId = 0;
-  items: GameItem[] = [
+  items: InventoryItem[] = [
     {
       id: crypto.randomUUID(),
       frame: 4,

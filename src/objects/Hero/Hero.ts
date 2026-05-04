@@ -9,10 +9,10 @@ import { moveTowards } from '../../helpers/moveTowards';
 import { Directions } from '../../Input';
 import { resources } from '../../Resource';
 import { Sprite } from '../../Sprite';
-import { GameObjectBaseConfig } from '../../types/gameObjectBaseConfig';
 import { Vector2 } from '../../Vector2';
-import { CollectibleItemData } from '../CollectibleItem/CollectibleItem';
-import { Main } from '../Main/Main';
+import { CollectibleItemData } from '../Item';
+import { Main } from '../Main';
+import { HeroAnimationFrame, HeroConfig } from './hero.types';
 import {
   PICK_UP_DOWN,
   STAND_DOWN,
@@ -24,22 +24,6 @@ import {
   WALK_RIGHT,
   WALK_UP,
 } from './heroAnimations';
-
-const ANIMATION_FRAMES = [
-  'walkDown',
-  'walkUp',
-  'walkLeft',
-  'walkRight',
-  'standDown',
-  'standUp',
-  'standLeft',
-  'standRight',
-  'pickUpDown',
-] as const;
-
-type HeroAnimationFrame = (typeof ANIMATION_FRAMES)[number];
-
-export type HeroConfig = GameObjectBaseConfig;
 
 export class Hero extends GameObject {
   facingDirection: Directions = 'DOWN';

@@ -5,29 +5,9 @@ import { GameObject } from '../../GameObject';
 import { resources } from '../../Resource';
 import { Sprite } from '../../Sprite';
 import { storyFlags } from '../../StoryFlags';
-import { GameObjectBaseConfig } from '../../types/gameObjectBaseConfig';
 import { Vector2 } from '../../Vector2';
+import { NpcAnimationFrame, NpcConfig, NpcContent } from './npc-types';
 import { STANDING_1, STANDING_2, STANDING_3, STANDING_4 } from './npcAnimations';
-
-export type NpcConfig = GameObjectBaseConfig & {
-  textConfig: NpcTextConfig;
-};
-
-export interface NpcTextConfig {
-  portraitFrame: number;
-  content: NpcContent[];
-}
-
-export interface NpcContent {
-  string: string;
-  requires: string[];
-  bypass?: string[];
-  addsFlag?: string;
-}
-
-const ANIMATION_FRAMES = ['standing1', 'standing2', 'standing3', 'standing4'] as const;
-
-type NpcAnimationFrame = (typeof ANIMATION_FRAMES)[number];
 
 export class Npc extends GameObject {
   textContent: NpcContent[];

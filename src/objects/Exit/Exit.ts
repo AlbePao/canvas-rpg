@@ -3,10 +3,8 @@ import { GameObject } from '../../GameObject';
 import { detectOverlap } from '../../helpers/detectOverlap';
 import { resources } from '../../Resource';
 import { Sprite } from '../../Sprite';
-import { GameObjectBaseConfig } from '../../types/gameObjectBaseConfig';
 import { Vector2 } from '../../Vector2';
-
-export type ExitConfig = GameObjectBaseConfig;
+import { ExitConfig } from './exit.types';
 
 export class Exit extends GameObject {
   constructor({ id, x, y }: ExitConfig) {

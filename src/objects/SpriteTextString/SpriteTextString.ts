@@ -3,24 +3,9 @@ import { GameObject } from '../../GameObject';
 import { resources } from '../../Resource';
 import { Sprite } from '../../Sprite';
 import { Vector2 } from '../../Vector2';
-import { Main } from '../Main/Main';
+import { Main } from '../Main';
+import { SpriteTextStringConfig, Word } from './sprite-text-string.types';
 import { getCharacterFrame, getCharacterWidth } from './spriteFontMap';
-
-type Word = {
-  wordWidth: number;
-  chars: Char[];
-};
-
-type Char = {
-  width: number;
-  sprite: Sprite;
-};
-
-export interface SpriteTextStringConfig {
-  id: string;
-  portraitFrame?: number;
-  string: string;
-}
 
 export class SpriteTextString extends GameObject {
   portrait: Sprite;

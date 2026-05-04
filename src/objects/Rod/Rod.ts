@@ -1,17 +1,10 @@
 import { events } from '../../Events';
 import { GameObject } from '../../GameObject';
 import { detectOverlap } from '../../helpers/detectOverlap';
-import { Resource, resources } from '../../Resource';
+import { resources } from '../../Resource';
 import { Sprite } from '../../Sprite';
-import { GameObjectBaseConfig } from '../../types/gameObjectBaseConfig';
 import { Vector2 } from '../../Vector2';
-
-export type RodConfig = GameObjectBaseConfig;
-
-export interface RodData {
-  image: Resource;
-  position: Vector2;
-}
+import { RodConfig, RodData } from './rod.types';
 
 export class Rod extends GameObject {
   constructor({ id, x, y }: RodConfig) {

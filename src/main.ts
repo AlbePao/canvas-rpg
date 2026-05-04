@@ -1,6 +1,6 @@
 import { GameLoop } from './GameLoop';
 import { CaveLevel1 } from './levels/CaveLevel1';
-import { Main } from './objects/Main/Main';
+import { Main } from './objects/Main';
 import './style.css';
 
 // Grabbing the canvas to draw to
