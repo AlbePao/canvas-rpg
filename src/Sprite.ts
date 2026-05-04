@@ -1,5 +1,5 @@
 import { Animations } from './Animations';
-import { GRID_SIZE } from './constants';
+import { GRID_SIZE } from './constants/gridSize';
 import { GameObject } from './GameObject';
 import { Resource } from './Resource';
 import { Vector2 } from './Vector2';

@@ -1,11 +1,12 @@
+import { GRID_SIZE } from '../../constants/gridSize';
 import { alignToGrid } from '../../helpers/alignToGrid';
 import { isSpaceFree } from '../../helpers/grid';
 import { Main } from '../Main/Main';
-import { Hero } from './Hero';
+import { Hero, HeroConfig } from './Hero';
 
 export class HeroSnappedMovement extends Hero {
-  constructor(x: number, y: number) {
-    super(x, y);
+  constructor(config: HeroConfig) {
+    super(config);
   }
 
   // Based on https://dev.to/robotspacefish/game-studies-link-s-movement-in-the-legend-of-zelda-48od
@@ -39,7 +40,7 @@ export class HeroSnappedMovement extends Hero {
     let nextGridY = this.destinationPosition.y;
 
     const characterPace = 1;
-    const gridSize = 8;
+    const gridSize = GRID_SIZE / 2;
 
     if (input.direction === 'DOWN') {
       nextCharacterY += characterPace;
