@@ -2,19 +2,25 @@ import { events } from '../../Events';
 import { GameObject } from '../../GameObject';
 import { Resource, resources } from '../../Resource';
 import { Sprite } from '../../Sprite';
+import { GameObjectBaseConfig } from '../../types/gameObjectBaseConfig';
 import { Vector2 } from '../../Vector2';
 
-export type ItemData = {
+export type RodConfig = GameObjectBaseConfig;
+
+export interface RodData {
   image: Resource;
   position: Vector2;
-};
+}
 
 export class Rod extends GameObject {
-  constructor(x: number, y: number) {
+  constructor({ id, x, y }: RodConfig) {
     super({
+      id,
       position: new Vector2(x, y),
     });
+
     const sprite = new Sprite({
+      id: `${id}-rod-sprite`,
       resource: resources.images.rod,
       position: new Vector2(0, -5), // nudge upwards visually
     });
@@ -38,7 +44,7 @@ export class Rod extends GameObject {
     this.destroy();
 
     // Alert other things that we picker up a rod
-    events.emit<ItemData>('HERO_PICKS_UP_ITEM', {
+    events.emit<RodData>('HERO_PICKS_UP_ITEM', {
       image: resources.images.rod,
       position: this.position,
     });

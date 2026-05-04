@@ -5,6 +5,7 @@ import { Resource } from './Resource';
 import { Vector2 } from './Vector2';
 
 export type SpriteConfig = {
+  id: string;
   resource: Resource;
 } & Partial<{
   frameSize: Vector2;
@@ -28,6 +29,7 @@ export class Sprite extends GameObject {
   animations: Animations<string | number | symbol> | null;
 
   constructor({
+    id, // id for the sprite
     resource, // image we want to draw,
     frameSize, // size of the crop of the image
     hFrames, // how the sprite arranged horizontally
@@ -37,7 +39,7 @@ export class Sprite extends GameObject {
     position, // where to draw it (top left corner)
     animations,
   }: SpriteConfig) {
-    super({});
+    super({ id });
     this.resource = resource;
     this.frameSize = frameSize ?? new Vector2(GRID_SIZE, GRID_SIZE);
     this.hFrames = hFrames ?? 1;

@@ -2,16 +2,21 @@ import { events } from '../../Events';
 import { GameObject } from '../../GameObject';
 import { resources } from '../../Resource';
 import { Sprite } from '../../Sprite';
+import { GameObjectBaseConfig } from '../../types/gameObjectBaseConfig';
 import { Vector2 } from '../../Vector2';
 
+export type ExitConfig = GameObjectBaseConfig;
+
 export class Exit extends GameObject {
-  constructor(x: number, y: number) {
+  constructor({ id, x, y }: ExitConfig) {
     super({
+      id,
       position: new Vector2(x, y),
     });
 
     this.addChild(
       new Sprite({
+        id: `${id}-exit-sprite`,
         resource: resources.images.exit,
       }),
     );

@@ -2,15 +2,14 @@ import { events } from '../../Events';
 import { GameObject } from '../../GameObject';
 import { resources } from '../../Resource';
 import { Sprite } from '../../Sprite';
+import { GameObjectBaseConfig } from '../../types/gameObjectBaseConfig';
 import { Vector2 } from '../../Vector2';
 import { CollectibleItemData } from '../CollectibleItem/CollectibleItem';
 import { ItemKey, ITEMS_SPRITE_FRAME } from '../Item/Item';
 
 export type ChestStatus = 'OPEN' | 'CLOSED';
 
-export interface ChestConfig {
-  x: number;
-  y: number;
+export type ChestConfig = GameObjectBaseConfig & {
   status?: ChestStatus;
   lootData: LootData;
 }
@@ -28,9 +27,11 @@ export class Chest extends GameObject {
     const { x, y, status, lootData } = config;
 
     super({
+      id,
       position: new Vector2(x, y),
     });
 
+    this.status = status ?? 'CLOSED';
     this.lootData = {
       id: crypto.randomUUID(),
       frame: ITEMS_SPRITE_FRAME[lootData.item],
@@ -38,7 +39,7 @@ export class Chest extends GameObject {
       shouldSkipPickupAnimation: false,
     };
 
-    const sprite = new Sprite({
+      id: `${id}-chest-sprite`,
       resource: resources.images.chest,
       frameSize: new Vector2(16, 16),
       hFrames: 2,

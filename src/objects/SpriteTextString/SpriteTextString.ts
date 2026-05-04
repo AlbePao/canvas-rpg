@@ -16,14 +16,16 @@ type Char = {
   sprite: Sprite;
 };
 
-export type SpriteTextStringConfig = {
+export interface SpriteTextStringConfig {
+  id: string;
   portraitFrame?: number;
   string: string;
-};
+}
 
 export class SpriteTextString extends GameObject {
   portrait: Sprite;
   backdrop = new Sprite({
+    id: `${this.id}-text-box-backdrop`,
     resource: resources.images.textBox,
     frameSize: new Vector2(256, 64),
   });
@@ -36,15 +38,16 @@ export class SpriteTextString extends GameObject {
   finalIndex = 0;
   timeUntilNextShow = this.textSpeed;
 
-  constructor(config: SpriteTextStringConfig) {
+  constructor({ id, string, portraitFrame }: SpriteTextStringConfig) {
     super({
+      id,
       position: new Vector2(32, 112),
     });
 
     // Draw on top layer
     this.drawLayer = 'HUD';
 
-    const content = config.string;
+    const content = string;
 
     // Create an array of words (because it helps with line wrapping later)
     this.words = content.split(' ').map((word) => {
@@ -61,6 +64,7 @@ export class SpriteTextString extends GameObject {
         return {
           width: charWidth,
           sprite: new Sprite({
+            id: `${id}-char-${char}`,
             resource: resources.images.fontWhite,
             hFrames: 13,
             vFrames: 6,
@@ -80,9 +84,10 @@ export class SpriteTextString extends GameObject {
 
     // Create a portrait
     this.portrait = new Sprite({
+      id: `${id}-portrait`,
       resource: resources.images.portraits,
       hFrames: 4,
-      frame: config.portraitFrame ?? 0,
+      frame: portraitFrame ?? 0,
     });
   }
 

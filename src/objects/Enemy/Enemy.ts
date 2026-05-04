@@ -3,15 +3,14 @@ import { FrameIndexPattern } from '../../FrameIndexPattern';
 import { GameObject } from '../../GameObject';
 import { resources } from '../../Resource';
 import { Sprite } from '../../Sprite';
+import { GameObjectBaseConfig } from '../../types/gameObjectBaseConfig';
 import { Vector2 } from '../../Vector2';
 import { Level } from '../Level/Level';
 import { HIT_1, HIT_2, HOVER_1, HOVER_2, HOVER_3, HOVER_4 } from './enemyAnimations';
 
-export interface EnemyConfig {
-  x: number;
-  y: number;
+export type EnemyConfig = GameObjectBaseConfig & {
   health?: number;
-}
+};
 
 const ANIMATION_FRAMES = ['hover1', 'hover2', 'hover3', 'hover4', 'hit1', 'hit2'] as const;
 
@@ -22,17 +21,17 @@ export class Enemy extends GameObject {
   body: Sprite;
   isSolid = true;
 
-  constructor(config: EnemyConfig) {
-    const { x, y } = config;
-
+  constructor({ id, x, y, health }: EnemyConfig) {
     super({
+      id,
       position: new Vector2(x, y),
     });
 
-    this.health = config.health ?? 100;
+    this.health = health ?? 100;
 
     // Shadow under feet
     const shadow = new Sprite({
+      id: `${id}-enemy-shadow-sprite`,
       resource: resources.images.shadow,
       frameSize: new Vector2(32, 32),
       position: new Vector2(-8, -19),
@@ -41,6 +40,7 @@ export class Enemy extends GameObject {
 
     // Body sprite
     this.body = new Sprite({
+      id: `${id}-enemy-body-sprite`,
       resource: resources.images.bat,
       frameSize: new Vector2(32, 32),
       hFrames: 6,

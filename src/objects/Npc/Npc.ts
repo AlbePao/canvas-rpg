@@ -5,20 +5,25 @@ import { GameObject } from '../../GameObject';
 import { resources } from '../../Resource';
 import { Sprite } from '../../Sprite';
 import { storyFlags } from '../../StoryFlags';
+import { GameObjectBaseConfig } from '../../types/gameObjectBaseConfig';
 import { Vector2 } from '../../Vector2';
 import { STANDING_1, STANDING_2, STANDING_3, STANDING_4 } from './npcAnimations';
 
-export type NpcTextConfig = {
-  portraitFrame: number;
-  content: NpcContent[];
+export type NpcConfig = GameObjectBaseConfig & {
+  textConfig: NpcTextConfig;
 };
 
-export type NpcContent = {
+export interface NpcTextConfig {
+  portraitFrame: number;
+  content: NpcContent[];
+}
+
+export interface NpcContent {
   string: string;
   requires: string[];
   bypass?: string[];
   addsFlag?: string;
-};
+}
 
 const ANIMATION_FRAMES = ['standing1', 'standing2', 'standing3', 'standing4'] as const;
 
@@ -29,8 +34,9 @@ export class Npc extends GameObject {
   textPortraitFrame: number;
   body: Sprite;
 
-  constructor(x: number, y: number, textConfig: NpcTextConfig) {
+  constructor({ id, x, y, textConfig }: NpcConfig) {
     super({
+      id,
       position: new Vector2(x, y),
     });
 
@@ -43,6 +49,7 @@ export class Npc extends GameObject {
 
     // Shadow under feet
     const shadow = new Sprite({
+      id: `${id}-npc-shadow-sprite`,
       resource: resources.images.shadow,
       frameSize: new Vector2(32, 32),
       position: new Vector2(-8, -19),
@@ -51,6 +58,7 @@ export class Npc extends GameObject {
 
     // Body sprite
     this.body = new Sprite({
+      id: `${id}-npc-body-sprite`,
       resource: resources.images.knight,
       frameSize: new Vector2(32, 32),
       hFrames: 6,

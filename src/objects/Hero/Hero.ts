@@ -3,14 +3,15 @@ import { GRID_SIZE } from '../../constants/gridSize';
 import { events } from '../../Events';
 import { FrameIndexPattern } from '../../FrameIndexPattern';
 import { GameObject } from '../../GameObject';
+import { createItemSprite } from '../../helpers/createItemSprite';
 import { isSpaceFree } from '../../helpers/grid';
 import { moveTowards } from '../../helpers/moveTowards';
 import { Directions } from '../../Input';
 import { resources } from '../../Resource';
 import { Sprite } from '../../Sprite';
+import { GameObjectBaseConfig } from '../../types/gameObjectBaseConfig';
 import { Vector2 } from '../../Vector2';
 import { CollectibleItemData } from '../CollectibleItem/CollectibleItem';
-import { createItemSprite } from '../Item/Item';
 import { Main } from '../Main/Main';
 import {
   PICK_UP_DOWN,
@@ -38,6 +39,8 @@ const ANIMATION_FRAMES = [
 
 type HeroAnimationFrame = (typeof ANIMATION_FRAMES)[number];
 
+export type HeroConfig = GameObjectBaseConfig;
+
 export class Hero extends GameObject {
   facingDirection: Directions = 'DOWN';
   body: Sprite;
@@ -48,12 +51,14 @@ export class Hero extends GameObject {
   itemPickUpShell: GameObject | null = null;
   isLocked = false;
 
-  constructor(x: number, y: number) {
+  constructor({ id, x, y }: HeroConfig) {
     super({
+      id,
       position: new Vector2(x, y),
     });
 
     const shadow = new Sprite({
+      id: `${id}-hero-shadow-sprite`,
       resource: resources.images.shadow,
       frameSize: new Vector2(32, 32),
       position: new Vector2(-8, -19),
@@ -61,6 +66,7 @@ export class Hero extends GameObject {
     this.addChild(shadow);
 
     this.body = new Sprite({
+      id: `${id}-hero-body-sprite`,
       resource: resources.images.hero,
       frameSize: new Vector2(32, 32),
       hFrames: 3,
@@ -216,8 +222,14 @@ export class Hero extends GameObject {
 
     // Start the pickup animation
     this.itemPickUpTime = 500; // ms
-    this.itemPickUpShell = new GameObject({});
-    this.itemPickUpShell.addChild(createItemSprite(frame, new Vector2(0, -36)));
+    this.itemPickUpShell = new GameObject({ id: `${this.id}-item-pickup-shell` });
+    this.itemPickUpShell.addChild(
+      createItemSprite({
+        id: `${this.id}-item-pickup-sprite`,
+        frame,
+        position: new Vector2(0, -36),
+      }),
+    );
     this.addChild(this.itemPickUpShell);
   }
 

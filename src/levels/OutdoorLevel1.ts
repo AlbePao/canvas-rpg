@@ -2,35 +2,44 @@ import { events } from '../Events';
 import { gridCells } from '../helpers/grid';
 import { CollectibleItem } from '../objects/CollectibleItem/CollectibleItem';
 import { Exit } from '../objects/Exit/Exit';
-import { Level, LevelConfig } from '../objects/Level/Level';
+import { Level, LevelConfig1 } from '../objects/Level/Level';
 import { resources } from '../Resource';
 import { Sprite } from '../Sprite';
 import { Vector2 } from '../Vector2';
 import { CaveLevel1 } from './CaveLevel1';
 
 const DEFAULT_HERO_POSITION = new Vector2(gridCells(6), gridCells(5));
+const LEVEL_ID = 'outdoorLevel1';
 
 export class OutdoorLevel1 extends Level {
   background = new Sprite({
+    id: `${LEVEL_ID}-background-sprite`,
     resource: resources.images.sky,
     frameSize: new Vector2(320, 180),
   });
 
-  constructor(config?: LevelConfig) {
+  constructor(config?: LevelConfig1) {
     super({
+      id: `${LEVEL_ID}-level`,
       heroPosition: config?.heroPosition ?? DEFAULT_HERO_POSITION,
     });
 
     const groundSprite = new Sprite({
+      id: `${LEVEL_ID}-ground-sprite`,
       resource: resources.images.ground,
       frameSize: new Vector2(320, 180),
     });
     this.addChild(groundSprite);
 
-    const exit = new Exit(gridCells(6), gridCells(3));
+    const exit = new Exit({
+      id: `${LEVEL_ID}-exit`,
+      x: gridCells(6),
+      y: gridCells(3),
+    });
     this.addChild(exit);
 
     const hammer = new CollectibleItem({
+      id: `${LEVEL_ID}-hammer`,
       item: 'hammer1',
       x: gridCells(7),
       y: gridCells(6),

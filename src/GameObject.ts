@@ -1,13 +1,15 @@
 import { events } from './Events';
 import { Vector2 } from './Vector2';
 
-export type GameObjectConfig = {
+export interface GameObjectConfig {
+  id: string;
   position?: Vector2;
-};
+}
 
 type GameObjectDrawLayer = 'HUD' | 'FLOOR' | null;
 
 export class GameObject {
+  id: string;
   position: Vector2;
   children: GameObject[] = [];
   parent: GameObject | null = null;
@@ -15,7 +17,8 @@ export class GameObject {
   isSolid = false;
   drawLayer: GameObjectDrawLayer = null;
 
-  constructor({ position }: GameObjectConfig) {
+  constructor({ id, position }: GameObjectConfig) {
+    this.id = id;
     this.position = position ?? new Vector2(0, 0);
   }
 

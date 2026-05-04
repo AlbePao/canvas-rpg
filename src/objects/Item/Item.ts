@@ -1,6 +1,6 @@
 import { GameObject } from '../../GameObject';
-import { resources } from '../../Resource';
-import { Sprite } from '../../Sprite';
+import { createItemSprite } from '../../helpers/createItemSprite';
+import { GameObjectBaseConfig } from '../../types/gameObjectBaseConfig';
 import { UUID } from '../../types/uuid';
 import { Vector2 } from '../../Vector2';
 
@@ -31,36 +31,22 @@ export const ITEMS_SPRITE_FRAME: ItemsSpriteFrame = {
   sword: 9,
 };
 
-export type ItemData = {
+export interface ItemData {
   id: UUID;
   frame: number;
   position: Vector2;
-};
-
-export type ItemConfig = {
-  item: ItemKey;
-  x: number;
-  y: number;
-};
-
-export function createItemSprite(frame: number, position: Vector2) {
-  return new Sprite({
-    resource: resources.images.items,
-    frameSize: new Vector2(16, 32),
-    hFrames: 10,
-    vFrames: 1,
-    frame,
-    position,
-  });
 }
+
+export type ItemConfig = GameObjectBaseConfig & {
+  item: ItemKey;
+};
 
 export class Item extends GameObject {
   data: ItemData;
 
-  constructor(config: ItemConfig) {
-    const { item, x, y } = config;
-
+  constructor({ id, item, x, y }: ItemConfig) {
     super({
+      id,
       position: new Vector2(x, y),
     });
     const frame = ITEMS_SPRITE_FRAME[item];
@@ -71,7 +57,11 @@ export class Item extends GameObject {
       position: this.position,
     };
 
-    const sprite = createItemSprite(frame, new Vector2(0, -20));
+    const sprite = createItemSprite({
+      id: `${id}-item-sprite`,
+      frame,
+      position: new Vector2(0, -20),
+    });
     this.addChild(sprite);
   }
 }

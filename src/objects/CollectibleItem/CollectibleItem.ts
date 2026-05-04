@@ -1,6 +1,6 @@
 import { events } from '../../Events';
 import { Vector2 } from '../../Vector2';
-import { createItemSprite, Item, ItemConfig, ItemData, ITEMS_SPRITE_FRAME } from '../Item/Item';
+import { Item, ItemConfig, ItemData, ITEMS_SPRITE_FRAME } from '../Item/Item';
 
 export type CollectibleItemData = ItemData & {
   shouldSkipPickupAnimation: boolean;
@@ -13,10 +13,9 @@ export type CollectibleItemConfig = ItemConfig & {
 export class CollectibleItem extends Item {
   data: CollectibleItemData;
 
-  constructor(config: CollectibleItemConfig) {
-    const { item, x, y, shouldSkipPickupAnimation } = config;
+  constructor({ id, item, x, y, shouldSkipPickupAnimation }: CollectibleItemConfig) {
+    super({ id, item, x, y });
 
-    super({ item, x, y });
     const frame = ITEMS_SPRITE_FRAME[item];
 
     this.data = {
@@ -25,9 +24,6 @@ export class CollectibleItem extends Item {
       position: this.position,
       shouldSkipPickupAnimation: shouldSkipPickupAnimation ?? false,
     };
-
-    const sprite = createItemSprite(frame, new Vector2(0, -20));
-    this.addChild(sprite);
   }
 
   ready() {

@@ -5,7 +5,7 @@ import { Vector2 } from './Vector2';
 
 export class Camera extends GameObject {
   constructor() {
-    super({});
+    super({ id: 'camera' });
     events.on<Vector2>('HERO_POSITION', this, (heroPosition) => {
       this.centerPositionOnTarget(heroPosition);
     });

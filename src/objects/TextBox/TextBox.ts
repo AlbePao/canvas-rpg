@@ -6,12 +6,14 @@ import { Vector2 } from '../../Vector2';
 export class TextBox extends GameObject {
   content = 'Hi. How are you How are you How are you How are you How are you How are you?';
   backdrop = new Sprite({
+    id: `${this.id}-backdrop`,
     resource: resources.images.textBox,
     frameSize: new Vector2(256, 64),
   });
 
   constructor() {
     super({
+      id: 'text-box',
       position: new Vector2(32, 112),
     });
   }

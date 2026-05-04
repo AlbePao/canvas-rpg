@@ -14,7 +14,7 @@ export class Main extends GameObject {
   camera = new Camera();
 
   constructor() {
-    super({});
+    super({ id: 'main' });
   }
 
   ready(): void {
@@ -42,6 +42,7 @@ export class Main extends GameObject {
 
         // Show the textbox
         const textBox = new SpriteTextString({
+          id: `text-box-for-${withObject.id}`,
           portraitFrame: content.portraitFrame,
           string: content.string,
         });
