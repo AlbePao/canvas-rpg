@@ -1,4 +1,5 @@
 import { events } from '../../Events';
+import { detectOverlap } from '../../helpers/detectOverlap';
 import { Vector2 } from '../../Vector2';
 import { Item, ItemConfig, ItemData, ITEMS_SPRITE_FRAME } from '../Item/Item';
 
@@ -28,11 +29,7 @@ export class CollectibleItem extends Item {
 
   ready() {
     events.on<Vector2>('HERO_POSITION', this, (position) => {
-      // detect overlap
-      const roundedHeroX = Math.round(position.x);
-      const roundedHeroY = Math.round(position.y);
-
-      if (roundedHeroX === this.position.x && roundedHeroY === this.position.y) {
+      if (detectOverlap(position, this.position)) {
         this.onCollideWithHero();
       }
     });

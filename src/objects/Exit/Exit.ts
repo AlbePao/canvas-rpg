@@ -1,5 +1,6 @@
 import { events } from '../../Events';
 import { GameObject } from '../../GameObject';
+import { detectOverlap } from '../../helpers/detectOverlap';
 import { resources } from '../../Resource';
 import { Sprite } from '../../Sprite';
 import { GameObjectBaseConfig } from '../../types/gameObjectBaseConfig';
@@ -26,11 +27,7 @@ export class Exit extends GameObject {
 
   ready() {
     events.on<Vector2>('HERO_POSITION', this, (position) => {
-      // detect overlap
-      const roundedHeroX = Math.round(position.x);
-      const roundedHeroY = Math.round(position.y);
-
-      if (roundedHeroX === this.position.x && roundedHeroY === this.position.y) {
+      if (detectOverlap(position, this.position)) {
         events.emit('HERO_EXITS');
       }
     });
