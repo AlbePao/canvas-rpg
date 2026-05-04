@@ -146,11 +146,7 @@ export class Hero extends GameObject {
     events.emit('HERO_POSITION', this.position);
   }
 
-  tryMove(root: GameObject) {
-    if (!(root instanceof Main)) {
-      return;
-    }
-
+  tryMove(root: Main) {
     const { input, level } = root;
 
     if (!input.direction) {

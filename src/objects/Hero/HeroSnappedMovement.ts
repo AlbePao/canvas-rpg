@@ -1,4 +1,3 @@
-import { GameObject } from '../../GameObject';
 import { alignToGrid } from '../../helpers/alignToGrid';
 import { isSpaceFree } from '../../helpers/grid';
 import { Main } from '../Main/Main';
@@ -10,11 +9,7 @@ export class HeroSnappedMovement extends Hero {
   }
 
   // Based on https://dev.to/robotspacefish/game-studies-link-s-movement-in-the-legend-of-zelda-48od
-  tryMove(root: GameObject) {
-    if (!(root instanceof Main)) {
-      return;
-    }
-
+  tryMove(root: Main) {
     const { input, level } = root;
 
     if (!input.direction) {
