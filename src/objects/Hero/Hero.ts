@@ -218,7 +218,7 @@ export class Hero extends GameObject {
     }
 
     // Make sure we land right on the item
-    this.destinationPosition = position.duplicate();
+    this.destinationPosition = position?.duplicate() ?? this.position.duplicate();
 
     // Start the pickup animation
     this.itemPickUpTime = 500; // ms

@@ -34,7 +34,7 @@ export const ITEMS_SPRITE_FRAME: ItemsSpriteFrame = {
 export interface ItemData {
   id: UUID;
   frame: number;
-  position: Vector2;
+  position?: Vector2;
 }
 
 export type ItemConfig = GameObjectBaseConfig & {

@@ -63,7 +63,7 @@ export class CaveLevel1 extends Level {
       id: `${LEVEL_ID}-chest`,
       x: gridCells(4),
       y: gridCells(3),
-      lootData: {
+      lootConfig: {
         item: 'sword',
       },
     });

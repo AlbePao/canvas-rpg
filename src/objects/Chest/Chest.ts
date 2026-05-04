@@ -11,21 +11,21 @@ export type ChestStatus = 'OPEN' | 'CLOSED';
 
 export type ChestConfig = GameObjectBaseConfig & {
   status?: ChestStatus;
-  lootData: LootData;
-}
+  lootConfig: LootConfig;
+};
 
-export interface LootData {
+export interface LootConfig {
+  // Expand this in the future to support random loot of item or multiple items
   item: ItemKey;
 }
 
 export class Chest extends GameObject {
   status: ChestStatus = 'CLOSED';
   isSolid = true;
+  body: Sprite;
   lootData: CollectibleItemData;
 
-  constructor(config: ChestConfig) {
-    const { x, y, status, lootData } = config;
-
+  constructor({ id, x, y, status, lootConfig }: ChestConfig) {
     super({
       id,
       position: new Vector2(x, y),
@@ -34,11 +34,11 @@ export class Chest extends GameObject {
     this.status = status ?? 'CLOSED';
     this.lootData = {
       id: crypto.randomUUID(),
-      frame: ITEMS_SPRITE_FRAME[lootData.item],
-      position: this.position.toNeighbor('DOWN'),
+      frame: ITEMS_SPRITE_FRAME[lootConfig.item],
       shouldSkipPickupAnimation: false,
     };
 
+    this.body = new Sprite({
       id: `${id}-chest-sprite`,
       resource: resources.images.chest,
       frameSize: new Vector2(16, 16),
@@ -46,7 +46,7 @@ export class Chest extends GameObject {
       vFrames: 1,
       frame: status === 'OPEN' ? 1 : 0,
     });
-    this.addChild(sprite);
+    this.addChild(this.body);
   }
 
   ready(): void {
@@ -62,12 +62,9 @@ export class Chest extends GameObject {
       return;
     }
 
+    // Update chest state and sprite frame to open and emit loot event
     this.status = 'OPEN';
-    this.children.forEach((child) => {
-      if (child instanceof Sprite) {
-        child.frame = 1; // assuming the sprite is the first child
-      }
-    });
+    this.body.frame = 1;
 
     events.emit<CollectibleItemData>('HERO_PICKS_UP_ITEM', this.lootData);
   }
