@@ -1,8 +1,12 @@
+import { Animations } from '../../Animations';
+import { events } from '../../Events';
+import { FrameIndexPattern } from '../../FrameIndexPattern';
 import { GameObject } from '../../GameObject';
 import { resources } from '../../Resource';
 import { Sprite } from '../../Sprite';
 import { storyFlags } from '../../StoryFlags';
 import { Vector2 } from '../../Vector2';
+import { STANDING_1, STANDING_2, STANDING_3, STANDING_4 } from './npcAnimations';
 
 export type NpcTextConfig = {
   portraitFrame: number;
@@ -16,9 +20,14 @@ export type NpcContent = {
   addsFlag?: string;
 };
 
+const ANIMATION_FRAMES = ['standing1', 'standing2', 'standing3', 'standing4'] as const;
+
+type NpcAnimationFrame = (typeof ANIMATION_FRAMES)[number];
+
 export class Npc extends GameObject {
   textContent: NpcContent[];
   textPortraitFrame: number;
+  body: Sprite;
 
   constructor(x: number, y: number, textConfig: NpcTextConfig) {
     super({
@@ -41,14 +50,25 @@ export class Npc extends GameObject {
     this.addChild(shadow);
 
     // Body sprite
-    const body = new Sprite({
+    this.body = new Sprite({
       resource: resources.images.knight,
       frameSize: new Vector2(32, 32),
-      hFrames: 2,
+      hFrames: 6,
       vFrames: 1,
       position: new Vector2(-8, -20),
+      animations: new Animations<NpcAnimationFrame>({
+        standing1: new FrameIndexPattern(STANDING_1),
+        standing2: new FrameIndexPattern(STANDING_2),
+        standing3: new FrameIndexPattern(STANDING_3),
+        standing4: new FrameIndexPattern(STANDING_4),
+      }),
     });
-    this.addChild(body);
+    this.addChild(this.body);
+  }
+
+  // TODO: stop animation when talking and face the hero direction
+  ready(): void {
+    events.on('START_TEXT_BOX', this, () => {});
   }
 
   getContent() {

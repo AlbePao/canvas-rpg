@@ -38,7 +38,7 @@ class Resources extends Singleton<Resources>() {
     cave: '/sprites/cave.png',
     caveGround: '/sprites/cave-ground.png',
     // NPCs
-    knight: '/sprites/knight-sheet-1.png',
+    knight: '/sprites/knight-sheet.png',
     // Enemies
     bat: '/sprites/bat-sheet.png',
     // HUD
