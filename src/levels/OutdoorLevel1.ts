@@ -2,7 +2,7 @@ import { events } from '../Events';
 import { gridCells } from '../helpers/grid';
 import { CollectibleItem } from '../objects/CollectibleItem/CollectibleItem';
 import { Exit } from '../objects/Exit/Exit';
-import { Level, LevelConfig1 } from '../objects/Level/Level';
+import { Level, LevelConfig } from '../objects/Level/Level';
 import { resources } from '../Resource';
 import { Sprite } from '../Sprite';
 import { Vector2 } from '../Vector2';
@@ -18,7 +18,7 @@ export class OutdoorLevel1 extends Level {
     frameSize: new Vector2(320, 180),
   });
 
-  constructor(config?: LevelConfig1) {
+  constructor(config?: LevelConfig) {
     super({
       id: `${LEVEL_ID}-level`,
       heroPosition: config?.heroPosition ?? DEFAULT_HERO_POSITION,

@@ -22,7 +22,7 @@ export class CaveLevel1 extends Level {
     frameSize: new Vector2(320, 180),
   });
 
-  constructor(config?: LevelConfig1) {
+  constructor(config?: LevelConfig) {
     super({
       id: LEVEL_ID,
       heroPosition: config?.heroPosition ?? DEFAULT_HERO_POSITION,
