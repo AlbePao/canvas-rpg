@@ -17,6 +17,7 @@ export type ImageKeys =
   | 'cave'
   | 'caveGround'
   | 'knight'
+  | 'bat'
   | 'textBox'
   | 'fontWhite'
   | 'portraits';
@@ -38,6 +39,8 @@ class Resources extends Singleton<Resources>() {
     caveGround: '/sprites/cave-ground.png',
     // NPCs
     knight: '/sprites/knight-sheet-1.png',
+    // Enemies
+    bat: '/sprites/bat-sheet.png',
     // HUD
     textBox: '/sprites/text-box.png',
     fontWhite: '/sprites/sprite-font-white.png',

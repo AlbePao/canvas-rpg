@@ -2,6 +2,7 @@ import { events } from '../Events';
 import { gridCells } from '../helpers/grid';
 import { Chest } from '../objects/Chest/Chest';
 import { CollectibleItem } from '../objects/CollectibleItem/CollectibleItem';
+import { Enemy } from '../objects/Enemy/Enemy';
 import { Exit } from '../objects/Exit/Exit';
 import { Level, LevelConfig } from '../objects/Level/Level';
 import { Npc } from '../objects/Npc/Npc';
@@ -56,6 +57,9 @@ export class CaveLevel1 extends Level {
       },
     });
     this.addChild(chest);
+
+    const bat = new Enemy({ x: gridCells(14), y: gridCells(4) });
+    this.addChild(bat);
 
     const npc1 = new Npc(gridCells(5), gridCells(5), {
       content: [
