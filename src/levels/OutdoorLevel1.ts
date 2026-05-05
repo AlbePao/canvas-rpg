@@ -2,6 +2,7 @@ import { CHANGE_LEVEL, HERO_EXITS } from '../constants/events';
 import { Events } from '../Events';
 import { gridCells } from '../helpers/grid';
 import { Exit } from '../objects/Exit';
+import { Hero } from '../objects/Hero/Hero';
 import { CollectibleItem } from '../objects/Item';
 import { Level, LevelConfig } from '../objects/Level';
 import { Resources } from '../Resources';
@@ -38,6 +39,13 @@ export class OutdoorLevel1 extends Level {
       y: gridCells(3),
     });
     this.addChild(exit);
+
+    const hero = new Hero({
+      id: `${LEVEL_ID}-hero`,
+      x: this.heroStartPosition.x,
+      y: this.heroStartPosition.y,
+    });
+    this.addChild(hero);
 
     const hammer = new CollectibleItem({
       id: `${LEVEL_ID}-hammer`,

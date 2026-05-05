@@ -5,6 +5,7 @@ import { gridCells } from '../helpers/grid';
 import { Chest } from '../objects/Chest';
 import { Enemy } from '../objects/Enemy';
 import { Exit } from '../objects/Exit';
+import { Hero } from '../objects/Hero';
 import { CollectibleItem } from '../objects/Item';
 import { Level, LevelConfig } from '../objects/Level';
 import { Npc } from '../objects/Npc';
@@ -42,6 +43,13 @@ export class CaveLevel1 extends Level {
       y: gridCells(5),
     });
     this.addChild(exit);
+
+    const hero = new Hero({
+      id: `${LEVEL_ID}-hero`,
+      x: this.heroStartPosition.x,
+      y: this.heroStartPosition.y,
+    });
+    this.addChild(hero);
 
     const heart = new CollectibleItem({
       id: `${LEVEL_ID}-heart`,
