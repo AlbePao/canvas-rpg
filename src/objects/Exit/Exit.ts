@@ -27,6 +27,7 @@ export class Exit extends GameObject {
   ready() {
     Events.on<Vector2>(HERO_POSITION, this, (position) => {
       if (detectOverlap(position, this.position)) {
+        // TODO: add a timeout and a  flash animation before entering the new level
         Events.emit(HERO_EXITS);
       }
     });
