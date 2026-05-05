@@ -1,10 +1,7 @@
 import { FrameIndexPattern } from './FrameIndexPattern';
+import { objectKeys } from './helpers/objectKeys';
 
 export type AnimationPattern<T extends string | number | symbol> = Record<T, FrameIndexPattern>;
-
-const objectKeys = <T extends object>(obj: T): (keyof T)[] => {
-  return Object.keys(obj) as (keyof T)[];
-};
 
 export class Animations<T extends string | number | symbol> {
   patterns: AnimationPattern<T>;

@@ -1,3 +1,4 @@
+import { objectKeys } from './helpers/objectKeys';
 import { Singleton } from './lib/Singleton';
 
 export interface Resource {
@@ -52,16 +53,15 @@ class Resources extends Singleton<Resources>() {
 
   constructor() {
     super();
-    Object.keys(this._toLoad).forEach((key) => {
-      const imageKey = key as ImageKeys;
+    objectKeys(this._toLoad).forEach((key) => {
       const img = new Image();
-      img.src = this._toLoad[imageKey];
-      this.images[imageKey] = {
+      img.src = this._toLoad[key];
+      this.images[key] = {
         image: img,
         isLoaded: false,
       };
       img.onload = () => {
-        this.images[imageKey].isLoaded = true;
+        this.images[key].isLoaded = true;
       };
     });
   }
