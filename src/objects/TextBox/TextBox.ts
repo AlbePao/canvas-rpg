@@ -1,5 +1,5 @@
 import { GameObject } from '../../GameObject';
-import { resources } from '../../Resource';
+import { Resources } from '../../Resources';
 import { Sprite } from '../../Sprite';
 import { Vector2 } from '../../Vector2';
 
@@ -7,7 +7,7 @@ export class TextBox extends GameObject {
   content = 'Hi. How are you How are you How are you How are you How are you How are you?';
   backdrop = new Sprite({
     id: `${this.id}-backdrop`,
-    resource: resources.images.textBox,
+    resource: Resources.images.textBox,
     frameSize: new Vector2(256, 64),
   });
 

@@ -1,4 +1,4 @@
-import { events } from './Events';
+import { Events } from './Events';
 import { Vector2 } from './Vector2';
 
 export interface GameObjectConfig {
@@ -86,7 +86,7 @@ export class GameObject {
   }
 
   removeChild(gameObject: GameObject) {
-    events.unsubscribe(gameObject);
+    Events.unsubscribe(gameObject);
     this.children = this.children.filter((g) => gameObject !== g);
   }
 }

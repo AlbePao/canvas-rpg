@@ -1,4 +1,5 @@
-import { events } from './Events';
+import { CHANGE_LEVEL, HERO_POSITION } from './constants/events';
+import { Events } from './Events';
 import { GameObject } from './GameObject';
 import { Level } from './objects/Level';
 import { Vector2 } from './Vector2';
@@ -6,12 +7,14 @@ import { Vector2 } from './Vector2';
 export class Camera extends GameObject {
   constructor() {
     super({ id: 'camera' });
-    events.on<Vector2>('HERO_POSITION', this, (heroPosition) => {
+    Events.on<Vector2>(HERO_POSITION, this, (heroPosition) => {
       this.centerPositionOnTarget(heroPosition);
     });
 
-    events.on<Level>('CHANGE_LEVEL', this, (newMap) => {
-      this.centerPositionOnTarget(newMap.heroStartPosition!);
+    Events.on<Level>(CHANGE_LEVEL, this, ({ heroStartPosition }) => {
+      if (heroStartPosition) {
+        this.centerPositionOnTarget(heroStartPosition);
+      }
     });
   }
 

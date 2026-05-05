@@ -1,6 +1,7 @@
-import { events } from '../../Events';
+import { END_TEXT_BOX } from '../../constants/events';
+import { Events } from '../../Events';
 import { GameObject } from '../../GameObject';
-import { resources } from '../../Resource';
+import { Resources } from '../../Resources';
 import { Sprite } from '../../Sprite';
 import { Vector2 } from '../../Vector2';
 import { Main } from '../Main';
@@ -11,7 +12,7 @@ export class SpriteTextString extends GameObject {
   portrait: Sprite;
   backdrop = new Sprite({
     id: `${this.id}-text-box-backdrop`,
-    resource: resources.images.textBox,
+    resource: Resources.images.textBox,
     frameSize: new Vector2(256, 64),
   });
 
@@ -50,7 +51,7 @@ export class SpriteTextString extends GameObject {
           width: charWidth,
           sprite: new Sprite({
             id: `${id}-char-${char}`,
-            resource: resources.images.fontWhite,
+            resource: Resources.images.fontWhite,
             hFrames: 13,
             vFrames: 6,
             frame: getCharacterFrame(char),
@@ -70,7 +71,7 @@ export class SpriteTextString extends GameObject {
     // Create a portrait
     this.portrait = new Sprite({
       id: `${id}-portrait`,
-      resource: resources.images.portraits,
+      resource: Resources.images.portraits,
       hFrames: 4,
       frame: portraitFrame ?? 0,
     });
@@ -89,7 +90,7 @@ export class SpriteTextString extends GameObject {
       }
 
       // Done with the textbox
-      events.emit('END_TEXT_BOX');
+      Events.emit(END_TEXT_BOX);
     }
 
     // Word on typewriter

@@ -1,7 +1,7 @@
 import { Animations } from '../../Animations';
 import { FrameIndexPattern } from '../../FrameIndexPattern';
 import { GameObject } from '../../GameObject';
-import { resources } from '../../Resource';
+import { Resources } from '../../Resources';
 import { Sprite } from '../../Sprite';
 import { Vector2 } from '../../Vector2';
 import { Level } from '../Level';
@@ -24,7 +24,7 @@ export class Enemy extends GameObject {
     // Shadow under feet
     const shadow = new Sprite({
       id: `${id}-enemy-shadow-sprite`,
-      resource: resources.images.shadow,
+      resource: Resources.images.shadow,
       frameSize: new Vector2(32, 32),
       position: new Vector2(-8, -19),
     });
@@ -33,7 +33,7 @@ export class Enemy extends GameObject {
     // Body sprite
     this.body = new Sprite({
       id: `${id}-enemy-body-sprite`,
-      resource: resources.images.bat,
+      resource: Resources.images.bat,
       frameSize: new Vector2(32, 32),
       hFrames: 6,
       vFrames: 1,
@@ -52,7 +52,7 @@ export class Enemy extends GameObject {
 
   ready(): void {}
 
-  step(delta: number, root: Level): void {
+  step(_delta: number, _root: Level): void {
     // TODO: move in level according to pattern set in config
     // TODO: if shouldChaseHero and hero is within range, move towards hero, go to start position if hero runs outside range
     // TODO: detect if colliding with hero and emit event to damage him

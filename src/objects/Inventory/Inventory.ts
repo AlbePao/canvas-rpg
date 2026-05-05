@@ -1,4 +1,5 @@
-import { events } from '../../Events';
+import { HERO_PICKS_UP_ITEM } from '../../constants/events';
+import { Events } from '../../Events';
 import { GameObject } from '../../GameObject';
 import { createItemSprite } from '../../helpers/createItemSprite';
 import { UUID } from '../../types/uuid';
@@ -28,7 +29,7 @@ export class Inventory extends GameObject {
     this.drawLayer = 'HUD';
 
     // React to hero picking up an item
-    events.on<CollectibleItemData>('HERO_PICKS_UP_ITEM', this, ({ id, frame }) => {
+    Events.on<CollectibleItemData>(HERO_PICKS_UP_ITEM, this, ({ id, frame }) => {
       this.items.push({ id, frame });
       this.renderInventory();
     });

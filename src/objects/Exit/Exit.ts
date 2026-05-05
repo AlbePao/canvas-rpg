@@ -1,7 +1,8 @@
-import { events } from '../../Events';
+import { HERO_EXITS, HERO_POSITION } from '../../constants/events';
+import { Events } from '../../Events';
 import { GameObject } from '../../GameObject';
 import { detectOverlap } from '../../helpers/detectOverlap';
-import { resources } from '../../Resource';
+import { Resources } from '../../Resources';
 import { Sprite } from '../../Sprite';
 import { Vector2 } from '../../Vector2';
 import { ExitConfig } from './exit.types';
@@ -16,7 +17,7 @@ export class Exit extends GameObject {
     this.addChild(
       new Sprite({
         id: `${id}-exit-sprite`,
-        resource: resources.images.exit,
+        resource: Resources.images.exit,
       }),
     );
 
@@ -24,9 +25,9 @@ export class Exit extends GameObject {
   }
 
   ready() {
-    events.on<Vector2>('HERO_POSITION', this, (position) => {
+    Events.on<Vector2>(HERO_POSITION, this, (position) => {
       if (detectOverlap(position, this.position)) {
-        events.emit('HERO_EXITS');
+        Events.emit(HERO_EXITS);
       }
     });
   }

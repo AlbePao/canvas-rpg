@@ -1,4 +1,4 @@
-import { Resource } from '../../Resource';
+import { Resource } from '../../Resources';
 import { GameObjectBaseConfig } from '../../types/gameObjectBaseConfig';
 import { Vector2 } from '../../Vector2';
 

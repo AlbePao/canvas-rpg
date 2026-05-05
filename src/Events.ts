@@ -8,7 +8,7 @@ interface EventCallback<T = any> {
   callback: (value: T) => void;
 }
 
-class Events extends Singleton<Events>() {
+class EventsSingleton extends Singleton<EventsSingleton>() {
   callbacks: EventCallback[] = [];
   nextId = 0;
 
@@ -44,4 +44,4 @@ class Events extends Singleton<Events>() {
   }
 }
 
-export const events = Events.getInstance();
+export const Events = EventsSingleton.getInstance();

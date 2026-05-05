@@ -1,7 +1,8 @@
-import { events } from '../../Events';
+import { HERO_PICKS_UP_ITEM, HERO_POSITION } from '../../constants/events';
+import { Events } from '../../Events';
 import { GameObject } from '../../GameObject';
 import { detectOverlap } from '../../helpers/detectOverlap';
-import { resources } from '../../Resource';
+import { Resources } from '../../Resources';
 import { Sprite } from '../../Sprite';
 import { Vector2 } from '../../Vector2';
 import { RodConfig, RodData } from './rod.types';
@@ -15,14 +16,14 @@ export class Rod extends GameObject {
 
     const sprite = new Sprite({
       id: `${id}-rod-sprite`,
-      resource: resources.images.rod,
+      resource: Resources.images.rod,
       position: new Vector2(0, -5), // nudge upwards visually
     });
     this.addChild(sprite);
   }
 
   ready() {
-    events.on<Vector2>('HERO_POSITION', this, (position) => {
+    Events.on<Vector2>(HERO_POSITION, this, (position) => {
       if (detectOverlap(position, this.position)) {
         this.onCollideWithHero();
       }
@@ -34,8 +35,8 @@ export class Rod extends GameObject {
     this.destroy();
 
     // Alert other things that we picker up a rod
-    events.emit<RodData>('HERO_PICKS_UP_ITEM', {
-      image: resources.images.rod,
+    Events.emit<RodData>(HERO_PICKS_UP_ITEM, {
+      image: Resources.images.rod,
       position: this.position,
     });
   }

@@ -1,13 +1,20 @@
 import { Animations } from '../../Animations';
+import {
+  END_TEXT_BOX,
+  HERO_PICKS_UP_ITEM,
+  HERO_POSITION,
+  HERO_REQUESTS_ACTION,
+  START_TEXT_BOX,
+} from '../../constants/events';
 import { GRID_SIZE } from '../../constants/gridSize';
-import { events } from '../../Events';
+import { Events } from '../../Events';
 import { FrameIndexPattern } from '../../FrameIndexPattern';
 import { GameObject } from '../../GameObject';
 import { createItemSprite } from '../../helpers/createItemSprite';
 import { isSpaceFree } from '../../helpers/grid';
 import { moveTowards } from '../../helpers/moveTowards';
 import { Directions } from '../../Input';
-import { resources } from '../../Resource';
+import { Resources } from '../../Resources';
 import { Sprite } from '../../Sprite';
 import { Vector2 } from '../../Vector2';
 import { CollectibleItemData } from '../Item';
@@ -43,7 +50,7 @@ export class Hero extends GameObject {
 
     const shadow = new Sprite({
       id: `${id}-hero-shadow-sprite`,
-      resource: resources.images.shadow,
+      resource: Resources.images.shadow,
       frameSize: new Vector2(32, 32),
       position: new Vector2(-8, -19),
     });
@@ -51,7 +58,7 @@ export class Hero extends GameObject {
 
     this.body = new Sprite({
       id: `${id}-hero-body-sprite`,
-      resource: resources.images.hero,
+      resource: Resources.images.hero,
       frameSize: new Vector2(32, 32),
       hFrames: 3,
       vFrames: 8,
@@ -74,16 +81,16 @@ export class Hero extends GameObject {
     this.destinationPosition = this.position.duplicate();
 
     // React to picking up an item
-    events.on<CollectibleItemData>('HERO_PICKS_UP_ITEM', this, (data) => {
+    Events.on<CollectibleItemData>(HERO_PICKS_UP_ITEM, this, (data) => {
       this.onPickUpItem(data);
     });
   }
 
   ready(): void {
-    events.on('START_TEXT_BOX', this, () => {
+    Events.on(START_TEXT_BOX, this, () => {
       this.isLocked = true;
     });
-    events.on('END_TEXT_BOX', this, () => {
+    Events.on(END_TEXT_BOX, this, () => {
       this.isLocked = false;
     });
   }
@@ -110,7 +117,7 @@ export class Hero extends GameObject {
       });
 
       if (objectAtPosition) {
-        events.emit('HERO_REQUESTS_ACTION', objectAtPosition);
+        Events.emit(HERO_REQUESTS_ACTION, objectAtPosition);
       }
     }
 
@@ -133,7 +140,7 @@ export class Hero extends GameObject {
     this.lastX = this.position.x;
     this.lastY = this.position.y;
 
-    events.emit('HERO_POSITION', this.position);
+    Events.emit<Vector2>(HERO_POSITION, this.position);
   }
 
   tryMove(root: Main) {

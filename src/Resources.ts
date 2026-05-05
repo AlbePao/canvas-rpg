@@ -23,9 +23,9 @@ export type ImageKeys =
   | 'fontWhite'
   | 'portraits';
 
-class Resources extends Singleton<Resources>() {
+class ResourcesSingleton extends Singleton<ResourcesSingleton>() {
   // Every image we want to download
-  private _toLoad: Record<ImageKeys, string> = {
+  private readonly _toLoad: Record<ImageKeys, string> = {
     hero: '/sprites/hero-sheet.png',
     shadow: '/sprites/shadow.png',
     rod: '/sprites/rod.png',
@@ -46,7 +46,7 @@ class Resources extends Singleton<Resources>() {
     textBox: '/sprites/text-box.png',
     fontWhite: '/sprites/sprite-font-white.png',
     portraits: '/sprites/portraits-sheet.png',
-  } as const;
+  };
 
   // A bucket to keep all of our images
   images: Record<ImageKeys, Resource> = {} as Record<ImageKeys, Resource>;
@@ -67,4 +67,4 @@ class Resources extends Singleton<Resources>() {
   }
 }
 
-export const resources = Resources.getInstance();
+export const Resources = ResourcesSingleton.getInstance();

@@ -1,10 +1,11 @@
 import { Animations } from '../../Animations';
-import { events } from '../../Events';
+import { START_TEXT_BOX } from '../../constants/events';
+import { Events } from '../../Events';
 import { FrameIndexPattern } from '../../FrameIndexPattern';
 import { GameObject } from '../../GameObject';
-import { resources } from '../../Resource';
+import { Resources } from '../../Resources';
 import { Sprite } from '../../Sprite';
-import { storyFlags } from '../../StoryFlags';
+import { StoryFlags } from '../../StoryFlags';
 import { Vector2 } from '../../Vector2';
 import { NpcAnimationFrame, NpcConfig, NpcContent } from './npc-types';
 import { STANDING_1, STANDING_2, STANDING_3, STANDING_4 } from './npcAnimations';
@@ -30,7 +31,7 @@ export class Npc extends GameObject {
     // Shadow under feet
     const shadow = new Sprite({
       id: `${id}-npc-shadow-sprite`,
-      resource: resources.images.shadow,
+      resource: Resources.images.shadow,
       frameSize: new Vector2(32, 32),
       position: new Vector2(-8, -19),
     });
@@ -39,7 +40,7 @@ export class Npc extends GameObject {
     // Body sprite
     this.body = new Sprite({
       id: `${id}-npc-body-sprite`,
-      resource: resources.images.knight,
+      resource: Resources.images.knight,
       frameSize: new Vector2(32, 32),
       hFrames: 6,
       vFrames: 1,
@@ -56,12 +57,12 @@ export class Npc extends GameObject {
 
   // TODO: stop animation when talking and face the hero direction
   ready(): void {
-    events.on('START_TEXT_BOX', this, () => {});
+    Events.on(START_TEXT_BOX, this, () => {});
   }
 
   getContent() {
     // Maybe expand with story flag logic, etc
-    const match = storyFlags.getRelevantScenario(this.textContent);
+    const match = StoryFlags.getRelevantScenario(this.textContent);
 
     if (!match) {
       console.warn('No matches found in this list!', this.textContent);

@@ -1,6 +1,7 @@
-import { events } from '../../Events';
+import { HERO_PICKS_UP_ITEM, HERO_REQUESTS_ACTION } from '../../constants/events';
+import { Events } from '../../Events';
 import { GameObject } from '../../GameObject';
-import { resources } from '../../Resource';
+import { Resources } from '../../Resources';
 import { Sprite } from '../../Sprite';
 import { Vector2 } from '../../Vector2';
 import { CollectibleItemData, ITEMS_SPRITE_FRAME } from '../Item';
@@ -27,7 +28,7 @@ export class Chest extends GameObject {
 
     this.body = new Sprite({
       id: `${id}-chest-sprite`,
-      resource: resources.images.chest,
+      resource: Resources.images.chest,
       frameSize: new Vector2(16, 16),
       hFrames: 2,
       vFrames: 1,
@@ -37,7 +38,7 @@ export class Chest extends GameObject {
   }
 
   ready(): void {
-    events.on<GameObject>('HERO_REQUESTS_ACTION', this, (withObject) => {
+    Events.on<GameObject>(HERO_REQUESTS_ACTION, this, (withObject) => {
       if (this.position.matches(withObject.position)) {
         this.openChest();
       }
@@ -53,6 +54,6 @@ export class Chest extends GameObject {
     this.status = 'OPEN';
     this.body.frame = 1;
 
-    events.emit<CollectibleItemData>('HERO_PICKS_UP_ITEM', this.lootData);
+    Events.emit<CollectibleItemData>(HERO_PICKS_UP_ITEM, this.lootData);
   }
 }

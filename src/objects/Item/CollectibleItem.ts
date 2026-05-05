@@ -1,4 +1,5 @@
-import { events } from '../../Events';
+import { HERO_PICKS_UP_ITEM, HERO_POSITION } from '../../constants/events';
+import { Events } from '../../Events';
 import { detectOverlap } from '../../helpers/detectOverlap';
 import { Vector2 } from '../../Vector2';
 import { Item } from './Item';
@@ -21,7 +22,7 @@ export class CollectibleItem extends Item {
   }
 
   ready() {
-    events.on<Vector2>('HERO_POSITION', this, (position) => {
+    Events.on<Vector2>(HERO_POSITION, this, (position) => {
       if (detectOverlap(position, this.position)) {
         this.onCollideWithHero();
       }
@@ -33,6 +34,6 @@ export class CollectibleItem extends Item {
     this.destroy();
 
     // Alert other things that we picker up a collectible item
-    events.emit<CollectibleItemData>('HERO_PICKS_UP_ITEM', this.data);
+    Events.emit<CollectibleItemData>(HERO_PICKS_UP_ITEM, this.data);
   }
 }

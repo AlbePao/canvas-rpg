@@ -1,4 +1,6 @@
-import { events } from '../Events';
+import { CHANGE_LEVEL, HERO_EXITS } from '../constants/events';
+import { TALKED_TO_A, TALKED_TO_B } from '../constants/storyFlags';
+import { Events } from '../Events';
 import { gridCells } from '../helpers/grid';
 import { Chest } from '../objects/Chest';
 import { Enemy } from '../objects/Enemy';
@@ -6,9 +8,8 @@ import { Exit } from '../objects/Exit';
 import { CollectibleItem } from '../objects/Item';
 import { Level, LevelConfig } from '../objects/Level';
 import { Npc } from '../objects/Npc';
-import { resources } from '../Resource';
+import { Resources } from '../Resources';
 import { Sprite } from '../Sprite';
-import { TALKED_TO_A, TALKED_TO_B } from '../StoryFlags';
 import { Vector2 } from '../Vector2';
 import { OutdoorLevel1 } from './OutdoorLevel1';
 
@@ -18,7 +19,7 @@ const LEVEL_ID = 'caveLevel1';
 export class CaveLevel1 extends Level {
   background = new Sprite({
     id: `${LEVEL_ID}-background-sprite`,
-    resource: resources.images.cave,
+    resource: Resources.images.cave,
     frameSize: new Vector2(320, 180),
   });
 
@@ -30,7 +31,7 @@ export class CaveLevel1 extends Level {
 
     const groundSprite = new Sprite({
       id: `${LEVEL_ID}-ground-sprite`,
-      resource: resources.images.caveGround,
+      resource: Resources.images.caveGround,
       frameSize: new Vector2(320, 180),
     });
     this.addChild(groundSprite);
@@ -121,9 +122,9 @@ export class CaveLevel1 extends Level {
   }
 
   ready(): void {
-    events.on('HERO_EXITS', this, () => {
-      events.emit(
-        'CHANGE_LEVEL',
+    Events.on(HERO_EXITS, this, () => {
+      Events.emit(
+        CHANGE_LEVEL,
         new OutdoorLevel1({
           heroPosition: new Vector2(gridCells(6), gridCells(4)),
         }),

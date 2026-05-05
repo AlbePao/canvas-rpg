@@ -1,8 +1,9 @@
 import { Camera } from '../../Camera';
-import { events } from '../../Events';
+import { CHANGE_LEVEL, END_TEXT_BOX, HERO_REQUESTS_ACTION, START_TEXT_BOX } from '../../constants/events';
+import { Events } from '../../Events';
 import { GameObject } from '../../GameObject';
 import { Input } from '../../Input';
-import { storyFlags } from '../../StoryFlags';
+import { StoryFlags } from '../../StoryFlags';
 import { Inventory } from '../Inventory';
 import { Level } from '../Level';
 import { Npc } from '../Npc';
@@ -22,12 +23,12 @@ export class Main extends GameObject {
     this.addChild(inventory);
 
     // Change level handler
-    events.on<Level>('CHANGE_LEVEL', this, (newLevelInstance) => {
+    Events.on<Level>(CHANGE_LEVEL, this, (newLevelInstance) => {
       this.setLevel(newLevelInstance);
     });
 
     // Launch text box handler
-    events.on<GameObject>('HERO_REQUESTS_ACTION', this, (withObject) => {
+    Events.on<GameObject>(HERO_REQUESTS_ACTION, this, (withObject) => {
       if (withObject instanceof Npc) {
         const content = withObject.getContent();
 
@@ -37,7 +38,7 @@ export class Main extends GameObject {
 
         // Potentially add a story flag
         if (content.addsFlag) {
-          storyFlags.add(content.addsFlag);
+          StoryFlags.add(content.addsFlag);
         }
 
         // Show the textbox
@@ -48,12 +49,12 @@ export class Main extends GameObject {
         });
         this.addChild(textBox);
 
-        events.emit('START_TEXT_BOX');
+        Events.emit(START_TEXT_BOX);
 
         // unsubscribe from this text box after it's destroyed
-        const endingSub = events.on('END_TEXT_BOX', this, () => {
+        const endingSub = Events.on(END_TEXT_BOX, this, () => {
           textBox.destroy();
-          events.off(endingSub);
+          Events.off(endingSub);
         });
       }
     });
