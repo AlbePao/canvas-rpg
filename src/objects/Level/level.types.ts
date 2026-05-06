@@ -4,4 +4,6 @@ export interface LevelConfig {
   heroPosition: Vector2;
 }
 
-export type MainLevelConfig = { id: string } & LevelConfig;
+export interface LevelBaseConfig {
+  id: string;
+}

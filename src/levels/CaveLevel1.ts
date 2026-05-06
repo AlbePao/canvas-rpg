@@ -27,7 +27,6 @@ export class CaveLevel1 extends Level {
   constructor(config?: LevelConfig) {
     super({
       id: LEVEL_ID,
-      heroPosition: config?.heroPosition ?? DEFAULT_HERO_POSITION,
     });
 
     const groundSprite = new Sprite({
@@ -44,6 +43,7 @@ export class CaveLevel1 extends Level {
     });
     this.addChild(exit);
 
+    this.heroStartPosition = config?.heroPosition ?? DEFAULT_HERO_POSITION;
     const hero = new Hero({
       id: `${LEVEL_ID}-hero`,
       x: this.heroStartPosition.x,

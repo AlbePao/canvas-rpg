@@ -2,15 +2,14 @@ import { GameObject } from '../../GameObject';
 import { Sprite } from '../../Sprite';
 import { WallCoords, Walls } from '../../types/walls';
 import { Vector2 } from '../../Vector2';
-import { MainLevelConfig } from './level.types';
+import { LevelBaseConfig } from './level.types';
 
 export class Level extends GameObject {
-  heroStartPosition: Vector2;
+  heroStartPosition?: Vector2;
   background: Sprite | null = null;
   walls: Walls = new Set<WallCoords>();
 
-  constructor({ id, heroPosition }: MainLevelConfig) {
+  constructor({ id }: LevelBaseConfig) {
     super({ id });
-    this.heroStartPosition = heroPosition;
   }
 }
