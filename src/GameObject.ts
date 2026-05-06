@@ -6,7 +6,7 @@ export interface GameObjectConfig {
   position?: Vector2;
 }
 
-type GameObjectDrawLayer = 'HUD' | 'FLOOR' | null;
+export type GameObjectDrawLayer = 'HUD' | 'FLOOR' | 'WORLD_TOP' | null;
 
 export class GameObject {
   id: string;
@@ -60,10 +60,20 @@ export class GameObject {
 
   getDrawChildrenOrdered() {
     return [...this.children].sort((a, b) => {
+      // FLOOR layer renders first (below everything)
       if (b.drawLayer === 'FLOOR') {
         return 1;
       }
 
+      // WORLD_TOP layer renders last (above Y-sorted objects)
+      if (a.drawLayer === 'WORLD_TOP' && b.drawLayer !== 'WORLD_TOP') {
+        return 1;
+      }
+      if (b.drawLayer === 'WORLD_TOP' && a.drawLayer !== 'WORLD_TOP') {
+        return -1;
+      }
+
+      // Default: sort by Y position (top of sprite)
       return a.position.y > b.position.y ? 1 : -1;
     });
   }
