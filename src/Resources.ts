@@ -19,6 +19,10 @@ export type ImageKeys =
   | 'caveGround'
   | 'knight'
   | 'bat'
+  | 'bgCave'
+  | 'bgSky'
+  | 'bgVolcano'
+  | 'worldTiles'
   | 'textBox'
   | 'fontWhite'
   | 'portraits';
@@ -42,6 +46,11 @@ class ResourcesSingleton extends Singleton<ResourcesSingleton>() {
     knight: '/sprites/knight-sheet.png',
     // Enemies
     bat: '/sprites/bat-sheet.png',
+    // Level builder assets
+    bgCave: '/sprites/levels/bg-cave.png',
+    bgSky: '/sprites/levels/bg-sky.png',
+    bgVolcano: '/sprites/levels/bg-volcano.png',
+    worldTiles: '/sprites/levels/world-tiles.png',
     // HUD
     textBox: '/sprites/text-box.png',
     fontWhite: '/sprites/sprite-font-white.png',
