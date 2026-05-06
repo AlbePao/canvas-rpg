@@ -48,8 +48,8 @@ export class GameObject {
 
   // Draw entry
   draw(ctx: CanvasRenderingContext2D, x: number, y: number) {
-    const drawPosX = x + this.position.x;
-    const drawPosY = y + this.position.y;
+    const drawPosX = Math.floor(x + this.position.x);
+    const drawPosY = Math.floor(y + this.position.y);
 
     // Do the actual rendering for Images
     this.drawImage(ctx, drawPosX, drawPosY);
