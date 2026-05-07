@@ -45,7 +45,9 @@ export class Inventory extends GameObject {
 
   renderInventory(): void {
     // Remove stale drawings
-    this.children.forEach((child) => child.destroy());
+    this.children.forEach((child) => {
+      child.destroy();
+    });
 
     // Draw fresh from the latest version of the list
     this.items.forEach((item, index) => {

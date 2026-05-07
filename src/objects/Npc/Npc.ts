@@ -56,7 +56,7 @@ export class Npc extends GameObject {
   }
 
   // TODO: stop animation when talking and face the hero direction
-  ready(): void {
+  override ready(): void {
     Events.on(START_TEXT_BOX, this, () => {});
   }
 

@@ -28,11 +28,9 @@ const draw = (): void => {
   ctx.save();
 
   // Offset by camera position (quantize to integer pixels to prevent jitter)
-  if (mainScene.camera) {
-    const cameraX = Math.floor(mainScene.camera.position.x);
-    const cameraY = Math.floor(mainScene.camera.position.y);
-    ctx.translate(cameraX, cameraY);
-  }
+  const cameraX = Math.floor(mainScene.camera.position.x);
+  const cameraY = Math.floor(mainScene.camera.position.y);
+  ctx.translate(cameraX, cameraY);
 
   // Draw objects in the mounted scene
   mainScene.drawObjects(ctx);

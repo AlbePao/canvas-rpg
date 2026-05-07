@@ -11,7 +11,6 @@ import { HIT_1, HIT_2, HOVER_1, HOVER_2, HOVER_3, HOVER_4 } from './enemyAnimati
 export class Enemy extends GameObject {
   health: number;
   body: Sprite;
-  isSolid = true;
 
   constructor({ id, x, y, health }: EnemyConfig) {
     super({
@@ -19,6 +18,7 @@ export class Enemy extends GameObject {
       position: new Vector2(x, y),
     });
 
+    this.isSolid = true;
     this.health = health ?? 100;
 
     // Shadow under feet
@@ -50,11 +50,11 @@ export class Enemy extends GameObject {
     this.addChild(this.body);
   }
 
-  ready(): void {
+  override ready(): void {
     // TODO: add implementation
   }
 
-  step(_delta: number, _root: Level): void {
+  override step(_delta: number, _root: Level): void {
     // TODO: move in level according to pattern set in config
     // TODO: if shouldChaseHero and hero is within range, move towards hero, go to start position if hero runs outside range
     // TODO: detect if colliding with hero and emit event to damage him

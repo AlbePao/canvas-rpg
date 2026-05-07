@@ -3,15 +3,10 @@ import { alignToGrid } from '../../helpers/alignToGrid';
 import { isSpaceFree } from '../../helpers/grid';
 import { Main } from '../Main';
 import { Hero } from './Hero';
-import { HeroConfig } from './hero.types';
 
 export class HeroSnappedMovement extends Hero {
-  constructor(config: HeroConfig) {
-    super(config);
-  }
-
   // Based on https://dev.to/robotspacefish/game-studies-link-s-movement-in-the-legend-of-zelda-48od
-  tryMove(root: Main): void {
+  override tryMove(root: Main): void {
     const { input, level } = root;
 
     if (!input.direction) {
@@ -76,7 +71,7 @@ export class HeroSnappedMovement extends Hero {
       this.body.animations?.play('walkRight');
     }
 
-    this.facingDirection = input.direction ?? this.facingDirection;
+    this.facingDirection = input.direction;
 
     // Validation that the next destination is free
     const spaceIsFree = level && isSpaceFree(level.walls, nextGridX, nextGridY);

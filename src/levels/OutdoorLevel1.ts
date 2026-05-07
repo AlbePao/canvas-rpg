@@ -29,15 +29,15 @@ const LEVEL_WALLS = [
 ] satisfies Coords[];
 
 export class OutdoorLevel1 extends Level {
-  background = new Sprite({
-    id: `${LEVEL_ID}-background-sprite`,
-    resource: Resources.images.sky,
-    frameSize: new Vector2(320, 180),
-  });
-
   constructor(config?: LevelConfig) {
     super({
       id: `${LEVEL_ID}-level`,
+    });
+
+    this.background = new Sprite({
+      id: `${LEVEL_ID}-background-sprite`,
+      resource: Resources.images.sky,
+      frameSize: new Vector2(320, 180),
     });
 
     const groundSprite = new Sprite({
@@ -73,7 +73,7 @@ export class OutdoorLevel1 extends Level {
     LEVEL_WALLS.forEach((wallCoords) => this.walls.add(wallCoords));
   }
 
-  ready(): void {
+  override ready(): void {
     Events.on(HERO_EXITS, this, () => {
       Events.emit(
         CHANGE_LEVEL,

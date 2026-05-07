@@ -18,15 +18,15 @@ const DEFAULT_HERO_POSITION = new Vector2(gridCells(6), gridCells(5));
 const LEVEL_ID = 'caveLevel1';
 
 export class CaveLevel1 extends Level {
-  background = new Sprite({
-    id: `${LEVEL_ID}-background-sprite`,
-    resource: Resources.images.cave,
-    frameSize: new Vector2(320, 180),
-  });
-
   constructor(config?: LevelConfig) {
     super({
       id: LEVEL_ID,
+    });
+
+    this.background = new Sprite({
+      id: `${LEVEL_ID}-background-sprite`,
+      resource: Resources.images.cave,
+      frameSize: new Vector2(320, 180),
     });
 
     const groundSprite = new Sprite({
@@ -103,7 +103,6 @@ export class CaveLevel1 extends Level {
           },
           {
             string: 'Grumble grumble. Another day at work',
-            requires: [],
           },
         ],
         portraitFrame: 1,
@@ -119,7 +118,6 @@ export class CaveLevel1 extends Level {
         content: [
           {
             string: 'What a beautiful day to work in the cave!',
-            requires: [],
             addsFlag: TALKED_TO_B,
           },
         ],
@@ -129,7 +127,7 @@ export class CaveLevel1 extends Level {
     this.addChild(npc2);
   }
 
-  ready(): void {
+  override ready(): void {
     Events.on(HERO_EXITS, this, () => {
       Events.emit(
         CHANGE_LEVEL,

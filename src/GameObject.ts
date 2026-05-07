@@ -24,7 +24,9 @@ export class GameObject {
 
   stepEntry(delta: number, root: GameObject): void {
     // Call updates on all children first
-    this.children.forEach((child) => child.stepEntry(delta, root));
+    this.children.forEach((child) => {
+      child.stepEntry(delta, root);
+    });
 
     // Call read on the first frame
     if (!this.hasReadyBeenCalled) {
@@ -55,7 +57,9 @@ export class GameObject {
     this.drawImage(ctx, drawPosX, drawPosY);
 
     // Pass on children
-    this.getDrawChildrenOrdered().forEach((child) => child.draw(ctx, drawPosX, drawPosY));
+    this.getDrawChildrenOrdered().forEach((child) => {
+      child.draw(ctx, drawPosX, drawPosY);
+    });
   }
 
   getDrawChildrenOrdered(): GameObject[] {
@@ -84,7 +88,9 @@ export class GameObject {
 
   // Remove from the tree
   destroy(): void {
-    this.children.forEach((child) => child.destroy());
+    this.children.forEach((child) => {
+      child.destroy();
+    });
     this.parent?.removeChild(this);
   }
 

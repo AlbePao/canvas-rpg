@@ -18,7 +18,7 @@ export class TextBox extends GameObject {
     });
   }
 
-  drawImage(ctx: CanvasRenderingContext2D, x: number, y: number): void {
+  override drawImage(ctx: CanvasRenderingContext2D, x: number, y: number): void {
     // Draw backdrop first
     this.backdrop.drawImage(ctx, x, y);
 

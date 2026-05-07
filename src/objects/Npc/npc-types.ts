@@ -11,7 +11,7 @@ export interface NpcTextConfig {
 
 export interface NpcContentConfig {
   string: string;
-  requires: string[];
+  requires?: string[];
   bypass?: string[];
   addsFlag?: string;
 }

@@ -32,6 +32,8 @@ import {
   WALK_UP,
 } from './heroAnimations';
 
+// TODO: add jump behavior for cutscenes with direction IN_PLACE, FORWARDS (facing direction + 1), BACKWARDS (facing direction -1)
+// TODO: add balloon behavior (with question or exclamation mark)
 export class Hero extends GameObject {
   facingDirection: Directions = 'DOWN';
   body: Sprite;
@@ -86,7 +88,7 @@ export class Hero extends GameObject {
     });
   }
 
-  ready(): void {
+  override ready(): void {
     Events.on(START_TEXT_BOX, this, () => {
       this.isLocked = true;
     });
@@ -95,7 +97,7 @@ export class Hero extends GameObject {
     });
   }
 
-  step(delta: number, root: Main): void {
+  override step(delta: number, root: Main): void {
     // Don't do anything when locked
     if (this.isLocked) {
       return;

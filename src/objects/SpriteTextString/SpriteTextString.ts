@@ -77,7 +77,7 @@ export class SpriteTextString extends GameObject {
     });
   }
 
-  step(delta: number, root: Main): void {
+  override step(delta: number, root: Main): void {
     // Listen for user input
     const input = root.input;
 
@@ -105,7 +105,7 @@ export class SpriteTextString extends GameObject {
     }
   }
 
-  drawImage(ctx: CanvasRenderingContext2D, drawPosX: number, drawPosY: number): void {
+  override drawImage(ctx: CanvasRenderingContext2D, drawPosX: number, drawPosY: number): void {
     // Draw the backdrop
     this.backdrop.drawImage(ctx, drawPosX, drawPosY);
 

@@ -48,8 +48,8 @@ export class Input {
     });
   }
 
-  get direction(): Directions {
-    return this.heldDirections[0];
+  get direction(): Directions | null {
+    return this.heldDirections[0] ?? null;
   }
 
   update(): void {

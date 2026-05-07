@@ -25,7 +25,6 @@ export class Sprite extends GameObject {
   frame: number;
   frameMap = new Map<number, Vector2>();
   scale: number;
-  position: Vector2;
   animations: Animations<string | number | symbol> | null;
 
   constructor({
@@ -61,7 +60,7 @@ export class Sprite extends GameObject {
     }
   }
 
-  step(delta: number): void {
+  override step(delta: number): void {
     if (!this.animations) {
       return;
     }
@@ -70,7 +69,7 @@ export class Sprite extends GameObject {
     this.frame = this.animations.frame;
   }
 
-  drawImage(ctx: CanvasRenderingContext2D, x: number, y: number): void {
+  override drawImage(ctx: CanvasRenderingContext2D, x: number, y: number): void {
     if (!this.resource.isLoaded) {
       return;
     }

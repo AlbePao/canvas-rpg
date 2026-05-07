@@ -305,6 +305,7 @@ const TEST_LEVEL_MAP: LevelMap = {
   },
 };
 
+// TODO: add zod validation of LevelMap object
 export class LevelBuilder extends Level {
   constructor(config?: LevelConfig) {
     const { id, background, heroDefaultPosition } = TEST_LEVEL_MAP;
@@ -358,7 +359,7 @@ export class LevelBuilder extends Level {
     });
   }
 
-  ready(): void {
+  override ready(): void {
     // Add game objects
     TEST_LEVEL_MAP.gameObjects.forEach((gameObject) => {
       const { id, type, x, y } = gameObject;

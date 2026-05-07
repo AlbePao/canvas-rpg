@@ -18,7 +18,7 @@ export class Main extends GameObject {
     super({ id: 'main' });
   }
 
-  ready(): void {
+  override ready(): void {
     const inventory = new Inventory();
     this.addChild(inventory);
 

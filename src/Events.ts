@@ -1,4 +1,4 @@
-import { GameObject } from './GameObject';
+import type { GameObject } from './GameObject';
 import { Singleton } from './lib/Singleton';
 
 interface EventCallback<T = unknown> {

@@ -6,7 +6,7 @@ import { Item } from './Item';
 import { CollectibleItemConfig, CollectibleItemData, ITEMS_SPRITE_FRAME } from './item.types';
 
 export class CollectibleItem extends Item {
-  data: CollectibleItemData;
+  override data: CollectibleItemData;
 
   constructor({ id, item, x, y, shouldSkipPickupAnimation }: CollectibleItemConfig) {
     super({ id, item, x, y });
@@ -21,7 +21,7 @@ export class CollectibleItem extends Item {
     };
   }
 
-  ready(): void {
+  override ready(): void {
     Events.on<Vector2>(HERO_POSITION, this, (position) => {
       if (detectOverlap(position, this.position)) {
         this.onCollideWithHero();

@@ -9,7 +9,6 @@ import { ChestConfig, ChestStatus } from './chest.types';
 
 export class Chest extends GameObject {
   status: ChestStatus = 'CLOSED';
-  isSolid = true;
   body: Sprite;
   lootData: CollectibleItemData;
 
@@ -19,6 +18,7 @@ export class Chest extends GameObject {
       position: new Vector2(x, y),
     });
 
+    this.isSolid = true;
     this.status = status ?? 'CLOSED';
     this.lootData = {
       id: crypto.randomUUID(),
@@ -37,7 +37,7 @@ export class Chest extends GameObject {
     this.addChild(this.body);
   }
 
-  ready(): void {
+  override ready(): void {
     Events.on<GameObject>(HERO_REQUESTS_ACTION, this, (withObject) => {
       if (this.position.matches(withObject.position)) {
         this.openChest();
