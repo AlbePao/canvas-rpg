@@ -33,13 +33,13 @@ export class TextBox extends GameObject {
     const PADDING_LEFT = 10;
     const PADDING_TOP = 12;
 
-    let words = this.content.split(' ');
+    const words = this.content.split(' ');
     let line = '';
 
     for (let n = 0; n < words.length; n++) {
-      let testLine = line + words[n] + ' ';
-      let metrics = ctx.measureText(testLine);
-      let testWidth = metrics.width;
+      const testLine = line + words[n] + ' ';
+      const metrics = ctx.measureText(testLine);
+      const testWidth = metrics.width;
 
       // If the test line exceeds the medium width, and it's not the first word...
       if (testWidth > MAX_WIDTH && n > 0) {

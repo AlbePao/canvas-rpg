@@ -7,11 +7,11 @@ import { Resources } from '../../Resources';
 import { Sprite } from '../../Sprite';
 import { StoryFlags } from '../../StoryFlags';
 import { Vector2 } from '../../Vector2';
-import { NpcAnimationFrame, NpcConfig, NpcContent } from './npc-types';
+import { NpcAnimationFrame, NpcConfig, NpcContent, NpcContentConfig } from './npc-types';
 import { STANDING_1, STANDING_2, STANDING_3, STANDING_4 } from './npcAnimations';
 
 export class Npc extends GameObject {
-  textContent: NpcContent[];
+  textContent: NpcContentConfig[];
   textPortraitFrame: number;
   body: Sprite;
 
@@ -60,7 +60,7 @@ export class Npc extends GameObject {
     Events.on(START_TEXT_BOX, this, () => {});
   }
 
-  getContent() {
+  getContent(): NpcContent {
     // Maybe expand with story flag logic, etc
     const match = StoryFlags.getRelevantScenario(this.textContent);
 

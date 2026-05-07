@@ -1,6 +1,4 @@
-const DIRECTIONS = ['LEFT', 'RIGHT', 'UP', 'DOWN'] as const;
-
-export type Directions = (typeof DIRECTIONS)[number];
+export type Directions = 'LEFT' | 'RIGHT' | 'UP' | 'DOWN';
 
 export class Input {
   heldDirections: Directions[] = [];
@@ -50,16 +48,16 @@ export class Input {
     });
   }
 
-  get direction() {
+  get direction(): Directions {
     return this.heldDirections[0];
   }
 
-  update() {
+  update(): void {
     // Diff the keys on previous frame to know when new ones are pressed
     this.lastKeys = { ...this.keys };
   }
 
-  getActionJustPressed(keyCode: string) {
+  getActionJustPressed(keyCode: string): boolean {
     let justPressed = false;
 
     if (this.keys[keyCode] && !this.lastKeys[keyCode]) {
@@ -69,14 +67,14 @@ export class Input {
     return justPressed;
   }
 
-  onArrowPressed(direction: Directions) {
+  onArrowPressed(direction: Directions): void {
     // Add this arrow to the queue if it's new
-    if (this.heldDirections.indexOf(direction) === -1) {
+    if (!this.heldDirections.includes(direction)) {
       this.heldDirections.unshift(direction);
     }
   }
 
-  onArrowReleased(direction: Directions) {
+  onArrowReleased(direction: Directions): void {
     const index = this.heldDirections.indexOf(direction);
     if (index !== -1) {
       // Remove this key from the list

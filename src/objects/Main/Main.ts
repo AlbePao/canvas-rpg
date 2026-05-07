@@ -60,7 +60,7 @@ export class Main extends GameObject {
     });
   }
 
-  setLevel(newLevelInstance: Level) {
+  setLevel(newLevelInstance: Level): void {
     if (this.level) {
       this.level.destroy();
     }
@@ -69,11 +69,11 @@ export class Main extends GameObject {
     this.addChild(this.level);
   }
 
-  drawBackground(ctx: CanvasRenderingContext2D) {
+  drawBackground(ctx: CanvasRenderingContext2D): void {
     this.level?.background?.drawImage(ctx, 0, 0);
   }
 
-  drawObjects(ctx: CanvasRenderingContext2D) {
+  drawObjects(ctx: CanvasRenderingContext2D): void {
     this.children.forEach((child) => {
       if (child.drawLayer !== 'HUD') {
         child.draw(ctx, 0, 0);
@@ -81,7 +81,7 @@ export class Main extends GameObject {
     });
   }
 
-  drawForeground(ctx: CanvasRenderingContext2D) {
+  drawForeground(ctx: CanvasRenderingContext2D): void {
     this.children.forEach((child) => {
       if (child.drawLayer === 'HUD') {
         child.draw(ctx, 0, 0);

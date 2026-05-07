@@ -10,15 +10,15 @@ export class Vector2 {
     this.y = y;
   }
 
-  duplicate() {
+  duplicate(): Vector2 {
     return new Vector2(this.x, this.y);
   }
 
-  matches(otherVector2: Vector2) {
+  matches(otherVector2: Vector2): boolean {
     return this.x === otherVector2.x && this.y === otherVector2.y;
   }
 
-  toNeighbor(direction: Directions) {
+  toNeighbor(direction: Directions): Vector2 {
     let { x, y } = this;
 
     if (direction === 'LEFT') {

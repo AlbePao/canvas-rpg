@@ -6,16 +6,20 @@ export type NpcConfig = GameObjectBaseConfig & {
 
 export interface NpcTextConfig {
   portraitFrame: number;
-  content: NpcContent[];
+  content: NpcContentConfig[];
 }
 
-export interface NpcContent {
+export interface NpcContentConfig {
   string: string;
   requires: string[];
   bypass?: string[];
   addsFlag?: string;
 }
 
-const ANIMATION_FRAMES = ['standing1', 'standing2', 'standing3', 'standing4'] as const;
+export type NpcContent = {
+  portraitFrame: number;
+  string: string;
+  addsFlag: string | null;
+} | null;
 
-export type NpcAnimationFrame = (typeof ANIMATION_FRAMES)[number];
+export type NpcAnimationFrame = 'standing1' | 'standing2' | 'standing3' | 'standing4';

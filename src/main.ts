@@ -1,5 +1,5 @@
 import { GameLoop } from './GameLoop';
-import { CaveLevel1 } from './levels/CaveLevel1';
+import { LevelBuilder } from './lib/LevelBuilder';
 import { Main } from './objects/Main';
 import './style.css';
 
@@ -9,15 +9,15 @@ const ctx = canvas.getContext('2d')!;
 
 // Establish the root scene
 const mainScene = new Main();
-mainScene.setLevel(new CaveLevel1());
+mainScene.setLevel(new LevelBuilder());
 
 // Establish update and draw loops
-const update = (delta: number) => {
+const update = (delta: number): void => {
   mainScene.stepEntry(delta, mainScene);
   mainScene.input.update();
 };
 
-const draw = () => {
+const draw = (): void => {
   // Clear anything stale
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 

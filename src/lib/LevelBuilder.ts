@@ -32,7 +32,10 @@ type WorldTile =
   | 'stones'
   | 'rock'
   | 'house';
-type Coords2D = { x: number; y: number };
+interface Coords2D {
+  x: number;
+  y: number;
+}
 
 type WorldTilesFrameMap = Record<WorldTile, number>;
 type GameObjectsBaseConfig = { id: string } & Coords2D;
@@ -55,7 +58,7 @@ type DecorationConfig = {
 
 type GameObjectsConfig = ExitConfig | CollectibleItemConfig | DecorationConfig;
 
-type LevelMap = {
+interface LevelMap {
   id: string;
   background: {
     resource: 'bgCave' | 'bgSky' | 'bgVolcano';
@@ -67,7 +70,7 @@ type LevelMap = {
   gameObjects: GameObjectsConfig[];
   walls: Coords[];
   tiles: Record<Coords, WorldTile | null>;
-};
+}
 
 const WORLD_TILES_FRAME_MAP: WorldTilesFrameMap = {
   grassUpperLeft: 0,

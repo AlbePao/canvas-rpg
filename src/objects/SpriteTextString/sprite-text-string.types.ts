@@ -1,14 +1,14 @@
 import { Sprite } from '../../Sprite';
 
-export type Word = {
+export interface Word {
   wordWidth: number;
   chars: Char[];
-};
+}
 
-export type Char = {
+export interface Char {
   width: number;
   sprite: Sprite;
-};
+}
 
 export interface SpriteTextStringConfig {
   id: string;

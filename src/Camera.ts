@@ -18,7 +18,7 @@ export class Camera extends GameObject {
     });
   }
 
-  centerPositionOnTarget(position: Vector2) {
+  centerPositionOnTarget(position: Vector2): void {
     // Create a new position based on the incoming position
     const personHalf = 8;
     const canvasWidth = 320;

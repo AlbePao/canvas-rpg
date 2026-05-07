@@ -12,11 +12,11 @@ export class Animations<T extends string | number | symbol> {
     this.activeKey = objectKeys(this.patterns)[0];
   }
 
-  get frame() {
+  get frame(): number {
     return this.patterns[this.activeKey].frame;
   }
 
-  play(key: T, startAtTime = 0) {
+  play(key: T, startAtTime = 0): void {
     // Already playing this one
     if (this.activeKey === key) {
       return;
@@ -27,7 +27,7 @@ export class Animations<T extends string | number | symbol> {
     this.patterns[this.activeKey].currentTime = startAtTime;
   }
 
-  step(delta: number) {
+  step(delta: number): void {
     this.patterns[this.activeKey].step(delta);
   }
 }

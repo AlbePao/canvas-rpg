@@ -1,44 +1,40 @@
 import { AnimationConfig } from '../../types/animationConfig';
 
-const makeHoveringFrame = (rootFrame = 0): AnimationConfig => {
-  return {
-    duration: 400,
-    frames: [
-      {
-        time: 0,
-        frame: rootFrame,
-      },
-      {
-        time: 100,
-        frame: rootFrame + 1,
-      },
-      {
-        time: 200,
-        frame: rootFrame + 2,
-      },
-      {
-        time: 300,
-        frame: rootFrame + 3,
-      },
-    ],
-  };
-};
+const makeHoveringFrame = (rootFrame = 0): AnimationConfig => ({
+  duration: 400,
+  frames: [
+    {
+      time: 0,
+      frame: rootFrame,
+    },
+    {
+      time: 100,
+      frame: rootFrame + 1,
+    },
+    {
+      time: 200,
+      frame: rootFrame + 2,
+    },
+    {
+      time: 300,
+      frame: rootFrame + 3,
+    },
+  ],
+});
 
-const makeHitFrame = (rootFrame = 0): AnimationConfig => {
-  return {
-    duration: 400,
-    frames: [
-      {
-        time: 0,
-        frame: rootFrame + 1,
-      },
-      {
-        time: 150,
-        frame: rootFrame,
-      },
-    ],
-  };
-};
+const makeHitFrame = (rootFrame = 0): AnimationConfig => ({
+  duration: 400,
+  frames: [
+    {
+      time: 0,
+      frame: rootFrame + 1,
+    },
+    {
+      time: 150,
+      frame: rootFrame,
+    },
+  ],
+});
 
 export const HOVER_1 = makeHoveringFrame(0);
 export const HOVER_2 = makeHoveringFrame(1);

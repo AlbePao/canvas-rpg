@@ -43,7 +43,7 @@ export class Inventory extends GameObject {
     this.renderInventory();
   }
 
-  renderInventory() {
+  renderInventory(): void {
     // Remove stale drawings
     this.children.forEach((child) => child.destroy());
 
@@ -58,7 +58,7 @@ export class Inventory extends GameObject {
     });
   }
 
-  removeFromInventory(id: UUID) {
+  removeFromInventory(id: UUID): void {
     this.items = this.items.filter((item) => item.id !== id);
     this.renderInventory();
   }

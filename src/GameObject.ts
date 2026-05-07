@@ -22,7 +22,7 @@ export class GameObject {
     this.position = position ?? new Vector2(0, 0);
   }
 
-  stepEntry(delta: number, root: GameObject) {
+  stepEntry(delta: number, root: GameObject): void {
     // Call updates on all children first
     this.children.forEach((child) => child.stepEntry(delta, root));
 
@@ -37,17 +37,17 @@ export class GameObject {
   }
 
   // Called before the first 'step'
-  ready() {
+  ready(): void {
     //
   }
 
   // Called once every frame
-  step(_delta: number, _root: GameObject) {
+  step(_delta: number, _root: GameObject): void {
     // ...
   }
 
   // Draw entry
-  draw(ctx: CanvasRenderingContext2D, x: number, y: number) {
+  draw(ctx: CanvasRenderingContext2D, x: number, y: number): void {
     const drawPosX = Math.floor(x + this.position.x);
     const drawPosY = Math.floor(y + this.position.y);
 
@@ -58,7 +58,7 @@ export class GameObject {
     this.getDrawChildrenOrdered().forEach((child) => child.draw(ctx, drawPosX, drawPosY));
   }
 
-  getDrawChildrenOrdered() {
+  getDrawChildrenOrdered(): GameObject[] {
     return [...this.children].sort((a, b) => {
       // FLOOR layer renders first (below everything)
       if (b.drawLayer === 'FLOOR') {
@@ -78,23 +78,23 @@ export class GameObject {
     });
   }
 
-  drawImage(_ctx: CanvasRenderingContext2D, _x: number, _y: number) {
+  drawImage(_ctx: CanvasRenderingContext2D, _x: number, _y: number): void {
     // ...
   }
 
   // Remove from the tree
-  destroy() {
+  destroy(): void {
     this.children.forEach((child) => child.destroy());
     this.parent?.removeChild(this);
   }
 
   // Other Game Objects are nestable inside thi one
-  addChild(gameObject: GameObject) {
+  addChild(gameObject: GameObject): void {
     gameObject.parent = this;
     this.children.push(gameObject);
   }
 
-  removeChild(gameObject: GameObject) {
+  removeChild(gameObject: GameObject): void {
     Events.unsubscribe(gameObject);
     this.children = this.children.filter((g) => gameObject !== g);
   }

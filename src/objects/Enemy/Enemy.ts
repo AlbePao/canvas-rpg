@@ -50,7 +50,9 @@ export class Enemy extends GameObject {
     this.addChild(this.body);
   }
 
-  ready(): void {}
+  ready(): void {
+    // TODO: add implementation
+  }
 
   step(_delta: number, _root: Level): void {
     // TODO: move in level according to pattern set in config

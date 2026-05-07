@@ -10,7 +10,7 @@ export class FrameIndexPattern {
     this.duration = animationConfig.duration;
   }
 
-  get frame() {
+  get frame(): number {
     const { frames } = this.animationConfig;
     for (let i = frames.length - 1; i >= 0; i--) {
       if (this.currentTime >= frames[i].time) {
@@ -18,10 +18,10 @@ export class FrameIndexPattern {
       }
     }
 
-    throw 'Time is before the first keyframe';
+    throw new Error('Time is before the first keyframe');
   }
 
-  step(delta: number) {
+  step(delta: number): void {
     this.currentTime += delta;
     if (this.currentTime >= this.duration) {
       this.currentTime = 0;

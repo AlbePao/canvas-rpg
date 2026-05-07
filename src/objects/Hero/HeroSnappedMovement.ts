@@ -11,7 +11,7 @@ export class HeroSnappedMovement extends Hero {
   }
 
   // Based on https://dev.to/robotspacefish/game-studies-link-s-movement-in-the-legend-of-zelda-48od
-  tryMove(root: Main) {
+  tryMove(root: Main): void {
     const { input, level } = root;
 
     if (!input.direction) {

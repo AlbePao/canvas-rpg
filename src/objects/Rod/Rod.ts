@@ -22,7 +22,7 @@ export class Rod extends GameObject {
     this.addChild(sprite);
   }
 
-  ready() {
+  ready(): void {
     Events.on<Vector2>(HERO_POSITION, this, (position) => {
       if (detectOverlap(position, this.position)) {
         this.onCollideWithHero();
@@ -30,7 +30,7 @@ export class Rod extends GameObject {
     });
   }
 
-  onCollideWithHero() {
+  onCollideWithHero(): void {
     // Remove this instance from the scene
     this.destroy();
 

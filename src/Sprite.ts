@@ -23,7 +23,7 @@ export class Sprite extends GameObject {
   hFrames: number;
   vFrames: number;
   frame: number;
-  frameMap = new Map();
+  frameMap = new Map<number, Vector2>();
   scale: number;
   position: Vector2;
   animations: Animations<string | number | symbol> | null;
@@ -51,7 +51,7 @@ export class Sprite extends GameObject {
     this.buildFrameMap();
   }
 
-  buildFrameMap() {
+  buildFrameMap(): void {
     let frameCount = 0;
     for (let v = 0; v < this.vFrames; v++) {
       for (let h = 0; h < this.hFrames; h++) {
@@ -61,7 +61,7 @@ export class Sprite extends GameObject {
     }
   }
 
-  step(delta: number) {
+  step(delta: number): void {
     if (!this.animations) {
       return;
     }
@@ -70,7 +70,7 @@ export class Sprite extends GameObject {
     this.frame = this.animations.frame;
   }
 
-  drawImage(ctx: CanvasRenderingContext2D, x: number, y: number) {
+  drawImage(ctx: CanvasRenderingContext2D, x: number, y: number): void {
     if (!this.resource.isLoaded) {
       return;
     }

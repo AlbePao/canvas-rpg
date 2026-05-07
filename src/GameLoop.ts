@@ -15,12 +15,12 @@ export class GameLoop {
     this.render = render;
   }
 
-  mainLoop = (timestamp: number) => {
+  mainLoop = (timestamp: number): void => {
     if (!this.isRunning) {
       return;
     }
 
-    let deltaTime = timestamp - this.lastFrameTime;
+    const deltaTime = timestamp - this.lastFrameTime;
     this.lastFrameTime = timestamp;
 
     // Accumulate all the time since the last frame
@@ -39,14 +39,14 @@ export class GameLoop {
     this.rafId = requestAnimationFrame(this.mainLoop);
   };
 
-  start() {
+  start(): void {
     if (!this.isRunning) {
       this.isRunning = true;
       this.rafId = requestAnimationFrame(this.mainLoop);
     }
   }
 
-  stop() {
+  stop(): void {
     if (this.rafId) {
       cancelAnimationFrame(this.rafId);
     }

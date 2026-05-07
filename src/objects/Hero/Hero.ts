@@ -95,7 +95,7 @@ export class Hero extends GameObject {
     });
   }
 
-  step(delta: number, root: Main) {
+  step(delta: number, root: Main): void {
     // Don't do anything when locked
     if (this.isLocked) {
       return;
@@ -112,9 +112,9 @@ export class Hero extends GameObject {
 
     if (input.getActionJustPressed('Space')) {
       // Look for an object at the next space (according to where Hero is facing)
-      const objectAtPosition = this.parent?.children.find((child) => {
-        return child.position.matches(this.position.toNeighbor(this.facingDirection));
-      });
+      const objectAtPosition = this.parent?.children.find((child) =>
+        child.position.matches(this.position.toNeighbor(this.facingDirection)),
+      );
 
       if (objectAtPosition) {
         Events.emit(HERO_REQUESTS_ACTION, objectAtPosition);
@@ -132,7 +132,7 @@ export class Hero extends GameObject {
     this.tryEmitPosition();
   }
 
-  tryEmitPosition() {
+  tryEmitPosition(): void {
     if (this.lastX === this.position.x && this.lastY === this.position.y) {
       return;
     }
@@ -143,7 +143,7 @@ export class Hero extends GameObject {
     Events.emit<Vector2>(HERO_POSITION, this.position);
   }
 
-  tryMove(root: Main) {
+  tryMove(root: Main): void {
     const { input, level } = root;
 
     if (!input.direction) {
@@ -200,7 +200,7 @@ export class Hero extends GameObject {
     }
   }
 
-  onPickUpItem(data: CollectibleItemData) {
+  onPickUpItem(data: CollectibleItemData): void {
     const { frame, position, shouldSkipPickupAnimation } = data;
 
     // If the item has requested to skip the pickup animation, just move there without any celebration
@@ -224,7 +224,7 @@ export class Hero extends GameObject {
     this.addChild(this.itemPickUpShell);
   }
 
-  workOnItemPickUp(delta: number) {
+  workOnItemPickUp(delta: number): void {
     this.itemPickUpTime -= delta;
     this.body.animations?.play('pickUpDown');
     if (this.itemPickUpTime <= 0) {

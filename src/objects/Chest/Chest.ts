@@ -45,7 +45,7 @@ export class Chest extends GameObject {
     });
   }
 
-  openChest() {
+  openChest(): void {
     if (this.status === 'OPEN') {
       return;
     }

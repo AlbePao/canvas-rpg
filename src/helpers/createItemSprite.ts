@@ -8,7 +8,7 @@ interface ItemSpriteConfig {
   position: Vector2;
 }
 
-export function createItemSprite({ id, frame, position }: ItemSpriteConfig) {
+export function createItemSprite({ id, frame, position }: ItemSpriteConfig): Sprite {
   return new Sprite({
     id,
     resource: Resources.images.items,

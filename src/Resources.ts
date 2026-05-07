@@ -69,7 +69,7 @@ class ResourcesSingleton extends Singleton<ResourcesSingleton>() {
         image: img,
         isLoaded: false,
       };
-      img.onload = () => {
+      img.onload = (): void => {
         this.images[key].isLoaded = true;
       };
     });

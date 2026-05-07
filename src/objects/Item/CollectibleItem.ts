@@ -21,7 +21,7 @@ export class CollectibleItem extends Item {
     };
   }
 
-  ready() {
+  ready(): void {
     Events.on<Vector2>(HERO_POSITION, this, (position) => {
       if (detectOverlap(position, this.position)) {
         this.onCollideWithHero();
@@ -29,7 +29,7 @@ export class CollectibleItem extends Item {
     });
   }
 
-  onCollideWithHero() {
+  onCollideWithHero(): void {
     // Remove this instance from the scene
     this.destroy();
 

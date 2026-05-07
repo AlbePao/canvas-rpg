@@ -27,9 +27,7 @@ width.set(' ', 3);
 width.set("'", 1);
 width.set('!', 1);
 
-export const getCharacterWidth = (char: string) => {
-  return width.get(char) ?? DEFAULT_WIDTH;
-};
+export const getCharacterWidth = (char: string): number => width.get(char) ?? DEFAULT_WIDTH;
 
 // FRAMES
 
@@ -41,6 +39,4 @@ const frameMap = new Map<string, number>();
     frameMap.set(char, index);
   });
 
-export const getCharacterFrame = (char: string) => {
-  return frameMap.get(char) ?? 0;
-};
+export const getCharacterFrame = (char: string): number => frameMap.get(char) ?? 0;
