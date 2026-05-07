@@ -68,6 +68,7 @@ export default defineConfig([
           checksVoidReturn: true,
         },
       ],
+      '@typescript-eslint/no-confusing-void-expression': 'error',
       'no-unused-expressions': 'error',
       'sort-imports': 'off',
       'arrow-body-style': 'error',
