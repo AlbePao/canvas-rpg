@@ -7,11 +7,26 @@ import { CollectibleItem } from '../objects/Item';
 import { Level, LevelConfig } from '../objects/Level';
 import { Resources } from '../Resources';
 import { Sprite } from '../Sprite';
+import { WallCoords } from '../types/walls';
 import { Vector2 } from '../Vector2';
 import { CaveLevel1 } from './CaveLevel1';
 
 const DEFAULT_HERO_POSITION = new Vector2(gridCells(6), gridCells(5));
 const LEVEL_ID = 'outdoorLevel1';
+const LEVEL_WALLS = [
+  //Tree
+  '64,48',
+  // Square
+  '64,64',
+  '64,80',
+  '80,64',
+  '80,80',
+  // Water
+  '112,80',
+  '128,80',
+  '144,80',
+  '160,80',
+] satisfies WallCoords[];
 
 export class OutdoorLevel1 extends Level {
   background = new Sprite({
@@ -55,17 +70,7 @@ export class OutdoorLevel1 extends Level {
     });
     this.addChild(hammer);
 
-    this.walls.add('64,48'); // Tree
-
-    this.walls.add('64,64'); // Square
-    this.walls.add('64,80');
-    this.walls.add('80,64');
-    this.walls.add('80,80');
-
-    this.walls.add('112,80'); // Water
-    this.walls.add('128,80');
-    this.walls.add('144,80');
-    this.walls.add('160,80');
+    LEVEL_WALLS.forEach((wallCoords) => this.walls.add(wallCoords));
   }
 
   ready(): void {
