@@ -7,7 +7,7 @@ import { CollectibleItem } from '../objects/Item';
 import { Level, LevelConfig } from '../objects/Level';
 import { Resources } from '../Resources';
 import { Sprite } from '../Sprite';
-import { WallCoords } from '../types/walls';
+import { Coords } from '../types/coords';
 import { Vector2 } from '../Vector2';
 import { CaveLevel1 } from './CaveLevel1';
 
@@ -26,7 +26,7 @@ const LEVEL_WALLS = [
   '128,80',
   '144,80',
   '160,80',
-] satisfies WallCoords[];
+] satisfies Coords[];
 
 export class OutdoorLevel1 extends Level {
   background = new Sprite({
