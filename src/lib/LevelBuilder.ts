@@ -1,14 +1,16 @@
 import { CHANGE_LEVEL, HERO_EXITS } from '../constants/events';
 import { Events } from '../Events';
+import { GameObject, GameObjectDrawLayer } from '../GameObject';
 import { gridCells } from '../helpers/grid';
 import { objectKeys } from '../helpers/objectKeys';
 import { CaveLevel1 } from '../levels/CaveLevel1';
 import { Exit } from '../objects/Exit';
 import { Hero } from '../objects/Hero';
 import { CollectibleItem, ItemKey } from '../objects/Item';
-import { Level } from '../objects/Level';
+import { Level, LevelConfig } from '../objects/Level';
 import { Resources } from '../Resources';
 import { Sprite } from '../Sprite';
+import { Coords } from '../types/coords';
 import { Vector2 } from '../Vector2';
 
 type WorldTile =
@@ -24,122 +26,86 @@ type WorldTile =
   | 'grassLowerRight'
   | 'grassPattern'
   | 'grassWater'
-  | 'tree'
+  | 'treeUpper'
+  | 'treeLower'
   | 'bush'
   | 'stones'
   | 'rock'
   | 'house';
-type Coords = `${number},${number}`;
 type Coords2D = { x: number; y: number };
 
-type WorldTileConfig = { frame: number; frameSize: Coords2D };
-type WorldTilesMap = Record<WorldTile, WorldTileConfig>;
+type WorldTilesFrameMap = Record<WorldTile, number>;
+type GameObjectsBaseConfig = { id: string } & Coords2D;
 
-type GameObjects = (
-  | {
-      type: 'Hero' | 'Exit';
-    }
-  | {
-      type: 'CollectibleItem';
-      item: ItemKey;
-    }
-) & { id: string } & Coords2D;
+type ExitConfig = {
+  type: 'Exit';
+} & GameObjectsBaseConfig;
+
+type CollectibleItemConfig = {
+  type: 'CollectibleItem';
+  item: ItemKey;
+} & GameObjectsBaseConfig;
+
+type DecorationConfig = {
+  type: 'Decoration';
+  key: WorldTile;
+  isSolid?: true;
+  drawLayer?: GameObjectDrawLayer;
+} & GameObjectsBaseConfig;
+
+type GameObjectsConfig = ExitConfig | CollectibleItemConfig | DecorationConfig;
 
 type LevelMap = {
   id: string;
-  background: { resource: 'bgCave' | 'bgSky' | 'bgVolcano'; frameSize: Coords2D };
+  background: {
+    resource: 'bgCave' | 'bgSky' | 'bgVolcano';
+    frameSize: Coords2D;
+  };
   horizontalTiles: number;
   verticalTiles: number;
-  heroPosition: Coords2D;
-  gameObjects: GameObjects[];
+  heroDefaultPosition: Coords2D;
+  gameObjects: GameObjectsConfig[];
   walls: Coords[];
-  tiles: Record<Coords, { tile: WorldTile; foregroundTile?: WorldTile } | null>;
+  tiles: Record<Coords, WorldTile | null>;
 };
 
-const WORLD_TILES_MAP: WorldTilesMap = {
-  grassUpperLeft: {
-    frame: 0,
-    frameSize: { x: 16, y: 16 },
-  },
-  grassUpper: {
-    frame: 1,
-    frameSize: { x: 16, y: 16 },
-  },
-  grassUpperRight: {
-    frame: 2,
-    frameSize: { x: 16, y: 16 },
-  },
-  grassLeft: {
-    frame: 16,
-    frameSize: { x: 16, y: 16 },
-  },
-  grass: {
-    frame: 17,
-    frameSize: { x: 16, y: 16 },
-  },
-  grassRight: {
-    frame: 18,
-    frameSize: { x: 16, y: 16 },
-  },
-  grassLowerLeft: {
-    frame: 32,
-    frameSize: { x: 16, y: 16 },
-  },
-  grassLower: {
-    frame: 33,
-    frameSize: { x: 16, y: 16 },
-  },
-  grassLowerRight: {
-    frame: 34,
-    frameSize: { x: 16, y: 16 },
-  },
-  grassPattern: {
-    frame: 3,
-    frameSize: { x: 16, y: 16 },
-  },
-  grassWater: {
-    frame: 19,
-    frameSize: { x: 16, y: 16 },
-  },
-  grassObstacle: {
-    frame: 35,
-    frameSize: { x: 16, y: 16 },
-  },
-  tree: {
-    frame: 112,
-    frameSize: { x: 16, y: 32 },
-  },
-  bush: {
-    frame: 113,
-    frameSize: { x: 16, y: 16 },
-  },
-  stones: {
-    frame: 98,
-    frameSize: { x: 16, y: 16 },
-  },
-  rock: {
-    frame: 114,
-    frameSize: { x: 16, y: 16 },
-  },
-  house: {
-    frame: 115,
-    frameSize: { x: 16, y: 16 },
-  },
+const WORLD_TILES_FRAME_MAP: WorldTilesFrameMap = {
+  grassUpperLeft: 0,
+  grassUpper: 1,
+  grassUpperRight: 2,
+  grassLeft: 16,
+  grass: 17,
+  grassRight: 18,
+  grassLowerLeft: 32,
+  grassLower: 33,
+  grassLowerRight: 34,
+  grassPattern: 3,
+  grassWater: 19,
+  grassObstacle: 35,
+  treeUpper: 96,
+  treeLower: 112,
+  bush: 113,
+  stones: 98,
+  rock: 114,
+  house: 115,
 };
 
 const TEST_LEVEL_MAP: LevelMap = {
   id: 'outdoorLevel1',
-  background: { resource: 'bgSky', frameSize: { x: 320, y: 180 } },
+  background: {
+    resource: 'bgSky',
+    frameSize: {
+      x: 320,
+      y: 180,
+    },
+  },
   horizontalTiles: 13,
   verticalTiles: 6,
-  heroPosition: { x: 3, y: 2 },
+  heroDefaultPosition: {
+    x: 3,
+    y: 2,
+  },
   gameObjects: [
-    {
-      type: 'Hero',
-      id: 'hero',
-      x: 3,
-      y: 2,
-    },
     {
       type: 'Exit',
       id: 'exit',
@@ -150,8 +116,56 @@ const TEST_LEVEL_MAP: LevelMap = {
       type: 'CollectibleItem',
       id: 'hammer',
       item: 'hammer1',
-      x: 7,
-      y: 6,
+      x: 5,
+      y: 4,
+    },
+    {
+      type: 'Decoration',
+      id: 'tree-upper-decoration',
+      key: 'treeUpper',
+      x: 11,
+      y: 1,
+      drawLayer: 'WORLD_TOP',
+    },
+    {
+      type: 'Decoration',
+      id: 'tree-lower-decoration',
+      key: 'treeLower',
+      x: 11,
+      y: 2,
+      isSolid: true,
+    },
+    {
+      type: 'Decoration',
+      id: 'house-decoration',
+      key: 'house',
+      x: 12,
+      y: 2,
+      isSolid: true,
+    },
+    {
+      type: 'Decoration',
+      id: 'rock1-decoration',
+      key: 'rock',
+      x: 10,
+      y: 4,
+      isSolid: true,
+    },
+    {
+      type: 'Decoration',
+      id: 'rock2-decoration',
+      key: 'rock',
+      x: 11,
+      y: 4,
+      isSolid: true,
+    },
+    {
+      type: 'Decoration',
+      id: 'rock3-decoration',
+      key: 'rock',
+      x: 12,
+      y: 4,
+      isSolid: true,
     },
   ],
   walls: [
@@ -169,8 +183,8 @@ const TEST_LEVEL_MAP: LevelMap = {
     '11,-1',
     '12,-1',
     '13,0',
-    '4,1',
     '5,1',
+    '6,1',
     '1,2',
     '2,2',
     '1,3',
@@ -179,11 +193,6 @@ const TEST_LEVEL_MAP: LevelMap = {
     '5,3',
     '6,3',
     '7,3',
-    '11,2',
-    '12,2',
-    '10,4',
-    '11,4',
-    '12,4',
     '0,5',
     '1,5',
     '2,5',
@@ -205,99 +214,99 @@ const TEST_LEVEL_MAP: LevelMap = {
     '1,0': null,
     '2,0': null,
     '3,0': null,
-    '4,0': { tile: 'grassUpperLeft' },
-    '5,0': { tile: 'grassUpper' },
-    '6,0': { tile: 'grassUpper' },
-    '7,0': { tile: 'grassUpper' },
-    '8,0': { tile: 'grassUpper' },
-    '9,0': { tile: 'grassUpper' },
-    '10,0': { tile: 'grassUpper' },
-    '11,0': { tile: 'grassUpper' },
-    '12,0': { tile: 'grassUpperRight' },
+    '4,0': 'grassUpperLeft',
+    '5,0': 'grassUpper',
+    '6,0': 'grassUpper',
+    '7,0': 'grassUpper',
+    '8,0': 'grassUpper',
+    '9,0': 'grassUpper',
+    '10,0': 'grassUpper',
+    '11,0': 'grassUpper',
+    '12,0': 'grassUpperRight',
     '13,0': null,
     // Second row
-    '0,1': { tile: 'grassUpperLeft' },
-    '1,1': { tile: 'grassUpper' },
-    '2,1': { tile: 'grassUpper' },
-    '3,1': { tile: 'grassUpper' },
-    '4,1': { tile: 'grass' },
-    '5,1': { tile: 'grassObstacle' },
-    '6,1': { tile: 'grassObstacle' },
-    '7,1': { tile: 'grass' },
-    '8,1': { tile: 'grass' },
-    '9,1': { tile: 'grass' },
-    '10,1': { tile: 'grass' },
-    '11,1': { tile: 'grass' },
-    '12,1': { tile: 'grass' },
-    '13,1': { tile: 'grassUpperRight' },
+    '0,1': 'grassUpperLeft',
+    '1,1': 'grassUpper',
+    '2,1': 'grassUpper',
+    '3,1': 'grassUpper',
+    '4,1': 'grass',
+    '5,1': 'grassObstacle',
+    '6,1': 'grassObstacle',
+    '7,1': 'grass',
+    '8,1': 'grass',
+    '9,1': 'grass',
+    '10,1': 'grass',
+    '11,1': 'grass',
+    '12,1': 'grass',
+    '13,1': 'grassUpperRight',
     // Third row
-    '0,2': { tile: 'grassLeft' },
-    '1,2': { tile: 'grassObstacle' },
-    '2,2': { tile: 'grassObstacle' },
-    '3,2': { tile: 'grass' },
-    '4,2': { tile: 'grass' },
-    '5,2': { tile: 'grass' },
-    '6,2': { tile: 'grass' },
-    '7,2': { tile: 'grass' },
-    '8,2': { tile: 'grass' },
-    '9,2': { tile: 'grass' },
-    '10,2': { tile: 'grass' },
-    '11,2': { tile: 'grass', foregroundTile: 'tree' },
-    '12,2': { tile: 'grass', foregroundTile: 'house' },
-    '13,2': { tile: 'grassRight' },
+    '0,2': 'grassLeft',
+    '1,2': 'grassObstacle',
+    '2,2': 'grassObstacle',
+    '3,2': 'grass',
+    '4,2': 'grass',
+    '5,2': 'grass',
+    '6,2': 'grass',
+    '7,2': 'grass',
+    '8,2': 'grass',
+    '9,2': 'grass',
+    '10,2': 'grass',
+    '11,2': 'grass',
+    '12,2': 'grass',
+    '13,2': 'grassRight',
     // Fourth row
-    '0,3': { tile: 'grassLeft' },
-    '1,3': { tile: 'grassObstacle' },
-    '2,3': { tile: 'grassObstacle' },
-    '3,3': { tile: 'grass' },
-    '4,3': { tile: 'grassWater' },
-    '5,3': { tile: 'grassWater' },
-    '6,3': { tile: 'grassWater' },
-    '7,3': { tile: 'grassWater' },
-    '8,3': { tile: 'grass' },
-    '9,3': { tile: 'grass' },
-    '10,3': { tile: 'grass' },
-    '11,3': { tile: 'grass' },
-    '12,3': { tile: 'grass' },
-    '13,3': { tile: 'grassRight' },
+    '0,3': 'grassLeft',
+    '1,3': 'grassObstacle',
+    '2,3': 'grassObstacle',
+    '3,3': 'grass',
+    '4,3': 'grassWater',
+    '5,3': 'grassWater',
+    '6,3': 'grassWater',
+    '7,3': 'grassWater',
+    '8,3': 'grass',
+    '9,3': 'grass',
+    '10,3': 'grass',
+    '11,3': 'grass',
+    '12,3': 'grass',
+    '13,3': 'grassRight',
     // Fifth row
-    '0,4': { tile: 'grassLeft' },
-    '1,4': { tile: 'grass' },
-    '2,4': { tile: 'grass' },
-    '3,4': { tile: 'grass' },
-    '4,4': { tile: 'grass' },
-    '5,4': { tile: 'grass' },
-    '6,4': { tile: 'grass' },
-    '7,4': { tile: 'grass' },
-    '8,4': { tile: 'grass' },
-    '9,4': { tile: 'grass' },
-    '10,4': { tile: 'grass', foregroundTile: 'rock' },
-    '11,4': { tile: 'grass', foregroundTile: 'rock' },
-    '12,4': { tile: 'grass', foregroundTile: 'rock' },
-    '13,4': { tile: 'grassRight' },
+    '0,4': 'grassLeft',
+    '1,4': 'grass',
+    '2,4': 'grass',
+    '3,4': 'grass',
+    '4,4': 'grass',
+    '5,4': 'grass',
+    '6,4': 'grass',
+    '7,4': 'grass',
+    '8,4': 'grass',
+    '9,4': 'grass',
+    '10,4': 'grass',
+    '11,4': 'grass',
+    '12,4': 'grass',
+    '13,4': 'grassRight',
     // Sixth row
-    '0,5': { tile: 'grassLowerLeft' },
-    '1,5': { tile: 'grassLower' },
-    '2,5': { tile: 'grassLower' },
-    '3,5': { tile: 'grassLower' },
-    '4,5': { tile: 'grassLower' },
-    '5,5': { tile: 'grassLower' },
-    '6,5': { tile: 'grassLower' },
-    '7,5': { tile: 'grassLower' },
-    '8,5': { tile: 'grassLower' },
-    '9,5': { tile: 'grassLower' },
-    '10,5': { tile: 'grassLower' },
-    '11,5': { tile: 'grassLower' },
-    '12,5': { tile: 'grassLower' },
-    '13,5': { tile: 'grassLowerRight' },
+    '0,5': 'grassLowerLeft',
+    '1,5': 'grassLower',
+    '2,5': 'grassLower',
+    '3,5': 'grassLower',
+    '4,5': 'grassLower',
+    '5,5': 'grassLower',
+    '6,5': 'grassLower',
+    '7,5': 'grassLower',
+    '8,5': 'grassLower',
+    '9,5': 'grassLower',
+    '10,5': 'grassLower',
+    '11,5': 'grassLower',
+    '12,5': 'grassLower',
+    '13,5': 'grassLowerRight',
   },
 };
 
 export class LevelBuilder extends Level {
-  constructor() {
-    const { id, background, heroPosition } = TEST_LEVEL_MAP;
+  constructor(config?: LevelConfig) {
+    const { id, background, heroDefaultPosition } = TEST_LEVEL_MAP;
 
-    super({ id, heroPosition: new Vector2(gridCells(heroPosition.x), gridCells(heroPosition.y)) });
+    super({ id });
 
     this.background = new Sprite({
       id: `${TEST_LEVEL_MAP.id}-background-sprite`,
@@ -308,41 +317,36 @@ export class LevelBuilder extends Level {
     // Add tiles
     objectKeys(TEST_LEVEL_MAP.tiles).forEach((coords) => {
       const [x, y] = coords.split(',').map(Number);
-      const tileData = TEST_LEVEL_MAP.tiles[coords];
+      const tileKey = TEST_LEVEL_MAP.tiles[coords];
 
-      if (tileData) {
-        const { frameSize, frame } = WORLD_TILES_MAP[tileData.tile];
-
-        const worldTileSprite = new Sprite({
-          id: `${TEST_LEVEL_MAP.id}-world-tile-${coords}`,
-          resource: Resources.images.worldTiles,
-          frameSize: new Vector2(frameSize.x, frameSize.y),
-          hFrames: 16,
-          vFrames: 9,
-          frame,
-          position: new Vector2(gridCells(x), gridCells(y)),
-        });
-
-        if (tileData.foregroundTile) {
-          const foregroundTileData = WORLD_TILES_MAP[tileData.foregroundTile];
-
-          const foregroundTileSprite = new Sprite({
-            id: `${TEST_LEVEL_MAP.id}-foreground-tile-${coords}`,
-            resource: Resources.images.worldTiles,
-            frameSize: new Vector2(foregroundTileData.frameSize.x, foregroundTileData.frameSize.y),
-            hFrames: 16,
-            vFrames: 9,
-            frame: foregroundTileData.frame,
-            position: new Vector2(gridCells(x), gridCells(y)),
-          });
-
-          this.addChild(foregroundTileSprite);
-        }
-
-        worldTileSprite.drawLayer = 'FLOOR';
-        this.addChild(worldTileSprite);
+      if (!tileKey) {
+        return;
       }
+
+      const frame = WORLD_TILES_FRAME_MAP[tileKey];
+      const worldTileSprite = new Sprite({
+        id: `${TEST_LEVEL_MAP.id}-world-tile-${coords}`,
+        resource: Resources.images.worldTiles,
+        frameSize: new Vector2(16, 16),
+        hFrames: 16,
+        vFrames: 9,
+        frame,
+        position: new Vector2(gridCells(x), gridCells(y)),
+      });
+
+      worldTileSprite.drawLayer = 'FLOOR';
+      this.addChild(worldTileSprite);
     });
+
+    // Add hero
+    this.heroStartPosition =
+      config?.heroPosition ?? new Vector2(gridCells(heroDefaultPosition.x), gridCells(heroDefaultPosition.y));
+    const hero = new Hero({
+      id: `${TEST_LEVEL_MAP.id}-hero`,
+      x: this.heroStartPosition.x,
+      y: this.heroStartPosition.y,
+    });
+    this.addChild(hero);
 
     // Add walls
     TEST_LEVEL_MAP.walls.forEach((wallCoords) => {
@@ -355,33 +359,51 @@ export class LevelBuilder extends Level {
     // Add game objects
     TEST_LEVEL_MAP.gameObjects.forEach((gameObject) => {
       const { id, type, x, y } = gameObject;
-
-      if (type === 'Hero') {
-        const hero = new Hero({
-          id: `${TEST_LEVEL_MAP.id}-hero`,
-          x: gridCells(x),
-          y: gridCells(y),
-        });
-        this.addChild(hero);
-      }
+      let object: GameObject | null = null;
 
       if (type === 'Exit') {
-        const exit = new Exit({
+        object = new Exit({
           id: `${TEST_LEVEL_MAP.id}-exit`,
           x: gridCells(x),
           y: gridCells(y),
         });
-        this.addChild(exit);
       }
 
       if (type === 'CollectibleItem') {
-        const collectibleItem = new CollectibleItem({
+        object = new CollectibleItem({
           id: `${TEST_LEVEL_MAP.id}-${id}`,
           item: gameObject.item,
           x: gridCells(x),
           y: gridCells(y),
         });
-        this.addChild(collectibleItem);
+      }
+
+      if (type === 'Decoration') {
+        const { id, x, y, key, isSolid, drawLayer } = gameObject;
+        const frame = WORLD_TILES_FRAME_MAP[key];
+
+        object = new Sprite({
+          id,
+          resource: Resources.images.worldTiles,
+          frameSize: new Vector2(16, 16),
+          hFrames: 16,
+          vFrames: 9,
+          frame,
+          position: new Vector2(gridCells(x), gridCells(y)),
+        });
+
+        if (isSolid) {
+          object.isSolid = isSolid;
+        }
+
+        // Mark decorations to render on top or bottom of characters
+        if (drawLayer) {
+          object.drawLayer = drawLayer;
+        }
+      }
+
+      if (object) {
+        this.addChild(object);
       }
     });
 
