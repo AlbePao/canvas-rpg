@@ -1,5 +1,5 @@
+import { objectKeys } from '../helpers/objectKeys';
 import { FrameIndexPattern } from './FrameIndexPattern';
-import { objectKeys } from './helpers/objectKeys';
 
 export type AnimationPattern<T extends string | number | symbol> = Record<T, FrameIndexPattern>;
 

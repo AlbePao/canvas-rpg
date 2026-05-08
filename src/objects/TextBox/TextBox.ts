@@ -1,7 +1,7 @@
-import { GameObject } from '../../GameObject';
-import { Resources } from '../../Resources';
-import { Sprite } from '../../Sprite';
-import { Vector2 } from '../../Vector2';
+import { GameObject } from '../../lib/GameObject';
+import { Resources } from '../../lib/Resources';
+import { Sprite } from '../../lib/Sprite';
+import { Vector2 } from '../../lib/Vector2';
 
 export class TextBox extends GameObject {
   content = 'Hi. How are you How are you How are you How are you How are you How are you?';

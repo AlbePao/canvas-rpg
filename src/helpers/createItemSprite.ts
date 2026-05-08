@@ -1,6 +1,6 @@
-import { Resources } from '../Resources';
-import { Sprite } from '../Sprite';
-import { Vector2 } from '../Vector2';
+import { Resources } from '../lib/Resources';
+import { Sprite } from '../lib/Sprite';
+import { Vector2 } from '../lib/Vector2';
 
 interface ItemSpriteConfig {
   id: string;

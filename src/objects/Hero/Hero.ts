@@ -1,4 +1,3 @@
-import { Animations } from '../../Animations';
 import {
   END_TEXT_BOX,
   HERO_PICKS_UP_ITEM,
@@ -7,16 +6,17 @@ import {
   START_TEXT_BOX,
 } from '../../constants/events';
 import { GRID_SIZE } from '../../constants/gridSize';
-import { Events } from '../../Events';
-import { FrameIndexPattern } from '../../FrameIndexPattern';
-import { GameObject } from '../../GameObject';
 import { createItemSprite } from '../../helpers/createItemSprite';
 import { isSpaceFree } from '../../helpers/grid';
 import { moveTowards } from '../../helpers/moveTowards';
-import { Directions } from '../../Input';
-import { Resources } from '../../Resources';
-import { Sprite } from '../../Sprite';
-import { Vector2 } from '../../Vector2';
+import { Animations } from '../../lib/Animations';
+import { Events } from '../../lib/Events';
+import { FrameIndexPattern } from '../../lib/FrameIndexPattern';
+import { GameObject } from '../../lib/GameObject';
+import { Directions } from '../../lib/Input';
+import { Resources } from '../../lib/Resources';
+import { Sprite } from '../../lib/Sprite';
+import { Vector2 } from '../../lib/Vector2';
 import { CollectibleItemData } from '../Item';
 import { Main } from '../Main';
 import { HeroAnimationFrame, HeroConfig } from './hero.types';

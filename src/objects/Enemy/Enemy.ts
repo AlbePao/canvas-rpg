@@ -1,9 +1,9 @@
-import { Animations } from '../../Animations';
-import { FrameIndexPattern } from '../../FrameIndexPattern';
-import { GameObject } from '../../GameObject';
-import { Resources } from '../../Resources';
-import { Sprite } from '../../Sprite';
-import { Vector2 } from '../../Vector2';
+import { Animations } from '../../lib/Animations';
+import { FrameIndexPattern } from '../../lib/FrameIndexPattern';
+import { GameObject } from '../../lib/GameObject';
+import { Resources } from '../../lib/Resources';
+import { Sprite } from '../../lib/Sprite';
+import { Vector2 } from '../../lib/Vector2';
 import { Level } from '../Level';
 import { EnemyAnimationFrame, EnemyConfig } from './enemy.types';
 import { HIT_1, HIT_2, HOVER_1, HOVER_2, HOVER_3, HOVER_4 } from './enemyAnimations';

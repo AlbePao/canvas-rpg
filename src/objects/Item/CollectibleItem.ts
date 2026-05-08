@@ -1,7 +1,7 @@
 import { HERO_PICKS_UP_ITEM, HERO_POSITION } from '../../constants/events';
-import { Events } from '../../Events';
 import { detectOverlap } from '../../helpers/detectOverlap';
-import { Vector2 } from '../../Vector2';
+import { Events } from '../../lib/Events';
+import { Vector2 } from '../../lib/Vector2';
 import { Item } from './Item';
 import { CollectibleItemConfig, CollectibleItemData, ITEMS_SPRITE_FRAME } from './item.types';
 

@@ -1,12 +1,12 @@
-import { Animations } from '../../Animations';
 import { START_TEXT_BOX } from '../../constants/events';
-import { Events } from '../../Events';
-import { FrameIndexPattern } from '../../FrameIndexPattern';
-import { GameObject } from '../../GameObject';
-import { Resources } from '../../Resources';
-import { Sprite } from '../../Sprite';
-import { StoryFlags } from '../../StoryFlags';
-import { Vector2 } from '../../Vector2';
+import { Animations } from '../../lib/Animations';
+import { Events } from '../../lib/Events';
+import { FrameIndexPattern } from '../../lib/FrameIndexPattern';
+import { GameObject } from '../../lib/GameObject';
+import { Resources } from '../../lib/Resources';
+import { Sprite } from '../../lib/Sprite';
+import { StoryFlags } from '../../lib/StoryFlags';
+import { Vector2 } from '../../lib/Vector2';
 import { NpcAnimationFrame, NpcConfig, NpcContent, NpcContentConfig } from './npc-types';
 import { STANDING_1, STANDING_2, STANDING_3, STANDING_4 } from './npcAnimations';
 

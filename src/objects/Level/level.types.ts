@@ -1,4 +1,4 @@
-import { Vector2 } from '../../Vector2';
+import { Vector2 } from '../../lib/Vector2';
 
 export interface LevelConfig {
   heroPosition: Vector2;

@@ -1,7 +1,10 @@
 import { CHANGE_LEVEL, HERO_EXITS } from '../constants/events';
 import { TALKED_TO_A, TALKED_TO_B } from '../constants/storyFlags';
-import { Events } from '../Events';
 import { gridCells } from '../helpers/grid';
+import { Events } from '../lib/Events';
+import { Resources } from '../lib/Resources';
+import { Sprite } from '../lib/Sprite';
+import { Vector2 } from '../lib/Vector2';
 import { Chest } from '../objects/Chest';
 import { Enemy } from '../objects/Enemy';
 import { Exit } from '../objects/Exit';
@@ -9,9 +12,6 @@ import { Hero } from '../objects/Hero';
 import { CollectibleItem } from '../objects/Item';
 import { Level, LevelConfig } from '../objects/Level';
 import { Npc } from '../objects/Npc';
-import { Resources } from '../Resources';
-import { Sprite } from '../Sprite';
-import { Vector2 } from '../Vector2';
 import { OutdoorLevel1 } from './OutdoorLevel1';
 
 const DEFAULT_HERO_POSITION = new Vector2(gridCells(6), gridCells(5));

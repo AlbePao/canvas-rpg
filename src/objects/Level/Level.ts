@@ -1,7 +1,7 @@
-import { GameObject } from '../../GameObject';
-import { Sprite } from '../../Sprite';
+import { GameObject } from '../../lib/GameObject';
+import { Sprite } from '../../lib/Sprite';
+import { Vector2 } from '../../lib/Vector2';
 import { Coords, Walls } from '../../types/coords';
-import { Vector2 } from '../../Vector2';
 import { LevelBaseConfig } from './level.types';
 
 export class Level extends GameObject {

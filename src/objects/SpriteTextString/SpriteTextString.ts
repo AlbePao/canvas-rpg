@@ -1,9 +1,9 @@
 import { END_TEXT_BOX } from '../../constants/events';
-import { Events } from '../../Events';
-import { GameObject } from '../../GameObject';
-import { Resources } from '../../Resources';
-import { Sprite } from '../../Sprite';
-import { Vector2 } from '../../Vector2';
+import { Events } from '../../lib/Events';
+import { GameObject } from '../../lib/GameObject';
+import { Resources } from '../../lib/Resources';
+import { Sprite } from '../../lib/Sprite';
+import { Vector2 } from '../../lib/Vector2';
 import { Main } from '../Main';
 import { SpriteTextStringConfig, Word } from './sprite-text-string.types';
 import { getCharacterFrame, getCharacterWidth } from './spriteFontMap';

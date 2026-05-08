@@ -1,6 +1,6 @@
-import { GameObject } from '../../GameObject';
 import { createItemSprite } from '../../helpers/createItemSprite';
-import { Vector2 } from '../../Vector2';
+import { GameObject } from '../../lib/GameObject';
+import { Vector2 } from '../../lib/Vector2';
 import { ItemConfig, ItemData, ITEMS_SPRITE_FRAME } from './item.types';
 
 export class Item extends GameObject {

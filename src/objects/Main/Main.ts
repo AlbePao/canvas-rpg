@@ -1,9 +1,9 @@
-import { Camera } from '../../Camera';
 import { CHANGE_LEVEL, END_TEXT_BOX, HERO_REQUESTS_ACTION, START_TEXT_BOX } from '../../constants/events';
-import { Events } from '../../Events';
-import { GameObject } from '../../GameObject';
-import { Input } from '../../Input';
-import { StoryFlags } from '../../StoryFlags';
+import { Camera } from '../../lib/Camera';
+import { Events } from '../../lib/Events';
+import { GameObject } from '../../lib/GameObject';
+import { Input } from '../../lib/Input';
+import { StoryFlags } from '../../lib/StoryFlags';
 import { Inventory } from '../Inventory';
 import { Level } from '../Level';
 import { Npc } from '../Npc';

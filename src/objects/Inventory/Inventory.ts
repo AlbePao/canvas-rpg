@@ -1,9 +1,9 @@
 import { HERO_PICKS_UP_ITEM } from '../../constants/events';
-import { Events } from '../../Events';
-import { GameObject } from '../../GameObject';
 import { createItemSprite } from '../../helpers/createItemSprite';
+import { Events } from '../../lib/Events';
+import { GameObject } from '../../lib/GameObject';
+import { Vector2 } from '../../lib/Vector2';
 import { UUID } from '../../types/uuid';
-import { Vector2 } from '../../Vector2';
 import { CollectibleItemData } from '../Item';
 import { InventoryItem } from './inventory.types';
 

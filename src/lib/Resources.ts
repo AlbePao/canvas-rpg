@@ -1,5 +1,5 @@
-import { objectKeys } from './helpers/objectKeys';
-import { Singleton } from './lib/Singleton';
+import { objectKeys } from '../helpers/objectKeys';
+import { Singleton } from './Singleton';
 
 export interface Resource {
   image: HTMLImageElement;

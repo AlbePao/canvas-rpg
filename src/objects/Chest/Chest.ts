@@ -1,9 +1,9 @@
 import { HERO_PICKS_UP_ITEM, HERO_REQUESTS_ACTION } from '../../constants/events';
-import { Events } from '../../Events';
-import { GameObject } from '../../GameObject';
-import { Resources } from '../../Resources';
-import { Sprite } from '../../Sprite';
-import { Vector2 } from '../../Vector2';
+import { Events } from '../../lib/Events';
+import { GameObject } from '../../lib/GameObject';
+import { Resources } from '../../lib/Resources';
+import { Sprite } from '../../lib/Sprite';
+import { Vector2 } from '../../lib/Vector2';
 import { CollectibleItemData, ITEMS_SPRITE_FRAME } from '../Item';
 import { ChestConfig, ChestStatus } from './chest.types';
 

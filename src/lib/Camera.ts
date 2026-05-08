@@ -1,7 +1,7 @@
-import { CHANGE_LEVEL, HERO_POSITION } from './constants/events';
+import { CHANGE_LEVEL, HERO_POSITION } from '../constants/events';
+import { Level } from '../objects/Level';
 import { Events } from './Events';
 import { GameObject } from './GameObject';
-import { Level } from './objects/Level';
 import { Vector2 } from './Vector2';
 
 export class Camera extends GameObject {

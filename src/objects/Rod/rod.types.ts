@@ -1,6 +1,6 @@
-import { Resource } from '../../Resources';
+import { Resource } from '../../lib/Resources';
+import { Vector2 } from '../../lib/Vector2';
 import { GameObjectBaseConfig } from '../../types/gameObjectBaseConfig';
-import { Vector2 } from '../../Vector2';
 
 export type RodConfig = GameObjectBaseConfig;
 

@@ -1,4 +1,4 @@
-import { GameLoop } from './GameLoop';
+import { GameLoop } from './lib/GameLoop';
 import { LevelBuilder } from './lib/LevelBuilder';
 import { Main } from './objects/Main';
 import './style.css';

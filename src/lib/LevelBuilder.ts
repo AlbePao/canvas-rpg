@@ -1,6 +1,4 @@
 import { CHANGE_LEVEL, HERO_EXITS } from '../constants/events';
-import { Events } from '../Events';
-import { GameObject, GameObjectDrawLayer } from '../GameObject';
 import { gridCells } from '../helpers/grid';
 import { objectKeys } from '../helpers/objectKeys';
 import { CaveLevel1 } from '../levels/CaveLevel1';
@@ -8,10 +6,12 @@ import { Exit } from '../objects/Exit';
 import { Hero } from '../objects/Hero';
 import { CollectibleItem, ItemKey } from '../objects/Item';
 import { Level, LevelConfig } from '../objects/Level';
-import { Resources } from '../Resources';
-import { Sprite } from '../Sprite';
 import { Coords } from '../types/coords';
-import { Vector2 } from '../Vector2';
+import { Events } from './Events';
+import { GameObject, GameObjectDrawLayer } from './GameObject';
+import { Resources } from './Resources';
+import { Sprite } from './Sprite';
+import { Vector2 } from './Vector2';
 
 type WorldTile =
   | 'grassUpperLeft'

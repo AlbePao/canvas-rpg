@@ -1,4 +1,4 @@
-import { GRID_SIZE } from './constants/gridSize';
+import { GRID_SIZE } from '../constants/gridSize';
 import { Directions } from './Input';
 
 export class Vector2 {
