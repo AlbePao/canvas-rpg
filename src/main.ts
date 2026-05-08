@@ -9,7 +9,11 @@ const ctx = canvas.getContext('2d')!;
 
 // Establish the root scene
 const mainScene = new Main();
-mainScene.setLevel(new LevelBuilder());
+mainScene.setLevel(
+  new LevelBuilder({
+    id: 'grass1',
+  }),
+);
 
 // Establish update and draw loops
 const update = (delta: number): void => {
