@@ -9,6 +9,7 @@ import { Level, LevelConfig } from '../objects/Level';
 import { Coords } from '../types/coords';
 import { Events } from './Events';
 import { GameObject, GameObjectDrawLayer } from './GameObject';
+import { LevelTransition } from './LevelTransition';
 import { Resources } from './Resources';
 import { Sprite } from './Sprite';
 import { Vector2 } from './Vector2';
@@ -412,12 +413,14 @@ export class LevelBuilder extends Level {
     });
 
     Events.on(HERO_EXITS, this, () => {
-      Events.emit(
-        CHANGE_LEVEL,
-        new CaveLevel1({
-          heroPosition: new Vector2(gridCells(3), gridCells(6)),
-        }),
-      );
+      LevelTransition.init(() => {
+        Events.emit(
+          CHANGE_LEVEL,
+          new CaveLevel1({
+            heroPosition: new Vector2(gridCells(3), gridCells(6)),
+          }),
+        );
+      });
     });
   }
 }

@@ -2,6 +2,7 @@ import { CHANGE_LEVEL, HERO_EXITS } from '../constants/events';
 import { TALKED_TO_A, TALKED_TO_B } from '../constants/storyFlags';
 import { gridCells } from '../helpers/grid';
 import { Events } from '../lib/Events';
+import { LevelTransition } from '../lib/LevelTransition';
 import { Resources } from '../lib/Resources';
 import { Sprite } from '../lib/Sprite';
 import { Vector2 } from '../lib/Vector2';
@@ -129,12 +130,14 @@ export class CaveLevel1 extends Level {
 
   override ready(): void {
     Events.on(HERO_EXITS, this, () => {
-      Events.emit(
-        CHANGE_LEVEL,
-        new OutdoorLevel1({
-          heroPosition: new Vector2(gridCells(6), gridCells(4)),
-        }),
-      );
+      LevelTransition.init(() => {
+        Events.emit(
+          CHANGE_LEVEL,
+          new OutdoorLevel1({
+            heroPosition: new Vector2(gridCells(6), gridCells(4)),
+          }),
+        );
+      });
     });
   }
 }

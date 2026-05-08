@@ -6,6 +6,7 @@ import {
   START_TEXT_BOX,
 } from '../../constants/events';
 import { GRID_SIZE } from '../../constants/gridSize';
+import { END_LEVEL_TRANSITION, START_LEVEL_TRANSITION } from '../../constants/levelTransition';
 import { createItemSprite } from '../../helpers/createItemSprite';
 import { isSpaceFree } from '../../helpers/grid';
 import { moveTowards } from '../../helpers/moveTowards';
@@ -89,11 +90,11 @@ export class Hero extends GameObject {
   }
 
   override ready(): void {
-    Events.on(START_TEXT_BOX, this, () => {
-      this.isLocked = true;
+    [START_TEXT_BOX, START_LEVEL_TRANSITION].forEach((event) => {
+      Events.on(event, this, () => (this.isLocked = true));
     });
-    Events.on(END_TEXT_BOX, this, () => {
-      this.isLocked = false;
+    [END_TEXT_BOX, END_LEVEL_TRANSITION].forEach((event) => {
+      Events.on(event, this, () => (this.isLocked = false));
     });
   }
 

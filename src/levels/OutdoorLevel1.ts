@@ -1,6 +1,7 @@
 import { CHANGE_LEVEL, HERO_EXITS } from '../constants/events';
 import { gridCells } from '../helpers/grid';
 import { Events } from '../lib/Events';
+import { LevelTransition } from '../lib/LevelTransition';
 import { Resources } from '../lib/Resources';
 import { Sprite } from '../lib/Sprite';
 import { Vector2 } from '../lib/Vector2';
@@ -75,12 +76,14 @@ export class OutdoorLevel1 extends Level {
 
   override ready(): void {
     Events.on(HERO_EXITS, this, () => {
-      Events.emit(
-        CHANGE_LEVEL,
-        new CaveLevel1({
-          heroPosition: new Vector2(gridCells(3), gridCells(6)),
-        }),
-      );
+      LevelTransition.init(() => {
+        Events.emit(
+          CHANGE_LEVEL,
+          new CaveLevel1({
+            heroPosition: new Vector2(gridCells(3), gridCells(6)),
+          }),
+        );
+      });
     });
   }
 }
