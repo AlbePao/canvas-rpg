@@ -4,7 +4,7 @@ import { GameObject } from './GameObject';
 import { Resource } from './Resources';
 import { Vector2 } from './Vector2';
 
-export type SpriteConfig = {
+type SpriteConfig = {
   id: string;
   resource: Resource;
 } & Partial<{

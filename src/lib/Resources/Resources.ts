@@ -1,35 +1,10 @@
-import { objectKeys } from '../helpers/objectKeys';
-import { Singleton } from './Singleton';
-
-export interface Resource {
-  image: HTMLImageElement;
-  isLoaded: boolean;
-}
-
-export type ImageKeys =
-  | 'hero'
-  | 'shadow'
-  | 'rod'
-  | 'items'
-  | 'chest'
-  | 'exit'
-  | 'sky'
-  | 'ground'
-  | 'cave'
-  | 'caveGround'
-  | 'knight'
-  | 'bat'
-  | 'bgCave'
-  | 'bgSky'
-  | 'bgVolcano'
-  | 'worldTiles'
-  | 'textBox'
-  | 'fontWhite'
-  | 'portraits';
+import { objectKeys } from '../../helpers/objectKeys';
+import { Singleton } from '../Singleton';
+import { Resource, ResourceKey } from './resources.types';
 
 class ResourcesSingleton extends Singleton<ResourcesSingleton>() {
   // Every image we want to download
-  private readonly _toLoad: Record<ImageKeys, string> = {
+  private readonly _toLoad: Record<ResourceKey, string> = {
     hero: '/sprites/hero-sheet.png',
     shadow: '/sprites/shadow.png',
     rod: '/sprites/rod.png',
@@ -58,7 +33,7 @@ class ResourcesSingleton extends Singleton<ResourcesSingleton>() {
   };
 
   // A bucket to keep all of our images
-  images: Record<ImageKeys, Resource> = {} as Record<ImageKeys, Resource>;
+  images: Record<ResourceKey, Resource> = {} as Record<ResourceKey, Resource>;
 
   constructor() {
     super();

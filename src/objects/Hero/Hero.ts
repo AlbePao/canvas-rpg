@@ -14,10 +14,10 @@ import { Animations } from '../../lib/Animations';
 import { Events } from '../../lib/Events';
 import { FrameIndexPattern } from '../../lib/FrameIndexPattern';
 import { GameObject } from '../../lib/GameObject';
-import { Directions } from '../../lib/Input';
 import { Resources } from '../../lib/Resources';
 import { Sprite } from '../../lib/Sprite';
 import { Vector2 } from '../../lib/Vector2';
+import { Directions } from '../../types/directions';
 import { CollectibleItemData } from '../Item';
 import { Main } from '../Main';
 import { HeroAnimationFrame, HeroConfig } from './hero.types';
@@ -33,6 +33,7 @@ import {
   WALK_UP,
 } from './heroAnimations';
 
+// TODO: hero can jump over the ledge, like in pokemon
 // TODO: add jump behavior for cutscenes with direction IN_PLACE, FORWARDS (facing direction + 1), BACKWARDS (facing direction -1)
 // TODO: add balloon behavior (with question or exclamation mark)
 export class Hero extends GameObject {

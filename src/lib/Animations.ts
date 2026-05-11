@@ -1,7 +1,7 @@
 import { objectKeys } from '../helpers/objectKeys';
 import { FrameIndexPattern } from './FrameIndexPattern';
 
-export type AnimationPattern<T extends string | number | symbol> = Record<T, FrameIndexPattern>;
+type AnimationPattern<T extends string | number | symbol> = Record<T, FrameIndexPattern>;
 
 export class Animations<T extends string | number | symbol> {
   patterns: AnimationPattern<T>;

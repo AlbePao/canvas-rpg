@@ -1,12 +1,6 @@
-import { Events } from './Events';
-import { Vector2 } from './Vector2';
-
-export interface GameObjectConfig {
-  id: string;
-  position?: Vector2;
-}
-
-export type GameObjectDrawLayer = 'HUD' | 'FLOOR' | 'WORLD_TOP' | null;
+import { Events } from '../Events';
+import { Vector2 } from '../Vector2';
+import { GameObjectConfig, GameObjectDrawLayer } from './gameObject.types';
 
 export class GameObject {
   id: string;
