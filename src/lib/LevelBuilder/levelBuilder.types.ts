@@ -1,8 +1,12 @@
-import { ItemKey } from '../../objects/Item';
-import { Level, LevelConfig } from '../../objects/Level';
-import { Coords, Coords2D } from '../../types/coords';
-import { GameObjectBaseConfig } from '../../types/gameObjectBaseConfig';
-import { GameObjectDrawLayer } from '../GameObject';
+import type { ItemKey } from '../../objects/Item';
+import type { LevelConfig } from '../../objects/Level';
+import type { Coords, Coords2D } from '../../types/coords';
+import type { GameObjectBaseConfig } from '../../types/gameObjectBaseConfig';
+import type { GameObjectDrawLayer } from '../GameObject';
+
+export const LEVELS_IDS = ['grass1Level', 'testTilesLevel'] as const;
+
+export type LevelsIds = (typeof LEVELS_IDS)[number];
 
 export const WORLD_BACKGROUNDS = ['bgCave', 'bgSky', 'bgVolcano'] as const;
 
@@ -142,7 +146,7 @@ export type WorldTile = (typeof WORLD_TILES)[number];
 export type WorldTilesFrameMap = Record<WorldTile, number>;
 
 export type LevelBuilderConfig = LevelConfig & {
-  id: string;
+  id: LevelsIds;
 };
 
 export type LevelCollectibleItem = GameObjectBaseConfig & {
@@ -160,7 +164,7 @@ export type LevelDecoration = GameObjectBaseConfig & {
 export type LevelObjects = LevelCollectibleItem | LevelDecoration;
 
 export type LevelExit = GameObjectBaseConfig & {
-  newLevel: string | typeof Level;
+  newLevelId: string;
   heroNewPosition: Coords2D;
 };
 

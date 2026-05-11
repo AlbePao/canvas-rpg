@@ -1,5 +1,4 @@
-import { CaveLevel1 } from '../../../levels/CaveLevel1';
-import { LevelMap } from '../levelBuilder.types';
+import type { LevelMap } from '../levelBuilder.types';
 
 export const GRASS1_LEVEL: LevelMap = {
   id: 'outdoorLevel1',
@@ -17,7 +16,7 @@ export const GRASS1_LEVEL: LevelMap = {
   exits: [
     {
       id: 'exitCave',
-      newLevel: CaveLevel1,
+      newLevelId: 'CaveLevel1',
       x: 4,
       y: 0,
       heroNewPosition: {
@@ -27,7 +26,7 @@ export const GRASS1_LEVEL: LevelMap = {
     },
     {
       id: 'exitTileMap',
-      newLevel: 'testTilesMap',
+      newLevelId: 'testTilesMap',
       x: 13,
       y: 4,
       heroNewPosition: {
