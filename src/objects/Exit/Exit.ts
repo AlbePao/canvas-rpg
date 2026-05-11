@@ -5,21 +5,26 @@ import { GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
 import { Sprite } from '../../lib/Sprite';
 import { Vector2 } from '../../lib/Vector2';
-import { ExitConfig } from './exit.types';
+import { ExitConfig, ExitData } from './exit.types';
 
+// TODO: add customizable exit sprite
 export class Exit extends GameObject {
+  readonly exitData: ExitData;
+
   constructor({ id, x, y }: ExitConfig) {
-    super({
+    const exitData = {
       id,
       position: new Vector2(x, y),
-    });
+    };
 
-    this.addChild(
-      new Sprite({
-        id: `${id}-exit-sprite`,
-        resource: Resources.images.exit,
-      }),
-    );
+    super(exitData);
+    this.exitData = exitData;
+
+    const exit = new Sprite({
+      id: `${id}-exit-sprite`,
+      resource: Resources.images.exit,
+    });
+    this.addChild(exit);
 
     this.drawLayer = 'FLOOR';
   }
@@ -27,8 +32,7 @@ export class Exit extends GameObject {
   override ready(): void {
     Events.on<Vector2>(HERO_POSITION, this, (position) => {
       if (detectOverlap(position, this.position)) {
-        // TODO: add a timeout and a flash animation before entering the new level
-        Events.emit(HERO_EXITS);
+        Events.emit<ExitData>(HERO_EXITS, this.exitData);
       }
     });
   }
