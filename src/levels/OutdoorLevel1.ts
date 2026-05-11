@@ -55,7 +55,7 @@ export class OutdoorLevel1 extends Level {
     });
     this.addChild(exit);
 
-    this.heroStartPosition = config?.heroPosition ?? DEFAULT_HERO_POSITION;
+    this.heroStartPosition = config?.heroStartPosition ?? DEFAULT_HERO_POSITION;
     const hero = new Hero({
       id: `${LEVEL_ID}-hero`,
       x: this.heroStartPosition.x,
@@ -80,7 +80,7 @@ export class OutdoorLevel1 extends Level {
         Events.emit(
           CHANGE_LEVEL,
           new CaveLevel1({
-            heroPosition: new Vector2(gridCells(3), gridCells(6)),
+            heroStartPosition: new Vector2(gridCells(3), gridCells(6)),
           }),
         );
       });
