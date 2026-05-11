@@ -1,6 +1,7 @@
 import { ItemKey } from '../../objects/Item';
-import { Level, LevelBaseConfig, LevelConfig } from '../../objects/Level';
+import { Level, LevelConfig } from '../../objects/Level';
 import { Coords, Coords2D } from '../../types/coords';
+import { GameObjectBaseConfig } from '../../types/gameObjectBaseConfig';
 import { GameObjectDrawLayer } from '../GameObject';
 
 export type WorldBackground = 'bgCave' | 'bgSky' | 'bgVolcano';
@@ -143,23 +144,29 @@ export type WorldTile =
   | 'squareOrange';
 
 export type WorldTilesFrameMap = Record<WorldTile, number>;
-export type GameObjectsBaseConfig = { id: string } & Coords2D;
 
-export type LevelBuilderConfig = LevelBaseConfig & Partial<LevelConfig>;
+export type LevelBuilderConfig = LevelConfig & {
+  id: string;
+};
 
-export type CollectibleItemConfig = {
+export type LevelCollectibleItem = GameObjectBaseConfig & {
   type: 'CollectibleItem';
   item: ItemKey;
-} & GameObjectsBaseConfig;
+};
 
-export type DecorationConfig = {
+export type LevelDecoration = GameObjectBaseConfig & {
   type: 'Decoration';
   key: WorldTile;
-  isSolid?: true;
+  isSolid?: boolean;
   drawLayer?: GameObjectDrawLayer;
-} & GameObjectsBaseConfig;
+};
 
-export type GameObjectsConfig = CollectibleItemConfig | DecorationConfig;
+export type LevelObjects = LevelCollectibleItem | LevelDecoration;
+
+export type LevelExit = GameObjectBaseConfig & {
+  newLevel: string | typeof Level;
+  heroNewPosition: Coords2D;
+};
 
 export interface LevelMap {
   id: string;
@@ -168,11 +175,8 @@ export interface LevelMap {
     frameSize: Coords2D;
   };
   heroDefaultPosition: Coords2D;
-  gameObjects: GameObjectsConfig[];
-  exits: (GameObjectsBaseConfig & {
-    level: string | Level;
-    heroNewPosition: Coords2D;
-  })[];
+  gameObjects: LevelObjects[];
+  exits: LevelExit[];
   walls: Coords[];
   tiles: Record<Coords, WorldTile | null>;
 }

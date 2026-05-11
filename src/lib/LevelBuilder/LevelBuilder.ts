@@ -1,7 +1,7 @@
 import { CHANGE_LEVEL, HERO_EXITS } from '../../constants/events';
 import { gridCells } from '../../helpers/grid';
 import { objectKeys } from '../../helpers/objectKeys';
-import { CaveLevel1 } from '../../levels/CaveLevel1';
+import { Exit, ExitData } from '../../objects/Exit';
 import { Hero } from '../../objects/Hero';
 import { CollectibleItem } from '../../objects/Item';
 import { Level } from '../../objects/Level';
@@ -11,15 +11,17 @@ import { LevelTransition } from '../LevelTransition';
 import { Resources } from '../Resources';
 import { Sprite } from '../Sprite';
 import { Vector2 } from '../Vector2';
-import { LevelBuilderConfig } from './levelBuilder.types';
+import { LevelBuilderConfig, LevelExit } from './levelBuilder.types';
 import { GRASS1_LEVEL } from './levels/grass1Level';
 import { WORLD_TILES_FRAME_MAP } from './tilesFramesMap';
 
 // TODO: create a LevelsMapper Record with level id and LevelMap object. Get levels dynamically from json and validate them with zod
 export class LevelBuilder extends Level {
+  exits: Record<string, LevelExit> = {};
+
   constructor(config: LevelBuilderConfig) {
     // TODO: config.id is used to select level from LevelsMapper
-    const { id, background, heroDefaultPosition, tiles, walls, exits } = GRASS1_LEVEL;
+    const { id, background, heroDefaultPosition, tiles, walls, exits, gameObjects } = GRASS1_LEVEL;
 
     super({ id });
 
@@ -55,7 +57,7 @@ export class LevelBuilder extends Level {
 
     // Add hero
     this.heroStartPosition =
-      config?.heroPosition ?? new Vector2(gridCells(heroDefaultPosition.x), gridCells(heroDefaultPosition.y));
+      config?.heroStartPosition ?? new Vector2(gridCells(heroDefaultPosition.x), gridCells(heroDefaultPosition.y));
     const hero = new Hero({
       id: `${id}-hero`,
       x: this.heroStartPosition.x,
@@ -69,20 +71,27 @@ export class LevelBuilder extends Level {
       this.walls.add(`${gridCells(x)},${gridCells(y)}`);
     });
 
-    // TODO: add exits logic
-  }
+    // Add level exits
+    exits.forEach((exitData) => {
+      const { id: exitId, x, y } = exitData;
+      const exit = new Exit({
+        id: exitId,
+        x: gridCells(x),
+        y: gridCells(y),
+      });
 
-  override ready(): void {
-    const { id: levelId, gameObjects } = GRASS1_LEVEL;
+      this.addChild(exit);
+      this.exits[exitId] = exitData;
+    });
 
     // Add game objects
     gameObjects.forEach((gameObject) => {
-      const { id, type, x, y } = gameObject;
+      const { id: gameObjectId, type, x, y } = gameObject;
       let object: GameObject | null = null;
 
       if (type === 'CollectibleItem') {
         object = new CollectibleItem({
-          id: `${levelId}-${id}`,
+          id: gameObjectId,
           item: gameObject.item,
           x: gridCells(x),
           y: gridCells(y),
@@ -90,11 +99,11 @@ export class LevelBuilder extends Level {
       }
 
       if (type === 'Decoration') {
-        const { id, x, y, key, isSolid, drawLayer } = gameObject;
+        const { id: decorationId, x, y, key, isSolid, drawLayer } = gameObject;
         const frame = WORLD_TILES_FRAME_MAP[key];
 
         object = new Sprite({
-          id,
+          id: decorationId,
           resource: Resources.images.worldTiles,
           frameSize: new Vector2(16, 16),
           hFrames: 16,
@@ -103,28 +112,34 @@ export class LevelBuilder extends Level {
           position: new Vector2(gridCells(x), gridCells(y)),
         });
 
-        if (isSolid) {
-          object.isSolid = isSolid;
-        }
+        object.isSolid = !!isSolid;
 
         // Mark decorations to render on top or bottom of characters
-        if (drawLayer) {
-          object.drawLayer = drawLayer;
-        }
+        object.drawLayer = drawLayer ?? null;
       }
 
       if (object) {
         this.addChild(object);
       }
     });
+  }
 
-    Events.on(HERO_EXITS, this, () => {
+  override ready(): void {
+    Events.on<ExitData>(HERO_EXITS, this, ({ id }) => {
+      const { newLevel, heroNewPosition } = this.exits[id];
+
       LevelTransition.init(() => {
         Events.emit(
           CHANGE_LEVEL,
-          new CaveLevel1({
-            heroPosition: new Vector2(gridCells(3), gridCells(6)),
-          }),
+          // TODO: newLevel should be a string representing the new level id from json or the class name of the new level
+          typeof newLevel === 'string'
+            ? new LevelBuilder({
+                id: newLevel,
+                heroStartPosition: new Vector2(gridCells(heroNewPosition.x), gridCells(heroNewPosition.y)),
+              })
+            : new newLevel({
+                heroStartPosition: new Vector2(gridCells(3), gridCells(6)),
+              }),
         );
       });
     });

@@ -1,3 +1,4 @@
+import { CaveLevel1 } from '../../../levels/CaveLevel1';
 import { LevelMap } from '../levelBuilder.types';
 
 export const GRASS1_LEVEL: LevelMap = {
@@ -13,7 +14,28 @@ export const GRASS1_LEVEL: LevelMap = {
     x: 3,
     y: 2,
   },
-  exits: [],
+  exits: [
+    {
+      id: 'exitCave',
+      newLevel: CaveLevel1,
+      x: 4,
+      y: 0,
+      heroNewPosition: {
+        x: 1,
+        y: 5,
+      },
+    },
+    {
+      id: 'exitTileMap',
+      newLevel: 'testTilesMap',
+      x: 13,
+      y: 4,
+      heroNewPosition: {
+        x: 0,
+        y: 0,
+      },
+    },
+  ],
   gameObjects: [
     {
       type: 'CollectibleItem',
