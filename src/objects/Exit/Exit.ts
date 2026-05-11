@@ -5,7 +5,7 @@ import { GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
 import { Sprite } from '../../lib/Sprite';
 import { Vector2 } from '../../lib/Vector2';
-import { ExitConfig, ExitData } from './exit.types';
+import type { ExitConfig, ExitData } from './exit.types';
 
 // TODO: add customizable exit sprite
 export class Exit extends GameObject {

@@ -1,4 +1,4 @@
-import { Vector2 } from '../lib/Vector2';
+import type { Vector2 } from '../lib/Vector2';
 
 export function detectOverlap(heroPosition: Vector2, objectPosition: Vector2): boolean {
   // detect overlap

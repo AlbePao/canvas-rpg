@@ -17,10 +17,10 @@ import { GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
 import { Sprite } from '../../lib/Sprite';
 import { Vector2 } from '../../lib/Vector2';
-import { Directions } from '../../types/directions';
-import { CollectibleItemData } from '../Item';
-import { Main } from '../Main';
-import { HeroAnimationFrame, HeroConfig } from './hero.types';
+import type { Directions } from '../../types/directions';
+import type { CollectibleItemData } from '../Item';
+import type { Main } from '../Main';
+import type { HeroAnimationFrame, HeroConfig } from './hero.types';
 import {
   PICK_UP_DOWN,
   STAND_DOWN,

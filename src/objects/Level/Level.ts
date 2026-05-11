@@ -1,8 +1,8 @@
 import { GameObject } from '../../lib/GameObject';
-import { Sprite } from '../../lib/Sprite';
-import { Vector2 } from '../../lib/Vector2';
-import { Coords, Walls } from '../../types/coords';
-import { LevelConfig } from './level.types';
+import type { Sprite } from '../../lib/Sprite';
+import type { Vector2 } from '../../lib/Vector2';
+import type { Coords, Walls } from '../../types/coords';
+import type { LevelConfig } from './level.types';
 
 export class Level extends GameObject {
   heroStartPosition?: Vector2;

@@ -69,6 +69,7 @@ export default defineConfig([
         },
       ],
       '@typescript-eslint/no-confusing-void-expression': 'error',
+      '@typescript-eslint/consistent-type-imports': 'error',
       'no-unused-expressions': 'error',
       'sort-imports': 'off',
       'arrow-body-style': 'error',

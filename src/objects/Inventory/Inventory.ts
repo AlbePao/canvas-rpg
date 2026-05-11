@@ -3,9 +3,9 @@ import { createItemSprite } from '../../helpers/createItemSprite';
 import { Events } from '../../lib/Events';
 import { GameObject } from '../../lib/GameObject';
 import { Vector2 } from '../../lib/Vector2';
-import { UUID } from '../../types/uuid';
-import { CollectibleItemData } from '../Item';
-import { InventoryItem } from './inventory.types';
+import type { UUID } from '../../types/uuid';
+import type { CollectibleItemData } from '../Item';
+import type { InventoryItem } from './inventory.types';
 
 export class Inventory extends GameObject {
   nextId = 0;

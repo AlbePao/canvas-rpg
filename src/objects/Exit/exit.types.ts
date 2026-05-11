@@ -1,5 +1,5 @@
-import { Vector2 } from '../../lib/Vector2';
-import { GameObjectBaseConfig } from '../../types/gameObjectBaseConfig';
+import type { Vector2 } from '../../lib/Vector2';
+import type { GameObjectBaseConfig } from '../../types/gameObjectBaseConfig';
 
 export type ExitConfig = GameObjectBaseConfig;
 

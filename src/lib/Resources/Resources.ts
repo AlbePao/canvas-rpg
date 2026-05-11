@@ -1,6 +1,6 @@
 import { objectKeys } from '../../helpers/objectKeys';
 import { Singleton } from '../Singleton';
-import { Resource, ResourceKey } from './resources.types';
+import type { Resource, ResourceKey } from './resources.types';
 
 class ResourcesSingleton extends Singleton<ResourcesSingleton>() {
   // Every image we want to download

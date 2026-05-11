@@ -5,7 +5,7 @@ import { GameObject } from '../../lib/GameObject';
 import { Input } from '../../lib/Input';
 import { StoryFlags } from '../../lib/StoryFlags';
 import { Inventory } from '../Inventory';
-import { Level } from '../Level';
+import type { Level } from '../Level';
 import { Npc } from '../Npc';
 import { SpriteTextString } from '../SpriteTextString';
 

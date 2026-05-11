@@ -1,5 +1,5 @@
 import { GRID_SIZE } from '../constants/gridSize';
-import { Coords, Walls } from '../types/coords';
+import type { Coords, Walls } from '../types/coords';
 
 export const gridCells = (n: number): number => n * GRID_SIZE;
 

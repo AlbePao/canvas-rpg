@@ -1,6 +1,6 @@
-import { Vector2 } from '../../lib/Vector2';
-import { GameObjectBaseConfig } from '../../types/gameObjectBaseConfig';
-import { UUID } from '../../types/uuid';
+import type { Vector2 } from '../../lib/Vector2';
+import type { GameObjectBaseConfig } from '../../types/gameObjectBaseConfig';
+import type { UUID } from '../../types/uuid';
 
 export const ITEM_KEYS = [
   'hammer1',

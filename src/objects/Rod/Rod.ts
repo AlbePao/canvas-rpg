@@ -5,7 +5,7 @@ import { GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
 import { Sprite } from '../../lib/Sprite';
 import { Vector2 } from '../../lib/Vector2';
-import { RodConfig, RodData } from './rod.types';
+import type { RodConfig, RodData } from './rod.types';
 
 export class Rod extends GameObject {
   constructor({ id, x, y }: RodConfig) {

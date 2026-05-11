@@ -1,5 +1,5 @@
-import { GameObjectBaseConfig } from '../../types/gameObjectBaseConfig';
-import { ItemKey } from '../Item';
+import type { GameObjectBaseConfig } from '../../types/gameObjectBaseConfig';
+import type { ItemKey } from '../Item';
 
 export type ChestStatus = 'OPEN' | 'CLOSED';
 

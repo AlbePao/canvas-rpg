@@ -1,4 +1,4 @@
-import { Directions } from '../types/directions';
+import type { Directions } from '../types/directions';
 
 export class Input {
   heldDirections: Directions[] = [];

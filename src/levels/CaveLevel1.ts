@@ -11,7 +11,8 @@ import { Enemy } from '../objects/Enemy';
 import { Exit } from '../objects/Exit';
 import { Hero } from '../objects/Hero';
 import { CollectibleItem } from '../objects/Item';
-import { Level, LevelConfig } from '../objects/Level';
+import type { LevelConfig } from '../objects/Level';
+import { Level } from '../objects/Level';
 import { Npc } from '../objects/Npc';
 import { OutdoorLevel1 } from './OutdoorLevel1';
 

@@ -1,9 +1,10 @@
 import { HERO_PICKS_UP_ITEM, HERO_POSITION } from '../../constants/events';
 import { detectOverlap } from '../../helpers/detectOverlap';
 import { Events } from '../../lib/Events';
-import { Vector2 } from '../../lib/Vector2';
+import type { Vector2 } from '../../lib/Vector2';
 import { Item } from './Item';
-import { CollectibleItemConfig, CollectibleItemData, ITEMS_SPRITE_FRAME } from './item.types';
+import type { CollectibleItemConfig, CollectibleItemData } from './item.types';
+import { ITEMS_SPRITE_FRAME } from './item.types';
 
 export class CollectibleItem extends Item {
   override data: CollectibleItemData;

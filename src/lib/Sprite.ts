@@ -1,7 +1,7 @@
 import { GRID_SIZE } from '../constants/gridSize';
-import { Animations } from './Animations';
+import type { Animations } from './Animations';
 import { GameObject } from './GameObject';
-import { Resource } from './Resources';
+import type { Resource } from './Resources';
 import { Vector2 } from './Vector2';
 
 type SpriteConfig = {

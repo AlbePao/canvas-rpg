@@ -1,4 +1,4 @@
-import { LevelMap } from '../levelBuilder.types';
+import type { LevelMap } from '../levelBuilder.types';
 
 export const TEST_TILES_LEVEL: LevelMap = {
   id: 'testTilesMap',

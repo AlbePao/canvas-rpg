@@ -1,6 +1,6 @@
 import { GRID_SIZE } from '../constants/gridSize';
-import { Coords2D } from '../types/coords';
-import { Directions } from '../types/directions';
+import type { Coords2D } from '../types/coords';
+import type { Directions } from '../types/directions';
 
 export class Vector2 implements Coords2D {
   x = 0;

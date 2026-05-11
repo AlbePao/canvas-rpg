@@ -1,4 +1,4 @@
-import { NpcContentConfig } from '../objects/Npc';
+import type { NpcContentConfig } from '../objects/Npc';
 import { Singleton } from './Singleton';
 
 class StoryFlagsSingleton extends Singleton<StoryFlagsSingleton>() {

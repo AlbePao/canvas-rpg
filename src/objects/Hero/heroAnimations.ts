@@ -1,4 +1,4 @@
-import { AnimationConfig } from '../../types/animationConfig';
+import type { AnimationConfig } from '../../types/animationConfig';
 
 const makeWalkingFrame = (rootFrame = 0): AnimationConfig => ({
   duration: 400,

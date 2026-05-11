@@ -1,4 +1,4 @@
-import { Sprite } from '../../lib/Sprite';
+import type { Sprite } from '../../lib/Sprite';
 
 export interface Word {
   wordWidth: number;

@@ -7,7 +7,7 @@ import { Resources } from '../../lib/Resources';
 import { Sprite } from '../../lib/Sprite';
 import { StoryFlags } from '../../lib/StoryFlags';
 import { Vector2 } from '../../lib/Vector2';
-import { NpcAnimationFrame, NpcConfig, NpcContent, NpcContentConfig } from './npc-types';
+import type { NpcAnimationFrame, NpcConfig, NpcContent, NpcContentConfig } from './npc-types';
 import { STANDING_1, STANDING_2, STANDING_3, STANDING_4 } from './npcAnimations';
 
 export class Npc extends GameObject {

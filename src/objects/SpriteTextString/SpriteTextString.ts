@@ -4,8 +4,8 @@ import { GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
 import { Sprite } from '../../lib/Sprite';
 import { Vector2 } from '../../lib/Vector2';
-import { Main } from '../Main';
-import { SpriteTextStringConfig, Word } from './sprite-text-string.types';
+import type { Main } from '../Main';
+import type { SpriteTextStringConfig, Word } from './sprite-text-string.types';
 import { getCharacterFrame, getCharacterWidth } from './spriteFontMap';
 
 export class SpriteTextString extends GameObject {

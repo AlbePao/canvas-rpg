@@ -1,6 +1,6 @@
 import { Events } from '../Events';
 import { Vector2 } from '../Vector2';
-import { GameObjectConfig, GameObjectDrawLayer } from './gameObject.types';
+import type { GameObjectConfig, GameObjectDrawLayer } from './gameObject.types';
 
 export class GameObject {
   id: string;

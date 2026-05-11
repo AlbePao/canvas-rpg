@@ -1,4 +1,4 @@
-import { GameObjectBaseConfig } from '../../types/gameObjectBaseConfig';
+import type { GameObjectBaseConfig } from '../../types/gameObjectBaseConfig';
 
 export type HeroAnimationFrame =
   | 'walkDown'

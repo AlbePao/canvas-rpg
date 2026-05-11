@@ -1,7 +1,7 @@
 import { GRID_SIZE } from '../../constants/gridSize';
 import { alignToGrid } from '../../helpers/alignToGrid';
 import { isSpaceFree } from '../../helpers/grid';
-import { Main } from '../Main';
+import type { Main } from '../Main';
 import { Hero } from './Hero';
 
 export class HeroSnappedMovement extends Hero {

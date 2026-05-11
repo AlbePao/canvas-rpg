@@ -8,8 +8,9 @@ import { Vector2 } from '../lib/Vector2';
 import { Exit } from '../objects/Exit';
 import { Hero } from '../objects/Hero';
 import { CollectibleItem } from '../objects/Item';
-import { Level, LevelConfig } from '../objects/Level';
-import { Coords } from '../types/coords';
+import type { LevelConfig } from '../objects/Level';
+import { Level } from '../objects/Level';
+import type { Coords } from '../types/coords';
 import { CaveLevel1 } from './CaveLevel1';
 
 const DEFAULT_HERO_POSITION = new Vector2(gridCells(6), gridCells(5));

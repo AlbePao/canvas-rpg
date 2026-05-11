@@ -1,5 +1,5 @@
 import { CHANGE_LEVEL, HERO_POSITION } from '../constants/events';
-import { Level } from '../objects/Level';
+import type { Level } from '../objects/Level';
 import { Events } from './Events';
 import { GameObject } from './GameObject';
 import { Vector2 } from './Vector2';

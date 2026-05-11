@@ -1,5 +1,5 @@
-import { GameObject } from '../lib/GameObject';
-import { Vector2 } from '../lib/Vector2';
+import type { GameObject } from '../lib/GameObject';
+import type { Vector2 } from '../lib/Vector2';
 
 export function moveTowards(person: GameObject, destinationPosition: Vector2, speed: number): number {
   let distanceTravelX = destinationPosition.x - person.position.x;

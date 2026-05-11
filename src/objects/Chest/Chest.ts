@@ -4,8 +4,9 @@ import { GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
 import { Sprite } from '../../lib/Sprite';
 import { Vector2 } from '../../lib/Vector2';
-import { CollectibleItemData, ITEMS_SPRITE_FRAME } from '../Item';
-import { ChestConfig, ChestStatus } from './chest.types';
+import type { CollectibleItemData } from '../Item';
+import { ITEMS_SPRITE_FRAME } from '../Item';
+import type { ChestConfig, ChestStatus } from './chest.types';
 
 export class Chest extends GameObject {
   status: ChestStatus = 'CLOSED';
