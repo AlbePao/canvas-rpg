@@ -1,4 +1,4 @@
-import { START_TEXT_BOX } from '../../constants/events';
+import { HERO_REQUESTS_ACTION, START_TEXT_BOX } from '../../constants/events';
 import { Animations } from '../../lib/Animations';
 import { Events } from '../../lib/Events';
 import { FrameIndexPattern } from '../../lib/FrameIndexPattern';
@@ -6,12 +6,14 @@ import { GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
 import { Sprite } from '../../lib/Sprite';
 import { StoryFlags } from '../../lib/StoryFlags';
+import type { TextContentConfig } from '../../lib/StoryFlags/storyFlags.types';
 import { Vector2 } from '../../lib/Vector2';
-import type { NpcAnimationFrame, NpcConfig, NpcContent, NpcContentConfig } from './npc-types';
+import { SpriteTextString } from '../SpriteTextString';
+import type { NpcAnimationFrame, NpcConfig, NpcTextContent } from './npc-types';
 import { STANDING_1, STANDING_2, STANDING_3, STANDING_4 } from './npcAnimations';
 
 export class Npc extends GameObject {
-  textContent: NpcContentConfig[];
+  textContent: TextContentConfig[];
   textPortraitFrame: number;
   body: Sprite;
 
@@ -57,11 +59,31 @@ export class Npc extends GameObject {
 
   // TODO: stop animation when talking and face the hero direction
   override ready(): void {
-    Events.on(START_TEXT_BOX, this, () => {});
+    Events.on<GameObject>(HERO_REQUESTS_ACTION, this, ({ position }) => {
+      const content = this.getTextContent();
+
+      if (!this.position.matches(position) || !content) {
+        return;
+      }
+
+      // Potentially add a story flag
+      if (content.addsFlag) {
+        StoryFlags.add(content.addsFlag);
+      }
+
+      // Emit the textbox
+      Events.emit<SpriteTextString>(
+        START_TEXT_BOX,
+        new SpriteTextString({
+          id: `text-box-for-${this.id}`,
+          portraitFrame: content.portraitFrame,
+          string: content.string,
+        }),
+      );
+    });
   }
 
-  getContent(): NpcContent {
-    // Maybe expand with story flag logic, etc
+  getTextContent(): NpcTextContent | null {
     const match = StoryFlags.getRelevantScenario(this.textContent);
 
     if (!match) {

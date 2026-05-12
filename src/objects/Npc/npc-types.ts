@@ -1,3 +1,4 @@
+import type { TextContent, TextContentConfig } from '../../lib/StoryFlags/storyFlags.types';
 import type { GameObjectBaseConfig } from '../../types/gameObjectBaseConfig';
 
 export type NpcConfig = GameObjectBaseConfig & {
@@ -6,20 +7,11 @@ export type NpcConfig = GameObjectBaseConfig & {
 
 export interface NpcTextConfig {
   portraitFrame: number;
-  content: NpcContentConfig[];
+  content: TextContentConfig[];
 }
 
-export interface NpcContentConfig {
-  string: string;
-  requires?: string[];
-  bypass?: string[];
-  addsFlag?: string;
-}
-
-export type NpcContent = {
+export type NpcTextContent = TextContent & {
   portraitFrame: number;
-  string: string;
-  addsFlag: string | null;
-} | null;
+};
 
 export type NpcAnimationFrame = 'standing1' | 'standing2' | 'standing3' | 'standing4';
