@@ -4,7 +4,7 @@ import type { Coords, Coords2D } from '../../types/coords';
 import type { GameObjectBaseConfig } from '../../types/gameObjectBaseConfig';
 import type { GameObjectDrawLayer } from '../GameObject';
 
-export type LevelsId = 'grass1Level' | 'testTilesLevel';
+export type LevelsId = 'grass1Level' | 'purpleLevel' | 'testTilesLevel';
 export type WorldBackground = 'bgCave' | 'bgSky' | 'bgVolcano';
 export type WorldTile =
   // Grass 1
@@ -137,7 +137,7 @@ export type WorldTile =
 export type WorldTilesFrameMap = Record<WorldTile, number>;
 
 export type LevelBuilderConfig = LevelConfig & {
-  id: string;
+  id: LevelsId;
 };
 
 export type LevelCollectibleItem = GameObjectBaseConfig & {
@@ -155,12 +155,12 @@ export type LevelDecoration = GameObjectBaseConfig & {
 export type LevelObjects = LevelCollectibleItem | LevelDecoration;
 
 export type LevelExit = GameObjectBaseConfig & {
-  newLevelId: string;
+  newLevelId: LevelsId;
   heroNewPosition: Coords2D;
 };
 
 export interface LevelMap {
-  id: string;
+  id: LevelsId;
   background: {
     resource: WorldBackground;
     frameSize: Coords2D;
