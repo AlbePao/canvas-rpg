@@ -80,6 +80,21 @@ export class CaveLevel1 extends Level {
     });
     this.addChild(chest);
 
+    const chest2 = new Chest({
+      id: `${LEVEL_ID}-chest2`,
+      x: gridCells(7),
+      y: gridCells(3),
+      lootConfig: {
+        item: 'hammer1',
+      },
+      textConfig: [
+        {
+          string: "You've found an hammer",
+        },
+      ],
+    });
+    this.addChild(chest2);
+
     const bat = new Enemy({
       id: `${LEVEL_ID}-bat`,
       x: gridCells(14),
@@ -127,6 +142,21 @@ export class CaveLevel1 extends Level {
       },
     });
     this.addChild(npc2);
+
+    const npc3 = new Npc({
+      id: `${LEVEL_ID}-npc3`,
+      x: gridCells(12),
+      y: gridCells(5),
+      textConfig: {
+        content: [
+          {
+            string: 'Go away!',
+          },
+        ],
+        portraitFrame: 0,
+      },
+    });
+    this.addChild(npc3);
   }
 
   override ready(): void {

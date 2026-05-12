@@ -15,7 +15,7 @@ import { CaveLevel1 } from './CaveLevel1';
 
 const DEFAULT_HERO_POSITION = new Vector2(gridCells(6), gridCells(5));
 const LEVEL_ID = 'outdoorLevel1';
-const LEVEL_WALLS = [
+const LEVEL_WALLS: Coords[] = [
   //Tree
   '64,48',
   // Square
@@ -28,7 +28,7 @@ const LEVEL_WALLS = [
   '128,80',
   '144,80',
   '160,80',
-] satisfies Coords[];
+] as const;
 
 export class OutdoorLevel1 extends Level {
   constructor(config?: LevelConfig) {
