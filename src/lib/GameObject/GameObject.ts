@@ -9,7 +9,7 @@ export class GameObject {
   parent: GameObject | null = null;
   hasReadyBeenCalled = false;
   isSolid = false;
-  drawLayer: GameObjectDrawLayer = null;
+  drawLayer: GameObjectDrawLayer | null = null;
 
   constructor({ id, position }: GameObjectConfig) {
     this.id = id;

@@ -1,7 +1,6 @@
-import { LEVELS_IDS, type LevelsIds } from '../LevelBuilder/levelBuilder.types';
 import { Singleton } from '../Singleton';
 import type { LevelMapJsonType } from './levelMapSchema';
-import { LevelMapJsonSchema } from './levelMapSchema';
+import { LevelMapJsonSchema, LEVELS_IDS } from './levelMapSchema';
 
 interface LoadLevelResult {
   id: string;
@@ -18,9 +17,6 @@ class LevelsMapperSingleton extends Singleton<LevelsMapperSingleton>() {
   private readonly _levels = new Map<string, LevelMapJsonType>();
   private _isLoaded = false;
 
-  // List of level IDs to load
-  private readonly _levelIds = LEVELS_IDS;
-
   /**
    * Load and validate all levels from individual JSON files
    * This should be called during app initialization (before starting the game)
@@ -28,7 +24,8 @@ class LevelsMapperSingleton extends Singleton<LevelsMapperSingleton>() {
   async loadLevels(): Promise<void> {
     const loadResults: LoadLevelResult[] = [];
 
-    for (const levelId of this._levelIds) {
+    // TODO: load level ids from a global config
+    for (const levelId of LEVELS_IDS) {
       try {
         const response = await fetch(`/json/${levelId}.json`);
 
@@ -67,21 +64,20 @@ class LevelsMapperSingleton extends Singleton<LevelsMapperSingleton>() {
       }
     }
 
-    // TODO remove this redundancy
     // Report results
     const successCount = loadResults.filter((r) => r.success).length;
     const failureCount = loadResults.filter((r) => !r.success).length;
-    const totalCount = this._levelIds.length;
+    const totalCount = LEVELS_IDS.length;
 
     if (failureCount > 0) {
-      console.warn(`⚠ Loaded ${successCount}/${totalCount} levels`);
+      console.warn(`Loaded ${successCount}/${totalCount} levels`);
       loadResults.forEach((result) => {
         if (!result.success) {
-          console.warn(`  ✗ ${result.id}: ${result.error}`);
+          console.warn(`${result.id}: ${result.error}`);
         }
       });
     } else {
-      console.log(`✓ Loaded ${successCount} levels from JSON`);
+      console.log(`Loaded ${successCount} levels from JSON`);
     }
 
     if (successCount === 0) {
@@ -123,7 +119,7 @@ class LevelsMapperSingleton extends Singleton<LevelsMapperSingleton>() {
   /**
    * Check if a level exists
    */
-  hasLevel(id: string): id is LevelsIds {
+  hasLevel(id: string): boolean {
     return this._levels.has(id);
   }
 

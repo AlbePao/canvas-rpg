@@ -5,6 +5,4 @@ export interface GameObjectConfig {
   position?: Vector2;
 }
 
-export const GAME_OBJECT_DRAW_LAYERS = ['HUD', 'WORLD_TOP', 'FLOOR'] as const;
-
-export type GameObjectDrawLayer = (typeof GAME_OBJECT_DRAW_LAYERS)[number] | null;
+export type GameObjectDrawLayer = 'HUD' | 'WORLD_TOP' | 'FLOOR';

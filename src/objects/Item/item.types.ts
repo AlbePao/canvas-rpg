@@ -2,20 +2,17 @@ import type { Vector2 } from '../../lib/Vector2';
 import type { GameObjectBaseConfig } from '../../types/gameObjectBaseConfig';
 import type { UUID } from '../../types/uuid';
 
-export const ITEM_KEYS = [
-  'hammer1',
-  'hammer2',
-  'slingshot1',
-  'slingshot2',
-  'rod1',
-  'rod2',
-  'potion1',
-  'potion2',
-  'heart',
-  'sword',
-] as const;
-
-export type ItemKey = (typeof ITEM_KEYS)[number];
+export type ItemKey =
+  | 'hammer1'
+  | 'hammer2'
+  | 'slingshot1'
+  | 'slingshot2'
+  | 'rod1'
+  | 'rod2'
+  | 'potion1'
+  | 'potion2'
+  | 'heart'
+  | 'sword';
 
 type ItemsSpriteFrame = Record<ItemKey, number>;
 
