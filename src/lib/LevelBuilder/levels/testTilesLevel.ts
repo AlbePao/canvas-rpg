@@ -1,7 +1,7 @@
 import type { LevelMap } from '../levelBuilder.types';
 
 export const TEST_TILES_LEVEL: LevelMap = {
-  id: 'testTilesMap',
+  id: 'testTilesLevel',
   background: {
     resource: 'bgVolcano',
     frameSize: {

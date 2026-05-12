@@ -1,7 +1,7 @@
 import type { LevelMap } from '../levelBuilder.types';
 
 export const GRASS1_LEVEL: LevelMap = {
-  id: 'outdoorLevel1',
+  id: 'grass1Level',
   background: {
     resource: 'bgSky',
     frameSize: {
@@ -15,8 +15,8 @@ export const GRASS1_LEVEL: LevelMap = {
   },
   exits: [
     {
-      id: 'exitCave',
-      newLevelId: 'CaveLevel1',
+      id: 'exitPurpleLevel',
+      newLevelId: 'purpleLevel',
       x: 4,
       y: 0,
       heroNewPosition: {
@@ -25,8 +25,8 @@ export const GRASS1_LEVEL: LevelMap = {
       },
     },
     {
-      id: 'exitTileMap',
-      newLevelId: 'testTilesMap',
+      id: 'exitTestTilesLevel',
+      newLevelId: 'testTilesLevel',
       x: 13,
       y: 4,
       heroNewPosition: {
