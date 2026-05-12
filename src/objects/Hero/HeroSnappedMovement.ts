@@ -1,8 +1,20 @@
 import { GRID_SIZE } from '../../constants/gridSize';
-import { alignToGrid } from '../../helpers/alignToGrid';
 import { isSpaceFree } from '../../helpers/grid';
 import type { Main } from '../Main';
 import { Hero } from './Hero';
+
+function alignToGrid(val: number, alignTo: number): number {
+  const remainder = val % alignTo;
+  const halfway = alignTo / 2;
+
+  if (remainder > halfway) {
+    // We're in the upper half, so we round to the next multiple
+    return alignTo - remainder;
+  } else {
+    // We're in the lower half, so we round to the prev multiple
+    return -remainder;
+  }
+}
 
 export class HeroSnappedMovement extends Hero {
   // Based on https://dev.to/robotspacefish/game-studies-link-s-movement-in-the-legend-of-zelda-48od
