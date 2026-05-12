@@ -1,5 +1,5 @@
-import type { NpcContentConfig } from '../objects/Npc';
-import { Singleton } from './Singleton';
+import { Singleton } from '../Singleton';
+import type { TextContentConfig } from './storyFlags.types';
 
 class StoryFlagsSingleton extends Singleton<StoryFlagsSingleton>() {
   flags = new Map<string, boolean>();
@@ -8,7 +8,7 @@ class StoryFlagsSingleton extends Singleton<StoryFlagsSingleton>() {
     this.flags.set(flag, true);
   }
 
-  getRelevantScenario(scenarios: NpcContentConfig[]): NpcContentConfig | null {
+  getRelevantScenario(scenarios: TextContentConfig[]): TextContentConfig | null {
     return (
       scenarios.find((scenario) => {
         // Disqualify when any bypass flags are present
