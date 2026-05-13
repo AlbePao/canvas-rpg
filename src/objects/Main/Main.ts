@@ -5,7 +5,7 @@ import { GameObject } from '../../lib/GameObject';
 import { Input } from '../../lib/Input';
 import { Inventory } from '../Inventory';
 import type { Level } from '../Level';
-import type { SpriteTextString } from '../SpriteTextString';
+import type { SpriteTextBox } from '../SpriteTextBox';
 
 // TODO add a global flag to stop npcs animations and movements (e.g. when a textbox is opened)
 export class Main extends GameObject {
@@ -27,7 +27,7 @@ export class Main extends GameObject {
     });
 
     // Launch text box handler
-    Events.on<SpriteTextString>(START_TEXT_BOX, this, (textBox) => {
+    Events.on<SpriteTextBox>(START_TEXT_BOX, this, (textBox) => {
       this.addChild(textBox);
 
       // unsubscribe from this text box after it's destroyed

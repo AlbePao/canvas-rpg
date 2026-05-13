@@ -8,7 +8,7 @@ import { Vector2 } from '../../lib/Vector2';
 import { InteractiveObject } from '../InteractiveObject';
 import type { CollectibleItemData } from '../Item';
 import { ITEMS_SPRITE_FRAME } from '../Item';
-import { SpriteTextString } from '../SpriteTextString';
+import { SpriteTextBox } from '../SpriteTextBox';
 import type { ChestConfig, ChestStatus } from './chest.types';
 
 // TODO: add story flags checks with requires and bypass properties for when a chest needs a key and/or hero already has it
@@ -59,9 +59,9 @@ export class Chest extends InteractiveObject {
         }
 
         // Emit the textbox
-        Events.emit<SpriteTextString>(
+        Events.emit<SpriteTextBox>(
           START_TEXT_BOX,
-          new SpriteTextString({
+          new SpriteTextBox({
             id: `text-box-for-${this.id}`,
             portraitFrame: content.portraitFrame,
             string: content.string,

@@ -5,10 +5,10 @@ import { Resources } from '../../lib/Resources';
 import { Sprite } from '../../lib/Sprite';
 import { Vector2 } from '../../lib/Vector2';
 import type { Main } from '../Main';
-import type { Line, SpriteTextStringConfig } from './sprite-text-string.types';
 import { getCharacterFrame, getCharacterWidth } from './spriteFontMap';
+import type { Line, SpriteTextStringConfig } from './spriteTextBox.types';
 
-export class SpriteTextString extends GameObject {
+export class SpriteTextBox extends GameObject {
   portrait?: Sprite;
   backdrop = new Sprite({
     id: `${this.id}-text-box-backdrop`,

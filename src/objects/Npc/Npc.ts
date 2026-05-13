@@ -8,8 +8,8 @@ import { Sprite } from '../../lib/Sprite';
 import { StoryFlags } from '../../lib/StoryFlags';
 import { Vector2 } from '../../lib/Vector2';
 import { InteractiveObject } from '../InteractiveObject';
-import { SpriteTextString } from '../SpriteTextString';
-import type { NpcAnimationFrame, NpcConfig } from './npc-types';
+import { SpriteTextBox } from '../SpriteTextBox';
+import type { NpcAnimationFrame, NpcConfig } from './npc.types';
 import { STANDING_1, STANDING_2, STANDING_3, STANDING_4 } from './npcAnimations';
 
 export class Npc extends InteractiveObject {
@@ -68,9 +68,9 @@ export class Npc extends InteractiveObject {
       }
 
       // Emit the textbox
-      Events.emit<SpriteTextString>(
+      Events.emit<SpriteTextBox>(
         START_TEXT_BOX,
-        new SpriteTextString({
+        new SpriteTextBox({
           id: `text-box-for-${this.id}`,
           portraitFrame: content.portraitFrame,
           string: content.string,
