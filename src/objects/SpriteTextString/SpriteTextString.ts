@@ -9,7 +9,7 @@ import type { SpriteTextStringConfig, Word } from './sprite-text-string.types';
 import { getCharacterFrame, getCharacterWidth } from './spriteFontMap';
 
 export class SpriteTextString extends GameObject {
-  portrait: Sprite;
+  portrait?: Sprite;
   backdrop = new Sprite({
     id: `${this.id}-text-box-backdrop`,
     resource: Resources.images.textBox,
@@ -69,12 +69,14 @@ export class SpriteTextString extends GameObject {
     this.finalIndex = this.words.reduce((acc, word) => acc + word.chars.length, 0);
 
     // Create a portrait
-    this.portrait = new Sprite({
-      id: `${id}-portrait`,
-      resource: Resources.images.portraits,
-      hFrames: 4,
-      frame: portraitFrame ?? 0,
-    });
+    if (portraitFrame) {
+      this.portrait = new Sprite({
+        id: `${id}-portrait`,
+        resource: Resources.images.portraits,
+        hFrames: 4,
+        frame: portraitFrame,
+      });
+    }
   }
 
   override step(delta: number, root: Main): void {
@@ -110,10 +112,13 @@ export class SpriteTextString extends GameObject {
     this.backdrop.drawImage(ctx, drawPosX, drawPosY);
 
     // Draw the portrait
-    this.portrait.drawImage(ctx, drawPosX + 6, drawPosY + 6);
+    if (this.portrait) {
+      this.portrait.drawImage(ctx, drawPosX + 6, drawPosY + 6);
+    }
 
     // Configurations options
-    const PADDING_LEFT = 27;
+    // Set padding according to portrait frame
+    const PADDING_LEFT = this.portrait ? 27 : 12;
     const PADDING_TOP = 9;
     const LINE_WIDTH_MAX = 240;
     const LINE_VERTICAL_HEIGHT = 14;

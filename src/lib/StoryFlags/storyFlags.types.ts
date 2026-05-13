@@ -6,6 +6,7 @@ export interface TextContentConfig {
 }
 
 export interface TextContent {
+  portraitFrame?: number;
   string: string;
   addsFlag: string | null;
 }

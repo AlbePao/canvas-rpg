@@ -6,10 +6,10 @@ import { GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
 import { Sprite } from '../../lib/Sprite';
 import { StoryFlags } from '../../lib/StoryFlags';
-import type { TextContentConfig } from '../../lib/StoryFlags/storyFlags.types';
+import type { TextContent, TextContentConfig } from '../../lib/StoryFlags/storyFlags.types';
 import { Vector2 } from '../../lib/Vector2';
 import { SpriteTextString } from '../SpriteTextString';
-import type { NpcAnimationFrame, NpcConfig, NpcTextContent } from './npc-types';
+import type { NpcAnimationFrame, NpcConfig } from './npc-types';
 import { STANDING_1, STANDING_2, STANDING_3, STANDING_4 } from './npcAnimations';
 
 export class Npc extends GameObject {
@@ -83,7 +83,7 @@ export class Npc extends GameObject {
     });
   }
 
-  getTextContent(): NpcTextContent | null {
+  getTextContent(): TextContent | null {
     const match = StoryFlags.getRelevantScenario(this.textContent);
 
     if (!match) {
