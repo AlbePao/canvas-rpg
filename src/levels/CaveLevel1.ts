@@ -87,11 +87,13 @@ export class CaveLevel1 extends Level {
       lootConfig: {
         item: 'hammer1',
       },
-      textConfig: [
-        {
-          string: "You've found an hammer",
-        },
-      ],
+      textConfig: {
+        content: [
+          {
+            string: "You've found an hammer",
+          },
+        ],
+      },
     });
     this.addChild(chest2);
 

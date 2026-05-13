@@ -1,3 +1,8 @@
+export interface TextConfig {
+  portraitFrame?: number | null;
+  content: TextContentConfig[];
+}
+
 export interface TextContentConfig {
   string: string;
   requires?: string[];
@@ -6,7 +11,7 @@ export interface TextContentConfig {
 }
 
 export interface TextContent {
-  portraitFrame?: number;
+  portraitFrame: number | null;
   string: string;
   addsFlag: string | null;
 }

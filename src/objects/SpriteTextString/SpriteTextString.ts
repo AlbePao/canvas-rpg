@@ -69,7 +69,7 @@ export class SpriteTextString extends GameObject {
     this.finalIndex = this.words.reduce((acc, word) => acc + word.chars.length, 0);
 
     // Create a portrait
-    if (portraitFrame) {
+    if (portraitFrame !== null) {
       this.portrait = new Sprite({
         id: `${id}-portrait`,
         resource: Resources.images.portraits,

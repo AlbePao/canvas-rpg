@@ -2,33 +2,29 @@ import { HERO_REQUESTS_ACTION, START_TEXT_BOX } from '../../constants/events';
 import { Animations } from '../../lib/Animations';
 import { Events } from '../../lib/Events';
 import { FrameIndexPattern } from '../../lib/FrameIndexPattern';
-import { GameObject } from '../../lib/GameObject';
+import type { GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
 import { Sprite } from '../../lib/Sprite';
 import { StoryFlags } from '../../lib/StoryFlags';
-import type { TextContent, TextContentConfig } from '../../lib/StoryFlags/storyFlags.types';
 import { Vector2 } from '../../lib/Vector2';
+import { InteractiveObject } from '../InteractiveObject';
 import { SpriteTextString } from '../SpriteTextString';
 import type { NpcAnimationFrame, NpcConfig } from './npc-types';
 import { STANDING_1, STANDING_2, STANDING_3, STANDING_4 } from './npcAnimations';
 
-export class Npc extends GameObject {
-  textContent: TextContentConfig[];
-  textPortraitFrame: number;
+export class Npc extends InteractiveObject {
   body: Sprite;
 
   constructor({ id, x, y, textConfig }: NpcConfig) {
     super({
       id,
-      position: new Vector2(x, y),
+      x,
+      y,
+      textConfig,
     });
 
     // Opt into being solid
     this.isSolid = true;
-
-    // Say something when talking
-    this.textContent = textConfig.content;
-    this.textPortraitFrame = textConfig.portraitFrame;
 
     // Shadow under feet
     const shadow = new Sprite({
@@ -81,20 +77,5 @@ export class Npc extends GameObject {
         }),
       );
     });
-  }
-
-  getTextContent(): TextContent | null {
-    const match = StoryFlags.getRelevantScenario(this.textContent);
-
-    if (!match) {
-      console.warn('No matches found in this list!', this.textContent);
-      return null;
-    }
-
-    return {
-      portraitFrame: this.textPortraitFrame,
-      string: match.string,
-      addsFlag: match.addsFlag ?? null,
-    };
   }
 }

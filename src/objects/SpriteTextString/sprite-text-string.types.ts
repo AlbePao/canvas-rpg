@@ -12,6 +12,6 @@ export interface Char {
 
 export interface SpriteTextStringConfig {
   id: string;
-  portraitFrame?: number;
+  portraitFrame: number | null;
   string: string;
 }

@@ -1,18 +1,18 @@
 import { END_TEXT_BOX, HERO_PICKS_UP_ITEM, HERO_REQUESTS_ACTION, START_TEXT_BOX } from '../../constants/events';
 import { Events } from '../../lib/Events';
-import { GameObject } from '../../lib/GameObject';
+import type { GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
 import { Sprite } from '../../lib/Sprite';
 import { StoryFlags } from '../../lib/StoryFlags';
-import type { TextContent, TextContentConfig } from '../../lib/StoryFlags/storyFlags.types';
 import { Vector2 } from '../../lib/Vector2';
+import { InteractiveObject } from '../InteractiveObject';
 import type { CollectibleItemData } from '../Item';
 import { ITEMS_SPRITE_FRAME } from '../Item';
 import { SpriteTextString } from '../SpriteTextString';
 import type { ChestConfig, ChestStatus } from './chest.types';
 
-export class Chest extends GameObject {
-  textContent?: TextContentConfig[];
+// TODO: add story flags checks with requires and bypass properties for when a chest needs a key and/or hero already has it
+export class Chest extends InteractiveObject {
   status: ChestStatus = 'CLOSED';
   body: Sprite;
   lootData: CollectibleItemData;
@@ -20,11 +20,12 @@ export class Chest extends GameObject {
   constructor({ id, x, y, status, lootConfig, textConfig }: ChestConfig) {
     super({
       id,
-      position: new Vector2(x, y),
+      x,
+      y,
+      textConfig,
     });
 
     this.isSolid = true;
-    this.textContent = textConfig;
     this.status = status ?? 'CLOSED';
     this.lootData = {
       id: crypto.randomUUID(),
@@ -62,6 +63,7 @@ export class Chest extends GameObject {
           START_TEXT_BOX,
           new SpriteTextString({
             id: `text-box-for-${this.id}`,
+            portraitFrame: content.portraitFrame,
             string: content.string,
           }),
         );
@@ -86,23 +88,5 @@ export class Chest extends GameObject {
     this.body.frame = 1;
 
     Events.emit<CollectibleItemData>(HERO_PICKS_UP_ITEM, this.lootData);
-  }
-
-  getTextContent(): TextContent | null {
-    if (!this.textContent) {
-      return null;
-    }
-
-    const match = StoryFlags.getRelevantScenario(this.textContent);
-
-    if (!match) {
-      console.warn('No matches found in this list!', this.textContent);
-      return null;
-    }
-
-    return {
-      string: match.string,
-      addsFlag: match.addsFlag ?? null,
-    };
   }
 }
