@@ -45,7 +45,7 @@ export class Chest extends GameObject {
 
   override ready(): void {
     Events.on<GameObject>(HERO_REQUESTS_ACTION, this, ({ position }) => {
-      if (!this.position.matches(position)) {
+      if (!this.position.matches(position) || this.status === 'OPEN') {
         return;
       }
 
