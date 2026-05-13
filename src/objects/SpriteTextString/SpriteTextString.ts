@@ -5,7 +5,7 @@ import { Resources } from '../../lib/Resources';
 import { Sprite } from '../../lib/Sprite';
 import { Vector2 } from '../../lib/Vector2';
 import type { Main } from '../Main';
-import type { SpriteTextStringConfig, Word } from './sprite-text-string.types';
+import type { Line, SpriteTextStringConfig } from './sprite-text-string.types';
 import { getCharacterFrame, getCharacterWidth } from './spriteFontMap';
 
 export class SpriteTextString extends GameObject {
@@ -16,13 +16,16 @@ export class SpriteTextString extends GameObject {
     frameSize: new Vector2(256, 64),
   });
 
-  words: Word[];
+  lines: Line[];
 
   // Typewriter
-  showingIndex = 0;
+  showingCharIndex = 0;
   textSpeed = 80;
-  finalIndex = 0;
   timeUntilNextShow = this.textSpeed;
+
+  // Current line
+  currentLineIndex = 0;
+  finalLineIndex = 0;
 
   constructor({ id, string, portraitFrame }: SpriteTextStringConfig) {
     super({
@@ -33,40 +36,46 @@ export class SpriteTextString extends GameObject {
     // Draw on top layer
     this.drawLayer = 'HUD';
 
-    const content = string;
+    // Create an array of words in an an array of lines (because it helps with line wrapping later)
+    this.lines = string.map((content) => {
+      const words = content.split(' ').map((word) => {
+        // We need to know how wide this word is
+        let wordWidth = 0;
 
-    // Create an array of words (because it helps with line wrapping later)
-    this.words = content.split(' ').map((word) => {
-      // We need to know how wide this word is
-      let wordWidth = 0;
+        // Break each word into single characters
+        const chars = word.split('').map((char) => {
+          // Measure each one
+          const charWidth = getCharacterWidth(char);
+          wordWidth += charWidth;
 
-      // Break each word into single characters
-      const chars = word.split('').map((char) => {
-        // Measure each one
-        const charWidth = getCharacterWidth(char);
-        wordWidth += charWidth;
+          // Also create a Sprite for each character in the word
+          return {
+            width: charWidth,
+            sprite: new Sprite({
+              id: `${id}-char-${char}`,
+              resource: Resources.images.fontWhite,
+              hFrames: 13,
+              vFrames: 6,
+              frame: getCharacterFrame(char),
+            }),
+          };
+        });
 
-        // Also create a Sprite for each character in the word
+        // Return a length and a list of characters per word
         return {
-          width: charWidth,
-          sprite: new Sprite({
-            id: `${id}-char-${char}`,
-            resource: Resources.images.fontWhite,
-            hFrames: 13,
-            vFrames: 6,
-            frame: getCharacterFrame(char),
-          }),
+          wordWidth,
+          chars,
         };
       });
 
-      // Return a length and a list of characters per word
       return {
-        wordWidth,
-        chars,
+        words,
+        // Get the last char index of the current line
+        finalCharIndex: words.reduce((count, { chars }) => count + chars.length, 0),
       };
     });
 
-    this.finalIndex = this.words.reduce((acc, word) => acc + word.chars.length, 0);
+    this.finalLineIndex = this.lines.length - 1;
 
     // Create a portrait
     if (portraitFrame !== null) {
@@ -84,9 +93,18 @@ export class SpriteTextString extends GameObject {
     const input = root.input;
 
     if (input.getActionJustPressed('Space')) {
-      if (this.showingIndex < this.finalIndex) {
+      const { finalCharIndex } = this.lines[this.currentLineIndex];
+
+      if (this.showingCharIndex < finalCharIndex) {
         // Skip
-        this.showingIndex = this.finalIndex;
+        this.showingCharIndex = finalCharIndex;
+        return;
+      }
+
+      if (this.currentLineIndex < this.finalLineIndex) {
+        // Display next text line
+        this.currentLineIndex += 1;
+        this.showingCharIndex = 0;
 
         return;
       }
@@ -100,7 +118,7 @@ export class SpriteTextString extends GameObject {
 
     if (this.timeUntilNextShow <= 0) {
       // Increase amount of characters that are drawn
-      this.showingIndex += 1;
+      this.showingCharIndex += 1;
 
       // Reset time counter for next character
       this.timeUntilNextShow = this.textSpeed;
@@ -128,7 +146,7 @@ export class SpriteTextString extends GameObject {
     let cursorY = drawPosY + PADDING_TOP;
     let currentShowingIndex = 0;
 
-    this.words.forEach((word) => {
+    this.lines[this.currentLineIndex].words.forEach((word) => {
       // Decide if we can fit this next word on this next line
       const spaceRemaining = drawPosX + LINE_WIDTH_MAX - cursorX;
 
@@ -140,7 +158,7 @@ export class SpriteTextString extends GameObject {
       // Draw this whole segment of text
       word.chars.forEach((char) => {
         // Stop here if we should not yet show the following character
-        if (currentShowingIndex > this.showingIndex) {
+        if (currentShowingIndex > this.showingCharIndex) {
           return;
         }
 

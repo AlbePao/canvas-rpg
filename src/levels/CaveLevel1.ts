@@ -90,7 +90,7 @@ export class CaveLevel1 extends Level {
       textConfig: {
         content: [
           {
-            string: "You've found an hammer",
+            string: ['You found an hammer'],
           },
         ],
       },
@@ -111,17 +111,17 @@ export class CaveLevel1 extends Level {
       textConfig: {
         content: [
           {
-            string: "I just can't stand that guy.",
+            string: ["I just can't stand that guy."],
             requires: [TALKED_TO_B],
             bypass: [TALKED_TO_A],
             addsFlag: TALKED_TO_A,
           },
           {
-            string: 'He is just the worst!',
+            string: ['He is just the worst!'],
             requires: [TALKED_TO_A],
           },
           {
-            string: 'Grumble grumble. Another day at work',
+            string: ['Grumble grumble. Another day at work'],
           },
         ],
         portraitFrame: 1,
@@ -136,7 +136,7 @@ export class CaveLevel1 extends Level {
       textConfig: {
         content: [
           {
-            string: 'What a beautiful day to work in the cave!',
+            string: ['What a beautiful day to work in the cave!'],
             addsFlag: TALKED_TO_B,
           },
         ],
@@ -152,7 +152,7 @@ export class CaveLevel1 extends Level {
       textConfig: {
         content: [
           {
-            string: 'Go away!',
+            string: ['Go away!', "You're not welcomed here!"],
           },
         ],
         portraitFrame: 0,
