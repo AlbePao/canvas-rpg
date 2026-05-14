@@ -7,11 +7,21 @@ import './style.css';
 const canvas = document.querySelector<HTMLCanvasElement>('#game-canvas')!;
 const ctx = canvas.getContext('2d')!;
 
+/**
+ * Initialize the game: load levels, set up the scene, and start the game loop
+ */
+// async function initializeGame(): Promise<void> {
+//   // Load all levels from JSON before starting the game
+//   await LevelsMapper.loadLevels();
+// }
+
+// TODO: add logic below inside initializeGame() function
 // Establish the root scene
 const mainScene = new Main();
 mainScene.setLevel(
+  // new CaveLevel1(),
   new LevelBuilder({
-    id: 'grass1',
+    id: 'purpleLevel',
   }),
 );
 
@@ -49,3 +59,8 @@ const draw = (): void => {
 // Start the game
 const gameLoop = new GameLoop(update, draw);
 gameLoop.start();
+
+// Initialize and start the game
+// initializeGame().catch((error) => {
+//   console.error('Failed to initialize game:', error);
+// });
