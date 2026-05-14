@@ -1,11 +1,14 @@
 import { CHANGE_LEVEL, HERO_EXITS } from '../../constants/events';
 import { gridCells } from '../../helpers/grid';
 import { objectKeys } from '../../helpers/objectKeys';
+import { Chest } from '../../objects/Chest';
+import { Enemy } from '../../objects/Enemy';
 import type { ExitData } from '../../objects/Exit';
 import { Exit } from '../../objects/Exit';
 import { Hero } from '../../objects/Hero';
 import { CollectibleItem } from '../../objects/Item';
 import { Level } from '../../objects/Level';
+import { Npc } from '../../objects/Npc';
 import { Events } from '../Events';
 import type { GameObject } from '../GameObject';
 import { LevelTransition } from '../LevelTransition';
@@ -68,16 +71,6 @@ export class LevelBuilder extends Level {
       this.addChild(worldTileSprite);
     });
 
-    // Add hero
-    this.heroStartPosition =
-      config?.heroStartPosition ?? new Vector2(gridCells(heroDefaultPosition.x), gridCells(heroDefaultPosition.y));
-    const hero = new Hero({
-      id: `${id}-hero`,
-      x: this.heroStartPosition.x,
-      y: this.heroStartPosition.y,
-    });
-    this.addChild(hero);
-
     // Add walls
     walls.forEach((wallCoords) => {
       const [x, y] = wallCoords.split(',').map(Number);
@@ -103,20 +96,52 @@ export class LevelBuilder extends Level {
       let object: GameObject | null = null;
 
       if (type === 'CollectibleItem') {
+        const { item, shouldSkipPickupAnimation } = gameObject;
         object = new CollectibleItem({
           id: gameObjectId,
-          item: gameObject.item,
+          item,
+          shouldSkipPickupAnimation,
+          x: gridCells(x),
+          y: gridCells(y),
+        });
+      }
+
+      if (type === 'Chest') {
+        const { textConfig, status, lootConfig } = gameObject;
+        object = new Chest({
+          id: gameObjectId,
+          status,
+          lootConfig,
+          textConfig,
+          x: gridCells(x),
+          y: gridCells(y),
+        });
+      }
+
+      if (type === 'Enemy') {
+        object = new Enemy({
+          id: gameObjectId,
+          x: gridCells(x),
+          y: gridCells(y),
+        });
+      }
+
+      if (type === 'Npc') {
+        const { textConfig } = gameObject;
+        object = new Npc({
+          id: gameObjectId,
+          textConfig,
           x: gridCells(x),
           y: gridCells(y),
         });
       }
 
       if (type === 'Decoration') {
-        const { id: decorationId, x, y, key, isSolid, drawLayer } = gameObject;
+        const { key, isSolid, drawLayer } = gameObject;
         const frame = WORLD_TILES_FRAME_MAP[key];
 
         object = new Sprite({
-          id: decorationId,
+          id: gameObjectId,
           resource: Resources.images.worldTiles,
           frameSize: new Vector2(16, 16),
           hFrames: 16,
@@ -135,6 +160,16 @@ export class LevelBuilder extends Level {
         this.addChild(object);
       }
     });
+
+    // Add hero
+    this.heroStartPosition =
+      config?.heroStartPosition ?? new Vector2(gridCells(heroDefaultPosition.x), gridCells(heroDefaultPosition.y));
+    const hero = new Hero({
+      id: `${id}-hero`,
+      x: this.heroStartPosition.x,
+      y: this.heroStartPosition.y,
+    });
+    this.addChild(hero);
   }
 
   override ready(): void {
