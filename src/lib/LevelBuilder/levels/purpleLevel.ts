@@ -1,3 +1,4 @@
+import { TALKED_TO_A, TALKED_TO_B } from '../../../constants/storyFlags';
 import type { LevelMap } from '../levelBuilder.types';
 
 export const PURPLE_LEVEL: LevelMap = {
@@ -10,15 +11,15 @@ export const PURPLE_LEVEL: LevelMap = {
     },
   },
   heroDefaultPosition: {
-    x: 3,
-    y: 6,
+    x: 0,
+    y: 5,
   },
   exits: [
     {
       id: 'exitGrass1',
       newLevelId: 'grass1Level',
-      x: 4,
-      y: 0,
+      x: 0,
+      y: 4,
       heroNewPosition: {
         x: 6,
         y: 4,
@@ -27,11 +28,44 @@ export const PURPLE_LEVEL: LevelMap = {
   ],
   gameObjects: [
     {
+      type: 'Chest',
+      id: 'chest1',
+      lootConfig: {
+        item: 'rod2',
+      },
+      x: 0,
+      y: 0,
+    },
+    {
+      type: 'Chest',
+      id: 'chest2',
+      lootConfig: {
+        item: 'hammer1',
+      },
+      textConfig: {
+        content: [
+          {
+            string: ['You found an hammer'],
+          },
+        ],
+      },
+      x: 3,
+      y: 0,
+    },
+    {
       type: 'CollectibleItem',
-      id: 'hammer',
-      item: 'hammer1',
-      x: 5,
-      y: 4,
+      id: 'rod',
+      item: 'rod2',
+      x: 7,
+      y: 5,
+    },
+    {
+      type: 'CollectibleItem',
+      id: 'heart',
+      item: 'heart',
+      x: 10,
+      y: 3,
+      shouldSkipPickupAnimation: true,
     },
     {
       type: 'Decoration',
@@ -96,6 +130,65 @@ export const PURPLE_LEVEL: LevelMap = {
       x: 0,
       y: 3,
       isSolid: true,
+    },
+    {
+      type: 'Enemy',
+      id: 'bat',
+      x: 14,
+      y: 4,
+    },
+    {
+      type: 'Npc',
+      id: 'npc1',
+      x: 6,
+      y: 3,
+      textConfig: {
+        content: [
+          {
+            string: ["I just can't stand that guy."],
+            requires: [TALKED_TO_B],
+            bypass: [TALKED_TO_A],
+            addsFlag: TALKED_TO_A,
+          },
+          {
+            string: ['He is just the worst!'],
+            requires: [TALKED_TO_A],
+          },
+          {
+            string: ['Grumble grumble. Another day at work'],
+          },
+        ],
+        portraitFrame: 1,
+      },
+    },
+    {
+      type: 'Npc',
+      id: 'npc2',
+      x: 9,
+      y: 4,
+      textConfig: {
+        content: [
+          {
+            string: ['What a beautiful day to work in the cave!'],
+            addsFlag: TALKED_TO_B,
+          },
+        ],
+        portraitFrame: 0,
+      },
+    },
+    {
+      type: 'Npc',
+      id: 'npc3',
+      x: 15,
+      y: 6,
+      textConfig: {
+        content: [
+          {
+            string: ['Go away!', "You're not welcomed here!"],
+          },
+        ],
+        portraitFrame: 0,
+      },
     },
   ],
   walls: [

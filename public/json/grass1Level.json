@@ -13,8 +13,8 @@
   },
   "exits": [
     {
-      "id": "exitCave",
-      "newLevelId": "CaveLevel1",
+      "id": "exitPurpleLevel",
+      "newLevelId": "purpleLevel",
       "x": 4,
       "y": 0,
       "heroNewPosition": {
@@ -23,7 +23,7 @@
       }
     },
     {
-      "id": "exitTileMap",
+      "id": "exitTestTilesLevel",
       "newLevelId": "testTilesLevel",
       "x": 13,
       "y": 4,
