@@ -53,6 +53,8 @@ export class Chest extends InteractiveObject {
       const content = this.getTextContent();
 
       if (content) {
+        this._openChest();
+
         // Potentially add a story flag
         if (content.addsFlag) {
           StoryFlags.add(content.addsFlag);
@@ -70,23 +72,23 @@ export class Chest extends InteractiveObject {
 
         Events.on(END_TEXT_BOX, this, () => {
           // Open chest after text box close
-          this.openChest();
+          this._pickUpItem();
         });
       } else {
-        this.openChest();
+        this._openChest();
+        this._pickUpItem();
       }
     });
   }
 
-  openChest(): void {
-    if (this.status === 'OPEN') {
-      return;
-    }
-
-    // Update chest state and sprite frame to open and emit loot event
+  private _openChest(): void {
+    // Update chest state and sprite frame to open
     this.status = 'OPEN';
     this.body.frame = 1;
+  }
 
+  private _pickUpItem(): void {
+    // Emit pick up item event
     Events.emit<CollectibleItemData>(HERO_PICKS_UP_ITEM, this.lootData);
   }
 }
