@@ -17,12 +17,12 @@ export class Chest extends InteractiveObject {
   body: Sprite;
   lootData: CollectibleItemData;
 
-  constructor({ id, x, y, status, lootConfig, textConfig }: ChestConfig) {
+  constructor({ id, x, y, status, lootConfig, interactionConfig }: ChestConfig) {
     super({
       id,
       x,
       y,
-      textConfig,
+      interactionConfig,
     });
 
     this.isSolid = true;

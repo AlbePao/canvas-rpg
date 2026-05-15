@@ -42,7 +42,7 @@ export const PURPLE_LEVEL: LevelMap = {
       lootConfig: {
         item: 'hammer1',
       },
-      textConfig: {
+      interactionConfig: {
         content: [
           {
             string: ['You found an hammer'],
@@ -143,7 +143,7 @@ export const PURPLE_LEVEL: LevelMap = {
       x: 6,
       y: 3,
       npc: 'ow1',
-      textConfig: {
+      interactionConfig: {
         content: [
           {
             string: ["I just can't stand that guy."],
@@ -168,7 +168,7 @@ export const PURPLE_LEVEL: LevelMap = {
       x: 9,
       y: 4,
       npc: 'ow2',
-      textConfig: {
+      interactionConfig: {
         content: [
           {
             string: ['What a beautiful day to work in the cave!'],
@@ -184,7 +184,7 @@ export const PURPLE_LEVEL: LevelMap = {
       x: 15,
       y: 6,
       npc: 'ow3',
-      textConfig: {
+      interactionConfig: {
         content: [
           {
             string: ['Go away!', "You're not welcomed here!"],

@@ -107,12 +107,12 @@ export class LevelBuilder extends Level {
       }
 
       if (type === 'Chest') {
-        const { textConfig, status, lootConfig } = gameObject;
+        const { interactionConfig, status, lootConfig } = gameObject;
         object = new Chest({
           id: gameObjectId,
           status,
           lootConfig,
-          textConfig,
+          interactionConfig,
           x: gridCells(x),
           y: gridCells(y),
         });
@@ -127,10 +127,10 @@ export class LevelBuilder extends Level {
       }
 
       if (type === 'Npc') {
-        const { textConfig, npc } = gameObject;
+        const { interactionConfig, npc } = gameObject;
         object = new Npc({
           id: gameObjectId,
-          textConfig,
+          interactionConfig,
           npc,
           x: gridCells(x),
           y: gridCells(y),

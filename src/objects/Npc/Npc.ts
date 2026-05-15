@@ -27,12 +27,12 @@ import {
 export class Npc extends InteractiveObject {
   body: Sprite;
 
-  constructor({ id, x, y, textConfig, npc }: NpcConfig) {
+  constructor({ id, x, y, interactionConfig, npc }: NpcConfig) {
     super({
       id,
       x,
       y,
-      textConfig,
+      interactionConfig,
     });
 
     // Opt into being solid

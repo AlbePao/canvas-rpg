@@ -87,7 +87,7 @@ export class CaveLevel1 extends Level {
       lootConfig: {
         item: 'hammer1',
       },
-      textConfig: {
+      interactionConfig: {
         content: [
           {
             string: ['You found an hammer'],
@@ -109,7 +109,7 @@ export class CaveLevel1 extends Level {
       x: gridCells(5),
       y: gridCells(5),
       npc: 'ow1',
-      textConfig: {
+      interactionConfig: {
         content: [
           {
             string: ["I just can't stand that guy."],
@@ -135,7 +135,7 @@ export class CaveLevel1 extends Level {
       x: gridCells(8),
       y: gridCells(5),
       npc: 'ow2',
-      textConfig: {
+      interactionConfig: {
         content: [
           {
             string: ['What a beautiful day to work in the cave!'],
@@ -152,7 +152,7 @@ export class CaveLevel1 extends Level {
       x: gridCells(12),
       y: gridCells(5),
       npc: 'ow3',
-      textConfig: {
+      interactionConfig: {
         content: [
           {
             string: ['Go away!', "You're not welcomed here!"],
