@@ -1,4 +1,4 @@
-import { CHANGE_LEVEL, END_TEXT_BOX, START_TEXT_BOX } from '../../constants/events';
+import { CHANGE_LEVEL, END_CUTSCENE, END_TEXT_BOX, START_CUTSCENE, START_TEXT_BOX } from '../../constants/events';
 import { Camera } from '../../lib/Camera';
 import { Events } from '../../lib/Events';
 import { GameObject } from '../../lib/GameObject';
@@ -7,7 +7,6 @@ import { Inventory } from '../Inventory';
 import type { Level } from '../Level';
 import type { SpriteTextBox } from '../SpriteTextBox';
 
-// TODO add a global flag to stop npcs animations and movements (e.g. when a textbox is opened)
 export class Main extends GameObject {
   level: Level | null = null;
   input = new Input();
@@ -37,6 +36,14 @@ export class Main extends GameObject {
         textBox.destroy();
         Events.off(endingSub);
       });
+    });
+
+    Events.on(START_CUTSCENE, this, () => {
+      this.isCutscenePlaying = true;
+    });
+
+    Events.on(END_CUTSCENE, this, () => {
+      this.isCutscenePlaying = false;
     });
   }
 
