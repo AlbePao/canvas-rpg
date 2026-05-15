@@ -9,13 +9,12 @@ import { StoryFlags } from '../../lib/StoryFlags';
 import { Vector2 } from '../../lib/Vector2';
 import { InteractiveObject } from '../InteractiveObject';
 import { SpriteTextBox } from '../SpriteTextBox';
-import type { NpcAnimationFrame, NpcConfig } from './npc.types';
-import { STANDING_1, STANDING_2, STANDING_3, STANDING_4 } from './npcAnimations';
+import type { NpcConfig } from './npc.types';
 
 export class Npc extends InteractiveObject {
   body: Sprite;
 
-  constructor({ id, x, y, textConfig }: NpcConfig) {
+  constructor({ id, x, y, textConfig, npc }: NpcConfig) {
     super({
       id,
       x,
@@ -38,10 +37,10 @@ export class Npc extends InteractiveObject {
     // Body sprite
     this.body = new Sprite({
       id: `${id}-npc-body-sprite`,
-      resource: Resources.images.knight,
+      resource: Resources.images[npc],
       frameSize: new Vector2(32, 32),
-      hFrames: 6,
-      vFrames: 1,
+      hFrames: 4,
+      vFrames: 4,
       position: new Vector2(-8, -20),
       animations: new Animations<NpcAnimationFrame>({
         standing1: new FrameIndexPattern(STANDING_1),

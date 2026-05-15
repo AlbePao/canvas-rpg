@@ -127,10 +127,11 @@ export class LevelBuilder extends Level {
       }
 
       if (type === 'Npc') {
-        const { textConfig } = gameObject;
+        const { textConfig, npc } = gameObject;
         object = new Npc({
           id: gameObjectId,
           textConfig,
+          npc,
           x: gridCells(x),
           y: gridCells(y),
         });

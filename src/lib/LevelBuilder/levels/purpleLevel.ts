@@ -142,6 +142,7 @@ export const PURPLE_LEVEL: LevelMap = {
       id: 'npc1',
       x: 6,
       y: 3,
+      npc: 'ow1',
       textConfig: {
         content: [
           {
@@ -166,6 +167,7 @@ export const PURPLE_LEVEL: LevelMap = {
       id: 'npc2',
       x: 9,
       y: 4,
+      npc: 'ow2',
       textConfig: {
         content: [
           {
@@ -181,6 +183,7 @@ export const PURPLE_LEVEL: LevelMap = {
       id: 'npc3',
       x: 15,
       y: 6,
+      npc: 'ow3',
       textConfig: {
         content: [
           {

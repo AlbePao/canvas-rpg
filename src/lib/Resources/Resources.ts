@@ -17,7 +17,17 @@ const ASSETS_TO_LOAD: Record<ResourceKey, string> = {
   cave: '/sprites/cave.png',
   caveGround: '/sprites/cave-ground.png',
   // NPCs
-  knight: '/sprites/knight-sheet.png',
+  // knight: '/sprites/knight-sheet.png',
+  ow1: '/sprites/npcs/ow1.png',
+  ow2: '/sprites/npcs/ow2.png',
+  ow3: '/sprites/npcs/ow3.png',
+  ow4: '/sprites/npcs/ow4.png',
+  ow5: '/sprites/npcs/ow5.png',
+  ow6: '/sprites/npcs/ow6.png',
+  ow7: '/sprites/npcs/ow7.png',
+  ow8: '/sprites/npcs/ow8.png',
+  ow9: '/sprites/npcs/ow9.png',
+  ow10: '/sprites/npcs/ow10.png',
   // Enemies
   bat: '/sprites/bat-sheet.png',
   // Level builder assets

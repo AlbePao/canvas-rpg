@@ -3,6 +3,8 @@ export interface Resource {
   isLoaded: boolean;
 }
 
+export type NpcKey = 'ow1' | 'ow2' | 'ow3' | 'ow4' | 'ow5' | 'ow6' | 'ow7' | 'ow8' | 'ow9' | 'ow10';
+
 export type ResourceKey =
   | 'hero'
   | 'shadow'
@@ -14,7 +16,6 @@ export type ResourceKey =
   | 'ground'
   | 'cave'
   | 'caveGround'
-  | 'knight'
   | 'bat'
   | 'bgCave'
   | 'bgSky'
@@ -22,4 +23,5 @@ export type ResourceKey =
   | 'worldTiles'
   | 'textBox'
   | 'fontWhite'
-  | 'portraits';
+  | 'portraits'
+  | NpcKey;

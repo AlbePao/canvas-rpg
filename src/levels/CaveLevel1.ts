@@ -108,6 +108,7 @@ export class CaveLevel1 extends Level {
       id: `${LEVEL_ID}-npc1`,
       x: gridCells(5),
       y: gridCells(5),
+      npc: 'ow1',
       textConfig: {
         content: [
           {
@@ -133,6 +134,7 @@ export class CaveLevel1 extends Level {
       id: `${LEVEL_ID}-npc2`,
       x: gridCells(8),
       y: gridCells(5),
+      npc: 'ow2',
       textConfig: {
         content: [
           {
@@ -149,6 +151,7 @@ export class CaveLevel1 extends Level {
       id: `${LEVEL_ID}-npc3`,
       x: gridCells(12),
       y: gridCells(5),
+      npc: 'ow3',
       textConfig: {
         content: [
           {
