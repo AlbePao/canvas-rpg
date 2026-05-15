@@ -32,17 +32,17 @@ const makeStandingFrames = (rootFrame = 0): AnimationConfig => ({
   ],
 });
 
-export const STAND_DOWN = makeStandingFrames(1);
-export const STAND_RIGHT = makeStandingFrames(4);
-export const STAND_UP = makeStandingFrames(7);
-export const STAND_LEFT = makeStandingFrames(10);
+export const HERO_STAND_DOWN = makeStandingFrames(1);
+export const HERO_STAND_RIGHT = makeStandingFrames(4);
+export const HERO_STAND_UP = makeStandingFrames(7);
+export const HERO_STAND_LEFT = makeStandingFrames(10);
 
-export const WALK_DOWN = makeWalkingFrame(0);
-export const WALK_RIGHT = makeWalkingFrame(3);
-export const WALK_UP = makeWalkingFrame(6);
-export const WALK_LEFT = makeWalkingFrame(9);
+export const HERO_WALK_DOWN = makeWalkingFrame(0);
+export const HERO_WALK_RIGHT = makeWalkingFrame(3);
+export const HERO_WALK_UP = makeWalkingFrame(6);
+export const HERO_WALK_LEFT = makeWalkingFrame(9);
 
-export const PICK_UP_DOWN: AnimationConfig = {
+export const HERO_PICK_UP_DOWN: AnimationConfig = {
   duration: 400,
   frames: [
     {

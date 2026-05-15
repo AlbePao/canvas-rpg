@@ -22,15 +22,15 @@ import type { CollectibleItemData } from '../Item';
 import type { Main } from '../Main';
 import type { HeroAnimationFrame, HeroConfig } from './hero.types';
 import {
-  PICK_UP_DOWN,
-  STAND_DOWN,
-  STAND_LEFT,
-  STAND_RIGHT,
-  STAND_UP,
-  WALK_DOWN,
-  WALK_LEFT,
-  WALK_RIGHT,
-  WALK_UP,
+  HERO_PICK_UP_DOWN,
+  HERO_STAND_DOWN,
+  HERO_STAND_LEFT,
+  HERO_STAND_RIGHT,
+  HERO_STAND_UP,
+  HERO_WALK_DOWN,
+  HERO_WALK_LEFT,
+  HERO_WALK_RIGHT,
+  HERO_WALK_UP,
 } from './heroAnimations';
 
 // TODO: hero can jump over the ledge, like in pokemon
@@ -69,15 +69,15 @@ export class Hero extends GameObject {
       frame: 1,
       position: new Vector2(-8, -20),
       animations: new Animations<HeroAnimationFrame>({
-        walkDown: new FrameIndexPattern(WALK_DOWN),
-        walkUp: new FrameIndexPattern(WALK_UP),
-        walkLeft: new FrameIndexPattern(WALK_LEFT),
-        walkRight: new FrameIndexPattern(WALK_RIGHT),
-        standDown: new FrameIndexPattern(STAND_DOWN),
-        standUp: new FrameIndexPattern(STAND_UP),
-        standLeft: new FrameIndexPattern(STAND_LEFT),
-        standRight: new FrameIndexPattern(STAND_RIGHT),
-        pickUpDown: new FrameIndexPattern(PICK_UP_DOWN),
+        walkDown: new FrameIndexPattern(HERO_WALK_DOWN),
+        walkUp: new FrameIndexPattern(HERO_WALK_UP),
+        walkLeft: new FrameIndexPattern(HERO_WALK_LEFT),
+        walkRight: new FrameIndexPattern(HERO_WALK_RIGHT),
+        standDown: new FrameIndexPattern(HERO_STAND_DOWN),
+        standUp: new FrameIndexPattern(HERO_STAND_UP),
+        standLeft: new FrameIndexPattern(HERO_STAND_LEFT),
+        standRight: new FrameIndexPattern(HERO_STAND_RIGHT),
+        pickUpDown: new FrameIndexPattern(HERO_PICK_UP_DOWN),
       }),
     });
     this.addChild(this.body);
