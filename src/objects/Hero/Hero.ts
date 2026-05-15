@@ -20,7 +20,7 @@ import { Vector2 } from '../../lib/Vector2';
 import type { Directions } from '../../types/directions';
 import type { CollectibleItemData } from '../Item';
 import type { Main } from '../Main';
-import type { HeroAnimationFrame, HeroConfig } from './hero.types';
+import type { HeroConfig } from './hero.types';
 import {
   HERO_PICK_UP_DOWN,
   HERO_STAND_DOWN,
@@ -68,7 +68,7 @@ export class Hero extends GameObject {
       vFrames: 8,
       frame: 1,
       position: new Vector2(-8, -20),
-      animations: new Animations<HeroAnimationFrame>({
+      animations: new Animations({
         walkDown: new FrameIndexPattern(HERO_WALK_DOWN),
         walkUp: new FrameIndexPattern(HERO_WALK_UP),
         walkLeft: new FrameIndexPattern(HERO_WALK_LEFT),

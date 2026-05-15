@@ -5,7 +5,7 @@ import { Resources } from '../../lib/Resources';
 import { Sprite } from '../../lib/Sprite';
 import { Vector2 } from '../../lib/Vector2';
 import type { Level } from '../Level';
-import type { EnemyAnimationFrame, EnemyConfig } from './enemy.types';
+import type { EnemyConfig } from './enemy.types';
 import { HIT_1, HIT_2, HOVER_1, HOVER_2, HOVER_3, HOVER_4 } from './enemyAnimations';
 
 export class Enemy extends GameObject {
@@ -38,7 +38,7 @@ export class Enemy extends GameObject {
       hFrames: 6,
       vFrames: 1,
       position: new Vector2(-8, -18),
-      animations: new Animations<EnemyAnimationFrame>({
+      animations: new Animations({
         hover1: new FrameIndexPattern(HOVER_1),
         hover2: new FrameIndexPattern(HOVER_2),
         hover3: new FrameIndexPattern(HOVER_3),

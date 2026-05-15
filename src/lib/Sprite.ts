@@ -14,7 +14,7 @@ type SpriteConfig = {
   frame: number;
   scale: number;
   position: Vector2;
-  animations: Animations<string | number | symbol>;
+  animations: Animations;
 }>;
 
 export class Sprite extends GameObject {
@@ -25,7 +25,7 @@ export class Sprite extends GameObject {
   frame: number;
   frameMap = new Map<number, Vector2>();
   scale: number;
-  animations: Animations<string | number | symbol> | null;
+  animations: Animations | null;
 
   constructor({
     id, // id for the sprite
