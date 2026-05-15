@@ -39,7 +39,7 @@
       "lootConfig": {
         "item": "hammer1"
       },
-      "textConfig": {
+      "interactionConfig": {
         "content": [
           {
             "string": [
@@ -49,6 +49,24 @@
         ]
       },
       "x": 3,
+      "y": 0
+    },
+    {
+      "type": "Chest",
+      "id": "chest3",
+      "lootConfig": {
+        "item": "rod1"
+      },
+      "interactionConfig": {
+        "content": [
+          {
+            "string": [
+              "You found a rod"
+            ]
+          }
+        ]
+      },
+      "x": 4,
       "y": 0
     },
     {
@@ -141,7 +159,8 @@
       "id": "npc1",
       "x": 6,
       "y": 3,
-      "textConfig": {
+      "npc": "ow1",
+      "interactionConfig": {
         "content": [
           {
             "string": [
@@ -177,11 +196,36 @@
       "id": "npc2",
       "x": 9,
       "y": 4,
-      "textConfig": {
+      "npc": "ow2",
+      "interactionConfig": {
         "content": [
           {
             "string": [
+              "Oh, here's your item"
+            ],
+            "requires": [
+              "TALKED_TO_B"
+            ],
+            "bypass": [
+              "RECEIVED_ITEM_FROM_B"
+            ],
+            "addsFlag": "RECEIVED_ITEM_FROM_B",
+            "item": "hammer1"
+          },
+          {
+            "string": [
+              "Now you are more powerful!"
+            ],
+            "requires": [
+              "RECEIVED_ITEM_FROM_B"
+            ]
+          },
+          {
+            "string": [
               "What a beautiful day to work in the cave!"
+            ],
+            "bypass": [
+              "TALKED_TO_B"
             ],
             "addsFlag": "TALKED_TO_B"
           }
@@ -194,7 +238,8 @@
       "id": "npc3",
       "x": 15,
       "y": 6,
-      "textConfig": {
+      "npc": "ow3",
+      "interactionConfig": {
         "content": [
           {
             "string": [

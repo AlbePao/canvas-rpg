@@ -1,4 +1,4 @@
-import { TALKED_TO_A, TALKED_TO_B } from '../../../constants/storyFlags';
+import { RECEIVED_ITEM_FROM_B, TALKED_TO_A, TALKED_TO_B } from '../../../constants/storyFlags';
 import type { LevelMap } from '../levelBuilder.types';
 
 export const PURPLE_LEVEL: LevelMap = {
@@ -50,6 +50,22 @@ export const PURPLE_LEVEL: LevelMap = {
         ],
       },
       x: 3,
+      y: 0,
+    },
+    {
+      type: 'Chest',
+      id: 'chest3',
+      lootConfig: {
+        item: 'rod1',
+      },
+      interactionConfig: {
+        content: [
+          {
+            string: ['You found a rod'],
+          },
+        ],
+      },
+      x: 4,
       y: 0,
     },
     {
@@ -171,7 +187,19 @@ export const PURPLE_LEVEL: LevelMap = {
       interactionConfig: {
         content: [
           {
+            string: ["Oh, here's your item"],
+            requires: [TALKED_TO_B],
+            bypass: [RECEIVED_ITEM_FROM_B],
+            addsFlag: RECEIVED_ITEM_FROM_B,
+            item: 'hammer1',
+          },
+          {
+            string: ['Now you are more powerful!'],
+            requires: [RECEIVED_ITEM_FROM_B],
+          },
+          {
             string: ['What a beautiful day to work in the cave!'],
+            bypass: [TALKED_TO_B],
             addsFlag: TALKED_TO_B,
           },
         ],

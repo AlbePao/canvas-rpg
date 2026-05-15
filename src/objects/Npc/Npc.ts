@@ -1,4 +1,4 @@
-import { END_TEXT_BOX, HERO_REQUESTS_ACTION, START_TEXT_BOX } from '../../constants/events';
+import { END_TEXT_BOX, HERO_PICKS_UP_ITEM, HERO_REQUESTS_ACTION, START_TEXT_BOX } from '../../constants/events';
 import { Animations } from '../../lib/Animations';
 import { Events } from '../../lib/Events';
 import { FrameIndexPattern } from '../../lib/FrameIndexPattern';
@@ -9,6 +9,7 @@ import { StoryFlags } from '../../lib/StoryFlags';
 import { Vector2 } from '../../lib/Vector2';
 import { Hero } from '../Hero';
 import { InteractiveObject } from '../InteractiveObject';
+import { type CollectibleItemData, type ItemKey, ITEMS_SPRITE_FRAME } from '../Item';
 import { SpriteTextBox } from '../SpriteTextBox';
 import type { NpcConfig } from './npc.types';
 import {
@@ -23,9 +24,9 @@ import {
 } from './npcAnimations';
 
 // TODO: add npc behavior
-// TODO: hero can get an item from the npc
 export class Npc extends InteractiveObject {
   body: Sprite;
+  contentItem: ItemKey | null = null;
 
   constructor({ id, x, y, interactionConfig, npc }: NpcConfig) {
     super({
@@ -94,6 +95,11 @@ export class Npc extends InteractiveObject {
         StoryFlags.add(content.addsFlag);
       }
 
+      // Save locally the item to pick when text box is closed and hero satisfies the story flags
+      if (content.item) {
+        this.contentItem = content.item;
+      }
+
       // Emit the textbox
       Events.emit<SpriteTextBox>(
         START_TEXT_BOX,
@@ -107,6 +113,17 @@ export class Npc extends InteractiveObject {
 
     Events.on(END_TEXT_BOX, this, () => {
       this.body.animations?.play('standDown');
+
+      if (this.contentItem) {
+        // Now hero can collect the item
+        Events.emit<CollectibleItemData>(HERO_PICKS_UP_ITEM, {
+          id: crypto.randomUUID(),
+          frame: ITEMS_SPRITE_FRAME[this.contentItem],
+          shouldSkipPickupAnimation: false,
+        });
+        // Reset the items once hero collects it
+        this.contentItem = null;
+      }
     });
   }
 }
