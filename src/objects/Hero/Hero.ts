@@ -100,8 +100,9 @@ export class Hero extends GameObject {
   }
 
   override step(delta: number, root: Main): void {
-    // Don't do anything when locked
-    if (this.isLocked) {
+    const { isPaused, isCutscenePlaying, input } = root;
+    // Don't do anything when locked, game is paused or cutscene is playing
+    if (this.isLocked || isPaused || isCutscenePlaying) {
       return;
     }
 
@@ -112,8 +113,6 @@ export class Hero extends GameObject {
     }
 
     // Check for input
-    const input = root.input;
-
     if (input.getActionJustPressed('Space')) {
       // Look for an object at the next space (according to where Hero is facing)
       const objectAtPosition = this.parent?.children.find((child) =>

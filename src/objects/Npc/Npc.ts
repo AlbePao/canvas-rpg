@@ -10,6 +10,7 @@ import { Vector2 } from '../../lib/Vector2';
 import { Hero } from '../Hero';
 import { InteractiveObject } from '../InteractiveObject';
 import { type CollectibleItemData, type ItemKey, ITEMS_SPRITE_FRAME } from '../Item';
+import type { Main } from '../Main';
 import { SpriteTextBox } from '../SpriteTextBox';
 import type { NpcConfig } from './npc.types';
 import {
@@ -27,6 +28,7 @@ import {
 export class Npc extends InteractiveObject {
   body: Sprite;
   contentItem: ItemKey | null = null;
+  isLocked = false;
 
   constructor({ id, x, y, interactionConfig, npc }: NpcConfig) {
     super({
@@ -125,5 +127,13 @@ export class Npc extends InteractiveObject {
         this.contentItem = null;
       }
     });
+  }
+
+  override step(_delta: number, root: Main): void {
+    const { isPaused, isCutscenePlaying } = root;
+    // Don't do anything when locked, game is paused or cutscene is playing
+    if (this.isLocked || isPaused || isCutscenePlaying) {
+      return;
+    }
   }
 }

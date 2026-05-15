@@ -12,6 +12,8 @@ export class Main extends GameObject {
   level: Level | null = null;
   input = new Input();
   camera = new Camera();
+  isCutscenePlaying = false;
+  isPaused = false;
 
   constructor() {
     super({ id: 'main' });
@@ -36,6 +38,13 @@ export class Main extends GameObject {
         Events.off(endingSub);
       });
     });
+  }
+
+  override step(_delta: number, _root: GameObject): void {
+    if (this.input.getActionJustPressed('Escape')) {
+      // TODO: add pause menu child
+      this.isPaused = !this.isPaused;
+    }
   }
 
   setLevel(newLevelInstance: Level): void {
