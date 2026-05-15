@@ -1,5 +1,4 @@
 import type { ChestConfig } from '../../objects/Chest';
-import type { EnemyConfig } from '../../objects/Enemy';
 import type { CollectibleItemConfig } from '../../objects/Item';
 import type { LevelConfig } from '../../objects/Level';
 import type { NpcConfig } from '../../objects/Npc';
@@ -151,10 +150,6 @@ export type LevelChestItem = ChestConfig & {
   type: 'Chest';
 };
 
-export type LevelEnemy = EnemyConfig & {
-  type: 'Enemy';
-};
-
 export type LevelNpc = NpcConfig & {
   type: 'Npc';
 };
@@ -166,7 +161,7 @@ export type LevelDecoration = GameObjectBaseConfig & {
   drawLayer?: GameObjectDrawLayer;
 };
 
-export type LevelObjects = LevelCollectibleItem | LevelChestItem | LevelEnemy | LevelNpc | LevelDecoration;
+export type LevelObjects = LevelCollectibleItem | LevelChestItem | LevelNpc | LevelDecoration;
 
 export type LevelExit = GameObjectBaseConfig & {
   newLevelId: LevelsId;

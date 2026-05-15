@@ -7,7 +7,6 @@ import { Resources } from '../lib/Resources';
 import { Sprite } from '../lib/Sprite';
 import { Vector2 } from '../lib/Vector2';
 import { Chest } from '../objects/Chest';
-import { Enemy } from '../objects/Enemy';
 import { Exit } from '../objects/Exit';
 import { Hero } from '../objects/Hero';
 import { CollectibleItem } from '../objects/Item';
@@ -96,13 +95,6 @@ export class CaveLevel1 extends Level {
       },
     });
     this.addChild(chest2);
-
-    const bat = new Enemy({
-      id: `${LEVEL_ID}-bat`,
-      x: gridCells(14),
-      y: gridCells(4),
-    });
-    this.addChild(bat);
 
     const npc1 = new Npc({
       id: `${LEVEL_ID}-npc1`,

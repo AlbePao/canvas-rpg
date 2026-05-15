@@ -11,10 +11,4 @@ export type AnimationFrame =
   | 'walkLeft'
   | 'walkRight'
   | 'walkUp'
-  | 'pickUpDown'
-  | 'hover1'
-  | 'hover2'
-  | 'hover3'
-  | 'hover4'
-  | 'hit1'
-  | 'hit2';
+  | 'pickUpDown';

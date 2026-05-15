@@ -148,12 +148,6 @@ export const PURPLE_LEVEL: LevelMap = {
       isSolid: true,
     },
     {
-      type: 'Enemy',
-      id: 'bat',
-      x: 14,
-      y: 4,
-    },
-    {
       type: 'Npc',
       id: 'npc1',
       x: 6,

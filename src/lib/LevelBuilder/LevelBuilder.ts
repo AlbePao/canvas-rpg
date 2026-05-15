@@ -2,7 +2,6 @@ import { CHANGE_LEVEL, HERO_EXITS } from '../../constants/events';
 import { gridCells } from '../../helpers/grid';
 import { objectKeys } from '../../helpers/objectKeys';
 import { Chest } from '../../objects/Chest';
-import { Enemy } from '../../objects/Enemy';
 import type { ExitData } from '../../objects/Exit';
 import { Exit } from '../../objects/Exit';
 import { Hero } from '../../objects/Hero';
@@ -113,14 +112,6 @@ export class LevelBuilder extends Level {
           status,
           lootConfig,
           interactionConfig,
-          x: gridCells(x),
-          y: gridCells(y),
-        });
-      }
-
-      if (type === 'Enemy') {
-        object = new Enemy({
-          id: gameObjectId,
           x: gridCells(x),
           y: gridCells(y),
         });
