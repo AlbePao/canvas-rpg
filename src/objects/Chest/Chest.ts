@@ -11,7 +11,6 @@ import { ITEMS_SPRITE_FRAME } from '../Item';
 import { SpriteTextBox } from '../SpriteTextBox';
 import type { ChestConfig, ChestStatus } from './chest.types';
 
-// TODO: add story flags checks with requires and bypass properties for when a chest needs a key and/or hero already has it
 export class Chest extends InteractiveObject {
   status: ChestStatus = 'CLOSED';
   body: Sprite;
@@ -52,12 +51,14 @@ export class Chest extends InteractiveObject {
 
       const content = this.getTextContent();
 
+      // TODO: implement a logic similar to Npc to add story flags checks with requires and bypass properties. Useful when a chest needs a key and/or hero already has it
       if (content) {
+        const { addsFlag, portraitFrame, string } = content;
         this._openChest();
 
         // Potentially add a story flag
-        if (content.addsFlag) {
-          StoryFlags.add(content.addsFlag);
+        if (addsFlag) {
+          StoryFlags.add(addsFlag);
         }
 
         // Emit the textbox
@@ -65,14 +66,15 @@ export class Chest extends InteractiveObject {
           START_TEXT_BOX,
           new SpriteTextBox({
             id: `text-box-for-${this.id}`,
-            portraitFrame: content.portraitFrame,
-            string: content.string,
+            portraitFrame,
+            string,
           }),
         );
 
-        Events.on(END_TEXT_BOX, this, () => {
+        const endingSub = Events.on(END_TEXT_BOX, this, () => {
           // Open chest after text box close
           this._pickUpItem();
+          Events.off(endingSub);
         });
       } else {
         this._openChest();
