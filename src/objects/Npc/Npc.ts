@@ -1,4 +1,11 @@
-import { END_TEXT_BOX, HERO_PICKS_UP_ITEM, HERO_REQUESTS_ACTION, START_TEXT_BOX } from '../../constants/events';
+import {
+  END_LEVEL_TRANSITION,
+  END_TEXT_BOX,
+  HERO_PICKS_UP_ITEM,
+  HERO_REQUESTS_ACTION,
+  START_LEVEL_TRANSITION,
+  START_TEXT_BOX,
+} from '../../constants/events';
 import { Animations } from '../../lib/Animations';
 import { Events } from '../../lib/Events';
 import { FrameIndexPattern } from '../../lib/FrameIndexPattern';
@@ -126,6 +133,13 @@ export class Npc extends InteractiveObject {
         // Reset the items once hero collects it
         this.contentItem = null;
       }
+    });
+
+    [START_TEXT_BOX, START_LEVEL_TRANSITION].forEach((event) => {
+      Events.on(event, this, () => (this.isLocked = true));
+    });
+    [END_TEXT_BOX, END_LEVEL_TRANSITION].forEach((event) => {
+      Events.on(event, this, () => (this.isLocked = false));
     });
   }
 

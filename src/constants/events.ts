@@ -7,6 +7,10 @@ export const HERO_PICKS_UP_ITEM = 'HERO_PICKS_UP_ITEM';
 // Level events
 export const CHANGE_LEVEL = 'CHANGE_LEVEL';
 
+// Level transition events
+export const START_LEVEL_TRANSITION = 'START_LEVEL_TRANSITION';
+export const END_LEVEL_TRANSITION = 'END_LEVEL_TRANSITION';
+
 // Text box events
 export const START_TEXT_BOX = 'START_TEXT_BOX';
 export const END_TEXT_BOX = 'END_TEXT_BOX';

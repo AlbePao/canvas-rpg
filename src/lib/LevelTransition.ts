@@ -1,4 +1,4 @@
-import { END_LEVEL_TRANSITION, START_LEVEL_TRANSITION } from '../constants/levelTransition';
+import { END_LEVEL_TRANSITION, START_LEVEL_TRANSITION } from '../constants/events';
 import { Events } from './Events';
 import { Singleton } from './Singleton';
 

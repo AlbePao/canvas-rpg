@@ -1,12 +1,13 @@
 import {
+  END_LEVEL_TRANSITION,
   END_TEXT_BOX,
   HERO_PICKS_UP_ITEM,
   HERO_POSITION,
   HERO_REQUESTS_ACTION,
+  START_LEVEL_TRANSITION,
   START_TEXT_BOX,
 } from '../../constants/events';
 import { GRID_SIZE } from '../../constants/gridSize';
-import { END_LEVEL_TRANSITION, START_LEVEL_TRANSITION } from '../../constants/levelTransition';
 import { createItemSprite } from '../../helpers/createItemSprite';
 import { isSpaceFree } from '../../helpers/grid';
 import { moveTowards } from '../../helpers/moveTowards';
