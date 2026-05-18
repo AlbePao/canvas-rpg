@@ -30,8 +30,13 @@ export const PURPLE_LEVEL: LevelMap = {
     {
       type: 'Chest',
       id: 'chest1',
-      lootConfig: {
-        item: 'rod2',
+      interactionConfig: {
+        content: [
+          {
+            string: [],
+            item: 'hammer1',
+          },
+        ],
       },
       x: 0,
       y: 0,
@@ -39,13 +44,11 @@ export const PURPLE_LEVEL: LevelMap = {
     {
       type: 'Chest',
       id: 'chest2',
-      lootConfig: {
-        item: 'hammer1',
-      },
       interactionConfig: {
         content: [
           {
             string: ['You found an hammer'],
+            item: 'hammer1',
           },
         ],
       },
@@ -55,17 +58,47 @@ export const PURPLE_LEVEL: LevelMap = {
     {
       type: 'Chest',
       id: 'chest3',
-      lootConfig: {
-        item: 'rod1',
-      },
       interactionConfig: {
         content: [
           {
             string: ['You found a rod'],
+            item: 'rod1',
           },
         ],
       },
       x: 4,
+      y: 0,
+    },
+    {
+      type: 'Chest',
+      id: 'chest3',
+      interactionConfig: {
+        content: [
+          {
+            string: ['You found a slingshot!'],
+            requires: [TALKED_TO_B],
+            item: 'slingshot1',
+          },
+          {
+            string: ['I have to talk with B first...'],
+          },
+        ],
+      },
+      x: 6,
+      y: 0,
+    },
+    {
+      type: 'Chest',
+      id: 'chest5',
+      interactionConfig: {
+        content: [
+          {
+            string: [],
+            item: 'potion2',
+          },
+        ],
+      },
+      x: 8,
       y: 0,
     },
     {
@@ -213,6 +246,23 @@ export const PURPLE_LEVEL: LevelMap = {
           },
         ],
         portraitFrame: 0,
+      },
+      behaviorConfig: [
+        { type: 'walk', direction: 'LEFT' },
+        { type: 'stand', direction: 'UP', duration: 800 },
+        { type: 'walk', direction: 'UP' },
+        { type: 'walk', direction: 'RIGHT' },
+        { type: 'walk', direction: 'DOWN' },
+      ],
+    },
+    {
+      type: 'Npc',
+      id: 'npc1',
+      x: 1,
+      y: 1,
+      npc: 'ow5',
+      interactionConfig: {
+        content: [],
       },
     },
   ],

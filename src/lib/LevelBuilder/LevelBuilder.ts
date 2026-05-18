@@ -106,11 +106,10 @@ export class LevelBuilder extends Level {
       }
 
       if (type === 'Chest') {
-        const { interactionConfig, status, lootConfig } = gameObject;
+        const { interactionConfig, status } = gameObject;
         object = new Chest({
           id: gameObjectId,
           status,
-          lootConfig,
           interactionConfig,
           x: gridCells(x),
           y: gridCells(y),

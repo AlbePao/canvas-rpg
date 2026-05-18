@@ -73,8 +73,13 @@ export class CaveLevel1 extends Level {
       id: `${LEVEL_ID}-chest`,
       x: gridCells(4),
       y: gridCells(3),
-      lootConfig: {
-        item: 'sword',
+      interactionConfig: {
+        content: [
+          {
+            string: [],
+            item: 'sword',
+          },
+        ],
       },
     });
     this.addChild(chest);
@@ -83,13 +88,11 @@ export class CaveLevel1 extends Level {
       id: `${LEVEL_ID}-chest2`,
       x: gridCells(7),
       y: gridCells(3),
-      lootConfig: {
-        item: 'hammer1',
-      },
       interactionConfig: {
         content: [
           {
             string: ['You found an hammer'],
+            item: 'hammer1',
           },
         ],
       },

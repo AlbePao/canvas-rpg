@@ -2,7 +2,7 @@ import type { GameObjectBaseConfig } from '../../types/gameObjectBaseConfig';
 import type { ItemKey } from '../Item';
 
 export type InteractiveObjectConfig = GameObjectBaseConfig & {
-  interactionConfig?: InteractionConfig;
+  interactionConfig: InteractionConfig;
 };
 
 export interface InteractionConfig {

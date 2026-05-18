@@ -6,7 +6,7 @@ import { Sprite } from '../../lib/Sprite';
 import { StoryFlags } from '../../lib/StoryFlags';
 import { Vector2 } from '../../lib/Vector2';
 import { InteractiveObject } from '../InteractiveObject';
-import type { CollectibleItemData } from '../Item';
+import type { CollectibleItemData, ItemKey } from '../Item';
 import { ITEMS_SPRITE_FRAME } from '../Item';
 import { SpriteTextBox } from '../SpriteTextBox';
 import type { ChestConfig, ChestStatus } from './chest.types';
@@ -14,9 +14,8 @@ import type { ChestConfig, ChestStatus } from './chest.types';
 export class Chest extends InteractiveObject {
   status: ChestStatus = 'CLOSED';
   body: Sprite;
-  lootData: CollectibleItemData;
 
-  constructor({ id, x, y, status, lootConfig, interactionConfig }: ChestConfig) {
+  constructor({ id, x, y, status, interactionConfig }: ChestConfig) {
     super({
       id,
       x,
@@ -26,11 +25,6 @@ export class Chest extends InteractiveObject {
 
     this.isSolid = true;
     this.status = status ?? 'CLOSED';
-    this.lootData = {
-      id: crypto.randomUUID(),
-      frame: ITEMS_SPRITE_FRAME[lootConfig.item],
-      shouldSkipPickupAnimation: false,
-    };
 
     this.body = new Sprite({
       id: `${id}-chest-sprite`,
@@ -51,14 +45,24 @@ export class Chest extends InteractiveObject {
 
       const content = this.getTextContent();
 
-      // TODO: implement a logic similar to Npc to add story flags checks with requires and bypass properties. Useful when a chest needs a key and/or hero already has it
-      if (content) {
-        const { addsFlag, portraitFrame, string } = content;
-        this._openChest();
+      if (!content) {
+        return;
+      }
+
+      const { addsFlag, portraitFrame, string, item } = content;
+
+      if (string.length > 0) {
+        let contentItem: ItemKey | null = null;
 
         // Potentially add a story flag
         if (addsFlag) {
           StoryFlags.add(addsFlag);
+        }
+
+        // Save the item to pick when text box is closed and hero satisfies the story flags
+        if (item) {
+          contentItem = item;
+          this._openChest();
         }
 
         // Emit the textbox
@@ -72,14 +76,17 @@ export class Chest extends InteractiveObject {
         );
 
         const endingSub = Events.on(END_TEXT_BOX, this, () => {
-          // Open chest after text box close
-          this._pickUpItem();
+          // Collect the item after text box close
+          this._pickUpItem(contentItem);
           Events.off(endingSub);
         });
-      } else {
-        this._openChest();
-        this._pickUpItem();
+
+        return;
       }
+
+      // No text box to display, collect the item directly
+      this._openChest();
+      this._pickUpItem(item);
     });
   }
 
@@ -89,8 +96,16 @@ export class Chest extends InteractiveObject {
     this.body.frame = 1;
   }
 
-  private _pickUpItem(): void {
+  private _pickUpItem(itemKey: ItemKey | null): void {
+    if (!itemKey) {
+      return;
+    }
+
     // Emit pick up item event
-    Events.emit<CollectibleItemData>(HERO_PICKS_UP_ITEM, this.lootData);
+    Events.emit<CollectibleItemData>(HERO_PICKS_UP_ITEM, {
+      id: crypto.randomUUID(),
+      frame: ITEMS_SPRITE_FRAME[itemKey],
+      shouldSkipPickupAnimation: false,
+    });
   }
 }

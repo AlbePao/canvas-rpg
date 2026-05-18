@@ -5,7 +5,6 @@ export type ChestStatus = 'OPEN' | 'CLOSED';
 
 export type ChestConfig = InteractiveObjectConfig & {
   status?: ChestStatus;
-  lootConfig: LootConfig;
 };
 
 export interface LootConfig {
