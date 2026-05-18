@@ -47,7 +47,7 @@ export class Main extends GameObject {
     });
   }
 
-  override step(_delta: number, _root: GameObject): void {
+  override step(_delta: number, _root: Main): void {
     if (this.input.getActionJustPressed('Escape')) {
       // TODO: add pause menu child
       this.isPaused = !this.isPaused;

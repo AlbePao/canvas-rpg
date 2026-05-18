@@ -31,7 +31,6 @@ import {
   NPC_WALK_UP,
 } from './npcAnimations';
 
-// TODO: add npc behavior
 export class Npc extends InteractiveObject {
   body: Sprite;
   contentItem: ItemKey | null = null;
@@ -99,14 +98,16 @@ export class Npc extends InteractiveObject {
         this.body.animations?.play('standRight');
       }
 
+      const { addsFlag, portraitFrame, string, item } = content;
+
       // Potentially add a story flag
-      if (content.addsFlag) {
-        StoryFlags.add(content.addsFlag);
+      if (addsFlag) {
+        StoryFlags.add(addsFlag);
       }
 
       // Save locally the item to pick when text box is closed and hero satisfies the story flags
-      if (content.item) {
-        this.contentItem = content.item;
+      if (item) {
+        this.contentItem = item;
       }
 
       // Emit the textbox
@@ -114,8 +115,8 @@ export class Npc extends InteractiveObject {
         START_TEXT_BOX,
         new SpriteTextBox({
           id: `text-box-for-${this.id}`,
-          portraitFrame: content.portraitFrame,
-          string: content.string,
+          portraitFrame,
+          string,
         }),
       );
     });
