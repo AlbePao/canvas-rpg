@@ -67,6 +67,10 @@ export class Input {
     return justPressed;
   }
 
+  isPressed(keyCode: string): boolean {
+    return this.keys[keyCode];
+  }
+
   onArrowPressed(direction: Directions): void {
     // Add this arrow to the queue if it's new
     if (!this.heldDirections.includes(direction)) {
