@@ -26,6 +26,7 @@ const LEVELS: Record<LevelsId, LevelMap> = {
   testTilesLevel: TEST_TILES_LEVEL,
 };
 
+// TODO: handle gridCells conversion in GameObject class
 export class LevelBuilder extends Level {
   exits: Record<string, LevelExit> = {};
 
@@ -95,33 +96,24 @@ export class LevelBuilder extends Level {
       let object: GameObject | null = null;
 
       if (type === 'CollectibleItem') {
-        const { item, shouldSkipPickupAnimation } = gameObject;
         object = new CollectibleItem({
-          id: gameObjectId,
-          item,
-          shouldSkipPickupAnimation,
+          ...gameObject,
           x: gridCells(x),
           y: gridCells(y),
         });
       }
 
       if (type === 'Chest') {
-        const { interactionConfig, status } = gameObject;
         object = new Chest({
-          id: gameObjectId,
-          status,
-          interactionConfig,
+          ...gameObject,
           x: gridCells(x),
           y: gridCells(y),
         });
       }
 
       if (type === 'Npc') {
-        const { interactionConfig, npc } = gameObject;
         object = new Npc({
-          id: gameObjectId,
-          interactionConfig,
-          npc,
+          ...gameObject,
           x: gridCells(x),
           y: gridCells(y),
         });
