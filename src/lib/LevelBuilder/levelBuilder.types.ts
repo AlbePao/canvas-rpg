@@ -3,8 +3,7 @@ import type { CollectibleItemConfig } from '../../objects/Item';
 import type { LevelConfig } from '../../objects/Level';
 import type { NpcConfig } from '../../objects/Npc';
 import type { Coords, Coords2D } from '../../types/coords';
-import type { GameObjectBaseConfig } from '../../types/gameObjectBaseConfig';
-import type { GameObjectDrawLayer } from '../GameObject';
+import type { GameObjectConfig, GameObjectDrawLayer } from '../GameObject';
 
 export type LevelsId = 'grass1Level' | 'purpleLevel' | 'testTilesLevel';
 export type WorldBackground = 'bgCave' | 'bgSky' | 'bgVolcano';
@@ -154,7 +153,7 @@ export type LevelNpc = NpcConfig & {
   type: 'Npc';
 };
 
-export type LevelDecoration = GameObjectBaseConfig & {
+export type LevelDecoration = GameObjectConfig & {
   type: 'Decoration';
   key: WorldTile;
   isSolid?: boolean;
@@ -163,7 +162,7 @@ export type LevelDecoration = GameObjectBaseConfig & {
 
 export type LevelObjects = LevelCollectibleItem | LevelChestItem | LevelNpc | LevelDecoration;
 
-export type LevelExit = GameObjectBaseConfig & {
+export type LevelExit = GameObjectConfig & {
   newLevelId: LevelsId;
   heroNewPosition: Coords2D;
 };

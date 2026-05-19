@@ -15,13 +15,10 @@ export class Chest extends InteractiveObject {
   status: ChestStatus = 'CLOSED';
   body: Sprite;
 
-  constructor({ id, x, y, status, interactionConfig }: ChestConfig) {
-    super({
-      id,
-      x,
-      y,
-      interactionConfig,
-    });
+  constructor(config: ChestConfig) {
+    super(config);
+
+    const { id, status } = config;
 
     this.isSolid = true;
     this.status = status ?? 'CLOSED';

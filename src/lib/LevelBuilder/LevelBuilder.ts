@@ -26,12 +26,11 @@ const LEVELS: Record<LevelsId, LevelMap> = {
   testTilesLevel: TEST_TILES_LEVEL,
 };
 
-// TODO: handle gridCells conversion in GameObject class
 export class LevelBuilder extends Level {
   exits: Record<string, LevelExit> = {};
 
   constructor(config: LevelBuilderConfig) {
-    // TODO: uncomment when levels are defined fom a json
+    // TODO: uncomment when levels are defined from a json
     // const levelMap = LevelsMapper.getLevel(config.id);
     // if (!levelMap) {
     //   throw new Error(`Level "${config.id}" not found in LevelsMapper`);
@@ -79,48 +78,31 @@ export class LevelBuilder extends Level {
 
     // Add level exits
     exits.forEach((exitData) => {
-      const { id: exitId, x, y } = exitData;
-      const exit = new Exit({
-        id: exitId,
-        x: gridCells(x),
-        y: gridCells(y),
-      });
+      const exit = new Exit(exitData);
 
       this.addChild(exit);
-      this.exits[exitId] = exitData;
+      this.exits[exitData.id] = exitData;
     });
 
     // Add game objects
     gameObjects.forEach((gameObject) => {
-      const { id: gameObjectId, type, x, y } = gameObject;
+      const { id: gameObjectId, type } = gameObject;
       let object: GameObject | null = null;
 
       if (type === 'CollectibleItem') {
-        object = new CollectibleItem({
-          ...gameObject,
-          x: gridCells(x),
-          y: gridCells(y),
-        });
+        object = new CollectibleItem(gameObject);
       }
 
       if (type === 'Chest') {
-        object = new Chest({
-          ...gameObject,
-          x: gridCells(x),
-          y: gridCells(y),
-        });
+        object = new Chest(gameObject);
       }
 
       if (type === 'Npc') {
-        object = new Npc({
-          ...gameObject,
-          x: gridCells(x),
-          y: gridCells(y),
-        });
+        object = new Npc(gameObject);
       }
 
       if (type === 'Decoration') {
-        const { key, isSolid, drawLayer } = gameObject;
+        const { key, isSolid, drawLayer, x, y } = gameObject;
         const frame = WORLD_TILES_FRAME_MAP[key];
 
         object = new Sprite({
@@ -130,7 +112,7 @@ export class LevelBuilder extends Level {
           hFrames: 16,
           vFrames: 9,
           frame,
-          position: new Vector2(gridCells(x), gridCells(y)),
+          position: new Vector2(gridCells(x ?? 0), gridCells(y ?? 0)),
         });
 
         object.isSolid = !!isSolid;
@@ -145,8 +127,7 @@ export class LevelBuilder extends Level {
     });
 
     // Add hero
-    this.heroStartPosition =
-      config?.heroStartPosition ?? new Vector2(gridCells(heroDefaultPosition.x), gridCells(heroDefaultPosition.y));
+    this.heroStartPosition = config?.heroStartPosition ?? new Vector2(heroDefaultPosition.x, heroDefaultPosition.y);
     const hero = new Hero({
       id: `${id}-hero`,
       x: this.heroStartPosition.x,
@@ -159,7 +140,7 @@ export class LevelBuilder extends Level {
     Events.on<ExitData>(HERO_EXITS, this, ({ id }) => {
       const { newLevelId, heroNewPosition } = this.exits[id];
 
-      // TODO: uncomment when levels are defined fom a json
+      // TODO: uncomment when levels are defined from a json
       // if (!LevelsMapper.hasLevel(newLevelId)) {
       //   throw new Error(`Level "${newLevelId}" not found in LevelsMapper`);
       // }
@@ -169,7 +150,7 @@ export class LevelBuilder extends Level {
           CHANGE_LEVEL,
           new LevelBuilder({
             id: newLevelId,
-            heroStartPosition: new Vector2(gridCells(heroNewPosition.x), gridCells(heroNewPosition.y)),
+            heroStartPosition: new Vector2(heroNewPosition.x, heroNewPosition.y),
           }),
         );
       });

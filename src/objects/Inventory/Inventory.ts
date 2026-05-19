@@ -23,7 +23,8 @@ export class Inventory extends GameObject {
   constructor() {
     super({
       id: 'inventory',
-      position: new Vector2(0, 1),
+      x: 0,
+      y: 0.5,
     });
 
     this.drawLayer = 'HUD';

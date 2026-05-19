@@ -9,8 +9,10 @@ import { ITEMS_SPRITE_FRAME } from './item.types';
 export class CollectibleItem extends Item {
   override data: CollectibleItemData;
 
-  constructor({ id, item, x, y, shouldSkipPickupAnimation }: CollectibleItemConfig) {
-    super({ id, item, x, y });
+  constructor(config: CollectibleItemConfig) {
+    super(config);
+
+    const { item, shouldSkipPickupAnimation } = config;
 
     const frame = ITEMS_SPRITE_FRAME[item];
 

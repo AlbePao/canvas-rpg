@@ -30,7 +30,8 @@ export class SpriteTextBox extends GameObject {
   constructor({ id, string, portraitFrame }: SpriteTextStringConfig) {
     super({
       id,
-      position: new Vector2(32, 112),
+      x: 2,
+      y: 7,
     });
 
     // Draw on top layer

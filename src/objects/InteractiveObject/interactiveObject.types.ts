@@ -1,7 +1,7 @@
-import type { GameObjectBaseConfig } from '../../types/gameObjectBaseConfig';
+import type { GameObjectConfig } from '../../lib/GameObject';
 import type { ItemKey } from '../Item';
 
-export type InteractiveObjectConfig = GameObjectBaseConfig & {
+export type InteractiveObjectConfig = GameObjectConfig & {
   interactionConfig: InteractionConfig;
 };
 

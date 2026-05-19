@@ -39,7 +39,6 @@ import {
 
 // TODO: hero can jump over the ledge, like in pokemon
 // TODO: add jump behavior for cutscenes with direction IN_PLACE, FORWARDS (facing direction + 1), BACKWARDS (facing direction -1)
-// TODO: add balloon behavior (with question or exclamation mark)
 export class Hero extends GameObject {
   facingDirection: Directions = 'DOWN';
   body: Sprite;
@@ -50,14 +49,13 @@ export class Hero extends GameObject {
   itemPickUpShell: GameObject | null = null;
   isLocked = false;
 
-  constructor({ id, x, y }: HeroConfig) {
-    super({
-      id,
-      position: new Vector2(x, y),
-    });
+  constructor(config: HeroConfig) {
+    super(config);
+
+    const { id } = config;
 
     const shadow = new Sprite({
-      id: `${id}-hero-shadow-sprite`,
+      id: `${config.id}-hero-shadow-sprite`,
       resource: Resources.images.shadow,
       frameSize: new Vector2(32, 32),
       position: new Vector2(-8, -19),

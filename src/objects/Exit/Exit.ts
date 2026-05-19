@@ -4,24 +4,16 @@ import { Events } from '../../lib/Events';
 import { GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
 import { Sprite } from '../../lib/Sprite';
-import { Vector2 } from '../../lib/Vector2';
+import type { Vector2 } from '../../lib/Vector2';
 import type { ExitConfig, ExitData } from './exit.types';
 
 // TODO: add customizable exit sprite
 export class Exit extends GameObject {
-  readonly exitData: ExitData;
-
-  constructor({ id, x, y }: ExitConfig) {
-    const exitData = {
-      id,
-      position: new Vector2(x, y),
-    };
-
-    super(exitData);
-    this.exitData = exitData;
+  constructor(config: ExitConfig) {
+    super(config);
 
     const exit = new Sprite({
-      id: `${id}-exit-sprite`,
+      id: `${config.id}-exit-sprite`,
       resource: Resources.images.exit,
     });
     this.addChild(exit);
@@ -32,7 +24,10 @@ export class Exit extends GameObject {
   override ready(): void {
     Events.on<Vector2>(HERO_POSITION, this, (position) => {
       if (detectOverlap(position, this.position)) {
-        Events.emit<ExitData>(HERO_EXITS, this.exitData);
+        Events.emit<ExitData>(HERO_EXITS, {
+          id: this.id,
+          position: this.position,
+        });
       }
     });
   }

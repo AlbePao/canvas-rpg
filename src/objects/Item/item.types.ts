@@ -1,5 +1,5 @@
+import type { GameObjectConfig } from '../../lib/GameObject';
 import type { Vector2 } from '../../lib/Vector2';
-import type { GameObjectBaseConfig } from '../../types/gameObjectBaseConfig';
 import type { UUID } from '../../types/uuid';
 
 export type ItemKey =
@@ -35,7 +35,7 @@ export interface ItemData {
   position?: Vector2;
 }
 
-export type ItemConfig = GameObjectBaseConfig & {
+export type ItemConfig = GameObjectConfig & {
   item: ItemKey;
 };
 

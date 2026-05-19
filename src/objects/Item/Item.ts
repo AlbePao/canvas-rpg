@@ -7,11 +7,10 @@ import { ITEMS_SPRITE_FRAME } from './item.types';
 export class Item extends GameObject {
   data: ItemData;
 
-  constructor({ id, item, x, y }: ItemConfig) {
-    super({
-      id,
-      position: new Vector2(x, y),
-    });
+  constructor(config: ItemConfig) {
+    super(config);
+
+    const { id, item } = config;
     const frame = ITEMS_SPRITE_FRAME[item];
 
     this.data = {

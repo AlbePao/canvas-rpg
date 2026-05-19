@@ -1,11 +1,10 @@
 import type { NpcBehavior } from '../../objects/Npc';
-import type { Vector2 } from '../Vector2';
+import type { Coords2D } from '../../types/coords';
 
-// TODO: replace position property with x and y
-export interface GameObjectConfig {
+export type GameObjectConfig = {
   id: string;
-  position?: Vector2;
-  behaviorConfig?: NpcBehavior[];
-}
+} & Partial<Coords2D> & {
+    behaviorConfig?: NpcBehavior[];
+  };
 
 export type GameObjectDrawLayer = 'HUD' | 'WORLD_TOP' | 'FLOOR';

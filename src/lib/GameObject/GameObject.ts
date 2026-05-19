@@ -1,4 +1,5 @@
 import { END_BEHAVIOR } from '../../constants/events';
+import { gridCells } from '../../helpers/grid';
 import type { Main } from '../../objects/Main';
 import type { NpcBehavior } from '../../objects/Npc';
 import { Events } from '../Events';
@@ -19,9 +20,9 @@ export class GameObject {
   retryTimeout: number | null = null;
 
   constructor(config: GameObjectConfig) {
-    const { id, position, behaviorConfig } = config;
+    const { id, x, y, behaviorConfig } = config;
     this.id = id;
-    this.position = position ?? new Vector2(0, 0);
+    this.position = new Vector2(gridCells(x ?? 0), gridCells(y ?? 0));
     // Set object behavior loop
     this.behaviorConfig = behaviorConfig ?? [];
   }

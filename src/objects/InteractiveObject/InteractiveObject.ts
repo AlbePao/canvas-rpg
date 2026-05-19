@@ -1,23 +1,22 @@
 import { GameObject } from '../../lib/GameObject';
 import { StoryFlags } from '../../lib/StoryFlags';
-import { Vector2 } from '../../lib/Vector2';
 import type { InteractionContent, InteractionContentConfig, InteractiveObjectConfig } from './interactiveObject.types';
 
 // TODO: extend to handle also selection box
 export class InteractiveObject extends GameObject {
   textContent: InteractionContentConfig[];
-  textPortraitFrame: number | null;
+  textPortraitFrame?: number | null;
 
-  constructor({ id, x, y, interactionConfig, behaviorConfig }: InteractiveObjectConfig) {
-    super({
-      id,
-      position: new Vector2(x, y),
-      behaviorConfig,
-    });
+  constructor(config: InteractiveObjectConfig) {
+    super(config);
+
+    const {
+      interactionConfig: { content, portraitFrame },
+    } = config;
 
     // Say something when talking
-    this.textContent = interactionConfig?.content ?? [];
-    this.textPortraitFrame = interactionConfig?.portraitFrame ?? null;
+    this.textContent = content;
+    this.textPortraitFrame = portraitFrame;
   }
 
   getTextContent(): InteractionContent | null {
@@ -33,7 +32,7 @@ export class InteractiveObject extends GameObject {
     }
 
     return {
-      portraitFrame: this.textPortraitFrame,
+      portraitFrame: this.textPortraitFrame ?? null,
       string: match.string,
       addsFlag: match.addsFlag ?? null,
       item: match.item ?? null,

@@ -1,3 +1,3 @@
-import type { GameObjectBaseConfig } from '../../types/gameObjectBaseConfig';
+import type { GameObjectConfig } from '../../lib/GameObject';
 
-export type HeroConfig = GameObjectBaseConfig;
+export type HeroConfig = GameObjectConfig;
