@@ -11,11 +11,6 @@ canvas {
   background: blue;
 }
 
-@font-face {
-  font-family: fontRetroGaming;
-  src: url('/fonts/Retro Gaming.ttf');
-}
-
 .LevelTransition {
   position: absolute;
   left: 0;
