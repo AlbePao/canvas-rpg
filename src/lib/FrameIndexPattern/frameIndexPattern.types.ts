@@ -1,4 +1,4 @@
-export interface AnimationFrame {
+interface AnimationFrame {
   time: number;
   frame: number;
 }
