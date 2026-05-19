@@ -8,10 +8,11 @@ export class InteractiveObject extends GameObject {
   textContent: InteractionContentConfig[];
   textPortraitFrame: number | null;
 
-  constructor({ id, x, y, interactionConfig }: InteractiveObjectConfig) {
+  constructor({ id, x, y, interactionConfig, behaviorConfig }: InteractiveObjectConfig) {
     super({
       id,
       position: new Vector2(x, y),
+      behaviorConfig,
     });
 
     // Say something when talking

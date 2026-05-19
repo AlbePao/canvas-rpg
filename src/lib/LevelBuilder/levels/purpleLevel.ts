@@ -257,13 +257,18 @@ export const PURPLE_LEVEL: LevelMap = {
     },
     {
       type: 'Npc',
-      id: 'npc1',
+      id: 'npc4',
       x: 1,
       y: 1,
-      npc: 'ow5',
+      npc: 'ow4',
       interactionConfig: {
-        content: [],
+        content: [{ string: ['Hi there!'] }],
       },
+      behaviorConfig: [
+        { type: 'stand', direction: 'UP', duration: 800 },
+        { type: 'stand', direction: 'RIGHT', duration: 800 },
+        { type: 'stand', direction: 'DOWN', duration: 1200 },
+      ],
     },
   ],
   walls: [

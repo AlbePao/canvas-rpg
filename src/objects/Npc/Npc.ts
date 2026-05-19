@@ -1,4 +1,6 @@
+import { STANDING_DIRECTIONS } from '../../constants/animationDirections';
 import {
+  END_BEHAVIOR,
   END_LEVEL_TRANSITION,
   END_PAUSE,
   END_TEXT_BOX,
@@ -20,9 +22,8 @@ import type { Directions } from '../../types/directions';
 import { Hero } from '../Hero';
 import { InteractiveObject } from '../InteractiveObject';
 import { ITEMS_SPRITE_FRAME, type CollectibleItemData, type ItemKey } from '../Item';
-import type { Main } from '../Main';
 import { SpriteTextBox } from '../SpriteTextBox';
-import type { NpcConfig } from './npc.types';
+import type { NpcBehavior, NpcConfig } from './npc.types';
 import {
   NPC_STAND_DOWN,
   NPC_STAND_LEFT,
@@ -40,13 +41,10 @@ export class Npc extends InteractiveObject {
   isLocked = false;
   facingDirection: Directions = 'DOWN';
 
-  constructor({ id, x, y, interactionConfig, npc }: NpcConfig) {
-    super({
-      id,
-      x,
-      y,
-      interactionConfig,
-    });
+  constructor(config: NpcConfig) {
+    super(config);
+
+    const { id, npc } = config;
 
     // Opt into being solid
     this.isSolid = true;
@@ -126,7 +124,8 @@ export class Npc extends InteractiveObject {
     });
 
     Events.on(END_TEXT_BOX, this, () => {
-      this._changeFacingDirection('DOWN');
+      const resetDirection = this.behaviorConfig[this.behaviorIndex]?.direction ?? 'DOWN';
+      this._changeFacingDirection(resetDirection);
 
       if (this.contentItem) {
         // Now hero can collect the item
@@ -149,11 +148,19 @@ export class Npc extends InteractiveObject {
     });
   }
 
-  override step(_delta: number, root: Main): void {
-    const { isPaused, isCutscenePlaying } = root;
-    // Don't do anything when locked, game is paused or cutscene is playing
-    if (this.isLocked || isPaused || isCutscenePlaying) {
-      return;
+  override startBehavior(behavior: NpcBehavior): void {
+    if (behavior.type === 'stand') {
+      const { direction, duration } = behavior;
+
+      if (!this.isLocked) {
+        this._changeFacingDirection(direction);
+      }
+
+      if (duration) {
+        setTimeout(() => {
+          Events.emit(END_BEHAVIOR, this.id);
+        }, duration);
+      }
     }
   }
 

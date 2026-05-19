@@ -1,3 +1,6 @@
+import { END_BEHAVIOR } from '../../constants/events';
+import type { Main } from '../../objects/Main';
+import type { NpcBehavior } from '../../objects/Npc';
 import { Events } from '../Events';
 import { Vector2 } from '../Vector2';
 import type { GameObjectConfig, GameObjectDrawLayer } from './gameObject.types';
@@ -11,12 +14,19 @@ export class GameObject {
   isSolid = false;
   drawLayer: GameObjectDrawLayer | null = null;
 
-  constructor({ id, position }: GameObjectConfig) {
+  behaviorConfig: NpcBehavior[];
+  behaviorIndex = 0;
+  retryTimeout: number | null = null;
+
+  constructor(config: GameObjectConfig) {
+    const { id, position, behaviorConfig } = config;
     this.id = id;
     this.position = position ?? new Vector2(0, 0);
+    // Set object behavior loop
+    this.behaviorConfig = behaviorConfig ?? [];
   }
 
-  stepEntry(delta: number, root: GameObject): void {
+  stepEntry(delta: number, root: Main): void {
     // Call updates on all children first
     this.children.forEach((child) => {
       child.stepEntry(delta, root);
@@ -26,6 +36,8 @@ export class GameObject {
     if (!this.hasReadyBeenCalled) {
       this.hasReadyBeenCalled = true;
       this.ready();
+      // Set and start behavior loop
+      this.setBehaviorLoop(root);
     }
 
     // Call any implemented step code
@@ -38,7 +50,7 @@ export class GameObject {
   }
 
   // Called once every frame
-  step(_delta: number, _root: GameObject): void {
+  step(_delta: number, _root: Main): void {
     // ...
   }
 
@@ -88,7 +100,7 @@ export class GameObject {
     this.parent?.removeChild(this);
   }
 
-  // Other Game Objects are nestable inside thi one
+  // Other Game Objects are nestable inside this one
   addChild(gameObject: GameObject): void {
     gameObject.parent = this;
     this.children.push(gameObject);
@@ -97,5 +109,56 @@ export class GameObject {
   removeChild(gameObject: GameObject): void {
     Events.unsubscribe(gameObject);
     this.children = this.children.filter((g) => gameObject !== g);
+  }
+
+  setBehaviorLoop(root: Main): void {
+    if (this.behaviorConfig.length === 0) {
+      return;
+    }
+
+    // If we have a behavior, kick off after a short delay
+    setTimeout(() => {
+      this.doBehaviorEvent(root);
+    }, 10);
+
+    Events.on<string>(END_BEHAVIOR, this, (id: string) => {
+      if (id !== this.id) {
+        return;
+      }
+
+      // Setting the next event to fire
+      this.behaviorIndex += 1;
+
+      if (this.behaviorIndex === this.behaviorConfig.length) {
+        this.behaviorIndex = 0;
+      }
+
+      // Do it again!
+      this.doBehaviorEvent(root);
+    });
+  }
+
+  doBehaviorEvent(main: Main): void {
+    if (main.isCutscenePlaying || this.behaviorConfig.length === 0) {
+      return;
+    }
+
+    if (main.isCutscenePlaying) {
+      if (this.retryTimeout) {
+        clearTimeout(this.retryTimeout);
+      }
+
+      this.retryTimeout = setTimeout(() => {
+        this.doBehaviorEvent(main);
+      }, 1000);
+
+      return;
+    }
+
+    this.startBehavior(this.behaviorConfig[this.behaviorIndex]);
+  }
+
+  startBehavior(_behavior: NpcBehavior): void {
+    // ...
   }
 }

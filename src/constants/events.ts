@@ -19,6 +19,10 @@ export const END_TEXT_BOX = 'END_TEXT_BOX';
 export const START_CUTSCENE = 'START_CUTSCENE';
 export const END_CUTSCENE = 'END_CUTSCENE';
 
+// Behavior events
+export const START_BEHAVIOR = 'START_BEHAVIOR';
+export const END_BEHAVIOR = 'END_BEHAVIOR';
+
 // Pause events
 export const START_PAUSE = 'START_PAUSE';
 export const END_PAUSE = 'END_PAUSE';
