@@ -2,7 +2,6 @@ import { END_LEVEL_TRANSITION, START_LEVEL_TRANSITION } from '../constants/event
 import { Events } from './Events';
 import { Singleton } from './Singleton';
 
-// TODO: make it configurable
 class LevelTransitionSingleton extends Singleton<LevelTransitionSingleton>() {
   element?: HTMLDivElement;
 

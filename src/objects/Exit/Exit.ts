@@ -7,7 +7,6 @@ import { Sprite } from '../../lib/Sprite';
 import type { Vector2 } from '../../lib/Vector2';
 import type { ExitConfig, ExitData } from './exit.types';
 
-// TODO: add customizable exit sprite
 export class Exit extends GameObject {
   constructor(config: ExitConfig) {
     super(config);
