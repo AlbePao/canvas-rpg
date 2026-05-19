@@ -13,6 +13,7 @@ import { GameObject } from '../../lib/GameObject';
 import { Input } from '../../lib/Input';
 import { Inventory } from '../Inventory';
 import type { Level } from '../Level';
+import { PauseMenu } from '../PauseMenu';
 import type { SpriteTextBox } from '../SpriteTextBox';
 
 export class Main extends GameObject {
@@ -53,14 +54,24 @@ export class Main extends GameObject {
     Events.on(END_CUTSCENE, this, () => {
       this.isCutscenePlaying = false;
     });
+
+    // Launch pause menu handler
+    Events.on(START_PAUSE, this, () => {
+      const pauseMenu = new PauseMenu();
+      this.addChild(pauseMenu);
+
+      // unsubscribe from this pause menu after it's destroyed
+      const endingSub = Events.on(END_PAUSE, this, () => {
+        pauseMenu.destroy();
+        // this.isPaused = false;
+        Events.off(endingSub);
+      });
+    });
   }
 
   override step(_delta: number, _root: Main): void {
     if (this.input.getActionJustPressed('Escape')) {
-      // TODO: add pause menu child
       this.isPaused = !this.isPaused;
-
-      // TODO: END_PAUSE event should be triggered on menu close
       Events.emit(this.isPaused ? START_PAUSE : END_PAUSE);
     }
   }
