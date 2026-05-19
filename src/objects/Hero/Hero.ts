@@ -130,6 +130,9 @@ export class Hero extends GameObject {
       }
     }
 
+    // If user keeps pressing B, the hero runs
+    // const speed = input.isPressed('KeyB') ? 2 : 1;
+    // const distance = moveTowards(this, this.destinationPosition, speed);
     const distance = moveTowards(this, this.destinationPosition, 1);
     const hasArrived = distance <= 1;
 
