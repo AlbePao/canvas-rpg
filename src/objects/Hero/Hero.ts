@@ -1,11 +1,13 @@
 import { STANDING_DIRECTIONS } from '../../constants/animationDirections';
 import {
   END_LEVEL_TRANSITION,
+  END_PAUSE,
   END_TEXT_BOX,
   HERO_PICKS_UP_ITEM,
   HERO_POSITION,
   HERO_REQUESTS_ACTION,
   START_LEVEL_TRANSITION,
+  START_PAUSE,
   START_TEXT_BOX,
 } from '../../constants/events';
 import { GRID_SIZE } from '../../constants/gridSize';
@@ -93,15 +95,19 @@ export class Hero extends GameObject {
   }
 
   override ready(): void {
-    [START_TEXT_BOX, START_LEVEL_TRANSITION].forEach((event) => {
+    // Lock hero when game is paused, cutscene is playing or is changing level
+    [START_PAUSE, START_TEXT_BOX, START_LEVEL_TRANSITION].forEach((event) => {
       Events.on(event, this, () => (this.isLocked = true));
     });
-    [END_TEXT_BOX, END_LEVEL_TRANSITION].forEach((event) => {
+    [END_PAUSE, END_TEXT_BOX, END_LEVEL_TRANSITION].forEach((event) => {
       Events.on(event, this, () => (this.isLocked = false));
     });
   }
 
   override step(delta: number, root: Main): void {
+    const { input } = root;
+    // Don't do anything when locked
+    if (this.isLocked) {
       this.body.animations?.play(STANDING_DIRECTIONS[this.facingDirection]);
       return;
     }

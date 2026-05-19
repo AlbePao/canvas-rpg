@@ -18,3 +18,7 @@ export const END_TEXT_BOX = 'END_TEXT_BOX';
 // Cutscene events
 export const START_CUTSCENE = 'START_CUTSCENE';
 export const END_CUTSCENE = 'END_CUTSCENE';
+
+// Pause events
+export const START_PAUSE = 'START_PAUSE';
+export const END_PAUSE = 'END_PAUSE';

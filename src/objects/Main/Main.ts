@@ -1,4 +1,12 @@
-import { CHANGE_LEVEL, END_CUTSCENE, END_TEXT_BOX, START_CUTSCENE, START_TEXT_BOX } from '../../constants/events';
+import {
+  CHANGE_LEVEL,
+  END_CUTSCENE,
+  END_PAUSE,
+  END_TEXT_BOX,
+  START_CUTSCENE,
+  START_PAUSE,
+  START_TEXT_BOX,
+} from '../../constants/events';
 import { Camera } from '../../lib/Camera';
 import { Events } from '../../lib/Events';
 import { GameObject } from '../../lib/GameObject';
@@ -51,6 +59,9 @@ export class Main extends GameObject {
     if (this.input.getActionJustPressed('Escape')) {
       // TODO: add pause menu child
       this.isPaused = !this.isPaused;
+
+      // TODO: END_PAUSE event should be triggered on menu close
+      Events.emit(this.isPaused ? START_PAUSE : END_PAUSE);
     }
   }
 
