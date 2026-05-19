@@ -1,3 +1,4 @@
+import { STANDING_DIRECTIONS } from '../../constants/animationDirections';
 import {
   END_LEVEL_TRANSITION,
   END_TEXT_BOX,
@@ -101,9 +102,7 @@ export class Hero extends GameObject {
   }
 
   override step(delta: number, root: Main): void {
-    const { isPaused, isCutscenePlaying, input } = root;
-    // Don't do anything when locked, game is paused or cutscene is playing
-    if (this.isLocked || isPaused || isCutscenePlaying) {
+      this.body.animations?.play(STANDING_DIRECTIONS[this.facingDirection]);
       return;
     }
 

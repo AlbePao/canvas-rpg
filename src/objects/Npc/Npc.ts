@@ -14,9 +14,10 @@ import { Resources } from '../../lib/Resources';
 import { Sprite } from '../../lib/Sprite';
 import { StoryFlags } from '../../lib/StoryFlags';
 import { Vector2 } from '../../lib/Vector2';
+import type { Directions } from '../../types/directions';
 import { Hero } from '../Hero';
 import { InteractiveObject } from '../InteractiveObject';
-import { type CollectibleItemData, type ItemKey, ITEMS_SPRITE_FRAME } from '../Item';
+import { ITEMS_SPRITE_FRAME, type CollectibleItemData, type ItemKey } from '../Item';
 import type { Main } from '../Main';
 import { SpriteTextBox } from '../SpriteTextBox';
 import type { NpcConfig } from './npc.types';
@@ -35,6 +36,7 @@ export class Npc extends InteractiveObject {
   body: Sprite;
   contentItem: ItemKey | null = null;
   isLocked = false;
+  facingDirection: Directions = 'DOWN';
 
   constructor({ id, x, y, interactionConfig, npc }: NpcConfig) {
     super({
@@ -89,13 +91,13 @@ export class Npc extends InteractiveObject {
       const heroDirection = this.parent?.children.find((child) => child instanceof Hero)?.facingDirection;
 
       if (heroDirection === 'DOWN') {
-        this.body.animations?.play('standUp');
+        this._changeFacingDirection('UP');
       } else if (heroDirection === 'UP') {
-        this.body.animations?.play('standDown');
+        this._changeFacingDirection('DOWN');
       } else if (heroDirection === 'RIGHT') {
-        this.body.animations?.play('standLeft');
+        this._changeFacingDirection('LEFT');
       } else if (heroDirection === 'LEFT') {
-        this.body.animations?.play('standRight');
+        this._changeFacingDirection('RIGHT');
       }
 
       const { addsFlag, portraitFrame, string, item } = content;
@@ -122,7 +124,7 @@ export class Npc extends InteractiveObject {
     });
 
     Events.on(END_TEXT_BOX, this, () => {
-      this.body.animations?.play('standDown');
+      this._changeFacingDirection('DOWN');
 
       if (this.contentItem) {
         // Now hero can collect the item
@@ -150,5 +152,10 @@ export class Npc extends InteractiveObject {
     if (this.isLocked || isPaused || isCutscenePlaying) {
       return;
     }
+  }
+
+  private _changeFacingDirection(direction: Directions): void {
+    this.facingDirection = direction;
+    this.body.animations?.play(STANDING_DIRECTIONS[direction]);
   }
 }
