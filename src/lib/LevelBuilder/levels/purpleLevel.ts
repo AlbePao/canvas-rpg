@@ -98,6 +98,7 @@ export const PURPLE_LEVEL: LevelMap = {
           },
         ],
       },
+      removeAfterLoot: true,
       x: 8,
       y: 0,
     },

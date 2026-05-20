@@ -14,14 +14,16 @@ import type { ChestConfig, ChestStatus } from './chest.types';
 export class Chest extends InteractiveObject {
   status: ChestStatus = 'CLOSED';
   body: Sprite;
+  readonly shouldRemove?: boolean;
 
   constructor(config: ChestConfig) {
     super(config);
 
-    const { id, status } = config;
+    const { id, status, removeAfterLoot } = config;
 
     this.isSolid = true;
     this.status = status ?? 'CLOSED';
+    this.shouldRemove = removeAfterLoot;
 
     this.body = new Sprite({
       id: `${id}-chest-sprite`,
@@ -104,5 +106,9 @@ export class Chest extends InteractiveObject {
       frame: ITEMS_SPRITE_FRAME[itemKey],
       shouldSkipPickupAnimation: false,
     });
+
+    if (this.shouldRemove) {
+      this.destroy();
+    }
   }
 }
