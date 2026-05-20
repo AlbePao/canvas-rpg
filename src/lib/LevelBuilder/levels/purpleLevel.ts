@@ -205,6 +205,16 @@ export const PURPLE_LEVEL: LevelMap = {
         ],
         portraitFrame: 1,
       },
+      behaviorConfig: [
+        { type: 'walk', direction: 'DOWN' },
+        { type: 'stand', direction: 'DOWN', duration: 1200 },
+        { type: 'walk', direction: 'RIGHT' },
+        { type: 'stand', direction: 'RIGHT', duration: 1200 },
+        { type: 'walk', direction: 'UP' },
+        { type: 'stand', direction: 'UP', duration: 1200 },
+        { type: 'walk', direction: 'LEFT' },
+        { type: 'stand', direction: 'LEFT', duration: 1200 },
+      ],
     },
     {
       type: 'Npc',
@@ -233,6 +243,12 @@ export const PURPLE_LEVEL: LevelMap = {
         ],
         portraitFrame: 0,
       },
+      behaviorConfig: [
+        { type: 'stand', direction: 'DOWN', duration: 1000 },
+        { type: 'stand', direction: 'LEFT', duration: 1000 },
+        { type: 'stand', direction: 'UP', duration: 1000 },
+        { type: 'stand', direction: 'RIGHT', duration: 1000 },
+      ],
     },
     {
       type: 'Npc',
@@ -248,13 +264,6 @@ export const PURPLE_LEVEL: LevelMap = {
         ],
         portraitFrame: 0,
       },
-      behaviorConfig: [
-        { type: 'walk', direction: 'LEFT' },
-        { type: 'stand', direction: 'UP', duration: 800 },
-        { type: 'walk', direction: 'UP' },
-        { type: 'walk', direction: 'RIGHT' },
-        { type: 'walk', direction: 'DOWN' },
-      ],
     },
     {
       type: 'Npc',

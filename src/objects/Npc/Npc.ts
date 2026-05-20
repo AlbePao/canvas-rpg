@@ -1,6 +1,6 @@
 import { STANDING_DIRECTIONS } from '../../constants/animationDirections';
 import {
-  END_BEHAVIOR,
+  BEHAVIOR_COMPLETE,
   END_LEVEL_TRANSITION,
   END_PAUSE,
   END_TEXT_BOX,
@@ -40,6 +40,7 @@ export class Npc extends InteractiveObject {
   contentItem: ItemKey | null = null;
   isLocked = false;
   facingDirection: Directions = 'DOWN';
+  destinationPosition: Vector2;
 
   constructor(config: NpcConfig) {
     super(config);
@@ -78,6 +79,8 @@ export class Npc extends InteractiveObject {
       }),
     });
     this.addChild(this.body);
+
+    this.destinationPosition = this.position.duplicate();
   }
 
   override ready(): void {
@@ -160,7 +163,7 @@ export class Npc extends InteractiveObject {
 
       if (duration) {
         setTimeout(() => {
-          Events.emit(END_BEHAVIOR, this.id);
+          Events.emit(BEHAVIOR_COMPLETE, this.id);
         }, duration);
       }
     } else if (type === 'walk') {

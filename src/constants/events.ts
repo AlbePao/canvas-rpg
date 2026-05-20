@@ -20,8 +20,9 @@ export const START_CUTSCENE = 'START_CUTSCENE';
 export const END_CUTSCENE = 'END_CUTSCENE';
 
 // Behavior events
-export const START_BEHAVIOR = 'START_BEHAVIOR';
-export const END_BEHAVIOR = 'END_BEHAVIOR';
+export const BEHAVIOR_COMPLETE = 'BEHAVIOR_COMPLETE';
+export const BEHAVIOR_STAND_COMPLETE = 'BEHAVIOR_STAND_COMPLETE';
+export const BEHAVIOR_WALK_COMPLETE = 'BEHAVIOR_WALK_COMPLETE';
 
 // Pause events
 export const START_PAUSE = 'START_PAUSE';
