@@ -1,5 +1,5 @@
+import type { GameObjectBehavior } from '../../lib/GameObject';
 import type { NpcKey } from '../../lib/Resources';
-import type { Directions } from '../../types/directions';
 import type { InteractiveObjectConfig } from '../InteractiveObject';
 
 export type NpcConfig = InteractiveObjectConfig & {
@@ -7,14 +7,13 @@ export type NpcConfig = InteractiveObjectConfig & {
   behaviorConfig?: NpcBehavior[];
 };
 
-export type NpcBehavior = (
-  | {
-      type: 'stand';
-      duration?: number;
-    }
-  | {
-      type: 'walk';
-    }
-) & {
-  direction: Directions;
-};
+export type NpcBehavior = GameObjectBehavior &
+  (
+    | {
+        type: 'stand';
+        duration?: number;
+      }
+    | {
+        type: 'walk';
+      }
+  );

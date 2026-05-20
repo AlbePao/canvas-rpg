@@ -149,7 +149,9 @@ export class Npc extends InteractiveObject {
   }
 
   override startBehavior(behavior: NpcBehavior): void {
-    if (behavior.type === 'stand') {
+    const { type } = behavior;
+
+    if (type === 'stand') {
       const { direction, duration } = behavior;
 
       if (!this.isLocked) {
@@ -161,6 +163,8 @@ export class Npc extends InteractiveObject {
           Events.emit(END_BEHAVIOR, this.id);
         }, duration);
       }
+    } else if (type === 'walk') {
+      // TODO: add walk behavior
     }
   }
 

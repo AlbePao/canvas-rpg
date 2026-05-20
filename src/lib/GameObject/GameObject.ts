@@ -1,10 +1,9 @@
 import { END_BEHAVIOR } from '../../constants/events';
 import { gridCells } from '../../helpers/grid';
 import type { Main } from '../../objects/Main';
-import type { NpcBehavior } from '../../objects/Npc';
 import { Events } from '../Events';
 import { Vector2 } from '../Vector2';
-import type { GameObjectConfig, GameObjectDrawLayer } from './gameObject.types';
+import type { GameObjectBehavior, GameObjectConfig, GameObjectDrawLayer } from './gameObject.types';
 
 export class GameObject {
   id: string;
@@ -15,7 +14,7 @@ export class GameObject {
   isSolid = false;
   drawLayer: GameObjectDrawLayer | null = null;
 
-  behaviorConfig: NpcBehavior[];
+  behaviorConfig: GameObjectBehavior[];
   behaviorIndex = 0;
   retryTimeout: number | null = null;
 
@@ -159,7 +158,7 @@ export class GameObject {
     this.startBehavior(this.behaviorConfig[this.behaviorIndex]);
   }
 
-  startBehavior(_behavior: NpcBehavior): void {
+  startBehavior(_behavior: GameObjectBehavior): void {
     // ...
   }
 }
