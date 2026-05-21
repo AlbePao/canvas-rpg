@@ -5,6 +5,7 @@ import type { AnimationFrame, AnimationPattern } from './animations.types';
 export class Animations {
   patterns: AnimationPattern;
   activeKey: AnimationFrame;
+  isPaused = false;
 
   constructor(patterns: AnimationPattern) {
     this.patterns = patterns;
@@ -27,7 +28,19 @@ export class Animations {
   }
 
   step(delta: number): void {
+    if (this.isPaused) {
+      return;
+    }
+
     this._getCurrentFramePattern().step(delta);
+  }
+
+  pause(): void {
+    this.isPaused = true;
+  }
+
+  resume(): void {
+    this.isPaused = false;
   }
 
   private _getCurrentFramePattern(): FrameIndexPattern {

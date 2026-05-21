@@ -148,10 +148,18 @@ export class Npc extends InteractiveObject {
 
     // Lock npc when game is paused, cutscene is playing or hero is changing level
     [START_PAUSE, START_TEXT_BOX, START_LEVEL_TRANSITION].forEach((event) => {
-      Events.on(event, this, () => (this.isLocked = true));
+      Events.on(event, this, () => {
+        this.isLocked = true;
+        // Freeze animation
+        this.body.animations?.pause();
+      });
     });
     [END_PAUSE, END_TEXT_BOX, END_LEVEL_TRANSITION].forEach((event) => {
-      Events.on(event, this, () => (this.isLocked = false));
+      Events.on(event, this, () => {
+        this.isLocked = false;
+        // Resume animation
+        this.body.animations?.resume();
+      });
     });
   }
 
