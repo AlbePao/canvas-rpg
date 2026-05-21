@@ -18,11 +18,11 @@ import { Events } from '../../lib/Events';
 import { FrameIndexPattern } from '../../lib/FrameIndexPattern';
 import { GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
-import { Sprite } from '../../lib/Sprite';
 import { Vector2 } from '../../lib/Vector2';
 import type { Directions } from '../../types/directions';
 import type { CollectibleItemData } from '../Item';
 import type { Main } from '../Main';
+import { Sprite } from '../Sprite';
 import type { HeroConfig } from './hero.types';
 import {
   HERO_PICK_UP_DOWN,

@@ -1,21 +1,9 @@
-import { GRID_SIZE } from '../constants/gridSize';
-import type { Animations } from './Animations';
-import { GameObject } from './GameObject';
-import type { Resource } from './Resources';
-import { Vector2 } from './Vector2';
-
-type SpriteConfig = {
-  id: string;
-  resource: Resource;
-} & Partial<{
-  frameSize: Vector2;
-  hFrames: number;
-  vFrames: number;
-  frame: number;
-  scale: number;
-  position: Vector2;
-  animations: Animations;
-}>;
+import { GRID_SIZE } from '../../constants/gridSize';
+import type { Animations } from '../../lib/Animations';
+import { GameObject } from '../../lib/GameObject';
+import type { Resource } from '../../lib/Resources';
+import { Vector2 } from '../../lib/Vector2';
+import type { SpriteConfig } from './sprite.types';
 
 export class Sprite extends GameObject {
   resource: Resource;

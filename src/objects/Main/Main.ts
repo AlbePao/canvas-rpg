@@ -7,10 +7,10 @@ import {
   START_PAUSE,
   START_TEXT_BOX,
 } from '../../constants/events';
-import { Camera } from '../../lib/Camera';
 import { Events } from '../../lib/Events';
 import { GameObject } from '../../lib/GameObject';
 import { Input } from '../../lib/Input';
+import { Camera } from '../Camera';
 import { Inventory } from '../Inventory';
 import type { Level } from '../Level';
 import { PauseMenu } from '../PauseMenu';

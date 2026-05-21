@@ -4,7 +4,6 @@ import { gridCells } from '../helpers/grid';
 import { Events } from '../lib/Events';
 import { LevelTransition } from '../lib/LevelTransition';
 import { Resources } from '../lib/Resources';
-import { Sprite } from '../lib/Sprite';
 import { Vector2 } from '../lib/Vector2';
 import { Chest } from '../objects/Chest';
 import { Exit } from '../objects/Exit';
@@ -13,6 +12,7 @@ import { CollectibleItem } from '../objects/Item';
 import type { LevelConfig } from '../objects/Level';
 import { Level } from '../objects/Level';
 import { Npc } from '../objects/Npc';
+import { Sprite } from '../objects/Sprite';
 import { OutdoorLevel1 } from './OutdoorLevel1';
 
 const DEFAULT_HERO_POSITION = new Vector2(gridCells(6), gridCells(5));

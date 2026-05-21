@@ -2,12 +2,12 @@ import { END_TEXT_BOX, HERO_PICKS_UP_ITEM, HERO_REQUESTS_ACTION, START_TEXT_BOX 
 import { Events } from '../../lib/Events';
 import type { GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
-import { Sprite } from '../../lib/Sprite';
 import { StoryFlags } from '../../lib/StoryFlags';
 import { Vector2 } from '../../lib/Vector2';
 import { InteractiveObject } from '../InteractiveObject';
 import type { CollectibleItemData, ItemKey } from '../Item';
 import { ITEMS_SPRITE_FRAME } from '../Item';
+import { Sprite } from '../Sprite';
 import { SpriteTextBox } from '../SpriteTextBox';
 import type { ChestConfig, ChestStatus } from './chest.types';
 

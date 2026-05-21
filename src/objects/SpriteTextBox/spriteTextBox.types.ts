@@ -1,4 +1,4 @@
-import type { Sprite } from '../../lib/Sprite';
+import type { Sprite } from '../Sprite';
 
 export interface Line {
   words: Word[];

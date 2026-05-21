@@ -2,8 +2,8 @@ import { END_PAUSE } from '../../constants/events';
 import { Events } from '../../lib/Events';
 import { GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
-import { Sprite } from '../../lib/Sprite';
 import { Vector2 } from '../../lib/Vector2';
+import { Sprite } from '../Sprite';
 import { getCharacterFrame, getCharacterWidth } from '../SpriteTextBox';
 
 export class PauseMenu extends GameObject {

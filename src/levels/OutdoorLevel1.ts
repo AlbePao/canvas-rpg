@@ -3,13 +3,13 @@ import { gridCells } from '../helpers/grid';
 import { Events } from '../lib/Events';
 import { LevelTransition } from '../lib/LevelTransition';
 import { Resources } from '../lib/Resources';
-import { Sprite } from '../lib/Sprite';
 import { Vector2 } from '../lib/Vector2';
 import { Exit } from '../objects/Exit';
 import { Hero } from '../objects/Hero';
 import { CollectibleItem } from '../objects/Item';
 import type { LevelConfig } from '../objects/Level';
 import { Level } from '../objects/Level';
+import { Sprite } from '../objects/Sprite';
 import type { Coords } from '../types/coords';
 import { CaveLevel1 } from './CaveLevel1';
 

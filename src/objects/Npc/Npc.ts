@@ -17,13 +17,13 @@ import { Events } from '../../lib/Events';
 import { FrameIndexPattern } from '../../lib/FrameIndexPattern';
 import type { GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
-import { Sprite } from '../../lib/Sprite';
 import { StoryFlags } from '../../lib/StoryFlags';
 import { Vector2 } from '../../lib/Vector2';
 import type { Directions } from '../../types/directions';
 import { Hero } from '../Hero';
 import { InteractiveObject } from '../InteractiveObject';
 import { ITEMS_SPRITE_FRAME, type CollectibleItemData, type ItemKey } from '../Item';
+import { Sprite } from '../Sprite';
 import { SpriteTextBox } from '../SpriteTextBox';
 import type { NpcBehavior, NpcConfig } from './npc.types';
 import {
