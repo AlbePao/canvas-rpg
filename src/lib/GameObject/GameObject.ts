@@ -139,11 +139,12 @@ export class GameObject {
   }
 
   doBehaviorEvent(main: Main): void {
-    if (main.isCutscenePlaying || this.behaviorConfig.length === 0) {
+    const { isCutscenePlaying } = main;
+    if (isCutscenePlaying || this.behaviorConfig.length === 0) {
       return;
     }
 
-    if (main.isCutscenePlaying) {
+    if (isCutscenePlaying) {
       if (this.retryTimeout) {
         clearTimeout(this.retryTimeout);
       }
