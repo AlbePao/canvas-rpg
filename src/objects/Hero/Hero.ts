@@ -54,6 +54,9 @@ export class Hero extends GameObject {
 
     const { id } = config;
 
+    // Opt into being solid
+    this.isSolid = true;
+
     const shadow = new Sprite({
       id: `${config.id}-hero-shadow-sprite`,
       resource: Resources.images.shadow,
@@ -84,7 +87,6 @@ export class Hero extends GameObject {
     });
     this.addChild(this.body);
 
-    this.isSolid = true;
     this.destinationPosition = this.position.duplicate();
 
     // React to picking up an item

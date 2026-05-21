@@ -15,6 +15,6 @@ export type NpcBehavior = GameObjectBehavior &
       }
     | {
         type: 'walk';
-        speed?: number;
+        speed?: number; // Optional walking speed multiplier
       }
   );
