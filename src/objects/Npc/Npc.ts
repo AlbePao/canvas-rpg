@@ -10,6 +10,8 @@ import {
   START_PAUSE,
   START_TEXT_BOX,
 } from '../../constants/events';
+import { GRID_SIZE } from '../../constants/gridSize';
+import { moveTowards } from '../../helpers/moveTowards';
 import { Animations } from '../../lib/Animations';
 import { Events } from '../../lib/Events';
 import { FrameIndexPattern } from '../../lib/FrameIndexPattern';
@@ -39,6 +41,8 @@ export class Npc extends InteractiveObject {
   body: Sprite;
   contentItem: ItemKey | null = null;
   isLocked = false;
+  isWalking = false;
+  walkingSpeed = 1;
   facingDirection: Directions = 'DOWN';
   destinationPosition: Vector2;
 
@@ -151,6 +155,24 @@ export class Npc extends InteractiveObject {
     });
   }
 
+  override step(): void {
+    if (!this.isWalking || this.isLocked) {
+      return;
+    }
+
+    // Move towards the walk target
+    const distance = moveTowards(this, this.destinationPosition, this.walkingSpeed);
+    const hasArrived = distance <= 1;
+
+    if (hasArrived) {
+      this.isWalking = false;
+      this.walkingSpeed = 1;
+      this.position.x = this.destinationPosition.x;
+      this.position.y = this.destinationPosition.y;
+      Events.emit(BEHAVIOR_COMPLETE, this.id);
+    }
+  }
+
   override startBehavior(behavior: NpcBehavior): void {
     const { type } = behavior;
 
@@ -167,7 +189,57 @@ export class Npc extends InteractiveObject {
         }, duration);
       }
     } else if (type === 'walk') {
-      // TODO: add walk behavior
+      if (this.isLocked) {
+        // this.body.animations?.stop();
+        setTimeout(() => {
+          this.startBehavior(behavior);
+        }, 10);
+
+        return;
+      }
+
+      const { direction, speed } = behavior;
+
+      // Calculate the walk target based on direction and distance
+      let nextX = this.destinationPosition.x;
+      let nextY = this.destinationPosition.y;
+
+      if (direction === 'DOWN') {
+        nextY += GRID_SIZE;
+        this.body.animations?.play('walkDown');
+      }
+      if (direction === 'UP') {
+        nextY -= GRID_SIZE;
+        this.body.animations?.play('walkUp');
+      }
+      if (direction === 'LEFT') {
+        nextX -= GRID_SIZE;
+        this.body.animations?.play('walkLeft');
+      }
+      if (direction === 'RIGHT') {
+        nextX += GRID_SIZE;
+        this.body.animations?.play('walkRight');
+      }
+
+      this.walkingSpeed = speed ?? 1;
+      this.facingDirection = direction;
+
+      // Validate the walk target is free
+      const solidBodyAtSpace = this.parent?.children.find(
+        (child) => child.isSolid && child.position.x === nextX && child.position.y === nextY,
+      );
+
+      if (solidBodyAtSpace) {
+        this._changeFacingDirection(direction);
+        setTimeout(() => {
+          this.startBehavior(behavior);
+        }, 10);
+        return;
+      }
+
+      this.isWalking = true;
+      this.destinationPosition.x = nextX;
+      this.destinationPosition.y = nextY;
     }
   }
 
