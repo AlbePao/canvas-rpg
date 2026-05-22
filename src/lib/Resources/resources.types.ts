@@ -21,6 +21,7 @@ export type ResourceKey =
   | 'bgSky'
   | 'bgVolcano'
   | 'worldTiles'
+  | 'tileset'
   | 'textBox'
   | 'fontWhite'
   | 'portraits'

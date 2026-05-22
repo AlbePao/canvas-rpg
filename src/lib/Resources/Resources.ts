@@ -35,6 +35,7 @@ const ASSETS_TO_LOAD: Record<ResourceKey, string> = {
   bgSky: '/sprites/levels/bg-sky.png',
   bgVolcano: '/sprites/levels/bg-volcano.png',
   worldTiles: '/sprites/levels/world-tiles.png',
+  tileset: '/sprites/tileset.png',
   // HUD
   textBox: '/sprites/text-box.png',
   fontWhite: '/sprites/sprite-font-white.png',

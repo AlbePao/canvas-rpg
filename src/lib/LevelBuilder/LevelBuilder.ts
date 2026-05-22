@@ -86,7 +86,7 @@ export class LevelBuilder extends Level {
 
     // Add game objects
     gameObjects.forEach((gameObject) => {
-      const { id: gameObjectId, type } = gameObject;
+      const { type } = gameObject;
       let object: GameObject | null = null;
 
       if (type === 'CollectibleItem') {
@@ -102,7 +102,7 @@ export class LevelBuilder extends Level {
       }
 
       if (type === 'Decoration') {
-        const { key, isSolid, drawLayer, x, y } = gameObject;
+        const { id: gameObjectId, key, isSolid, drawLayer, x, y } = gameObject;
         const frame = WORLD_TILES_FRAME_MAP[key];
 
         object = new Sprite({
