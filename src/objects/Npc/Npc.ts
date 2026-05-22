@@ -233,9 +233,19 @@ export class Npc extends InteractiveObject {
       this.facingDirection = direction;
 
       // Validate the walk target is free
-      const solidBodyAtSpace = this.parent?.children.find(
-        (child) => child.isSolid && child.position.x === nextX && child.position.y === nextY,
-      );
+      const solidBodyAtSpace = this.parent?.children.find((child) => {
+        // Check if solid body is at the target position
+        if (child.isSolid && child.position.x === nextX && child.position.y === nextY) {
+          return true;
+        }
+
+        // Check if Hero is walking to that position (reserve the space)
+        if (child instanceof Hero && child.destinationPosition.x === nextX && child.destinationPosition.y === nextY) {
+          return true;
+        }
+
+        return false;
+      });
 
       if (solidBodyAtSpace) {
         this._changeFacingDirection(direction);

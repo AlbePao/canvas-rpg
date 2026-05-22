@@ -24,6 +24,7 @@ import { Vector2 } from '../../lib/Vector2';
 import type { Directions } from '../../types/directions';
 import type { CollectibleItemData } from '../Item';
 import type { Main } from '../Main';
+import { Npc } from '../Npc';
 import { Sprite } from '../Sprite';
 import type { HeroConfig } from './hero.types';
 import {
@@ -120,6 +121,8 @@ export class Hero extends GameObject {
     });
   }
 
+  // jump(direction:'IN_PLACE' | 'FORWARDS' | 'BACKWARDS'): void {}
+
   override step(delta: number, root: Main): void {
     const { input } = root;
     // Don't do anything when locked
@@ -214,9 +217,19 @@ export class Hero extends GameObject {
 
     // Validation that the next destination is free
     const spaceIsFree = level && isSpaceFree(level.walls, nextX, nextY);
-    const solidBodyAtSpace = this.parent?.children.find(
-      (child) => child.isSolid && child.position.x === nextX && child.position.y === nextY,
-    );
+    const solidBodyAtSpace = this.parent?.children.find((child) => {
+      // Check if solid body is at the target position
+      if (child.isSolid && child.position.x === nextX && child.position.y === nextY) {
+        return true;
+      }
+
+      // Check if NPC is walking to that position (reserve the space)
+      if (child instanceof Npc && child.destinationPosition.x === nextX && child.destinationPosition.y === nextY) {
+        return true;
+      }
+
+      return false;
+    });
 
     if (spaceIsFree && !solidBodyAtSpace) {
       this.destinationPosition.x = nextX;
