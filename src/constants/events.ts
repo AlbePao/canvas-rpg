@@ -25,3 +25,6 @@ export const BEHAVIOR_COMPLETE = 'BEHAVIOR_COMPLETE';
 // Pause events
 export const START_PAUSE = 'START_PAUSE';
 export const END_PAUSE = 'END_PAUSE';
+
+// Input events
+export const DIRECTION_TAP = 'DIRECTION_TAP';

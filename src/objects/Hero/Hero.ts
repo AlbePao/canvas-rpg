@@ -1,4 +1,6 @@
+import { STANDING_DIRECTIONS } from '../../constants/animationDirections';
 import {
+  DIRECTION_TAP,
   END_LEVEL_TRANSITION,
   END_PAUSE,
   END_TEXT_BOX,
@@ -110,6 +112,11 @@ export class Hero extends GameObject {
         // Resume animation
         this.body.animations?.resume();
       });
+    });
+
+    // Turn to face direction when user taps a direction key without holding
+    Events.on<Directions>(DIRECTION_TAP, this, (direction) => {
+      this._changeFacingDirection(direction);
     });
   }
 
@@ -252,5 +259,10 @@ export class Hero extends GameObject {
     // this.state = 'PICKING_UP_ITEM'
     // or
     // this.state = 'IS_ATTACKING'
+  }
+
+  private _changeFacingDirection(direction: Directions): void {
+    this.facingDirection = direction;
+    this.body.animations?.play(STANDING_DIRECTIONS[direction]);
   }
 }
