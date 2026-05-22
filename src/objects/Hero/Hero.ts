@@ -47,6 +47,7 @@ export class Hero extends GameObject {
   itemPickUpTime = 0;
   itemPickUpShell: GameObject | null = null;
   isLocked = false;
+  speed = 1;
 
   constructor(config: HeroConfig) {
     super(config);
@@ -137,10 +138,7 @@ export class Hero extends GameObject {
       }
     }
 
-    // If user keeps pressing B, the hero runs
-    // const speed = input.isPressed('KeyB') ? 2 : 1;
-    // const distance = moveTowards(this, this.destinationPosition, speed);
-    const distance = moveTowards(this, this.destinationPosition, 1);
+    const distance = moveTowards(this, this.destinationPosition, this.speed);
     const hasArrived = distance <= 1;
 
     // Attempt to move again if the hero is at his position
