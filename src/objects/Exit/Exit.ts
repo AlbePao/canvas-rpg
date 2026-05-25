@@ -8,8 +8,12 @@ import { Sprite } from '../Sprite';
 import type { ExitConfig, ExitData } from './exit.types';
 
 export class Exit extends GameObject {
+  readonly exitData: ExitData;
+
   constructor(config: ExitConfig) {
     super(config);
+
+    const { id, heroNewPosition, newLevelId } = config;
 
     const exit = new Sprite({
       id: `${config.id}-exit-sprite`,
@@ -18,15 +22,19 @@ export class Exit extends GameObject {
     this.addChild(exit);
 
     this.drawLayer = 'FLOOR';
+
+    this.exitData = {
+      id,
+      position: this.position,
+      newLevelId,
+      heroNewPosition,
+    };
   }
 
   override ready(): void {
     Events.on<Vector2>(HERO_POSITION, this, (position) => {
       if (detectOverlap(position, this.position)) {
-        Events.emit<ExitData>(HERO_EXITS, {
-          id: this.id,
-          position: this.position,
-        });
+        Events.emit<ExitData>(HERO_EXITS, this.exitData);
       }
     });
   }

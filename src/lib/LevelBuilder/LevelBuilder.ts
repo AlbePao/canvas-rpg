@@ -27,8 +27,6 @@ const LEVELS: Record<LevelsId, LevelMap> = {
 };
 
 export class LevelBuilder extends Level {
-  exits: Record<string, LevelExit> = {};
-
   constructor(config: LevelBuilderConfig) {
     // TODO: uncomment when levels are defined from a json
     // const levelMap = LevelsMapper.getLevel(config.id);
@@ -76,14 +74,6 @@ export class LevelBuilder extends Level {
       this.walls.add(`${gridCells(x)},${gridCells(y)}`);
     });
 
-    // Add level exits
-    exits.forEach((exitData) => {
-      const exit = new Exit(exitData);
-
-      this.addChild(exit);
-      this.exits[exitData.id] = exitData;
-    });
-
     // Add game objects
     gameObjects.forEach((gameObject) => {
       const { type } = gameObject;
@@ -102,23 +92,11 @@ export class LevelBuilder extends Level {
       }
 
       if (type === 'Decoration') {
-        const { id: gameObjectId, key, isSolid, drawLayer, x, y } = gameObject;
-        const frame = WORLD_TILES_FRAME_MAP[key];
+        object = new Decoration(gameObject);
+      }
 
-        object = new Sprite({
-          id: gameObjectId,
-          resource: Resources.images.worldTiles,
-          frameSize: new Vector2(16, 16),
-          hFrames: 16,
-          vFrames: 9,
-          frame,
-          position: new Vector2(gridCells(x ?? 0), gridCells(y ?? 0)),
-        });
-
-        object.isSolid = !!isSolid;
-
-        // Mark decorations to render on top or bottom of characters
-        object.drawLayer = drawLayer ?? null;
+      if (type === 'Exit') {
+        object = new Exit(gameObject);
       }
 
       if (object) {
@@ -137,9 +115,7 @@ export class LevelBuilder extends Level {
   }
 
   override ready(): void {
-    Events.on<ExitData>(HERO_EXITS, this, ({ id }) => {
-      const { newLevelId, heroNewPosition } = this.exits[id];
-
+    Events.on<ExitData>(HERO_EXITS, this, ({ newLevelId, heroNewPosition }) => {
       // TODO: uncomment when levels are defined from a json
       // if (!LevelsMapper.hasLevel(newLevelId)) {
       //   throw new Error(`Level "${newLevelId}" not found in LevelsMapper`);
