@@ -20,7 +20,7 @@ const ctx = canvas.getContext('2d')!;
 const mainScene = new Main();
 mainScene.setLevel(
   new LevelBuilder({
-    id: 'purpleLevel',
+    id: 'tilesetLevel',
   }),
 );
 

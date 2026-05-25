@@ -1,12 +1,15 @@
 import { CHANGE_LEVEL, HERO_EXITS } from '../../constants/events';
 import { gridCells } from '../../helpers/grid';
 import { objectKeys } from '../../helpers/objectKeys';
+import { TILESET_LEVEL } from '../../levels/tilesetLevel';
 import { Chest } from '../../objects/Chest';
+import { Decoration } from '../../objects/Decoration';
 import type { ExitData } from '../../objects/Exit';
 import { Exit } from '../../objects/Exit';
 import { Hero } from '../../objects/Hero';
 import { CollectibleItem } from '../../objects/Item';
 import { Level } from '../../objects/Level';
+import { LevelTile } from '../../objects/LevelTile';
 import { Npc } from '../../objects/Npc';
 import { Sprite } from '../../objects/Sprite';
 import { Events } from '../Events';
@@ -14,16 +17,10 @@ import type { GameObject } from '../GameObject';
 import { LevelTransition } from '../LevelTransition';
 import { Resources } from '../Resources';
 import { Vector2 } from '../Vector2';
-import type { LevelBuilderConfig, LevelExit, LevelMap, LevelsId } from './levelBuilder.types';
-import { GRASS1_LEVEL } from './levels/grass1Level';
-import { PURPLE_LEVEL } from './levels/purpleLevel';
-import { TEST_TILES_LEVEL } from './levels/testTilesLevel';
-import { WORLD_TILES_FRAME_MAP } from './tilesFramesMap';
+import type { LevelBuilderConfig, LevelMap } from './levelBuilder.types';
 
-const LEVELS: Record<LevelsId, LevelMap> = {
-  grass1Level: GRASS1_LEVEL,
-  purpleLevel: PURPLE_LEVEL,
-  testTilesLevel: TEST_TILES_LEVEL,
+const LEVELS: Record<string, LevelMap> = {
+  tilesetLevel: TILESET_LEVEL,
 };
 
 export class LevelBuilder extends Level {
@@ -34,33 +31,30 @@ export class LevelBuilder extends Level {
     //   throw new Error(`Level "${config.id}" not found in LevelsMapper`);
     // }
 
-    const { id, background, heroDefaultPosition, tiles, walls, exits, gameObjects } = LEVELS[config.id];
+    const { id, background, heroDefaultPosition, tiles, walls, gameObjects } = LEVELS[config.id];
 
     super({ id });
 
-    this.background = new Sprite({
-      id: `${id}-background-sprite`,
-      resource: Resources.images[background.resource],
-      frameSize: new Vector2(background.frameSize.x, background.frameSize.y),
-    });
+    this.background = background
+      ? new Sprite({
+          id: `${id}-background-sprite`,
+          resource: Resources.images[background.resource],
+          frameSize: new Vector2(background.frameSize.x, background.frameSize.y),
+        })
+      : null;
 
     // Add tiles
     objectKeys(tiles).forEach((coords) => {
       const [x, y] = coords.split(',').map(Number);
-      const tileKey = tiles[coords];
+      const tileName = tiles[coords];
 
-      if (!tileKey) {
+      if (!tileName) {
         return;
       }
 
-      const frame = WORLD_TILES_FRAME_MAP[tileKey];
-      const worldTileSprite = new Sprite({
+      const worldTileSprite = new LevelTile({
         id: `${id}-world-tile-${coords}`,
-        resource: Resources.images.worldTiles,
-        frameSize: new Vector2(16, 16),
-        hFrames: 16,
-        vFrames: 9,
-        frame,
+        tileName,
         position: new Vector2(gridCells(x), gridCells(y)),
       });
 

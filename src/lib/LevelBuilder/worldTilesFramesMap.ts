@@ -1,4 +1,4 @@
-import type { WorldTilesFrameMap } from './levelBuilder.types';
+import type { WorldTilesFrameMap } from './worldTiles.types';
 
 export const WORLD_TILES_FRAME_MAP: WorldTilesFrameMap = {
   // Grass 1
