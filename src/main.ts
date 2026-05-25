@@ -19,7 +19,6 @@ const ctx = canvas.getContext('2d')!;
 // Establish the root scene
 const mainScene = new Main();
 mainScene.setLevel(
-  // new CaveLevel1(),
   new LevelBuilder({
     id: 'purpleLevel',
   }),
