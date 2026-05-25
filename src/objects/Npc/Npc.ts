@@ -54,7 +54,7 @@ export class Npc extends InteractiveObject {
     // Opt into being solid
     this.isSolid = true;
 
-    // Shadow under feet
+    // Shadow under feet is separated from body to stay in place when npc is doing some actions, like walking or jumping
     const shadow = new Sprite({
       id: `${id}-npc-shadow-sprite`,
       resource: Resources.images.shadow,
