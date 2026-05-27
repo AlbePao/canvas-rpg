@@ -1,4 +1,4 @@
-import { END_TEXT_BOX } from '../../constants/events';
+import { TEXT_BOX_END } from '../../constants/events';
 import { Events } from '../../lib/Events';
 import { GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
@@ -111,7 +111,7 @@ export class SpriteTextBox extends GameObject {
       }
 
       // Done with the textbox
-      Events.emit(END_TEXT_BOX);
+      Events.emit(TEXT_BOX_END);
     }
 
     // Word on typewriter

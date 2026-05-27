@@ -1,4 +1,4 @@
-import { END_LEVEL_TRANSITION, START_LEVEL_TRANSITION } from '../../constants/events';
+import { LEVEL_TRANSITION_END, LEVEL_TRANSITION_START } from '../../constants/events';
 import { Events } from '../Events';
 import { Singleton } from '../Singleton';
 import type { LevelTransitionConfig } from './levelTransition.types';
@@ -21,7 +21,7 @@ class LevelTransitionSingleton extends Singleton<LevelTransitionSingleton>() {
 
     // TODO: get container id from global config
     document.querySelector('#game-container')?.appendChild(this.element);
-    Events.emit(START_LEVEL_TRANSITION);
+    Events.emit(LEVEL_TRANSITION_START);
 
     this.element.addEventListener(
       'animationend',
@@ -41,7 +41,7 @@ class LevelTransitionSingleton extends Singleton<LevelTransitionSingleton>() {
         // Remove element and styles
         this.element?.remove();
         document.querySelector(`#${TRANSITION_STYLES_ID}`)?.remove();
-        Events.emit(END_LEVEL_TRANSITION);
+        Events.emit(LEVEL_TRANSITION_END);
       },
       { once: true },
     );

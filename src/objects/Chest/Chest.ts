@@ -1,4 +1,4 @@
-import { END_TEXT_BOX, HERO_PICKS_UP_ITEM, HERO_REQUESTS_ACTION, START_TEXT_BOX } from '../../constants/events';
+import { HERO_PICKS_UP_ITEM, HERO_REQUESTS_ACTION, TEXT_BOX_END, TEXT_BOX_START } from '../../constants/events';
 import { Events } from '../../lib/Events';
 import type { GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
@@ -66,7 +66,7 @@ export class Chest extends InteractiveObject {
 
         // Emit the textbox
         Events.emit<SpriteTextBox>(
-          START_TEXT_BOX,
+          TEXT_BOX_START,
           new SpriteTextBox({
             id: `text-box-for-${this.id}`,
             portraitFrame,
@@ -74,7 +74,7 @@ export class Chest extends InteractiveObject {
           }),
         );
 
-        const endingSub = Events.on(END_TEXT_BOX, this, () => {
+        const endingSub = Events.on(TEXT_BOX_END, this, () => {
           // Collect the item after text box close
           this._pickUpItem(contentItem);
           Events.off(endingSub);

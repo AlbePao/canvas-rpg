@@ -1,11 +1,11 @@
 import {
   CHANGE_LEVEL,
-  END_CUTSCENE,
-  END_PAUSE,
-  END_TEXT_BOX,
-  START_CUTSCENE,
-  START_PAUSE,
-  START_TEXT_BOX,
+  CUTSCENE_END,
+  CUTSCENE_START,
+  PAUSE_OFF,
+  PAUSE_ON,
+  TEXT_BOX_END,
+  TEXT_BOX_START,
 } from '../../constants/events';
 import { Events } from '../../lib/Events';
 import { GameObject } from '../../lib/GameObject';
@@ -37,31 +37,31 @@ export class Main extends GameObject {
     });
 
     // Launch text box handler
-    Events.on<SpriteTextBox>(START_TEXT_BOX, this, (textBox) => {
+    Events.on<SpriteTextBox>(TEXT_BOX_START, this, (textBox) => {
       this.addChild(textBox);
 
       // unsubscribe from this text box after it's destroyed
-      const endingSub = Events.on(END_TEXT_BOX, this, () => {
+      const endingSub = Events.on(TEXT_BOX_END, this, () => {
         textBox.destroy();
         Events.off(endingSub);
       });
     });
 
-    Events.on(START_CUTSCENE, this, () => {
+    Events.on(CUTSCENE_START, this, () => {
       this.isCutscenePlaying = true;
     });
 
-    Events.on(END_CUTSCENE, this, () => {
+    Events.on(CUTSCENE_END, this, () => {
       this.isCutscenePlaying = false;
     });
 
     // Launch pause menu handler
-    Events.on(START_PAUSE, this, () => {
+    Events.on(PAUSE_ON, this, () => {
       const pauseMenu = new PauseMenu();
       this.addChild(pauseMenu);
 
       // unsubscribe from this pause menu after it's destroyed
-      const endingSub = Events.on(END_PAUSE, this, () => {
+      const endingSub = Events.on(PAUSE_OFF, this, () => {
         pauseMenu.destroy();
         // this.isPaused = false;
         Events.off(endingSub);
@@ -72,7 +72,7 @@ export class Main extends GameObject {
   override step(_delta: number, _root: Main): void {
     if (this.input.getActionJustPressed('Escape')) {
       this.isPaused = !this.isPaused;
-      Events.emit(this.isPaused ? START_PAUSE : END_PAUSE);
+      Events.emit(this.isPaused ? PAUSE_ON : PAUSE_OFF);
     }
   }
 

@@ -1,4 +1,4 @@
-import { BEHAVIOR_COMPLETE } from '../../constants/events';
+import { BEHAVIOR_END } from '../../constants/events';
 import { gridCells } from '../../helpers/grid';
 import type { Main } from '../../objects/Main';
 import { Events } from '../Events';
@@ -121,7 +121,7 @@ export class GameObject {
       this.doBehaviorEvent(root);
     }, 10);
 
-    Events.on<string>(BEHAVIOR_COMPLETE, this, (id) => {
+    Events.on<string>(BEHAVIOR_END, this, (id) => {
       if (id !== this.id) {
         return;
       }

@@ -1,4 +1,4 @@
-import { END_PAUSE } from '../../constants/events';
+import { PAUSE_OFF } from '../../constants/events';
 import { Events } from '../../lib/Events';
 import { GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
@@ -21,7 +21,7 @@ export class PauseMenu extends GameObject {
   }
 
   override ready(): void {
-    const endingSub = Events.on(END_PAUSE, this, () => {
+    const endingSub = Events.on(PAUSE_OFF, this, () => {
       this.destroy();
       Events.off(endingSub);
     });

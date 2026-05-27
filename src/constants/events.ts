@@ -8,23 +8,23 @@ export const HERO_PICKS_UP_ITEM = 'HERO_PICKS_UP_ITEM';
 export const CHANGE_LEVEL = 'CHANGE_LEVEL';
 
 // Level transition events
-export const START_LEVEL_TRANSITION = 'START_LEVEL_TRANSITION';
-export const END_LEVEL_TRANSITION = 'END_LEVEL_TRANSITION';
+export const LEVEL_TRANSITION_START = 'LEVEL_TRANSITION_START';
+export const LEVEL_TRANSITION_END = 'LEVEL_TRANSITION_END';
 
 // Text box events
-export const START_TEXT_BOX = 'START_TEXT_BOX';
-export const END_TEXT_BOX = 'END_TEXT_BOX';
+export const TEXT_BOX_START = 'TEXT_BOX_START';
+export const TEXT_BOX_END = 'TEXT_BOX_END';
 
 // Cutscene events
-export const START_CUTSCENE = 'START_CUTSCENE';
-export const END_CUTSCENE = 'END_CUTSCENE';
+export const CUTSCENE_START = 'CUTSCENE_START';
+export const CUTSCENE_END = 'CUTSCENE_END';
 
 // Behavior events
-export const BEHAVIOR_COMPLETE = 'BEHAVIOR_COMPLETE';
+export const BEHAVIOR_END = 'BEHAVIOR_END';
 
 // Pause events
-export const START_PAUSE = 'START_PAUSE';
-export const END_PAUSE = 'END_PAUSE';
+export const PAUSE_ON = 'PAUSE_ON';
+export const PAUSE_OFF = 'PAUSE_OFF';
 
 // Input events
 export const DIRECTION_TAP = 'DIRECTION_TAP';

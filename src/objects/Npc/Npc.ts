@@ -1,14 +1,14 @@
 import { STANDING_DIRECTIONS } from '../../constants/animationDirections';
 import {
-  BEHAVIOR_COMPLETE,
-  END_LEVEL_TRANSITION,
-  END_PAUSE,
-  END_TEXT_BOX,
+  BEHAVIOR_END,
   HERO_PICKS_UP_ITEM,
   HERO_REQUESTS_ACTION,
-  START_LEVEL_TRANSITION,
-  START_PAUSE,
-  START_TEXT_BOX,
+  LEVEL_TRANSITION_END,
+  LEVEL_TRANSITION_START,
+  PAUSE_OFF,
+  PAUSE_ON,
+  TEXT_BOX_END,
+  TEXT_BOX_START,
 } from '../../constants/events';
 import { GRID_SIZE } from '../../constants/gridSize';
 import { moveTowards } from '../../helpers/moveTowards';
@@ -121,7 +121,7 @@ export class Npc extends InteractiveObject {
 
       // Emit the textbox
       Events.emit<SpriteTextBox>(
-        START_TEXT_BOX,
+        TEXT_BOX_START,
         new SpriteTextBox({
           id: `text-box-for-${this.id}`,
           portraitFrame,
@@ -130,7 +130,7 @@ export class Npc extends InteractiveObject {
       );
     });
 
-    Events.on(END_TEXT_BOX, this, () => {
+    Events.on(TEXT_BOX_END, this, () => {
       const resetDirection = this.behaviorConfig[this.behaviorIndex]?.direction ?? 'DOWN';
       this._changeFacingDirection(resetDirection);
 
@@ -147,14 +147,14 @@ export class Npc extends InteractiveObject {
     });
 
     // Lock npc when game is paused, cutscene is playing or hero is changing level
-    [START_PAUSE, START_TEXT_BOX, START_LEVEL_TRANSITION].forEach((event) => {
+    [PAUSE_ON, TEXT_BOX_START, LEVEL_TRANSITION_START].forEach((event) => {
       Events.on(event, this, () => {
         this.isLocked = true;
         // Freeze animation
         this.body.animations?.pause();
       });
     });
-    [END_PAUSE, END_TEXT_BOX, END_LEVEL_TRANSITION].forEach((event) => {
+    [PAUSE_OFF, TEXT_BOX_END, LEVEL_TRANSITION_END].forEach((event) => {
       Events.on(event, this, () => {
         this.isLocked = false;
         // Resume animation
@@ -177,7 +177,7 @@ export class Npc extends InteractiveObject {
       this.walkingSpeed = 1;
       this.position.x = this.destinationPosition.x;
       this.position.y = this.destinationPosition.y;
-      Events.emit(BEHAVIOR_COMPLETE, this.id);
+      Events.emit(BEHAVIOR_END, this.id);
     }
   }
 
@@ -193,7 +193,7 @@ export class Npc extends InteractiveObject {
 
       if (duration) {
         setTimeout(() => {
-          Events.emit(BEHAVIOR_COMPLETE, this.id);
+          Events.emit(BEHAVIOR_END, this.id);
         }, duration);
       }
     } else if (type === 'walk') {

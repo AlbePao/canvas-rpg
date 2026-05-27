@@ -1,15 +1,15 @@
 import { STANDING_DIRECTIONS } from '../../constants/animationDirections';
 import {
   DIRECTION_TAP,
-  END_LEVEL_TRANSITION,
-  END_PAUSE,
-  END_TEXT_BOX,
   HERO_PICKS_UP_ITEM,
   HERO_POSITION,
   HERO_REQUESTS_ACTION,
-  START_LEVEL_TRANSITION,
-  START_PAUSE,
-  START_TEXT_BOX,
+  LEVEL_TRANSITION_END,
+  LEVEL_TRANSITION_START,
+  PAUSE_OFF,
+  PAUSE_ON,
+  TEXT_BOX_END,
+  TEXT_BOX_START,
 } from '../../constants/events';
 import { GRID_SIZE } from '../../constants/gridSize';
 import { createItemSprite } from '../../helpers/createItemSprite';
@@ -100,14 +100,14 @@ export class Hero extends GameObject {
 
   override ready(): void {
     // Lock hero when game is paused, cutscene is playing or is changing level
-    [START_PAUSE, START_TEXT_BOX, START_LEVEL_TRANSITION].forEach((event) => {
+    [PAUSE_ON, TEXT_BOX_START, LEVEL_TRANSITION_START].forEach((event) => {
       Events.on(event, this, () => {
         this.isLocked = true;
         // Freeze animation
         this.body.animations?.pause();
       });
     });
-    [END_PAUSE, END_TEXT_BOX, END_LEVEL_TRANSITION].forEach((event) => {
+    [PAUSE_OFF, TEXT_BOX_END, LEVEL_TRANSITION_END].forEach((event) => {
       Events.on(event, this, () => {
         this.isLocked = false;
         // Resume animation
