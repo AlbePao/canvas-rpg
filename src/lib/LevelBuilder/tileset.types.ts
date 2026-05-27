@@ -1,4 +1,4 @@
-type TileBorder = `${'UpperLeft' | 'UpperRight' | 'LowerLeft' | 'LowerRight' | 'Upper' | 'Lower' | 'Left' | 'Right'}`;
+type TileBorder = `${'Upper' | 'Lower' | ''}${'Left' | 'Right' | ''}`;
 type WaterTileIndex = 1 | 2 | 3 | 4;
 
 export type LevelGroundTileset =
@@ -128,7 +128,7 @@ export type LevelDecorationTileset =
 
 export type LevelWaterTileName =
   // Water
-  | `water`
+  | 'water'
 
   // Water with grass ledge border
   | `waterGrassLedgeBorder${TileBorder}`
