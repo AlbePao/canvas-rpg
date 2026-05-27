@@ -13,7 +13,7 @@ import type { LevelTileConfig } from './levelTile.types';
 import { WATER_ANIMATIONS } from './levelTileAnimations';
 
 function isWaterTile(tileName: LevelTileName): tileName is LevelWaterTileName {
-  return tileName.includes('water');
+  return tileName.toLowerCase().includes('water');
 }
 
 function getLevelTileFrame(tileName: LevelTileName): number {
