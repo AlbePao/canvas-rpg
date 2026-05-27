@@ -126,7 +126,35 @@ export type LevelDecorationTileset =
   // Rocks
   | `rock${1 | 2}Base${'Grass' | 'Sand' | 'Snow'}`;
 
-export type LevelWaterTileName =
+export type LevelWaterAnimatedTileName =
+  // Water
+  | 'waterAnimated'
+
+  // Water with grass ledge border
+  | `waterAnimatedGrassLedgeBorder${TileBorder}`
+
+  // Grass ledge with water border
+  | `grassLedgeWaterAnimatedBorder${TileBorder}`
+
+  // Water with sand ledge border
+  | `waterAnimatedSandLedgeBorder${TileBorder}`
+
+  // Sand ledge with water border
+  | `sandLedgeWaterAnimatedBorder${TileBorder}`
+
+  // Water with snow ledge border
+  | `waterAnimatedSnowLedgeBorder${TileBorder}`
+
+  // Snow ledge with water border
+  | `snowLedgeWaterAnimatedBorder${TileBorder}`
+
+  // Sand shore with water border
+  | `sandShoreWaterAnimatedBorder${TileBorder}`
+
+  // Water with sand shore border
+  | `waterAnimatedSandShoreBorder${TileBorder}`;
+
+export type LevelWaterStillTileName =
   // Water
   | 'water'
 
@@ -153,6 +181,8 @@ export type LevelWaterTileName =
 
   // Water with sand shore border
   | `waterSandShoreBorder${TileBorder}`;
+
+export type LevelWaterTileName = LevelWaterAnimatedTileName | LevelWaterStillTileName;
 
 export type LevelTileSet = LevelGroundTileset | LevelWaterTileSet | LevelDecorationTileset;
 export type LevelTileName = LevelGroundTileset | LevelWaterTileName;

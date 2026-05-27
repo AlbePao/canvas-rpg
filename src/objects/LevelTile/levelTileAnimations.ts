@@ -1,6 +1,10 @@
 import type { AnimationConfig } from '../../lib/FrameIndexPattern';
 import { FrameIndexPattern } from '../../lib/FrameIndexPattern';
-import type { LevelWaterTileName, LevelWaterTileSet } from '../../lib/LevelBuilder/tileset.types';
+import type {
+  LevelWaterStillTileName,
+  LevelWaterTileName,
+  LevelWaterTileSet,
+} from '../../lib/LevelBuilder/tileset.types';
 import { TILESET_FRAME_MAP } from '../../lib/LevelBuilder/tilesetFrameMap';
 
 const makeWaterFrame = (rootFrame: number, base = 156): AnimationConfig => ({
@@ -25,9 +29,12 @@ const makeWaterFrame = (rootFrame: number, base = 156): AnimationConfig => ({
   ],
 });
 
-export const WATER_ANIMATIONS: Record<LevelWaterTileName, Partial<Record<LevelWaterTileSet, FrameIndexPattern>>> = {
+export const WATER_ANIMATIONS: Record<
+  Exclude<LevelWaterTileName, LevelWaterStillTileName>,
+  Partial<Record<LevelWaterTileSet, FrameIndexPattern>>
+> = {
   // Water animations
-  water: {
+  waterAnimated: {
     water1: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water1, 1)),
     water2: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water2, 1)),
     water3: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water3, 1)),
@@ -35,7 +42,7 @@ export const WATER_ANIMATIONS: Record<LevelWaterTileName, Partial<Record<LevelWa
   },
 
   // Water animations with grass ledge border
-  waterGrassLedgeBorderUpperLeft: {
+  waterAnimatedGrassLedgeBorderUpperLeft: {
     water1GrassLedgeBorderUpperLeft: new FrameIndexPattern(
       makeWaterFrame(TILESET_FRAME_MAP.water1GrassLedgeBorderUpperLeft),
     ),
@@ -49,13 +56,13 @@ export const WATER_ANIMATIONS: Record<LevelWaterTileName, Partial<Record<LevelWa
       makeWaterFrame(TILESET_FRAME_MAP.water4GrassLedgeBorderUpperLeft),
     ),
   },
-  waterGrassLedgeBorderUpper: {
+  waterAnimatedGrassLedgeBorderUpper: {
     water1GrassLedgeBorderUpper: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water1GrassLedgeBorderUpper)),
     water2GrassLedgeBorderUpper: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water2GrassLedgeBorderUpper)),
     water3GrassLedgeBorderUpper: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water3GrassLedgeBorderUpper)),
     water4GrassLedgeBorderUpper: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water4GrassLedgeBorderUpper)),
   },
-  waterGrassLedgeBorderUpperRight: {
+  waterAnimatedGrassLedgeBorderUpperRight: {
     water1GrassLedgeBorderUpperRight: new FrameIndexPattern(
       makeWaterFrame(TILESET_FRAME_MAP.water1GrassLedgeBorderUpperRight),
     ),
@@ -69,25 +76,25 @@ export const WATER_ANIMATIONS: Record<LevelWaterTileName, Partial<Record<LevelWa
       makeWaterFrame(TILESET_FRAME_MAP.water4GrassLedgeBorderUpperRight),
     ),
   },
-  waterGrassLedgeBorderLeft: {
+  waterAnimatedGrassLedgeBorderLeft: {
     water1GrassLedgeBorderLeft: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water1GrassLedgeBorderLeft)),
     water2GrassLedgeBorderLeft: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water2GrassLedgeBorderLeft)),
     water3GrassLedgeBorderLeft: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water3GrassLedgeBorderLeft)),
     water4GrassLedgeBorderLeft: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water4GrassLedgeBorderLeft)),
   },
-  waterGrassLedgeBorder: {
+  waterAnimatedGrassLedgeBorder: {
     water1GrassLedgeBorder: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water1GrassLedgeBorder)),
     water2GrassLedgeBorder: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water2GrassLedgeBorder)),
     water3GrassLedgeBorder: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water3GrassLedgeBorder)),
     water4GrassLedgeBorder: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water4GrassLedgeBorder)),
   },
-  waterGrassLedgeBorderRight: {
+  waterAnimatedGrassLedgeBorderRight: {
     water1GrassLedgeBorderRight: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water1GrassLedgeBorderRight)),
     water2GrassLedgeBorderRight: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water2GrassLedgeBorderRight)),
     water3GrassLedgeBorderRight: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water3GrassLedgeBorderRight)),
     water4GrassLedgeBorderRight: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water4GrassLedgeBorderRight)),
   },
-  waterGrassLedgeBorderLowerLeft: {
+  waterAnimatedGrassLedgeBorderLowerLeft: {
     water1GrassLedgeBorderLowerLeft: new FrameIndexPattern(
       makeWaterFrame(TILESET_FRAME_MAP.water1GrassLedgeBorderLowerLeft),
     ),
@@ -101,13 +108,13 @@ export const WATER_ANIMATIONS: Record<LevelWaterTileName, Partial<Record<LevelWa
       makeWaterFrame(TILESET_FRAME_MAP.water4GrassLedgeBorderLowerLeft),
     ),
   },
-  waterGrassLedgeBorderLower: {
+  waterAnimatedGrassLedgeBorderLower: {
     water1GrassLedgeBorderLower: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water1GrassLedgeBorderLower)),
     water2GrassLedgeBorderLower: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water2GrassLedgeBorderLower)),
     water3GrassLedgeBorderLower: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water3GrassLedgeBorderLower)),
     water4GrassLedgeBorderLower: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water4GrassLedgeBorderLower)),
   },
-  waterGrassLedgeBorderLowerRight: {
+  waterAnimatedGrassLedgeBorderLowerRight: {
     water1GrassLedgeBorderLowerRight: new FrameIndexPattern(
       makeWaterFrame(TILESET_FRAME_MAP.water1GrassLedgeBorderLowerRight),
     ),
@@ -123,7 +130,7 @@ export const WATER_ANIMATIONS: Record<LevelWaterTileName, Partial<Record<LevelWa
   },
 
   // Grass ledge with water animations border
-  grassLedgeWaterBorderUpperLeft: {
+  grassLedgeWaterAnimatedBorderUpperLeft: {
     grassLedgeWater1BorderUpperLeft: new FrameIndexPattern(
       makeWaterFrame(TILESET_FRAME_MAP.grassLedgeWater1BorderUpperLeft),
     ),
@@ -137,13 +144,13 @@ export const WATER_ANIMATIONS: Record<LevelWaterTileName, Partial<Record<LevelWa
       makeWaterFrame(TILESET_FRAME_MAP.grassLedgeWater4BorderUpperLeft),
     ),
   },
-  grassLedgeWaterBorderUpper: {
+  grassLedgeWaterAnimatedBorderUpper: {
     grassLedgeWater1BorderUpper: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.grassLedgeWater1BorderUpper)),
     grassLedgeWater2BorderUpper: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.grassLedgeWater2BorderUpper)),
     grassLedgeWater3BorderUpper: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.grassLedgeWater3BorderUpper)),
     grassLedgeWater4BorderUpper: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.grassLedgeWater4BorderUpper)),
   },
-  grassLedgeWaterBorderUpperRight: {
+  grassLedgeWaterAnimatedBorderUpperRight: {
     grassLedgeWater1BorderUpperRight: new FrameIndexPattern(
       makeWaterFrame(TILESET_FRAME_MAP.grassLedgeWater1BorderUpperRight),
     ),
@@ -157,25 +164,25 @@ export const WATER_ANIMATIONS: Record<LevelWaterTileName, Partial<Record<LevelWa
       makeWaterFrame(TILESET_FRAME_MAP.grassLedgeWater4BorderUpperRight),
     ),
   },
-  grassLedgeWaterBorderLeft: {
+  grassLedgeWaterAnimatedBorderLeft: {
     grassLedgeWater1BorderLeft: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.grassLedgeWater1BorderLeft)),
     grassLedgeWater2BorderLeft: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.grassLedgeWater2BorderLeft)),
     grassLedgeWater3BorderLeft: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.grassLedgeWater3BorderLeft)),
     grassLedgeWater4BorderLeft: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.grassLedgeWater4BorderLeft)),
   },
-  grassLedgeWaterBorder: {
+  grassLedgeWaterAnimatedBorder: {
     grassLedgeWater1Border: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.grassLedgeWater1Border)),
     grassLedgeWater2Border: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.grassLedgeWater2Border)),
     grassLedgeWater3Border: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.grassLedgeWater3Border)),
     grassLedgeWater4Border: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.grassLedgeWater4Border)),
   },
-  grassLedgeWaterBorderRight: {
+  grassLedgeWaterAnimatedBorderRight: {
     grassLedgeWater1BorderRight: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.grassLedgeWater1BorderRight)),
     grassLedgeWater2BorderRight: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.grassLedgeWater2BorderRight)),
     grassLedgeWater3BorderRight: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.grassLedgeWater3BorderRight)),
     grassLedgeWater4BorderRight: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.grassLedgeWater4BorderRight)),
   },
-  grassLedgeWaterBorderLowerLeft: {
+  grassLedgeWaterAnimatedBorderLowerLeft: {
     grassLedgeWater1BorderLowerLeft: new FrameIndexPattern(
       makeWaterFrame(TILESET_FRAME_MAP.grassLedgeWater1BorderLowerLeft),
     ),
@@ -189,13 +196,13 @@ export const WATER_ANIMATIONS: Record<LevelWaterTileName, Partial<Record<LevelWa
       makeWaterFrame(TILESET_FRAME_MAP.grassLedgeWater4BorderLowerLeft),
     ),
   },
-  grassLedgeWaterBorderLower: {
+  grassLedgeWaterAnimatedBorderLower: {
     grassLedgeWater1BorderLower: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.grassLedgeWater1BorderLower)),
     grassLedgeWater2BorderLower: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.grassLedgeWater2BorderLower)),
     grassLedgeWater3BorderLower: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.grassLedgeWater3BorderLower)),
     grassLedgeWater4BorderLower: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.grassLedgeWater4BorderLower)),
   },
-  grassLedgeWaterBorderLowerRight: {
+  grassLedgeWaterAnimatedBorderLowerRight: {
     grassLedgeWater1BorderLowerRight: new FrameIndexPattern(
       makeWaterFrame(TILESET_FRAME_MAP.grassLedgeWater1BorderLowerRight),
     ),
@@ -211,7 +218,7 @@ export const WATER_ANIMATIONS: Record<LevelWaterTileName, Partial<Record<LevelWa
   },
 
   // Water animations with sand ledge border
-  waterSandLedgeBorderUpperLeft: {
+  waterAnimatedSandLedgeBorderUpperLeft: {
     water1SandLedgeBorderUpperLeft: new FrameIndexPattern(
       makeWaterFrame(TILESET_FRAME_MAP.water1SandLedgeBorderUpperLeft),
     ),
@@ -225,13 +232,13 @@ export const WATER_ANIMATIONS: Record<LevelWaterTileName, Partial<Record<LevelWa
       makeWaterFrame(TILESET_FRAME_MAP.water4SandLedgeBorderUpperLeft),
     ),
   },
-  waterSandLedgeBorderUpper: {
+  waterAnimatedSandLedgeBorderUpper: {
     water1SandLedgeBorderUpper: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water1SandLedgeBorderUpper)),
     water2SandLedgeBorderUpper: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water2SandLedgeBorderUpper)),
     water3SandLedgeBorderUpper: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water3SandLedgeBorderUpper)),
     water4SandLedgeBorderUpper: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water4SandLedgeBorderUpper)),
   },
-  waterSandLedgeBorderUpperRight: {
+  waterAnimatedSandLedgeBorderUpperRight: {
     water1SandLedgeBorderUpperRight: new FrameIndexPattern(
       makeWaterFrame(TILESET_FRAME_MAP.water1SandLedgeBorderUpperRight),
     ),
@@ -245,25 +252,25 @@ export const WATER_ANIMATIONS: Record<LevelWaterTileName, Partial<Record<LevelWa
       makeWaterFrame(TILESET_FRAME_MAP.water4SandLedgeBorderUpperRight),
     ),
   },
-  waterSandLedgeBorderLeft: {
+  waterAnimatedSandLedgeBorderLeft: {
     water1SandLedgeBorderLeft: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water1SandLedgeBorderLeft)),
     water2SandLedgeBorderLeft: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water2SandLedgeBorderLeft)),
     water3SandLedgeBorderLeft: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water3SandLedgeBorderLeft)),
     water4SandLedgeBorderLeft: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water4SandLedgeBorderLeft)),
   },
-  waterSandLedgeBorder: {
+  waterAnimatedSandLedgeBorder: {
     water1SandLedgeBorder: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water1SandLedgeBorder)),
     water2SandLedgeBorder: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water2SandLedgeBorder)),
     water3SandLedgeBorder: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water3SandLedgeBorder)),
     water4SandLedgeBorder: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water4SandLedgeBorder)),
   },
-  waterSandLedgeBorderRight: {
+  waterAnimatedSandLedgeBorderRight: {
     water1SandLedgeBorderRight: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water1SandLedgeBorderRight)),
     water2SandLedgeBorderRight: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water2SandLedgeBorderRight)),
     water3SandLedgeBorderRight: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water3SandLedgeBorderRight)),
     water4SandLedgeBorderRight: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water4SandLedgeBorderRight)),
   },
-  waterSandLedgeBorderLowerLeft: {
+  waterAnimatedSandLedgeBorderLowerLeft: {
     water1SandLedgeBorderLowerLeft: new FrameIndexPattern(
       makeWaterFrame(TILESET_FRAME_MAP.water1SandLedgeBorderLowerLeft),
     ),
@@ -277,13 +284,13 @@ export const WATER_ANIMATIONS: Record<LevelWaterTileName, Partial<Record<LevelWa
       makeWaterFrame(TILESET_FRAME_MAP.water4SandLedgeBorderLowerLeft),
     ),
   },
-  waterSandLedgeBorderLower: {
+  waterAnimatedSandLedgeBorderLower: {
     water1SandLedgeBorderLower: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water1SandLedgeBorderLower)),
     water2SandLedgeBorderLower: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water2SandLedgeBorderLower)),
     water3SandLedgeBorderLower: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water3SandLedgeBorderLower)),
     water4SandLedgeBorderLower: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water4SandLedgeBorderLower)),
   },
-  waterSandLedgeBorderLowerRight: {
+  waterAnimatedSandLedgeBorderLowerRight: {
     water1SandLedgeBorderLowerRight: new FrameIndexPattern(
       makeWaterFrame(TILESET_FRAME_MAP.water1SandLedgeBorderLowerRight),
     ),
@@ -299,7 +306,7 @@ export const WATER_ANIMATIONS: Record<LevelWaterTileName, Partial<Record<LevelWa
   },
 
   // Sand ledge with water animations border
-  sandLedgeWaterBorderUpperLeft: {
+  sandLedgeWaterAnimatedBorderUpperLeft: {
     sandLedgeWater1BorderUpperLeft: new FrameIndexPattern(
       makeWaterFrame(TILESET_FRAME_MAP.sandLedgeWater1BorderUpperLeft),
     ),
@@ -313,13 +320,13 @@ export const WATER_ANIMATIONS: Record<LevelWaterTileName, Partial<Record<LevelWa
       makeWaterFrame(TILESET_FRAME_MAP.sandLedgeWater4BorderUpperLeft),
     ),
   },
-  sandLedgeWaterBorderUpper: {
+  sandLedgeWaterAnimatedBorderUpper: {
     sandLedgeWater1BorderUpper: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.sandLedgeWater1BorderUpper)),
     sandLedgeWater2BorderUpper: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.sandLedgeWater2BorderUpper)),
     sandLedgeWater3BorderUpper: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.sandLedgeWater3BorderUpper)),
     sandLedgeWater4BorderUpper: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.sandLedgeWater4BorderUpper)),
   },
-  sandLedgeWaterBorderUpperRight: {
+  sandLedgeWaterAnimatedBorderUpperRight: {
     sandLedgeWater1BorderUpperRight: new FrameIndexPattern(
       makeWaterFrame(TILESET_FRAME_MAP.sandLedgeWater1BorderUpperRight),
     ),
@@ -333,25 +340,25 @@ export const WATER_ANIMATIONS: Record<LevelWaterTileName, Partial<Record<LevelWa
       makeWaterFrame(TILESET_FRAME_MAP.sandLedgeWater4BorderUpperRight),
     ),
   },
-  sandLedgeWaterBorderLeft: {
+  sandLedgeWaterAnimatedBorderLeft: {
     sandLedgeWater1BorderLeft: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.sandLedgeWater1BorderLeft)),
     sandLedgeWater2BorderLeft: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.sandLedgeWater2BorderLeft)),
     sandLedgeWater3BorderLeft: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.sandLedgeWater3BorderLeft)),
     sandLedgeWater4BorderLeft: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.sandLedgeWater4BorderLeft)),
   },
-  sandLedgeWaterBorder: {
+  sandLedgeWaterAnimatedBorder: {
     sandLedgeWater1Border: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.sandLedgeWater1Border)),
     sandLedgeWater2Border: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.sandLedgeWater2Border)),
     sandLedgeWater3Border: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.sandLedgeWater3Border)),
     sandLedgeWater4Border: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.sandLedgeWater4Border)),
   },
-  sandLedgeWaterBorderRight: {
+  sandLedgeWaterAnimatedBorderRight: {
     sandLedgeWater1BorderRight: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.sandLedgeWater1BorderRight)),
     sandLedgeWater2BorderRight: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.sandLedgeWater2BorderRight)),
     sandLedgeWater3BorderRight: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.sandLedgeWater3BorderRight)),
     sandLedgeWater4BorderRight: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.sandLedgeWater4BorderRight)),
   },
-  sandLedgeWaterBorderLowerLeft: {
+  sandLedgeWaterAnimatedBorderLowerLeft: {
     sandLedgeWater1BorderLowerLeft: new FrameIndexPattern(
       makeWaterFrame(TILESET_FRAME_MAP.sandLedgeWater1BorderLowerLeft),
     ),
@@ -365,13 +372,13 @@ export const WATER_ANIMATIONS: Record<LevelWaterTileName, Partial<Record<LevelWa
       makeWaterFrame(TILESET_FRAME_MAP.sandLedgeWater4BorderLowerLeft),
     ),
   },
-  sandLedgeWaterBorderLower: {
+  sandLedgeWaterAnimatedBorderLower: {
     sandLedgeWater1BorderLower: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.sandLedgeWater1BorderLower)),
     sandLedgeWater2BorderLower: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.sandLedgeWater2BorderLower)),
     sandLedgeWater3BorderLower: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.sandLedgeWater3BorderLower)),
     sandLedgeWater4BorderLower: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.sandLedgeWater4BorderLower)),
   },
-  sandLedgeWaterBorderLowerRight: {
+  sandLedgeWaterAnimatedBorderLowerRight: {
     sandLedgeWater1BorderLowerRight: new FrameIndexPattern(
       makeWaterFrame(TILESET_FRAME_MAP.sandLedgeWater1BorderLowerRight),
     ),
@@ -387,7 +394,7 @@ export const WATER_ANIMATIONS: Record<LevelWaterTileName, Partial<Record<LevelWa
   },
 
   // Water animations with snow ledge border
-  waterSnowLedgeBorderUpperLeft: {
+  waterAnimatedSnowLedgeBorderUpperLeft: {
     water1SnowLedgeBorderUpperLeft: new FrameIndexPattern(
       makeWaterFrame(TILESET_FRAME_MAP.water1SnowLedgeBorderUpperLeft),
     ),
@@ -401,13 +408,13 @@ export const WATER_ANIMATIONS: Record<LevelWaterTileName, Partial<Record<LevelWa
       makeWaterFrame(TILESET_FRAME_MAP.water4SnowLedgeBorderUpperLeft),
     ),
   },
-  waterSnowLedgeBorderUpper: {
+  waterAnimatedSnowLedgeBorderUpper: {
     water1SnowLedgeBorderUpper: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water1SnowLedgeBorderUpper)),
     water2SnowLedgeBorderUpper: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water2SnowLedgeBorderUpper)),
     water3SnowLedgeBorderUpper: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water3SnowLedgeBorderUpper)),
     water4SnowLedgeBorderUpper: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water4SnowLedgeBorderUpper)),
   },
-  waterSnowLedgeBorderUpperRight: {
+  waterAnimatedSnowLedgeBorderUpperRight: {
     water1SnowLedgeBorderUpperRight: new FrameIndexPattern(
       makeWaterFrame(TILESET_FRAME_MAP.water1SnowLedgeBorderUpperRight),
     ),
@@ -421,25 +428,25 @@ export const WATER_ANIMATIONS: Record<LevelWaterTileName, Partial<Record<LevelWa
       makeWaterFrame(TILESET_FRAME_MAP.water4SnowLedgeBorderUpperRight),
     ),
   },
-  waterSnowLedgeBorderLeft: {
+  waterAnimatedSnowLedgeBorderLeft: {
     water1SnowLedgeBorderLeft: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water1SnowLedgeBorderLeft)),
     water2SnowLedgeBorderLeft: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water2SnowLedgeBorderLeft)),
     water3SnowLedgeBorderLeft: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water3SnowLedgeBorderLeft)),
     water4SnowLedgeBorderLeft: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water4SnowLedgeBorderLeft)),
   },
-  waterSnowLedgeBorder: {
+  waterAnimatedSnowLedgeBorder: {
     water1SnowLedgeBorder: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water1SnowLedgeBorder)),
     water2SnowLedgeBorder: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water2SnowLedgeBorder)),
     water3SnowLedgeBorder: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water3SnowLedgeBorder)),
     water4SnowLedgeBorder: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water4SnowLedgeBorder)),
   },
-  waterSnowLedgeBorderRight: {
+  waterAnimatedSnowLedgeBorderRight: {
     water1SnowLedgeBorderRight: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water1SnowLedgeBorderRight)),
     water2SnowLedgeBorderRight: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water2SnowLedgeBorderRight)),
     water3SnowLedgeBorderRight: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water3SnowLedgeBorderRight)),
     water4SnowLedgeBorderRight: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water4SnowLedgeBorderRight)),
   },
-  waterSnowLedgeBorderLowerLeft: {
+  waterAnimatedSnowLedgeBorderLowerLeft: {
     water1SnowLedgeBorderLowerLeft: new FrameIndexPattern(
       makeWaterFrame(TILESET_FRAME_MAP.water1SnowLedgeBorderLowerLeft),
     ),
@@ -453,13 +460,13 @@ export const WATER_ANIMATIONS: Record<LevelWaterTileName, Partial<Record<LevelWa
       makeWaterFrame(TILESET_FRAME_MAP.water4SnowLedgeBorderLowerLeft),
     ),
   },
-  waterSnowLedgeBorderLower: {
+  waterAnimatedSnowLedgeBorderLower: {
     water1SnowLedgeBorderLower: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water1SnowLedgeBorderLower)),
     water2SnowLedgeBorderLower: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water2SnowLedgeBorderLower)),
     water3SnowLedgeBorderLower: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water3SnowLedgeBorderLower)),
     water4SnowLedgeBorderLower: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water4SnowLedgeBorderLower)),
   },
-  waterSnowLedgeBorderLowerRight: {
+  waterAnimatedSnowLedgeBorderLowerRight: {
     water1SnowLedgeBorderLowerRight: new FrameIndexPattern(
       makeWaterFrame(TILESET_FRAME_MAP.water1SnowLedgeBorderLowerRight),
     ),
@@ -475,7 +482,7 @@ export const WATER_ANIMATIONS: Record<LevelWaterTileName, Partial<Record<LevelWa
   },
 
   // Snow ledge with water animations border
-  snowLedgeWaterBorderUpperLeft: {
+  snowLedgeWaterAnimatedBorderUpperLeft: {
     snowLedgeWater1BorderUpperLeft: new FrameIndexPattern(
       makeWaterFrame(TILESET_FRAME_MAP.snowLedgeWater1BorderUpperLeft),
     ),
@@ -489,13 +496,13 @@ export const WATER_ANIMATIONS: Record<LevelWaterTileName, Partial<Record<LevelWa
       makeWaterFrame(TILESET_FRAME_MAP.snowLedgeWater4BorderUpperLeft),
     ),
   },
-  snowLedgeWaterBorderUpper: {
+  snowLedgeWaterAnimatedBorderUpper: {
     snowLedgeWater1BorderUpper: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.snowLedgeWater1BorderUpper)),
     snowLedgeWater2BorderUpper: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.snowLedgeWater2BorderUpper)),
     snowLedgeWater3BorderUpper: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.snowLedgeWater3BorderUpper)),
     snowLedgeWater4BorderUpper: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.snowLedgeWater4BorderUpper)),
   },
-  snowLedgeWaterBorderUpperRight: {
+  snowLedgeWaterAnimatedBorderUpperRight: {
     snowLedgeWater1BorderUpperRight: new FrameIndexPattern(
       makeWaterFrame(TILESET_FRAME_MAP.snowLedgeWater1BorderUpperRight),
     ),
@@ -509,25 +516,25 @@ export const WATER_ANIMATIONS: Record<LevelWaterTileName, Partial<Record<LevelWa
       makeWaterFrame(TILESET_FRAME_MAP.snowLedgeWater4BorderUpperRight),
     ),
   },
-  snowLedgeWaterBorderLeft: {
+  snowLedgeWaterAnimatedBorderLeft: {
     snowLedgeWater1BorderLeft: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.snowLedgeWater1BorderLeft)),
     snowLedgeWater2BorderLeft: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.snowLedgeWater2BorderLeft)),
     snowLedgeWater3BorderLeft: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.snowLedgeWater3BorderLeft)),
     snowLedgeWater4BorderLeft: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.snowLedgeWater4BorderLeft)),
   },
-  snowLedgeWaterBorder: {
+  snowLedgeWaterAnimatedBorder: {
     snowLedgeWater1Border: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.snowLedgeWater1Border)),
     snowLedgeWater2Border: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.snowLedgeWater2Border)),
     snowLedgeWater3Border: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.snowLedgeWater3Border)),
     snowLedgeWater4Border: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.snowLedgeWater4Border)),
   },
-  snowLedgeWaterBorderRight: {
+  snowLedgeWaterAnimatedBorderRight: {
     snowLedgeWater1BorderRight: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.snowLedgeWater1BorderRight)),
     snowLedgeWater2BorderRight: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.snowLedgeWater2BorderRight)),
     snowLedgeWater3BorderRight: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.snowLedgeWater3BorderRight)),
     snowLedgeWater4BorderRight: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.snowLedgeWater4BorderRight)),
   },
-  snowLedgeWaterBorderLowerLeft: {
+  snowLedgeWaterAnimatedBorderLowerLeft: {
     snowLedgeWater1BorderLowerLeft: new FrameIndexPattern(
       makeWaterFrame(TILESET_FRAME_MAP.snowLedgeWater1BorderLowerLeft),
     ),
@@ -541,13 +548,13 @@ export const WATER_ANIMATIONS: Record<LevelWaterTileName, Partial<Record<LevelWa
       makeWaterFrame(TILESET_FRAME_MAP.snowLedgeWater4BorderLowerLeft),
     ),
   },
-  snowLedgeWaterBorderLower: {
+  snowLedgeWaterAnimatedBorderLower: {
     snowLedgeWater1BorderLower: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.snowLedgeWater1BorderLower)),
     snowLedgeWater2BorderLower: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.snowLedgeWater2BorderLower)),
     snowLedgeWater3BorderLower: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.snowLedgeWater3BorderLower)),
     snowLedgeWater4BorderLower: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.snowLedgeWater4BorderLower)),
   },
-  snowLedgeWaterBorderLowerRight: {
+  snowLedgeWaterAnimatedBorderLowerRight: {
     snowLedgeWater1BorderLowerRight: new FrameIndexPattern(
       makeWaterFrame(TILESET_FRAME_MAP.snowLedgeWater1BorderLowerRight),
     ),
@@ -563,7 +570,7 @@ export const WATER_ANIMATIONS: Record<LevelWaterTileName, Partial<Record<LevelWa
   },
 
   // Sand shore with water animations border
-  sandShoreWaterBorderUpperLeft: {
+  sandShoreWaterAnimatedBorderUpperLeft: {
     sandShoreWater1BorderUpperLeft: new FrameIndexPattern(
       makeWaterFrame(TILESET_FRAME_MAP.sandShoreWater1BorderUpperLeft),
     ),
@@ -577,13 +584,13 @@ export const WATER_ANIMATIONS: Record<LevelWaterTileName, Partial<Record<LevelWa
       makeWaterFrame(TILESET_FRAME_MAP.sandShoreWater4BorderUpperLeft),
     ),
   },
-  sandShoreWaterBorderUpper: {
+  sandShoreWaterAnimatedBorderUpper: {
     sandShoreWater1BorderUpper: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.sandShoreWater1BorderUpper)),
     sandShoreWater2BorderUpper: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.sandShoreWater2BorderUpper)),
     sandShoreWater3BorderUpper: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.sandShoreWater3BorderUpper)),
     sandShoreWater4BorderUpper: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.sandShoreWater4BorderUpper)),
   },
-  sandShoreWaterBorderUpperRight: {
+  sandShoreWaterAnimatedBorderUpperRight: {
     sandShoreWater1BorderUpperRight: new FrameIndexPattern(
       makeWaterFrame(TILESET_FRAME_MAP.sandShoreWater1BorderUpperRight),
     ),
@@ -597,25 +604,25 @@ export const WATER_ANIMATIONS: Record<LevelWaterTileName, Partial<Record<LevelWa
       makeWaterFrame(TILESET_FRAME_MAP.sandShoreWater4BorderUpperRight),
     ),
   },
-  sandShoreWaterBorderLeft: {
+  sandShoreWaterAnimatedBorderLeft: {
     sandShoreWater1BorderLeft: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.sandShoreWater1BorderLeft)),
     sandShoreWater2BorderLeft: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.sandShoreWater2BorderLeft)),
     sandShoreWater3BorderLeft: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.sandShoreWater3BorderLeft)),
     sandShoreWater4BorderLeft: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.sandShoreWater4BorderLeft)),
   },
-  sandShoreWaterBorder: {
+  sandShoreWaterAnimatedBorder: {
     sandShoreWater1Border: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.sandShoreWater1Border)),
     sandShoreWater2Border: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.sandShoreWater2Border)),
     sandShoreWater3Border: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.sandShoreWater3Border)),
     sandShoreWater4Border: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.sandShoreWater4Border)),
   },
-  sandShoreWaterBorderRight: {
+  sandShoreWaterAnimatedBorderRight: {
     sandShoreWater1BorderRight: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.sandShoreWater1BorderRight)),
     sandShoreWater2BorderRight: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.sandShoreWater2BorderRight)),
     sandShoreWater3BorderRight: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.sandShoreWater3BorderRight)),
     sandShoreWater4BorderRight: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.sandShoreWater4BorderRight)),
   },
-  sandShoreWaterBorderLowerLeft: {
+  sandShoreWaterAnimatedBorderLowerLeft: {
     sandShoreWater1BorderLowerLeft: new FrameIndexPattern(
       makeWaterFrame(TILESET_FRAME_MAP.sandShoreWater1BorderLowerLeft),
     ),
@@ -629,13 +636,13 @@ export const WATER_ANIMATIONS: Record<LevelWaterTileName, Partial<Record<LevelWa
       makeWaterFrame(TILESET_FRAME_MAP.sandShoreWater4BorderLowerLeft),
     ),
   },
-  sandShoreWaterBorderLower: {
+  sandShoreWaterAnimatedBorderLower: {
     sandShoreWater1BorderLower: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.sandShoreWater1BorderLower)),
     sandShoreWater2BorderLower: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.sandShoreWater2BorderLower)),
     sandShoreWater3BorderLower: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.sandShoreWater3BorderLower)),
     sandShoreWater4BorderLower: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.sandShoreWater4BorderLower)),
   },
-  sandShoreWaterBorderLowerRight: {
+  sandShoreWaterAnimatedBorderLowerRight: {
     sandShoreWater1BorderLowerRight: new FrameIndexPattern(
       makeWaterFrame(TILESET_FRAME_MAP.sandShoreWater1BorderLowerRight),
     ),
@@ -651,7 +658,7 @@ export const WATER_ANIMATIONS: Record<LevelWaterTileName, Partial<Record<LevelWa
   },
 
   // Water animations with sand shore border
-  waterSandShoreBorderUpperLeft: {
+  waterAnimatedSandShoreBorderUpperLeft: {
     water1SandShoreBorderUpperLeft: new FrameIndexPattern(
       makeWaterFrame(TILESET_FRAME_MAP.water1SandShoreBorderUpperLeft),
     ),
@@ -665,13 +672,13 @@ export const WATER_ANIMATIONS: Record<LevelWaterTileName, Partial<Record<LevelWa
       makeWaterFrame(TILESET_FRAME_MAP.water4SandShoreBorderUpperLeft),
     ),
   },
-  waterSandShoreBorderUpper: {
+  waterAnimatedSandShoreBorderUpper: {
     water1SandShoreBorderUpper: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water1SandShoreBorderUpper)),
     water2SandShoreBorderUpper: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water2SandShoreBorderUpper)),
     water3SandShoreBorderUpper: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water3SandShoreBorderUpper)),
     water4SandShoreBorderUpper: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water4SandShoreBorderUpper)),
   },
-  waterSandShoreBorderUpperRight: {
+  waterAnimatedSandShoreBorderUpperRight: {
     water1SandShoreBorderUpperRight: new FrameIndexPattern(
       makeWaterFrame(TILESET_FRAME_MAP.water1SandShoreBorderUpperRight),
     ),
@@ -685,25 +692,25 @@ export const WATER_ANIMATIONS: Record<LevelWaterTileName, Partial<Record<LevelWa
       makeWaterFrame(TILESET_FRAME_MAP.water4SandShoreBorderUpperRight),
     ),
   },
-  waterSandShoreBorderLeft: {
+  waterAnimatedSandShoreBorderLeft: {
     water1SandShoreBorderLeft: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water1SandShoreBorderLeft)),
     water2SandShoreBorderLeft: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water2SandShoreBorderLeft)),
     water3SandShoreBorderLeft: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water3SandShoreBorderLeft)),
     water4SandShoreBorderLeft: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water4SandShoreBorderLeft)),
   },
-  waterSandShoreBorder: {
+  waterAnimatedSandShoreBorder: {
     water1SandShoreBorder: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water1SandShoreBorder)),
     water2SandShoreBorder: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water2SandShoreBorder)),
     water3SandShoreBorder: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water3SandShoreBorder)),
     water4SandShoreBorder: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water4SandShoreBorder)),
   },
-  waterSandShoreBorderRight: {
+  waterAnimatedSandShoreBorderRight: {
     water1SandShoreBorderRight: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water1SandShoreBorderRight)),
     water2SandShoreBorderRight: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water2SandShoreBorderRight)),
     water3SandShoreBorderRight: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water3SandShoreBorderRight)),
     water4SandShoreBorderRight: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water4SandShoreBorderRight)),
   },
-  waterSandShoreBorderLowerLeft: {
+  waterAnimatedSandShoreBorderLowerLeft: {
     water1SandShoreBorderLowerLeft: new FrameIndexPattern(
       makeWaterFrame(TILESET_FRAME_MAP.water1SandShoreBorderLowerLeft),
     ),
@@ -717,13 +724,13 @@ export const WATER_ANIMATIONS: Record<LevelWaterTileName, Partial<Record<LevelWa
       makeWaterFrame(TILESET_FRAME_MAP.water4SandShoreBorderLowerLeft),
     ),
   },
-  waterSandShoreBorderLower: {
+  waterAnimatedSandShoreBorderLower: {
     water1SandShoreBorderLower: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water1SandShoreBorderLower)),
     water2SandShoreBorderLower: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water2SandShoreBorderLower)),
     water3SandShoreBorderLower: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water3SandShoreBorderLower)),
     water4SandShoreBorderLower: new FrameIndexPattern(makeWaterFrame(TILESET_FRAME_MAP.water4SandShoreBorderLower)),
   },
-  waterSandShoreBorderLowerRight: {
+  waterAnimatedSandShoreBorderLowerRight: {
     water1SandShoreBorderLowerRight: new FrameIndexPattern(
       makeWaterFrame(TILESET_FRAME_MAP.water1SandShoreBorderLowerRight),
     ),

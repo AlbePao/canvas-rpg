@@ -12,5 +12,5 @@ export type SpriteConfig = {
   frame: number;
   scale: number;
   position: Vector2;
-  animations: Animations;
+  animations: Animations | null;
 }>;
