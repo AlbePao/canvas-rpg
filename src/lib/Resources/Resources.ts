@@ -4,20 +4,9 @@ import type { Resource, ResourceKey } from './resources.types';
 
 // Every image we want to download
 const ASSETS_TO_LOAD: Record<ResourceKey, string> = {
-  hero: '/sprites/hero-sheet.png',
-  shadow: '/sprites/shadow.png',
-  rod: '/sprites/rod.png',
-  items: '/sprites/items-sheet.png',
-  chest: '/sprites/chest-sheet.png',
-  exit: '/sprites/exit.png',
-  // Outdoor
-  sky: '/sprites/sky.png',
-  ground: '/sprites/ground.png',
-  // Cave
-  cave: '/sprites/cave.png',
-  caveGround: '/sprites/cave-ground.png',
-  // NPCs
-  // knight: '/sprites/knight-sheet.png',
+  bgCave: '/sprites/backgrounds/cave.png',
+  bgSky: '/sprites/backgrounds/sky.png',
+  bgVolcano: '/sprites/backgrounds/volcano.png',
   ow1: '/sprites/npcs/ow1.png',
   ow2: '/sprites/npcs/ow2.png',
   ow3: '/sprites/npcs/ow3.png',
@@ -28,18 +17,15 @@ const ASSETS_TO_LOAD: Record<ResourceKey, string> = {
   ow8: '/sprites/npcs/ow8.png',
   ow9: '/sprites/npcs/ow9.png',
   ow10: '/sprites/npcs/ow10.png',
-  // Enemies
-  bat: '/sprites/bat-sheet.png',
-  // Level builder assets
-  bgCave: '/sprites/levels/bg-cave.png',
-  bgSky: '/sprites/levels/bg-sky.png',
-  bgVolcano: '/sprites/levels/bg-volcano.png',
-  worldTiles: '/sprites/levels/world-tiles.png',
-  tileset: '/sprites/tileset.png',
-  // HUD
-  textBox: '/sprites/text-box.png',
-  fontWhite: '/sprites/sprite-font-white.png',
+  chest: '/sprites/chest-sheet.png',
+  exit: '/sprites/exit.png',
+  hero: '/sprites/hero-sheet.png',
+  items: '/sprites/items-sheet.png',
   portraits: '/sprites/portraits-sheet.png',
+  shadow: '/sprites/shadow.png',
+  font: '/sprites/sprite-font.png',
+  textBox: '/sprites/text-box.png',
+  tileset: '/sprites/tileset.png',
 } as const;
 
 class ResourcesSingleton extends Singleton<ResourcesSingleton>() {
