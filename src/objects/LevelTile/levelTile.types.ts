@@ -1,15 +1,18 @@
 import type { LevelTileName } from '../../lib/LevelBuilder/tileset.types';
 import type { Vector2 } from '../../lib/Vector2';
 
+// TODO: extract related logic to set hero behavior programmatically
+export interface LevelTileHeroBehavior {
+  behavior: 'jump' | 'move' | 'spin';
+  direction: 'IN_PLACE' | 'FORWARDS' | 'BACKWARDS';
+  speed?: number;
+}
+
 export interface LevelTileConfig {
   id: string;
   tileName: LevelTileName;
   position: Vector2;
-  reflectUpperObjects?: boolean;
+  reflectUpperCell?: boolean;
   reflectChildren?: boolean;
-  behavior?: {
-    moveDirection: 'IN_PLACE' | 'FORWARDS' | 'BACKWARDS';
-    heroBehavior: 'jump' | 'move' | 'spin';
-    speed?: number;
-  };
+  heroBehavior?: LevelTileHeroBehavior;
 }

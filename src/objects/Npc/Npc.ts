@@ -11,6 +11,7 @@ import {
   TEXT_BOX_START,
 } from '../../constants/events';
 import { GRID_SIZE } from '../../constants/gridSize';
+import { getHeroSiblingObject, isHeroObject } from '../../helpers/getHeroSiblingObject';
 import { moveTowards } from '../../helpers/moveTowards';
 import { Animations } from '../../lib/Animations';
 import { Events } from '../../lib/Events';
@@ -20,7 +21,6 @@ import { Resources } from '../../lib/Resources';
 import { StoryFlags } from '../../lib/StoryFlags';
 import { Vector2 } from '../../lib/Vector2';
 import type { Directions } from '../../types/directions';
-import { Hero } from '../Hero';
 import { InteractiveObject } from '../InteractiveObject';
 import { ITEMS_SPRITE_FRAME, type CollectibleItemData, type ItemKey } from '../Item';
 import { Sprite } from '../Sprite';
@@ -95,7 +95,7 @@ export class Npc extends InteractiveObject {
         return;
       }
 
-      const heroDirection = this.parent?.children.find((child) => child instanceof Hero)?.facingDirection;
+      const heroDirection = getHeroSiblingObject(this.parent)?.facingDirection;
 
       if (heroDirection === 'DOWN') {
         this._changeFacingDirection('UP');
@@ -240,7 +240,7 @@ export class Npc extends InteractiveObject {
         }
 
         // Check if Hero is walking to that position (reserve the space)
-        if (child instanceof Hero && child.destinationPosition.x === nextX && child.destinationPosition.y === nextY) {
+        if (isHeroObject(child) && child.destinationPosition.x === nextX && child.destinationPosition.y === nextY) {
           return true;
         }
 

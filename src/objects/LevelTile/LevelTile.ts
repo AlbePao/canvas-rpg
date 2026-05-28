@@ -1,20 +1,20 @@
 import { HERO_POSITION } from '../../constants/events';
 import { detectOverlap } from '../../helpers/detectOverlap';
+import { getHeroSiblingObject } from '../../helpers/getHeroSiblingObject';
 import { Events } from '../../lib/Events';
 import { GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
 import type { Vector2 } from '../../lib/Vector2';
-import { Hero } from '../Hero';
 import { Sprite } from '../Sprite';
-import type { LevelTileConfig } from './levelTile.types';
+import type { LevelTileConfig, LevelTileHeroBehavior } from './levelTile.types';
 import { getLevelTileFrame, getWaterAnimations } from './levelTile.utils';
 
 export class LevelTile extends GameObject {
   body: Sprite;
-  behavior: LevelTileConfig['behavior'] | null = null;
+  readonly heroBehavior?: LevelTileHeroBehavior;
 
   constructor(config: LevelTileConfig) {
-    const { id, tileName, position, behavior } = config;
+    const { id, tileName, position, heroBehavior } = config;
 
     super({
       id,
@@ -31,18 +31,18 @@ export class LevelTile extends GameObject {
     });
     this.addChild(this.body);
 
-    this.behavior = behavior ?? null;
+    this.heroBehavior = heroBehavior;
   }
 
   override ready(): void {
-    if (!this.behavior) {
+    if (!this.heroBehavior) {
       return;
     }
 
     Events.on<Vector2>(HERO_POSITION, this, (position) => {
       if (detectOverlap(position, this.position)) {
-        const hero = this.parent?.children.find((child) => child instanceof Hero);
-        if (hero && this.behavior) {
+        const hero = getHeroSiblingObject(this.parent);
+        if (hero && this.heroBehavior) {
           // const { heroBehavior, moveDirection } = this.behavior;
           // if (heroBehavior === 'jump') {
           //   // hero.jump(moveDirection);
