@@ -2,6 +2,7 @@ import { CHANGE_LEVEL, HERO_EXITS } from '../../constants/events';
 import { gridCells } from '../../helpers/grid';
 import { objectKeys } from '../../helpers/objectKeys';
 import { TILESET_LEVEL } from '../../levels/tilesetLevel';
+import { TILESET_LEVEL2 } from '../../levels/tilesetLevel2';
 import { Chest } from '../../objects/Chest';
 import { Decoration } from '../../objects/Decoration';
 import type { ExitData } from '../../objects/Exit';
@@ -21,6 +22,7 @@ import type { LevelBuilderConfig, LevelMap } from './levelBuilder.types';
 
 const LEVELS: Record<string, LevelMap> = {
   tilesetLevel: TILESET_LEVEL,
+  tilesetLevel2: TILESET_LEVEL2,
 };
 
 export class LevelBuilder extends Level {

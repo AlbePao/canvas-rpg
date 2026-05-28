@@ -8,7 +8,7 @@ import type { Coords, Coords2D } from '../../types/coords';
 import type { LevelTileName } from './tileset.types';
 import type { WorldBackground } from './worldTiles.types';
 
-export type LevelsId = 'tilesetLevel';
+export type LevelsId = 'tilesetLevel' | 'tilesetLevel2';
 
 export type LevelBuilderConfig = LevelConfig & {
   id: string;

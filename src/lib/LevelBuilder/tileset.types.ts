@@ -1,5 +1,8 @@
 type TileBorder = `${'Upper' | 'Lower' | ''}${'Left' | 'Right' | ''}`;
 type WaterTileIndex = 1 | 2 | 3 | 4;
+type TileBiome = 'Grass' | 'Sand' | 'Snow';
+type StairsDirection = '2stepsLower' | '3stepsLower' | '2stepsLeft' | '2stepsRight';
+type LedgeDirection = 'Lower1' | 'Lower2' | 'Upper1' | 'Upper2' | 'Right1' | 'Right2' | 'Left1' | 'Left2';
 
 export type LevelGroundTileset =
   // Grass
@@ -12,7 +15,7 @@ export type LevelGroundTileset =
   | 'snow'
 
   // Bushes
-  | `bushBg${'Grass' | 'Sand' | 'Snow'}`
+  | `bushBg${TileBiome}`
 
   // Ice
   | 'ice'
@@ -54,10 +57,10 @@ export type LevelGroundTileset =
   | `ledgeGrassBorder${TileBorder}`
 
   // Grass ledges
-  | `ledgeGrass${'Lower1' | 'Lower2' | 'Upper1' | 'Upper2' | 'Right1' | 'Right2' | 'Left1' | 'Left2'}`
+  | `ledgeGrass${LedgeDirection}`
 
   // Grass Stairs
-  | `grassStairs${'2stepsLower' | '3stepsLower' | '2stepsLeft' | '2stepsRight'}`
+  | `grassStairs${StairsDirection}`
 
   // Sand with ledge border
   | `sandLedgeBorder${TileBorder}`
@@ -66,10 +69,10 @@ export type LevelGroundTileset =
   | `ledgeSandBorder${TileBorder}`
 
   // Sand ledges
-  | `ledgeSand${'Lower1' | 'Lower2' | 'Upper1' | 'Upper2' | 'Right1' | 'Right2' | 'Left1' | 'Left2'}`
+  | `ledgeSand${LedgeDirection}`
 
   // Sand Stairs
-  | `sandStairs${'2stepsLower' | '3stepsLower' | '2stepsLeft' | '2stepsRight'}`
+  | `sandStairs${StairsDirection}`
 
   // Snow with ledge border
   | `snowLedgeBorder${TileBorder}`
@@ -78,16 +81,19 @@ export type LevelGroundTileset =
   | `ledgeSnowBorder${TileBorder}`
 
   // Snow ledges
-  | `ledgeSnow${'Lower1' | 'Lower2' | 'Upper1' | 'Upper2' | 'Right1' | 'Right2' | 'Left1' | 'Left2'}`
+  | `ledgeSnow${LedgeDirection}`
 
   // Snow Stairs
-  | `snowStairs${'2stepsLower' | '3stepsLower' | '2stepsLeft' | '2stepsRight'}`
+  | `snowStairs${StairsDirection}`
 
   // Ice with snow ledge border
   | `iceSnowLedgeBorder${TileBorder}`
 
   // Snow ledge with ice border
-  | `snowLedgeIceBorder${TileBorder}`;
+  | `snowLedgeIceBorder${TileBorder}`
+
+  // Flowers
+  | `flower${'Sm' | 'Md' | 'Lg'}${'Red' | 'Blue' | 'Yellow'}Bg${TileBiome}`;
 
 export type LevelWaterTileSet =
   // Water animations
@@ -118,13 +124,25 @@ export type LevelWaterTileSet =
   | `water${WaterTileIndex}SandShoreBorder${TileBorder}`;
 
 export type LevelDecorationTileset =
-  // Trees
-  // TODO: add trees
-  // | 'tree';
   // Bushes
-  | 'bushBgTransparent'
+  | 'bush'
+
   // Rocks
-  | `rock${1 | 2}Base${'Grass' | 'Sand' | 'Snow'}`;
+  | `rock${1 | 2}Base${TileBiome}`
+
+  // Spruce trees
+  | `spruce${'Snow1' | 'Snow2' | 'Green'}${'Upper' | 'Middle' | 'Lower'}${'Left' | 'Right'}`
+
+  // Palm Trees
+  | `palmLg${1 | 2}${'Upper' | 'Middle' | 'Lower'}${'Left' | 'Right'}`
+  | `palmSm${'Upper' | 'Lower'}`
+
+  // Trees
+  | `treeLg${'Snow' | 'Green'}${'Upper' | 'Middle' | 'Lower'}${'Left' | 'Right'}`
+  | `treeSm${'Snow' | 'Green'}${'Upper' | 'Lower'}`
+
+  // Flowers
+  | `flower${'Sm' | 'Md' | 'Lg'}${'Red' | 'Blue' | 'Yellow'}Base${TileBiome}`;
 
 export type LevelWaterAnimatedTileName =
   // Water
