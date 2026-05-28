@@ -11,12 +11,12 @@ export const TILESET_LEVEL: LevelMap = {
     {
       type: 'Exit',
       id: 'exitGrass1',
-      newLevelId: 'tilesetLevel',
+      newLevelId: 'tilesetLevel2',
       x: 1,
       y: 4,
       heroNewPosition: {
-        x: 6,
-        y: 4,
+        x: 0,
+        y: 0,
       },
     },
     {

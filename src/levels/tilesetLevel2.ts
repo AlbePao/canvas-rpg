@@ -1,12 +1,21 @@
 import type { LevelMap } from '../lib/LevelBuilder/levelBuilder.types';
 
 export const TILESET_LEVEL2: LevelMap = {
-  id: 'tilesetLevel',
+  id: 'tilesetLevel2',
   heroDefaultPosition: {
     x: 1,
     y: 5,
   },
-  gameObjects: [],
+  gameObjects: [
+    {
+      type: 'Exit',
+      id: 'exit1',
+      newLevelId: 'tilesetLevel',
+      x: 0,
+      y: -1,
+      heroNewPosition: { x: 1, y: 5 },
+    },
+  ],
   walls: [],
   tiles: {
     // First row
