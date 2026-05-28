@@ -8,6 +8,7 @@ import { Sprite } from '../Sprite';
 import { getCharacterFrame, getCharacterWidth } from './spriteFontMap';
 import type { Line, SpriteTextStringConfig } from './spriteTextBox.types';
 
+// TODO: add an arrow down on the text box when remaining text lines are > 1
 export class SpriteTextBox extends GameObject {
   portrait?: Sprite;
   backdrop = new Sprite({

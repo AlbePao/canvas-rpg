@@ -39,8 +39,6 @@ import {
   HERO_WALK_UP,
 } from './heroAnimations';
 
-// TODO: hero can jump over the ledge, like in pokemon
-// TODO: add jump behavior for cutscenes with direction IN_PLACE, FORWARDS (facing direction + 1), BACKWARDS (facing direction -1)
 export class Hero extends GameObject {
   facingDirection: Directions = 'DOWN';
   body: Sprite;
