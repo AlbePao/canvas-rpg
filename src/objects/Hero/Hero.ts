@@ -48,7 +48,7 @@ export class Hero extends GameObject {
   itemPickUpTime = 0;
   itemPickUpShell: GameObject | null = null;
   isLocked = false;
-  speed = 1;
+  walkingSpeed = 1;
 
   constructor(config: HeroConfig) {
     super(config);
@@ -146,7 +146,7 @@ export class Hero extends GameObject {
       }
     }
 
-    const distance = moveTowards(this, this.destinationPosition, this.speed);
+    const distance = moveTowards(this, this.destinationPosition, this.walkingSpeed);
     const hasArrived = distance <= 1;
 
     // Attempt to move again if the hero is at his position
