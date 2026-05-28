@@ -11,7 +11,7 @@ export class Level extends GameObject {
 
   constructor({ id }: LevelConfig) {
     if (!id) {
-      throw new Error('Level must have an id');
+      throw new Error('Level: id is missing');
     }
 
     super({ id });

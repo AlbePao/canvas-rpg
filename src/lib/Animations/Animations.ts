@@ -47,7 +47,7 @@ export class Animations {
     const currentFramePattern = this.patterns[this.activeKey];
 
     if (!currentFramePattern) {
-      throw new Error('Selected frame pattern does not exist');
+      throw new Error('Animations: selected frame pattern does not exist');
     }
 
     return currentFramePattern;

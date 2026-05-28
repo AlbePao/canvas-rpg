@@ -30,7 +30,7 @@ export class LevelBuilder extends Level {
     // TODO: uncomment when levels are defined from a json
     // const levelMap = LevelsMapper.getLevel(config.id);
     // if (!levelMap) {
-    //   throw new Error(`Level "${config.id}" not found in LevelsMapper`);
+    //   throw new Error(`LevelBuilder: level "${config.id}" not found in LevelsMapper`);
     // }
 
     const { id, background, heroDefaultPosition, tiles, walls, gameObjects } = LEVELS[config.id];
@@ -114,7 +114,7 @@ export class LevelBuilder extends Level {
     Events.on<ExitData>(HERO_EXITS, this, ({ newLevelId, heroNewPosition }) => {
       // TODO: uncomment when levels are defined from a json
       // if (!LevelsMapper.hasLevel(newLevelId)) {
-      //   throw new Error(`Level "${newLevelId}" not found in LevelsMapper`);
+      //   throw new Error(`LevelBuilder: level "${newLevelId}" not found in LevelsMapper`);
       // }
 
       LevelTransition.init(() => {

@@ -81,7 +81,7 @@ class LevelsMapperSingleton extends Singleton<LevelsMapperSingleton>() {
     }
 
     if (successCount === 0) {
-      throw new Error('Failed to load any levels');
+      throw new Error('LevelsMapper: failed to load any levels');
     }
 
     this._isLoaded = true;
@@ -93,7 +93,7 @@ class LevelsMapperSingleton extends Singleton<LevelsMapperSingleton>() {
    */
   getLevel(id: string): LevelMapJsonType | null {
     if (!this._isLoaded) {
-      throw new Error('Levels not loaded yet. Call loadLevels() during app initialization.');
+      throw new Error('LevelsMapper: levels not loaded yet. Call loadLevels() during app initialization.');
     }
 
     const level = this._levels.get(id);
@@ -110,7 +110,7 @@ class LevelsMapperSingleton extends Singleton<LevelsMapperSingleton>() {
    */
   getAllLevelIds(): string[] {
     if (!this._isLoaded) {
-      throw new Error('Levels not loaded yet. Call loadLevels() during app initialization.');
+      throw new Error('LevelsMapper: levels not loaded yet. Call loadLevels() during app initialization.');
     }
 
     return Array.from(this._levels.keys());

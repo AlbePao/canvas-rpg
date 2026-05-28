@@ -19,7 +19,7 @@ export class FrameIndexPattern {
       }
     }
 
-    throw new Error('Time is before the first keyframe');
+    throw new Error('FrameIndexPattern: time is before the first keyframe');
   }
 
   step(delta: number): void {
