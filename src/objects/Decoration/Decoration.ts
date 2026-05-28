@@ -20,7 +20,7 @@ export class Decoration extends GameObject {
 
     this.body = new Sprite({
       id,
-      resource: Resources.images.worldTiles,
+      resource: Resources.images.tileset,
       frameSize: new Vector2(16, 16),
       hFrames: 16,
       vFrames: 9,

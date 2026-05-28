@@ -37,7 +37,7 @@ export class PauseMenu extends GameObject {
       startIndex += getCharacterWidth(letter) + 2;
       new Sprite({
         id: `char-${0}`,
-        resource: Resources.images.fontWhite,
+        resource: Resources.images.font,
         hFrames: 13,
         vFrames: 6,
         frame: getCharacterFrame(letter),

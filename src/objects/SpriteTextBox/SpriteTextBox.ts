@@ -55,7 +55,7 @@ export class SpriteTextBox extends GameObject {
             width: charWidth,
             sprite: new Sprite({
               id: `${id}-char-${char}`,
-              resource: Resources.images.fontWhite,
+              resource: Resources.images.font,
               hFrames: 13,
               vFrames: 6,
               frame: getCharacterFrame(char),

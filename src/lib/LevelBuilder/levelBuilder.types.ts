@@ -5,8 +5,8 @@ import type { CollectibleItemConfig } from '../../objects/Item';
 import type { LevelConfig } from '../../objects/Level';
 import type { NpcConfig } from '../../objects/Npc';
 import type { Coords, Coords2D } from '../../types/coords';
+import type { BgKey } from '../Resources';
 import type { LevelTileName } from './tileset.types';
-import type { WorldBackground } from './worldTiles.types';
 
 export type LevelsId = 'tilesetLevel' | 'tilesetLevel2';
 
@@ -37,7 +37,7 @@ export type LevelExit = ExitConfig & {
 export type LevelObjects = LevelCollectibleItem | LevelChestItem | LevelNpc | LevelDecoration | LevelExit;
 
 export interface LevelBackground {
-  resource: WorldBackground;
+  resource: BgKey;
   frameSize: Coords2D;
 }
 
