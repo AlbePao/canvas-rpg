@@ -9,9 +9,26 @@ A TypeScript-based 2D RPG game built with HTML5 Canvas and Vite. This document h
 **Key Commands**:
 
 - `npm run dev` - Start dev server (http://localhost:5173)
-- `npm run build` - Production build
+- `npm run build` - TypeScript check + Vite build
 - `npm run lint` - Run ESLint type checking
 - `npm run lint:fix` - Auto-fix linting issues
+
+**Essential Directories**:
+
+- `src/objects/` - All game objects (Hero, NPCs, Items, etc.)
+- `src/lib/` - Core game systems (GameLoop, Events, Input, etc.)
+- `src/constants/` - Events, story flags, grid size
+- `src/helpers/` - Utilities (grid collision, movement, etc.)
+- `public/json/` - Level definitions (JSON-based levels)
+- `public/sprites/` - Sprite sheet assets
+
+**For New Agents**:
+
+1. **Understanding patterns?** → See [Adding Game Content](#adding-game-content) for full examples
+2. **Creating a GameObject?** → Check [Full Example: Creating a New GameObject](#1-full-example-creating-a-new-gameobject)
+3. **Need debugging help?** → Go to [Troubleshooting Guide](#troubleshooting-guide)
+4. **TypeScript rules?** → See [canvas-rpg.instructions.md](canvas-rpg.instructions.md)
+5. **Known issues blocking work?** → See [Known TODOs & Blockers](#known-todos--blockers)
 
 ## Project Architecture
 
