@@ -1,5 +1,6 @@
 import { LEVEL_TRANSITION_END, LEVEL_TRANSITION_START } from '../../constants/events';
 import { Events } from '../Events';
+import { Game } from '../Game';
 import { Singleton } from '../Singleton';
 import type { LevelTransitionConfig } from './levelTransition.types';
 import { LEVEL_TRANSITION_BASE_CLASS, LEVEL_TRANSITION_CLASSNAME, LEVEL_TRANSITIONS } from './levelTransitions';
@@ -19,8 +20,7 @@ class LevelTransitionSingleton extends Singleton<LevelTransitionSingleton>() {
     this.element = document.createElement('div');
     this.element.classList.add(LEVEL_TRANSITION_CLASSNAME, 'fade-in');
 
-    // TODO: get container id from global config
-    document.querySelector('#game-container')?.appendChild(this.element);
+    document.querySelector(Game.getConfig('containerId'))?.appendChild(this.element);
     Events.emit(LEVEL_TRANSITION_START);
 
     this.element.addEventListener(
