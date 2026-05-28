@@ -3,43 +3,4 @@ body {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  image-rendering: pixelated;
-}
-
-canvas {
-  width: 100%;
-  background: blue;
-}
-
-.LevelTransition {
-  position: absolute;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  background: #fff;
-  opacity: 0;
-  animation: scene-transition-fade-in 0.2s forwards;
-}
-
-.LevelTransition.fade-out {
-  animation: scene-transition-fade-out 0.2s forwards;
-}
-
-@keyframes scene-transition-fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes scene-transition-fade-out {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
 }
