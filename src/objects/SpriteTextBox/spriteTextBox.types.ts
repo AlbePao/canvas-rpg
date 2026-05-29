@@ -19,4 +19,5 @@ export interface SpriteTextStringConfig {
   id: string;
   portraitFrame: number | null;
   string: string[];
+  speed?: number;
 }

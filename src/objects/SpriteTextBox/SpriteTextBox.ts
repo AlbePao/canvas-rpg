@@ -8,27 +8,46 @@ import { Sprite } from '../Sprite';
 import { getCharacterFrame, getCharacterWidth } from './spriteFontMap';
 import type { Line, SpriteTextStringConfig } from './spriteTextBox.types';
 
+// Text box dimensions (in grid cells, 16px per cell)
+export const TEXT_BOX_WIDTH = 16; // 256 pixels
+export const TEXT_BOX_HEIGHT = 4; // 64 pixels
+
+// Rendering constants for text layout
+export const TEXT_BOX_PADDING_LEFT_WITH_PORTRAIT = 27;
+export const TEXT_BOX_PADDING_LEFT_NO_PORTRAIT = 12;
+export const TEXT_BOX_PADDING_TOP = 9;
+export const TEXT_BOX_LINE_WIDTH_MAX = 240;
+export const TEXT_BOX_LINE_VERTICAL_HEIGHT = 14;
+export const TEXT_BOX_PORTRAIT_OFFSET_X = 6;
+export const TEXT_BOX_PORTRAIT_OFFSET_Y = 6;
+export const TEXT_BOX_CHARACTER_OFFSET_X = 5;
+
+// Typewriter animation constants
+export const TYPEWRITER_DEFAULT_SPEED = 80; // milliseconds per character
+
 // TODO: add an arrow down on the text box when remaining text lines are > 1
 export class SpriteTextBox extends GameObject {
-  portrait?: Sprite;
+  readonly portrait?: Sprite;
   backdrop = new Sprite({
     id: `${this.id}-text-box-backdrop`,
     resource: Resources.images.textBox,
     frameSize: new Vector2(256, 64),
   });
 
-  lines: Line[];
+  readonly lines: Line[];
 
-  // Typewriter
-  showingCharIndex = 0;
-  textSpeed = 80;
-  timeUntilNextShow = this.textSpeed;
+  // Typewriter state
+  private _showingCharIndex = 0;
+  readonly textSpeed: number;
+  private _timeUntilNextShow: number;
 
-  // Current line
-  currentLineIndex = 0;
-  finalLineIndex = 0;
+  // Current line state
+  private _currentLineIndex = 0;
+  private readonly _finalLineIndex: number;
 
-  constructor({ id, string, portraitFrame }: SpriteTextStringConfig) {
+  private _isSelectionBoxOpened = false;
+
+  constructor({ id, string, portraitFrame, speed }: SpriteTextStringConfig) {
     super({
       id,
       x: 2,
@@ -37,6 +56,8 @@ export class SpriteTextBox extends GameObject {
 
     // Draw on top layer
     this.drawLayer = 'HUD';
+    this.textSpeed = speed ?? TYPEWRITER_DEFAULT_SPEED;
+    this._timeUntilNextShow = this.textSpeed;
 
     // Create an array of words in an an array of lines (because it helps with line wrapping later)
     this.lines = string.map((content) => {
@@ -77,7 +98,7 @@ export class SpriteTextBox extends GameObject {
       };
     });
 
-    this.finalLineIndex = this.lines.length - 1;
+    this._finalLineIndex = this.lines.length - 1;
 
     // Create a portrait
     if (portraitFrame !== null) {
@@ -95,18 +116,18 @@ export class SpriteTextBox extends GameObject {
     const { input } = root;
 
     if (input.getActionJustPressed('Space')) {
-      const { finalCharIndex } = this.lines[this.currentLineIndex];
+      const { finalCharIndex } = this.lines[this._currentLineIndex];
 
-      if (this.showingCharIndex < finalCharIndex) {
+      if (this._showingCharIndex < finalCharIndex) {
         // Skip
-        this.showingCharIndex = finalCharIndex;
+        this._showingCharIndex = finalCharIndex;
         return;
       }
 
-      if (this.currentLineIndex < this.finalLineIndex) {
+      if (this._currentLineIndex < this._finalLineIndex) {
         // Display next text line
-        this.currentLineIndex += 1;
-        this.showingCharIndex = 0;
+        this._currentLineIndex += 1;
+        this._showingCharIndex = 0;
 
         return;
       }
@@ -116,14 +137,14 @@ export class SpriteTextBox extends GameObject {
     }
 
     // Word on typewriter
-    this.timeUntilNextShow -= delta;
+    this._timeUntilNextShow -= delta;
 
-    if (this.timeUntilNextShow <= 0) {
+    if (this._timeUntilNextShow <= 0) {
       // Increase amount of characters that are drawn
-      this.showingCharIndex += 1;
+      this._showingCharIndex += 1;
 
       // Reset time counter for next character
-      this.timeUntilNextShow = this.textSpeed;
+      this._timeUntilNextShow = this.textSpeed;
     }
   }
 
@@ -133,40 +154,36 @@ export class SpriteTextBox extends GameObject {
 
     // Draw the portrait
     if (this.portrait) {
-      this.portrait.drawImage(ctx, drawPosX + 6, drawPosY + 6);
+      this.portrait.drawImage(ctx, drawPosX + TEXT_BOX_PORTRAIT_OFFSET_X, drawPosY + TEXT_BOX_PORTRAIT_OFFSET_Y);
     }
 
-    // Configurations options
     // Set padding according to portrait frame
-    const PADDING_LEFT = this.portrait ? 27 : 12;
-    const PADDING_TOP = 9;
-    const LINE_WIDTH_MAX = 240;
-    const LINE_VERTICAL_HEIGHT = 14;
+    const paddingLeft = this.portrait ? TEXT_BOX_PADDING_LEFT_WITH_PORTRAIT : TEXT_BOX_PADDING_LEFT_NO_PORTRAIT;
 
     // Initial position of cursor
-    let cursorX = drawPosX + PADDING_LEFT;
-    let cursorY = drawPosY + PADDING_TOP;
+    let cursorX = drawPosX + paddingLeft;
+    let cursorY = drawPosY + TEXT_BOX_PADDING_TOP;
     let currentShowingIndex = 0;
 
-    this.lines[this.currentLineIndex].words.forEach((word) => {
+    this.lines[this._currentLineIndex].words.forEach((word) => {
       // Decide if we can fit this next word on this next line
-      const spaceRemaining = drawPosX + LINE_WIDTH_MAX - cursorX;
+      const spaceRemaining = drawPosX + TEXT_BOX_LINE_WIDTH_MAX - cursorX;
 
       if (spaceRemaining < word.wordWidth) {
-        cursorX = drawPosX + PADDING_LEFT;
-        cursorY += LINE_VERTICAL_HEIGHT;
+        cursorX = drawPosX + paddingLeft;
+        cursorY += TEXT_BOX_LINE_VERTICAL_HEIGHT;
       }
 
       // Draw this whole segment of text
       word.chars.forEach((char) => {
         // Stop here if we should not yet show the following character
-        if (currentShowingIndex > this.showingCharIndex) {
+        if (currentShowingIndex > this._showingCharIndex) {
           return;
         }
 
         const { sprite, width } = char;
 
-        const widthCharOffset = cursorX - 5;
+        const widthCharOffset = cursorX - TEXT_BOX_CHARACTER_OFFSET_X;
         sprite.draw(ctx, widthCharOffset, cursorY);
 
         // Add width of the character we just printed to cursor pos
