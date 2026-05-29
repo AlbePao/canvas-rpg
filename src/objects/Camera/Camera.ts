@@ -1,5 +1,6 @@
 import { CHANGE_LEVEL, HERO_POSITION } from '../../constants/events';
 import { Events } from '../../lib/Events';
+import { Game } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
 import { Vector2 } from '../../lib/Vector2';
 import type { Level } from '../Level';
@@ -21,8 +22,7 @@ export class Camera extends GameObject {
   centerPositionOnTarget(position: Vector2): void {
     // Create a new position based on the incoming position
     const personHalf = 8;
-    const canvasWidth = 320;
-    const canvasHeight = 180;
+    const { canvasWidth, canvasHeight } = Game.getContainerSizes();
     const halfWidth = -personHalf + canvasWidth / 2;
     const halfHeight = -personHalf + canvasHeight / 2;
     this.position = new Vector2(-position.x + halfWidth, -position.y + halfHeight);

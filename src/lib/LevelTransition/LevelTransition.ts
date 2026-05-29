@@ -21,7 +21,7 @@ export class LevelTransition {
     this.element = document.createElement('div');
     this.element.classList.add(LEVEL_TRANSITION_CLASSNAME, 'fade-in');
 
-    document.querySelector(Game.getConfig('containerId'))?.appendChild(this.element);
+    document.querySelector(Game.getContainerId())?.appendChild(this.element);
     Events.emit(LEVEL_TRANSITION_START);
 
     this.element.addEventListener(

@@ -2,29 +2,31 @@ import { Main } from '../../objects/Main';
 import { GameLoop } from '../GameLoop';
 import { LevelBuilder } from '../LevelBuilder';
 import { Singleton } from '../Singleton';
-import type { GameConfig, GameConfigKey } from './game.types';
+import type { GameCanvasSize, GameConfig } from './game.types';
 
 class GameSingleton extends Singleton<GameSingleton>() {
-  private readonly _configs: Record<GameConfigKey, string> = {
-    containerId: '',
-  };
+  private _containerId = '';
+  private _canvasWidth = 0;
+  private _canvasHeight = 0;
 
   /**
    * Initialize the game: load levels, set up the scene, and start the game loop
    */
   // async initializeGame(config: Partial<{ containerId: string }>): Promise<void> {
   initializeGame(config: GameConfig): void {
-    const { containerId } = config;
+    const { containerId, canvasWidth, canvasHeight } = config;
 
-    // Set the game container id
-    this._configs.containerId = `#${containerId}`;
+    // Set the game configs
+    this._containerId = `#${containerId}`;
+    this._canvasWidth = canvasWidth ?? 320;
+    this._canvasHeight = canvasHeight ?? 180;
 
     // Load all levels from JSON before starting the game
     // await Resources.loadResources();
     // await LevelsMapper.loadLevels();
 
     // Grabbing the container to create canvas inside
-    const gameContainer = document.querySelector<HTMLDivElement>(this._configs.containerId);
+    const gameContainer = document.querySelector<HTMLDivElement>(this._containerId);
 
     if (!gameContainer) {
       throw new Error('Game: game container not found');
@@ -38,8 +40,8 @@ class GameSingleton extends Singleton<GameSingleton>() {
     // Creating the canvas to draw to
     const canvas = document.createElement('canvas');
     canvas.setAttribute('id', 'game-canvas');
-    canvas.setAttribute('width', '320');
-    canvas.setAttribute('height', '180');
+    canvas.setAttribute('width', `${this._canvasWidth}`);
+    canvas.setAttribute('height', `${this._canvasHeight}`);
     canvas.style.width = '100%';
     canvas.style.backgroundColor = '#333';
     canvas.style.imageRendering = 'pixelated';
@@ -96,8 +98,15 @@ class GameSingleton extends Singleton<GameSingleton>() {
     gameLoop.start();
   }
 
-  getConfig(key: GameConfigKey): string {
-    return this._configs[key];
+  getContainerId(): string {
+    return this._containerId;
+  }
+
+  getContainerSizes(): GameCanvasSize {
+    return {
+      canvasWidth: this._canvasWidth,
+      canvasHeight: this._canvasHeight,
+    };
   }
 }
 
