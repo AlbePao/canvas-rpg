@@ -2,36 +2,32 @@ import { TEXT_BOX_END } from '../../constants/events';
 import { Events } from '../../lib/Events';
 import { GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
-import { Vector2 } from '../../lib/Vector2';
+import { BackdropBox } from '../BackdropBox';
 import type { Main } from '../Main';
 import { Sprite } from '../Sprite';
 import { getCharacterFrame, getCharacterWidth } from './spriteFontMap';
 import type { Line, SpriteTextStringConfig } from './spriteTextBox.types';
 
-// Text box dimensions (in grid cells, 16px per cell)
-export const TEXT_BOX_WIDTH = 16; // 256 pixels
-export const TEXT_BOX_HEIGHT = 4; // 64 pixels
-
 // Rendering constants for text layout
-export const TEXT_BOX_PADDING_LEFT_WITH_PORTRAIT = 27;
-export const TEXT_BOX_PADDING_LEFT_NO_PORTRAIT = 12;
-export const TEXT_BOX_PADDING_TOP = 9;
-export const TEXT_BOX_LINE_WIDTH_MAX = 240;
-export const TEXT_BOX_LINE_VERTICAL_HEIGHT = 14;
-export const TEXT_BOX_PORTRAIT_OFFSET_X = 6;
-export const TEXT_BOX_PORTRAIT_OFFSET_Y = 6;
-export const TEXT_BOX_CHARACTER_OFFSET_X = 5;
+const TEXT_BOX_PADDING_LEFT_WITH_PORTRAIT = 27;
+const TEXT_BOX_PADDING_LEFT_NO_PORTRAIT = 12;
+const TEXT_BOX_PADDING_TOP = 9;
+const TEXT_BOX_LINE_WIDTH_MAX = 240;
+const TEXT_BOX_LINE_VERTICAL_HEIGHT = 14;
+const TEXT_BOX_PORTRAIT_OFFSET_X = 6;
+const TEXT_BOX_PORTRAIT_OFFSET_Y = 6;
+const TEXT_BOX_CHARACTER_OFFSET_X = 5;
 
 // Typewriter animation constants
-export const TYPEWRITER_DEFAULT_SPEED = 80; // milliseconds per character
+const TYPEWRITER_DEFAULT_SPEED = 80; // milliseconds per character
 
 // TODO: add an arrow down on the text box when remaining text lines are > 1
 export class SpriteTextBox extends GameObject {
   readonly portrait?: Sprite;
-  backdrop = new Sprite({
+  readonly backdrop = new BackdropBox({
     id: `${this.id}-text-box-backdrop`,
-    resource: Resources.images.textBox,
-    frameSize: new Vector2(256, 64),
+    width: 16, // 256 pixels
+    height: 4, // 64 pixels
   });
 
   readonly lines: Line[];

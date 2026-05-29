@@ -24,7 +24,7 @@ const ASSETS_TO_LOAD: Record<ResourceKey, string> = {
   portraits: '/sprites/portraits-sheet.png',
   shadow: '/sprites/shadow.png',
   font: '/sprites/sprite-font.png',
-  textBox: '/sprites/text-box.png',
+  textBox: '/sprites/text-box-sheet.png',
   tileset: '/sprites/tileset.png',
 } as const;
 

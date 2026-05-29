@@ -2,19 +2,19 @@ import { PAUSE_OFF } from '../../constants/events';
 import { Events } from '../../lib/Events';
 import { GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
-import { Vector2 } from '../../lib/Vector2';
+import { BackdropBox } from '../BackdropBox';
 import { Sprite } from '../Sprite';
 import { getCharacterFrame, getCharacterWidth } from '../SpriteTextBox';
 
 export class PauseMenu extends GameObject {
-  backdrop = new Sprite({
+  readonly backdrop = new BackdropBox({
     id: `${this.id}-text-box-backdrop`,
-    resource: Resources.images.textBox,
-    frameSize: new Vector2(256, 64),
+    width: 4,
+    height: 4,
   });
 
   constructor() {
-    super({ id: 'pauseMenu', x: 2, y: 3 });
+    super({ id: 'pauseMenu', x: 8, y: 4 });
 
     // Draw on top layer
     this.drawLayer = 'HUD';
