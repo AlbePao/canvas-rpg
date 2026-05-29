@@ -28,3 +28,7 @@ export const PAUSE_OFF = 'PAUSE_OFF';
 
 // Input events
 export const DIRECTION_TAP = 'DIRECTION_TAP';
+
+// Selection box events
+export const SELECTION_BOX_OPENED = 'SELECTION_BOX_OPENED';
+export const SELECTION_BOX_CLOSED = 'SELECTION_BOX_CLOSED';

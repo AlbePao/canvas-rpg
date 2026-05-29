@@ -1,4 +1,4 @@
-import { TEXT_BOX_END } from '../../constants/events';
+import { SELECTION_BOX_CLOSED, SELECTION_BOX_OPENED, TEXT_BOX_END } from '../../constants/events';
 import { Events } from '../../lib/Events';
 import { GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
@@ -107,7 +107,21 @@ export class SpriteTextBox extends GameObject {
     }
   }
 
+  override ready(): void {
+    Events.on(SELECTION_BOX_OPENED, this, () => {
+      this._isSelectionBoxOpened = true;
+    });
+    Events.on(SELECTION_BOX_CLOSED, this, () => {
+      this._isSelectionBoxOpened = false;
+    });
+  }
+
   override step(delta: number, root: Main): void {
+    // Don't interact if options selection box is opened
+    if (this._isSelectionBoxOpened) {
+      return;
+    }
+
     // Listen for input
     const { input } = root;
 
