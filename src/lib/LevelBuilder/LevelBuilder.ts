@@ -117,7 +117,7 @@ export class LevelBuilder extends Level {
       //   throw new Error(`LevelBuilder: level "${newLevelId}" not found in LevelsMapper`);
       // }
 
-      LevelTransition.init(() => {
+      new LevelTransition(() => {
         Events.emit(
           CHANGE_LEVEL,
           new LevelBuilder({

@@ -1,20 +1,21 @@
 import { LEVEL_TRANSITION_END, LEVEL_TRANSITION_START } from '../../constants/events';
 import { Events } from '../Events';
 import { Game } from '../Game';
-import { Singleton } from '../Singleton';
 import type { LevelTransitionConfig } from './levelTransition.types';
 import { LEVEL_TRANSITION_BASE_CLASS, LEVEL_TRANSITION_CLASSNAME, LEVEL_TRANSITIONS } from './levelTransitions';
 
 const TRANSITION_STYLES_ID = 'level-transition-styles';
 
-class LevelTransitionSingleton extends Singleton<LevelTransitionSingleton>() {
+export class LevelTransition {
   element?: HTMLDivElement;
 
-  init(callback: () => void, config: LevelTransitionConfig = { transition: 'fade' }): void {
+  constructor(callback: () => void, config: LevelTransitionConfig = { transition: 'fade' }) {
+    const { transition } = config;
+
     // Inject styles
     const styleSheet = document.createElement('style');
     styleSheet.id = TRANSITION_STYLES_ID;
-    styleSheet.textContent = `${LEVEL_TRANSITION_BASE_CLASS}${LEVEL_TRANSITIONS[config.transition]}`;
+    styleSheet.textContent = `${LEVEL_TRANSITION_BASE_CLASS}${LEVEL_TRANSITIONS[transition]}`;
     document.head.appendChild(styleSheet);
 
     this.element = document.createElement('div');
@@ -47,5 +48,3 @@ class LevelTransitionSingleton extends Singleton<LevelTransitionSingleton>() {
     );
   }
 }
-
-export const LevelTransition = LevelTransitionSingleton.getInstance();
