@@ -91,8 +91,8 @@ export class SpriteTextBox extends GameObject {
   }
 
   override step(delta: number, root: Main): void {
-    // Listen for user input
-    const input = root.input;
+    // Listen for input
+    const { input } = root;
 
     if (input.getActionJustPressed('Space')) {
       const { finalCharIndex } = this.lines[this.currentLineIndex];

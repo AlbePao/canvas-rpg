@@ -122,7 +122,6 @@ export class Hero extends GameObject {
   // jump(direction:'IN_PLACE' | 'FORWARDS' | 'BACKWARDS'): void {}
 
   override step(delta: number, root: Main): void {
-    const { input } = root;
     // Don't do anything when locked
     if (this.isLocked) {
       return;
@@ -135,6 +134,8 @@ export class Hero extends GameObject {
     }
 
     // Check for input
+    const { input } = root;
+
     if (input.getActionJustPressed('Space')) {
       // Look for an object at the next space (according to where Hero is facing)
       const objectAtPosition = this.parent?.children.find((child) =>
