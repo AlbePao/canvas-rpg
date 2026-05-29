@@ -138,8 +138,8 @@ export class GameObject {
     });
   }
 
-  doBehaviorEvent(main: Main): void {
-    const { isCutscenePlaying } = main;
+  doBehaviorEvent(root: Main): void {
+    const { isCutscenePlaying } = root;
     if (isCutscenePlaying || this.behaviorConfig.length === 0) {
       return;
     }
@@ -150,7 +150,7 @@ export class GameObject {
       }
 
       this.retryTimeout = setTimeout(() => {
-        this.doBehaviorEvent(main);
+        this.doBehaviorEvent(root);
       }, 1000);
 
       return;

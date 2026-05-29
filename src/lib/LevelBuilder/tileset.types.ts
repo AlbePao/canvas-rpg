@@ -14,8 +14,8 @@ export type LevelGroundTileset =
   // Snow
   | 'snow'
 
-  // Bushes
-  | `bushBg${TileBiome}`
+  // Tall grass
+  | `tallGrassBg${TileBiome}`
 
   // Ice
   | 'ice'
@@ -124,8 +124,8 @@ export type LevelWaterTileSet =
   | `water${WaterTileIndex}SandShoreBorder${TileBorder}`;
 
 export type LevelDecorationTileset =
-  // Bushes
-  | 'bush'
+  // Tall grass
+  | 'tallGrass'
 
   // Rocks
   | `rock${1 | 2}Base${TileBiome}`

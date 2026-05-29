@@ -29,9 +29,9 @@ const TILESET: LevelTileName[] = [
   'grass',
   'sand',
   'snow',
-  'bushBgGrass',
-  'bushBgSand',
-  'bushBgSnow',
+  'tallGrassBgGrass',
+  'tallGrassBgSand',
+  'tallGrassBgSnow',
   'ice',
   'sandGrassBorder',
   'sandGrassBorderUpper',
@@ -407,7 +407,7 @@ const TILESET: LevelTileName[] = [
 ];
 
 const TILESET_DECORATIONS: LevelDecorationTileset[] = [
-  'bush',
+  'tallGrass',
   'rock1BaseGrass',
   'rock1BaseSand',
   'rock1BaseSnow',
