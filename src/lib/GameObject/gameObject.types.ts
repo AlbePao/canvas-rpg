@@ -3,9 +3,11 @@ import type { Directions } from '../../types/directions';
 
 export type GameObjectConfig = {
   id: string;
-} & Partial<Coords2D> & {
-    behaviorConfig?: GameObjectBehavior[];
-  };
+} & Partial<
+  Coords2D & {
+    behaviorConfig: GameObjectBehavior[];
+  }
+>;
 
 export interface GameObjectBehavior {
   type: unknown;
