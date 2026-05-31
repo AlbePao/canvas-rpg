@@ -192,14 +192,14 @@ export class Npc extends InteractiveObject {
       }
 
       if (duration) {
-        setTimeout(() => {
+        this.scheduleTimeout(() => {
           Events.emit(BEHAVIOR_END, this.id);
         }, duration);
       }
     } else if (type === 'walk') {
       if (this.isLocked) {
         // this.body.animations?.stop();
-        setTimeout(() => {
+        this.scheduleTimeout(() => {
           this.startBehavior(behavior);
         }, 10);
 
@@ -249,7 +249,7 @@ export class Npc extends InteractiveObject {
 
       if (solidBodyAtSpace) {
         this._changeFacingDirection(direction);
-        setTimeout(() => {
+        this.scheduleTimeout(() => {
           this.startBehavior(behavior);
         }, 10);
         return;

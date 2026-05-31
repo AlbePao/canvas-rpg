@@ -17,6 +17,7 @@ export class GameObject {
   behaviorConfig: GameObjectBehavior[];
   behaviorIndex = 0;
   retryTimeout: number | null = null;
+  pendingTimeouts = new Set<number>();
 
   constructor(config: GameObjectConfig) {
     const { id, x, y, behaviorConfig } = config;
@@ -94,6 +95,19 @@ export class GameObject {
 
   // Remove from the tree
   destroy(): void {
+    // Clear all pending timeouts
+    this.pendingTimeouts.forEach((timeoutId) => {
+      clearTimeout(timeoutId);
+    });
+    this.pendingTimeouts.clear();
+
+    if (this.retryTimeout) {
+      clearTimeout(this.retryTimeout);
+      this.retryTimeout = null;
+    }
+
+    Events.unsubscribe(this);
+
     this.children.forEach((child) => {
       child.destroy();
     });
@@ -111,13 +125,22 @@ export class GameObject {
     this.children = this.children.filter((g) => gameObject !== g);
   }
 
+  protected scheduleTimeout(callback: () => void, delay: number): number {
+    const timeoutId = window.setTimeout(() => {
+      this.pendingTimeouts.delete(timeoutId);
+      callback();
+    }, delay);
+    this.pendingTimeouts.add(timeoutId);
+    return timeoutId;
+  }
+
   setBehaviorLoop(root: Main): void {
     if (this.behaviorConfig.length === 0) {
       return;
     }
 
-    // If we have a behavior, kick off after a short delay
-    setTimeout(() => {
+    // If we have a behavior, kick off after a short delay - track this timeout
+    this.scheduleTimeout(() => {
       this.doBehaviorEvent(root);
     }, 10);
 
@@ -149,7 +172,7 @@ export class GameObject {
         clearTimeout(this.retryTimeout);
       }
 
-      this.retryTimeout = setTimeout(() => {
+      this.retryTimeout = this.scheduleTimeout(() => {
         this.doBehaviorEvent(root);
       }, 1000);
 
