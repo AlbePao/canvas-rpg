@@ -32,9 +32,9 @@ export class PauseMenu extends GameObject {
     this.backdrop.drawImage(ctx, drawPosX, drawPosY);
 
     // Draw the text
-    let startIndex = drawPosX + 5;
+    let startIndex = drawPosX + 6;
     'Pause'.split('').forEach((letter) => {
-      startIndex += getCharacterWidth(letter) + 2;
+      startIndex += getCharacterWidth(letter) + 1;
       new Sprite({
         id: `char-${0}`,
         resource: Resources.images.font,
