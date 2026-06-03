@@ -1,4 +1,5 @@
 import { SELECTION_BOX_CLOSED, SELECTION_BOX_OPENED, TEXT_BOX_END } from '../../constants/events';
+import { ArrowIndicator } from '../../lib/ArrowIndicator';
 import { Events } from '../../lib/Events';
 import { GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
@@ -17,6 +18,8 @@ const TEXT_BOX_LINE_VERTICAL_HEIGHT = 14;
 const TEXT_BOX_PORTRAIT_OFFSET_X = 6;
 const TEXT_BOX_PORTRAIT_OFFSET_Y = 6;
 const TEXT_BOX_CHARACTER_OFFSET_X = 5;
+const TEXT_CONTINUE_INDICATOR_PADDING_LEFT = 236;
+const TEXT_CONTINUE_INDICATOR_PADDING_TOP = 48;
 
 // Typewriter animation constants
 const TYPEWRITER_DEFAULT_SPEED = 80; // milliseconds per character
@@ -32,9 +35,14 @@ export class SpriteTextBox extends GameObject {
 
   readonly lines: Line[];
 
+  readonly continueIndicator = new ArrowIndicator({
+    id: `${this.id}-arrow-indicator`,
+    direction: 'DOWN',
+  });
+
   // Typewriter state
+  private readonly _textSpeed: number;
   private _showingCharIndex = 0;
-  readonly textSpeed: number;
   private _timeUntilNextShow: number;
 
   // Current line state
@@ -52,8 +60,8 @@ export class SpriteTextBox extends GameObject {
 
     // Draw on top layer
     this.drawLayer = 'HUD';
-    this.textSpeed = speed ?? TYPEWRITER_DEFAULT_SPEED;
-    this._timeUntilNextShow = this.textSpeed;
+    this._textSpeed = speed ?? TYPEWRITER_DEFAULT_SPEED;
+    this._timeUntilNextShow = this._textSpeed;
 
     // Create an array of words in an an array of lines (because it helps with line wrapping later)
     this.lines = string.map((content) => {
@@ -154,7 +162,7 @@ export class SpriteTextBox extends GameObject {
       this._showingCharIndex += 1;
 
       // Reset time counter for next character
-      this._timeUntilNextShow = this.textSpeed;
+      this._timeUntilNextShow = this._textSpeed;
     }
   }
 
@@ -175,7 +183,9 @@ export class SpriteTextBox extends GameObject {
     let cursorY = drawPosY + TEXT_BOX_PADDING_TOP;
     let currentShowingIndex = 0;
 
-    this.lines[this._currentLineIndex].words.forEach((word) => {
+    const currentLineWords = this.lines[this._currentLineIndex].words;
+
+    currentLineWords.forEach((word, wordIndex) => {
       // Decide if we can fit this next word on this next line
       const spaceRemaining = drawPosX + TEXT_BOX_LINE_WIDTH_MAX - cursorX;
 
@@ -184,8 +194,10 @@ export class SpriteTextBox extends GameObject {
         cursorY += TEXT_BOX_LINE_VERTICAL_HEIGHT;
       }
 
+      const wordChars = word.chars;
+
       // Draw this whole segment of text
-      word.chars.forEach((char) => {
+      wordChars.forEach((char, charIndex) => {
         // Stop here if we should not yet show the following character
         if (currentShowingIndex > this._showingCharIndex) {
           return;
@@ -204,6 +216,19 @@ export class SpriteTextBox extends GameObject {
 
         // Uptick the index we are counting
         currentShowingIndex += 1;
+
+        // If is the latest letter of the latest word of the line and it's not the last line, shows the continue indicator
+        if (
+          charIndex === wordChars.length - 1 &&
+          wordIndex === currentLineWords.length - 1 &&
+          this._currentLineIndex < this._finalLineIndex
+        ) {
+          this.continueIndicator.drawImage(
+            ctx,
+            drawPosX + TEXT_CONTINUE_INDICATOR_PADDING_LEFT,
+            drawPosY + TEXT_CONTINUE_INDICATOR_PADDING_TOP,
+          );
+        }
       });
 
       // Move the cursor over
