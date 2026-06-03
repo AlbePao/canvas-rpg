@@ -205,4 +205,4 @@ export type LevelWaterTileName = LevelWaterAnimatedTileName | LevelWaterStillTil
 export type LevelTileSet = LevelGroundTileset | LevelWaterTileSet | LevelDecorationTileset;
 export type LevelTileName = LevelGroundTileset | LevelWaterTileName;
 
-export type TilesetFrameMap = Record<LevelTileSet, number>;
+export type TilesetFrameMap = Readonly<Record<LevelTileSet, number>>;

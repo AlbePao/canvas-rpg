@@ -18,14 +18,14 @@ import type {
 import type { LevelDecorationTileset, LevelTileName } from '../LevelBuilder/tileset.types';
 import type { BgKey, NpcKey } from '../Resources';
 
-export const LEVELS_IDS: LevelsId[] = ['tilesetLevel', 'tilesetLevel2'] as const;
-const GAME_OBJECT_DRAW_LAYERS: GameObjectDrawLayer[] = ['HUD', 'WORLD_TOP', 'FLOOR'] as const;
-const WORLD_BACKGROUNDS: BgKey[] = ['bgCave', 'bgSky', 'bgVolcano'] as const;
-const NPC_KEYS: NpcKey[] = ['ow1', 'ow2', 'ow3', 'ow4', 'ow5', 'ow6', 'ow7', 'ow8', 'ow9', 'ow10'] as const;
-const CHEST_STATUSES: ChestStatus[] = ['OPEN', 'CLOSED'] as const;
-const DIRECTIONS: Directions[] = ['LEFT', 'RIGHT', 'UP', 'DOWN'];
+export const LEVELS_IDS: readonly LevelsId[] = ['tilesetLevel', 'tilesetLevel2'];
+const GAME_OBJECT_DRAW_LAYERS: readonly GameObjectDrawLayer[] = ['HUD', 'WORLD_TOP', 'FLOOR'];
+const WORLD_BACKGROUNDS: readonly BgKey[] = ['bgCave', 'bgSky', 'bgVolcano'];
+const NPC_KEYS: readonly NpcKey[] = ['ow1', 'ow2', 'ow3', 'ow4', 'ow5', 'ow6', 'ow7', 'ow8', 'ow9', 'ow10'];
+const CHEST_STATUSES: readonly ChestStatus[] = ['OPEN', 'CLOSED'];
+const DIRECTIONS: readonly Directions[] = ['LEFT', 'RIGHT', 'UP', 'DOWN'];
 
-const TILESET: LevelTileName[] = [
+const TILESET: readonly LevelTileName[] = [
   'grass',
   'sand',
   'snow',
@@ -489,9 +489,9 @@ const TILESET_DECORATIONS: LevelDecorationTileset[] = [
   'flowerLgYellowBaseGrass',
   'flowerLgYellowBaseSand',
   'flowerLgYellowBaseSnow',
-] as const;
+];
 
-const ITEM_KEYS: ItemKey[] = [
+const ITEM_KEYS: readonly ItemKey[] = [
   'hammer1',
   'hammer2',
   'slingshot1',
@@ -502,7 +502,7 @@ const ITEM_KEYS: ItemKey[] = [
   'potion2',
   'heart',
   'sword',
-] as const;
+];
 
 /**
  * Zod schema for validating LevelMap JSON data

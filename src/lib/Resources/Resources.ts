@@ -1,9 +1,9 @@
 import { objectKeys } from '../../helpers/objectKeys';
 import { Singleton } from '../Singleton';
-import type { Resource, ResourceKey } from './resources.types';
+import type { AssetsToLoad, Resource, ResourceKey } from './resources.types';
 
 // Every image we want to download
-const ASSETS_TO_LOAD: Record<ResourceKey, string> = {
+const ASSETS_TO_LOAD: AssetsToLoad = {
   bgCave: '/sprites/backgrounds/cave.png',
   bgSky: '/sprites/backgrounds/sky.png',
   bgVolcano: '/sprites/backgrounds/volcano.png',
@@ -26,7 +26,7 @@ const ASSETS_TO_LOAD: Record<ResourceKey, string> = {
   font: '/sprites/sprite-font.png',
   textBox: '/sprites/text-box-sheet.png',
   tileset: '/sprites/tileset.png',
-} as const;
+};
 
 class ResourcesSingleton extends Singleton<ResourcesSingleton>() {
   // A bucket to keep all of our images

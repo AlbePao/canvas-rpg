@@ -656,4 +656,4 @@ export const TILESET_FRAME_MAP: TilesetFrameMap = {
   flowerMdRedBaseSnow: 1263,
   flowerMdBlueBaseSnow: 1264,
   flowerMdYellowBaseSnow: 1265,
-} as const;
+};
