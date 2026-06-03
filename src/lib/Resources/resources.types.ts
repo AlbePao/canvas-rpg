@@ -19,5 +19,6 @@ export type ResourceKey =
   | 'font'
   | 'textBox'
   | 'tileset'
+  | 'arrows'
   | BgKey
   | NpcKey;

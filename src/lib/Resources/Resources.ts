@@ -26,6 +26,7 @@ const ASSETS_TO_LOAD: AssetsToLoad = {
   font: '/sprites/sprite-font.png',
   textBox: '/sprites/text-box-sheet.png',
   tileset: '/sprites/tileset.png',
+  arrows: '/sprites/arrows-sheet.png',
 };
 
 class ResourcesSingleton extends Singleton<ResourcesSingleton>() {
