@@ -1,13 +1,30 @@
 import { DIRECTION_TAP } from '../constants/events';
+import { objectKeys } from '../helpers/objectKeys';
 import type { Directions } from '../types/directions';
 import { Events } from './Events';
 
 const HOLD_THRESHOLD = 120; // milliseconds
 
+const KEY_TO_DIRECTION: Readonly<Record<string, Directions>> = {
+  ArrowUp: 'UP',
+  KeyW: 'UP',
+  ArrowDown: 'DOWN',
+  KeyS: 'DOWN',
+  ArrowLeft: 'LEFT',
+  KeyA: 'LEFT',
+  ArrowRight: 'RIGHT',
+  KeyD: 'RIGHT',
+};
+
+const DIRECTION_KEYS = new Set(objectKeys(KEY_TO_DIRECTION));
+
+function getDirectionFromCode(code: string): Directions | null {
+  return KEY_TO_DIRECTION[code] ?? null;
+}
+
 export class Input {
-  heldDirections: Directions[] = [];
-  keys: Record<string, boolean> = {};
-  lastKeys: Record<string, boolean> = {};
+  private readonly _pressedKeys = new Set<string>();
+  private readonly _justPressedKeys = new Set<string>();
 
   private readonly _directionPressTime: Record<Directions, number> = {
     UP: 0,
@@ -16,120 +33,133 @@ export class Input {
     RIGHT: 0,
   };
 
-  private readonly _pressedDirections: Set<Directions> = new Set<Directions>();
+  private readonly _heldDirections: Directions[] = [];
+  private readonly _heldDirectionSet = new Set<Directions>();
+  private readonly _pressedDirections = new Set<Directions>();
 
   constructor() {
-    document.addEventListener('keydown', (event) => {
-      const { code } = event;
-
-      this.keys[code] = true;
-
-      // Also check for dedicated direction list
-      if (code === 'ArrowUp' || code === 'KeyW') {
-        this.onArrowPressed('UP');
-      }
-      if (code === 'ArrowDown' || code === 'KeyS') {
-        this.onArrowPressed('DOWN');
-      }
-      if (code === 'ArrowLeft' || code === 'KeyA') {
-        this.onArrowPressed('LEFT');
-      }
-      if (code === 'ArrowRight' || code === 'KeyD') {
-        this.onArrowPressed('RIGHT');
-      }
-    });
-
-    document.addEventListener('keyup', (event) => {
-      const { code } = event;
-
-      this.keys[code] = false;
-
-      // Also check for dedicated direction list
-      if (code === 'ArrowUp' || code === 'KeyW') {
-        this.onArrowReleased('UP');
-      }
-      if (code === 'ArrowDown' || code === 'KeyS') {
-        this.onArrowReleased('DOWN');
-      }
-      if (code === 'ArrowLeft' || code === 'KeyA') {
-        this.onArrowReleased('LEFT');
-      }
-      if (code === 'ArrowRight' || code === 'KeyD') {
-        this.onArrowReleased('RIGHT');
-      }
-    });
+    document.addEventListener('keydown', this._handleKeyDown);
+    document.addEventListener('keyup', this._handleKeyUp);
+    window.addEventListener('blur', this._reset);
   }
 
   get direction(): Directions | null {
-    return this.heldDirections[0] ?? null;
+    return this._heldDirections[0] ?? null;
   }
 
   update(): void {
-    // Update held directions based on how long they've been pressed
-    const now = Date.now();
+    const now = performance.now();
 
-    if (this._pressedDirections.size > 0) {
-      this._pressedDirections.forEach((direction) => {
-        const pressTime = this._directionPressTime[direction];
-        const holdDuration = now - pressTime;
+    for (const direction of this._pressedDirections) {
+      if (this._heldDirectionSet.has(direction)) {
+        continue;
+      }
 
-        // If held long enough, add to heldDirections for movement
-        if (holdDuration >= HOLD_THRESHOLD) {
-          if (!this.heldDirections.includes(direction)) {
-            this.heldDirections.unshift(direction);
-          }
-        }
-      });
+      const pressedAt = this._directionPressTime[direction];
+      if (pressedAt > 0 && now - pressedAt >= HOLD_THRESHOLD) {
+        this._pushDirectionFront(direction);
+      }
     }
 
-    // Diff the keys on previous frame to know when new ones are pressed
-    this.lastKeys = { ...this.keys };
-  }
-
-  getActionJustPressed(keyCode: string): boolean {
-    let justPressed = false;
-
-    if (this.keys[keyCode] && !this.lastKeys[keyCode]) {
-      justPressed = true;
-    }
-
-    return justPressed;
+    this._justPressedKeys.clear();
   }
 
   isPressed(keyCode: string): boolean {
-    return this.keys[keyCode];
+    return this._pressedKeys.has(keyCode);
   }
 
-  onArrowPressed(direction: Directions): void {
-    // Track that this direction key is physically pressed
-    this._pressedDirections.add(direction);
-    this._directionPressTime[direction] = Date.now();
+  getActionJustPressed(keyCode: string): boolean {
+    return this._justPressedKeys.has(keyCode);
+  }
 
-    // If we're already moving, immediately add this new direction to the front.
-    // This allows instant direction changes while moving, avoiding the threshold delay.
-    if (this.heldDirections.length > 0 && !this.heldDirections.includes(direction)) {
-      this.heldDirections.unshift(direction);
+  destroy(): void {
+    document.removeEventListener('keydown', this._handleKeyDown);
+    document.removeEventListener('keyup', this._handleKeyUp);
+    window.removeEventListener('blur', this._reset);
+    this._reset();
+  }
+
+  private readonly _handleKeyDown = (event: KeyboardEvent): void => {
+    const { code, repeat } = event;
+
+    if (DIRECTION_KEYS.has(code)) {
+      event.preventDefault();
     }
-  }
 
-  onArrowReleased(direction: Directions): void {
-    const pressTime = this._directionPressTime[direction];
-    const holdDuration = Date.now() - pressTime;
+    if (repeat || this._pressedKeys.has(code)) {
+      return;
+    }
 
-    // Emit tap event only if this direction never entered movement (was not added to heldDirections)
-    // This ensures taps are only emitted for quick, standalone presses, not for direction changes
-    if (holdDuration < HOLD_THRESHOLD && !this.heldDirections.includes(direction)) {
+    this._pressedKeys.add(code);
+    this._justPressedKeys.add(code);
+
+    const direction = getDirectionFromCode(code);
+    if (!direction) {
+      return;
+    }
+
+    this._pressedDirections.add(direction);
+    this._directionPressTime[direction] = performance.now();
+
+    if (this._heldDirections.length > 0) {
+      this._pushDirectionFront(direction);
+    }
+  };
+
+  private readonly _handleKeyUp = (event: KeyboardEvent): void => {
+    const { code } = event;
+    this._pressedKeys.delete(code);
+
+    const direction = getDirectionFromCode(code);
+    if (!direction) {
+      return;
+    }
+
+    const pressedAt = this._directionPressTime[direction];
+    const heldDuration = pressedAt > 0 ? performance.now() - pressedAt : 0;
+    const wasAlreadyMoving = this._heldDirectionSet.has(direction);
+
+    if (heldDuration < HOLD_THRESHOLD && !wasAlreadyMoving) {
       Events.emit(DIRECTION_TAP, direction);
     }
 
-    const index = this.heldDirections.indexOf(direction);
-    if (index !== -1) {
-      // Remove this key from the list
-      this.heldDirections.splice(index, 1);
-    }
-
-    // Remove from pressed set
     this._pressedDirections.delete(direction);
     this._directionPressTime[direction] = 0;
+    this._removeDirection(direction);
+  };
+
+  private _pushDirectionFront(direction: Directions): void {
+    if (this._heldDirectionSet.has(direction)) {
+      this._removeDirection(direction);
+    }
+
+    this._heldDirections.unshift(direction);
+    this._heldDirectionSet.add(direction);
   }
+
+  private _removeDirection(direction: Directions): void {
+    if (!this._heldDirectionSet.has(direction)) {
+      return;
+    }
+
+    const index = this._heldDirections.indexOf(direction);
+    if (index !== -1) {
+      this._heldDirections.splice(index, 1);
+    }
+
+    this._heldDirectionSet.delete(direction);
+  }
+
+  private readonly _reset = (): void => {
+    this._pressedKeys.clear();
+    this._justPressedKeys.clear();
+    this._pressedDirections.clear();
+    this._heldDirections.length = 0;
+    this._heldDirectionSet.clear();
+
+    this._directionPressTime.UP = 0;
+    this._directionPressTime.DOWN = 0;
+    this._directionPressTime.LEFT = 0;
+    this._directionPressTime.RIGHT = 0;
+  };
 }
