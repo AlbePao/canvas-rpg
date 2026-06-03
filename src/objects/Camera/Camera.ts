@@ -2,7 +2,7 @@ import { CHANGE_LEVEL, HERO_POSITION } from '../../constants/events';
 import { Events } from '../../lib/Events';
 import { Game } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
-import { Vector2 } from '../../lib/Vector2';
+import type { Vector2 } from '../../lib/Vector2';
 import type { Level } from '../Level';
 
 export class Camera extends GameObject {
@@ -25,6 +25,8 @@ export class Camera extends GameObject {
     const { canvasWidth, canvasHeight } = Game.getContainerSizes();
     const halfWidth = -personHalf + canvasWidth / 2;
     const halfHeight = -personHalf + canvasHeight / 2;
-    this.position = new Vector2(-position.x + halfWidth, -position.y + halfHeight);
+    // Reuse existing Vector2, just update x/y
+    this.position.x = -position.x + halfWidth;
+    this.position.y = -position.y + halfHeight;
   }
 }
