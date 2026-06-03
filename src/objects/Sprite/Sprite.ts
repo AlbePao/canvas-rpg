@@ -11,7 +11,6 @@ export class Sprite extends GameObject {
   hFrames: number;
   vFrames: number;
   frame: number;
-  frameMap = new Map<number, Vector2>();
   scale: number;
   animations: Animations | null;
 
@@ -35,17 +34,6 @@ export class Sprite extends GameObject {
     this.scale = scale ?? 1;
     this.position = position ?? new Vector2(0, 0);
     this.animations = animations ?? null;
-    this.buildFrameMap();
-  }
-
-  buildFrameMap(): void {
-    let frameCount = 0;
-    for (let v = 0; v < this.vFrames; v++) {
-      for (let h = 0; h < this.hFrames; h++) {
-        this.frameMap.set(frameCount, new Vector2(this.frameSize.x * h, this.frameSize.y * v));
-        frameCount++;
-      }
-    }
   }
 
   override step(delta: number): void {
@@ -57,19 +45,23 @@ export class Sprite extends GameObject {
     this.frame = this.animations.frame;
   }
 
+  // Calculate frame coordinates on-the-fly without allocations
+  private _getFrameCoordinates(frameIndex: number): { x: number; y: number } {
+    const frameX = frameIndex % this.hFrames;
+    const frameY = Math.floor(frameIndex / this.hFrames);
+    return {
+      x: frameX * this.frameSize.x,
+      y: frameY * this.frameSize.y,
+    };
+  }
+
   override drawImage(ctx: CanvasRenderingContext2D, x: number, y: number): void {
     if (!this.resource.isLoaded) {
       return;
     }
 
-    // Find the current sprite sheet frame to use
-    let frameCoordX = 0;
-    let frameCoordY = 0;
-    const frame = this.frameMap.get(this.frame);
-    if (frame) {
-      frameCoordX = frame.x;
-      frameCoordY = frame.y;
-    }
+    // Calculate frame coordinates without allocating Vector2
+    const { x: frameCoordX, y: frameCoordY } = this._getFrameCoordinates(this.frame);
 
     const frameSizeX = this.frameSize.x;
     const frameSizeY = this.frameSize.y;
