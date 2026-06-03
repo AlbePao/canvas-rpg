@@ -12,6 +12,9 @@ export class LevelTransition {
   constructor(callback: () => void, config: LevelTransitionConfig = { transition: 'fade' }) {
     const { transition } = config;
 
+    // Remove existing style if present (from previous incomplete transition)
+    document.querySelector(`#${TRANSITION_STYLES_ID}`)?.remove();
+
     // Inject styles
     const styleSheet = document.createElement('style');
     styleSheet.id = TRANSITION_STYLES_ID;
