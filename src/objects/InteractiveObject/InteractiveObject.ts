@@ -2,10 +2,9 @@ import { GameObject } from '../../lib/GameObject';
 import { StoryFlags } from '../../lib/StoryFlags';
 import type { InteractionContent, InteractionContentConfig, InteractiveObjectConfig } from './interactiveObject.types';
 
-// TODO: extend to handle also selection box
 export class InteractiveObject extends GameObject {
-  textContent: InteractionContentConfig[];
-  textPortraitFrame?: number | null;
+  private readonly _textContent: InteractionContentConfig[];
+  private readonly _textPortraitFrame?: number | null;
 
   constructor(config: InteractiveObjectConfig) {
     super(config);
@@ -15,19 +14,19 @@ export class InteractiveObject extends GameObject {
     } = config;
 
     // Say something when talking
-    this.textContent = content;
-    this.textPortraitFrame = portraitFrame;
+    this._textContent = content;
+    this._textPortraitFrame = portraitFrame;
   }
 
   getTextContent(): InteractionContent | null {
-    if (this.textContent.length === 0) {
+    if (this._textContent.length === 0) {
       return null;
     }
 
-    const match = StoryFlags.getRelevantScenario(this.textContent);
+    const match = StoryFlags.getRelevantScenario(this._textContent);
 
     if (!match) {
-      console.warn('No matches found in this list!', this.textContent);
+      console.warn('No matches found in this list!', this._textContent);
       return null;
     }
 

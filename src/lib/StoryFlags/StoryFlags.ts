@@ -2,10 +2,10 @@ import type { InteractionContentConfig } from '../../objects/InteractiveObject/i
 import { Singleton } from '../Singleton';
 
 class StoryFlagsSingleton extends Singleton<StoryFlagsSingleton>() {
-  flags = new Map<string, boolean>();
+  private readonly _flags = new Map<string, boolean>();
 
   add(flag: string): void {
-    this.flags.set(flag, true);
+    this._flags.set(flag, true);
   }
 
   getRelevantScenario(scenarios: InteractionContentConfig[]): InteractionContentConfig | null {
@@ -14,7 +14,7 @@ class StoryFlagsSingleton extends Singleton<StoryFlagsSingleton>() {
         // Disqualify when any bypass flags are present
         const bypassFlags = scenario.bypass ?? [];
         for (const thisFlag of bypassFlags) {
-          if (this.flags.has(thisFlag)) {
+          if (this._flags.has(thisFlag)) {
             return false;
           }
         }
@@ -22,7 +22,7 @@ class StoryFlagsSingleton extends Singleton<StoryFlagsSingleton>() {
         // Disqualify if we find a missing required flag
         const requiredFlags = scenario.requires ?? [];
         for (const thisFlag of requiredFlags) {
-          if (!this.flags.has(thisFlag)) {
+          if (!this._flags.has(thisFlag)) {
             return false;
           }
         }

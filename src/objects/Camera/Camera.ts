@@ -9,17 +9,17 @@ export class Camera extends GameObject {
   constructor() {
     super({ id: 'camera' });
     Events.on<Vector2>(HERO_POSITION, this, (heroPosition) => {
-      this.centerPositionOnTarget(heroPosition);
+      this._centerPositionOnTarget(heroPosition);
     });
 
     Events.on<Level>(CHANGE_LEVEL, this, ({ heroStartPosition }) => {
       if (heroStartPosition) {
-        this.centerPositionOnTarget(heroStartPosition);
+        this._centerPositionOnTarget(heroStartPosition);
       }
     });
   }
 
-  centerPositionOnTarget(position: Vector2): void {
+  private _centerPositionOnTarget(position: Vector2): void {
     // Create a new position based on the incoming position
     const personHalf = 8;
     const { canvasWidth, canvasHeight } = Game.getContainerSizes();

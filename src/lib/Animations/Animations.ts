@@ -3,13 +3,13 @@ import type { FrameIndexPattern } from '../FrameIndexPattern';
 import type { AnimationFrame, AnimationPattern } from './animations.types';
 
 export class Animations {
-  patterns: AnimationPattern;
-  activeKey: AnimationFrame;
-  isPaused = false;
+  private readonly _patterns: AnimationPattern;
+  private _activeKey: AnimationFrame;
+  private _isPaused = false;
 
   constructor(patterns: AnimationPattern) {
-    this.patterns = patterns;
-    this.activeKey = objectKeys(this.patterns)[0];
+    this._patterns = patterns;
+    this._activeKey = objectKeys(this._patterns)[0];
   }
 
   get frame(): number {
@@ -18,17 +18,17 @@ export class Animations {
 
   play(key: AnimationFrame, startAtTime = 0): void {
     // Already playing this one
-    if (this.activeKey === key) {
+    if (this._activeKey === key) {
       return;
     }
 
     // Switch
-    this.activeKey = key;
+    this._activeKey = key;
     this._getCurrentFramePattern().currentTime = startAtTime;
   }
 
   step(delta: number): void {
-    if (this.isPaused) {
+    if (this._isPaused) {
       return;
     }
 
@@ -36,15 +36,15 @@ export class Animations {
   }
 
   pause(): void {
-    this.isPaused = true;
+    this._isPaused = true;
   }
 
   resume(): void {
-    this.isPaused = false;
+    this._isPaused = false;
   }
 
   private _getCurrentFramePattern(): FrameIndexPattern {
-    const currentFramePattern = this.patterns[this.activeKey];
+    const currentFramePattern = this._patterns[this._activeKey];
 
     if (!currentFramePattern) {
       throw new Error('Animations: selected frame pattern does not exist');

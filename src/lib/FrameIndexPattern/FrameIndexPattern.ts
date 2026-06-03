@@ -2,16 +2,16 @@ import type { AnimationConfig } from './frameIndexPattern.types';
 
 export class FrameIndexPattern {
   currentTime = 0;
-  animationConfig: AnimationConfig;
-  duration: number;
+  private readonly _animationConfig: AnimationConfig;
+  private readonly _duration: number;
 
   constructor(animationConfig: AnimationConfig) {
-    this.animationConfig = animationConfig;
-    this.duration = animationConfig.duration;
+    this._animationConfig = animationConfig;
+    this._duration = animationConfig.duration;
   }
 
   get frame(): number {
-    const { frames } = this.animationConfig;
+    const { frames } = this._animationConfig;
     for (let i = frames.length - 1; i >= 0; i--) {
       const { time, frame } = frames[i];
       if (this.currentTime >= time) {
@@ -24,7 +24,7 @@ export class FrameIndexPattern {
 
   step(delta: number): void {
     this.currentTime += delta;
-    if (this.currentTime >= this.duration) {
+    if (this.currentTime >= this._duration) {
       this.currentTime = 0;
     }
   }

@@ -7,7 +7,7 @@ import { LEVEL_TRANSITION_BASE_CLASS, LEVEL_TRANSITION_CLASSNAME, LEVEL_TRANSITI
 const TRANSITION_STYLES_ID = 'level-transition-styles';
 
 export class LevelTransition {
-  element?: HTMLDivElement;
+  private readonly _element: HTMLDivElement;
 
   constructor(callback: () => void, config: LevelTransitionConfig = { transition: 'fade' }) {
     const { transition } = config;
@@ -18,13 +18,13 @@ export class LevelTransition {
     styleSheet.textContent = `${LEVEL_TRANSITION_BASE_CLASS}${LEVEL_TRANSITIONS[transition]}`;
     document.head.appendChild(styleSheet);
 
-    this.element = document.createElement('div');
-    this.element.classList.add(LEVEL_TRANSITION_CLASSNAME, 'fade-in');
+    this._element = document.createElement('div');
+    this._element.classList.add(LEVEL_TRANSITION_CLASSNAME, 'fade-in');
 
-    document.querySelector(Game.getContainerId())?.appendChild(this.element);
+    document.querySelector(Game.getContainerId())?.appendChild(this._element);
     Events.emit(LEVEL_TRANSITION_START);
 
-    this.element.addEventListener(
+    this._element.addEventListener(
       'animationend',
       () => {
         callback();
@@ -35,12 +35,12 @@ export class LevelTransition {
   }
 
   private _stop(): void {
-    this.element?.classList.add('fade-out');
-    this.element?.addEventListener(
+    this._element?.classList.add('fade-out');
+    this._element?.addEventListener(
       'animationend',
       () => {
         // Remove element and styles
-        this.element?.remove();
+        this._element?.remove();
         document.querySelector(`#${TRANSITION_STYLES_ID}`)?.remove();
         Events.emit(LEVEL_TRANSITION_END);
       },

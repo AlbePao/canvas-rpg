@@ -10,14 +10,15 @@ export class GameObject {
   position: Vector2;
   children: GameObject[] = [];
   parent: GameObject | null = null;
-  hasReadyBeenCalled = false;
   isSolid = false;
   drawLayer: GameObjectDrawLayer | null = null;
 
   behaviorConfig: GameObjectBehavior[];
-  behaviorIndex = 0;
-  retryTimeout: number | null = null;
-  pendingTimeouts = new Set<number>();
+
+  private _hasReadyBeenCalled = false;
+  protected behaviorIndex = 0;
+  private _retryTimeout: number | null = null;
+  private readonly _pendingTimeouts = new Set<number>();
 
   constructor(config: GameObjectConfig) {
     const { id, x, y, behaviorConfig } = config;
@@ -34,8 +35,8 @@ export class GameObject {
     });
 
     // Call read on the first frame
-    if (!this.hasReadyBeenCalled) {
-      this.hasReadyBeenCalled = true;
+    if (!this._hasReadyBeenCalled) {
+      this._hasReadyBeenCalled = true;
       this.ready();
       // Set and start behavior loop
       this.setBehaviorLoop(root);
@@ -96,14 +97,14 @@ export class GameObject {
   // Remove from the tree
   destroy(): void {
     // Clear all pending timeouts
-    this.pendingTimeouts.forEach((timeoutId) => {
+    this._pendingTimeouts.forEach((timeoutId) => {
       clearTimeout(timeoutId);
     });
-    this.pendingTimeouts.clear();
+    this._pendingTimeouts.clear();
 
-    if (this.retryTimeout) {
-      clearTimeout(this.retryTimeout);
-      this.retryTimeout = null;
+    if (this._retryTimeout) {
+      clearTimeout(this._retryTimeout);
+      this._retryTimeout = null;
     }
 
     Events.unsubscribe(this);
@@ -127,10 +128,10 @@ export class GameObject {
 
   protected scheduleTimeout(callback: () => void, delay: number): number {
     const timeoutId = window.setTimeout(() => {
-      this.pendingTimeouts.delete(timeoutId);
+      this._pendingTimeouts.delete(timeoutId);
       callback();
     }, delay);
-    this.pendingTimeouts.add(timeoutId);
+    this._pendingTimeouts.add(timeoutId);
     return timeoutId;
   }
 
@@ -168,11 +169,11 @@ export class GameObject {
     }
 
     if (isCutscenePlaying) {
-      if (this.retryTimeout) {
-        clearTimeout(this.retryTimeout);
+      if (this._retryTimeout) {
+        clearTimeout(this._retryTimeout);
       }
 
-      this.retryTimeout = this.scheduleTimeout(() => {
+      this._retryTimeout = this.scheduleTimeout(() => {
         this.doBehaviorEvent(root);
       }, 1000);
 
