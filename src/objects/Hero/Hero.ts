@@ -129,7 +129,7 @@ export class Hero extends GameObject {
 
     // Lock movement if celebrating an item pickup
     if (this.itemPickUpTime > 0) {
-      this.workOnItemPickUp(delta);
+      this._workOnItemPickUp(delta);
       return;
     }
 
@@ -139,7 +139,7 @@ export class Hero extends GameObject {
     if (input.getActionJustPressed('Space')) {
       // Look for an object at the next space (according to where Hero is facing)
       const objectAtPosition = this.parent?.children.find((child) =>
-        child.position.matches(this.position.toNeighbor(this.facingDirection)),
+        child.position.matches(this.position.toNeighborCoords(this.facingDirection)),
       );
 
       if (objectAtPosition) {
@@ -169,7 +169,7 @@ export class Hero extends GameObject {
     Events.emit<Vector2>(HERO_POSITION, this.position);
   }
 
-  tryMove(root: Main): void {
+  protected tryMove(root: Main): void {
     const { input, level } = root;
 
     if (!input.direction) {
@@ -260,7 +260,7 @@ export class Hero extends GameObject {
     this.addChild(this.itemPickUpShell);
   }
 
-  workOnItemPickUp(delta: number): void {
+  private _workOnItemPickUp(delta: number): void {
     this.itemPickUpTime -= delta;
     this.body.animations?.play('pickUpDown');
     if (this.itemPickUpTime <= 0) {

@@ -1,5 +1,5 @@
 import { GRID_SIZE } from '../constants/gridSize';
-import type { Coords2D } from '../types/coords';
+import type { Coords2D, TileCoords } from '../types/coords';
 import type { Directions } from '../types/directions';
 
 export class Vector2 implements Coords2D {
@@ -15,11 +15,11 @@ export class Vector2 implements Coords2D {
     return new Vector2(this.x, this.y);
   }
 
-  matches(otherVector2: Vector2): boolean {
-    return this.x === otherVector2.x && this.y === otherVector2.y;
+  matches([x, y]: TileCoords): boolean {
+    return this.x === x && this.y === y;
   }
 
-  toNeighbor(direction: Directions): Vector2 {
+  toNeighborCoords(direction: Directions): TileCoords {
     let { x, y } = this;
 
     if (direction === 'LEFT') {
@@ -35,6 +35,6 @@ export class Vector2 implements Coords2D {
       y += GRID_SIZE;
     }
 
-    return new Vector2(x, y);
+    return [x, y];
   }
 }

@@ -90,8 +90,9 @@ export class Npc extends InteractiveObject {
   override ready(): void {
     Events.on<GameObject>(HERO_REQUESTS_ACTION, this, ({ position }) => {
       const content = this.getTextContent();
+      const { x, y } = position;
 
-      if (!this.position.matches(position) || !content) {
+      if (!this.position.matches([x, y]) || !content) {
         return;
       }
 

@@ -38,7 +38,9 @@ export class Chest extends InteractiveObject {
 
   override ready(): void {
     Events.on<GameObject>(HERO_REQUESTS_ACTION, this, ({ position }) => {
-      if (!this.position.matches(position) || this.status === 'OPEN') {
+      const { x, y } = position;
+
+      if (!this.position.matches([x, y]) || this.status === 'OPEN') {
         return;
       }
 
