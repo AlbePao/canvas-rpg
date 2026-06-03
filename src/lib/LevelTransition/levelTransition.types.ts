@@ -1,8 +1,8 @@
 // TODO add other level transitions
-export type LevelTransition = 'fade';
+export type TransitionName = 'fade';
 
-export type LevelTransitionMap = Record<LevelTransition, string>;
+export type LevelTransitionMap = Record<TransitionName, string>;
 
 export interface LevelTransitionConfig {
-  transition: LevelTransition;
+  transition: TransitionName;
 }
