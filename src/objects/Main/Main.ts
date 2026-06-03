@@ -20,6 +20,7 @@ export class Main extends GameObject {
   level: Level | null = null;
   input = new Input();
   camera = new Camera();
+  isTextBoxOpened = false;
   isCutscenePlaying = false;
   isPaused = false;
 
@@ -39,10 +40,12 @@ export class Main extends GameObject {
     // Launch text box handler
     Events.on<SpriteTextBox>(TEXT_BOX_START, this, (textBox) => {
       this.addChild(textBox);
+      this.isTextBoxOpened = true;
 
       // unsubscribe from this text box after it's destroyed
       const endingSub = Events.on(TEXT_BOX_END, this, () => {
         textBox.destroy();
+        this.isTextBoxOpened = false;
         Events.off(endingSub);
       });
     });
@@ -70,7 +73,7 @@ export class Main extends GameObject {
   }
 
   override step(_delta: number, _root: Main): void {
-    if (this.input.getActionJustPressed('Escape')) {
+    if (this.input.getActionJustPressed('Escape') && !this.isCutscenePlaying && !this.isTextBoxOpened) {
       this.isPaused = !this.isPaused;
       Events.emit(this.isPaused ? PAUSE_ON : PAUSE_OFF);
     }
