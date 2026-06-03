@@ -1,4 +1,5 @@
 import { HERO_PICKS_UP_ITEM } from '../../constants/events';
+import { GRID_SIZE } from '../../constants/gridSize';
 import { createItemSprite } from '../../helpers/createItemSprite';
 import { Events } from '../../lib/Events';
 import { GameObject } from '../../lib/GameObject';
@@ -8,8 +9,7 @@ import type { CollectibleItemData } from '../Item';
 import type { InventoryItem } from './inventory.types';
 
 export class Inventory extends GameObject {
-  nextId = 0;
-  items: InventoryItem[] = [
+  private readonly _items: InventoryItem[] = [
     {
       id: crypto.randomUUID(),
       frame: 4,
@@ -29,38 +29,38 @@ export class Inventory extends GameObject {
 
     // React to hero picking up an item
     Events.on<CollectibleItemData>(HERO_PICKS_UP_ITEM, this, ({ id, frame }) => {
-      this.items.push({ id, frame });
-      this.renderInventory();
+      this._items.push({ id, frame });
+      this._rebuildInventoryDisplay();
     });
 
-    // Demo removing of something (could happen on item use)
-    // setTimeout(() => {
-    //   this.removeFromInventory(-2);
-    // }, 2000);
-
-    // Draw initial state on boot up
-    this.renderInventory();
+    // Build initial display once
+    this._rebuildInventoryDisplay();
   }
 
-  renderInventory(): void {
-    // Remove stale drawings
+  // Only rebuild when items actually change (not every render frame)
+  private _rebuildInventoryDisplay(): void {
+    // Clear all old children
     this.children.forEach((child) => {
       child.destroy();
     });
+    this.children = [];
 
-    // Draw fresh from the latest version of the list
-    this.items.forEach((item, index) => {
+    // Create fresh sprites for current items
+    this._items.forEach((item, index) => {
       const sprite = createItemSprite({
         id: `${item.id}-inventory-sprite`,
         frame: item.frame,
-        position: new Vector2(index * 16, -8),
+        position: new Vector2(index * GRID_SIZE, -8),
       });
       this.addChild(sprite);
     });
   }
 
   removeFromInventory(id: UUID): void {
-    this.items = this.items.filter((item) => item.id !== id);
-    this.renderInventory();
+    const indexToRemove = this._items.findIndex((item) => item.id === id);
+    if (indexToRemove !== -1) {
+      this._items.splice(indexToRemove, 1);
+      this._rebuildInventoryDisplay();
+    }
   }
 }
