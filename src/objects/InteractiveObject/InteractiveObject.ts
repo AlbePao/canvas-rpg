@@ -31,7 +31,7 @@ export class InteractiveObject extends GameObject {
     }
 
     return {
-      portraitFrame: this.textPortraitFrame ?? null,
+      portraitFrame: this._textPortraitFrame ?? null,
       string: match.string,
       addsFlag: match.addsFlag ?? null,
       item: match.item ?? null,
