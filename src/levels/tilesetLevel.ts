@@ -251,13 +251,17 @@ export const TILESET_LEVEL: LevelMap = {
     {
       type: 'Npc',
       id: 'npc3',
-      x: 14,
-      y: 6,
+      x: 1,
+      y: 7,
       npc: 'ow3',
       interactionConfig: {
         content: [
           {
-            string: ['Go away!', "You're not welcomed here!"],
+            string: [
+              'Lorem Ipsum is simply dummy text of the printing and typesetting industry',
+              'The quick brown fox jumps over the lazy dog',
+              'I need a break...',
+            ],
           },
         ],
         portraitFrame: 0,
@@ -271,7 +275,27 @@ export const TILESET_LEVEL: LevelMap = {
       y: 0,
       npc: 'ow4',
       interactionConfig: {
-        content: [{ string: ['Hi there!'] }],
+        content: [
+          {
+            string: ['Hi there!'],
+            options: [
+              {
+                text: 'Hi',
+                value: 'hi',
+                response: ['Beautiful day, huh?'],
+                // addsFlag?: string;
+                // item?: ItemKey;
+              },
+              {
+                text: 'Nice to meet you',
+                value: 'nice_to_meet_you',
+                response: ['My pleasure'],
+                // addsFlag?: string;
+                // item?: ItemKey;
+              },
+            ],
+          },
+        ],
       },
       behaviorConfig: [
         { type: 'stand', direction: 'UP', duration: 800 },
