@@ -7,8 +7,8 @@ import {
   LEVEL_TRANSITION_START,
   PAUSE_OFF,
   PAUSE_ON,
-  TEXT_BOX_END,
-  TEXT_BOX_START,
+  TEXT_BOX_CLOSE,
+  TEXT_BOX_OPEN,
 } from '../../constants/events';
 import { GRID_SIZE } from '../../constants/gridSize';
 import { getHeroSiblingObject, isHeroObject } from '../../helpers/getHeroSiblingObject';
@@ -122,7 +122,7 @@ export class Npc extends InteractiveObject {
 
       // Emit the textbox
       Events.emit<SpriteTextBox>(
-        TEXT_BOX_START,
+        TEXT_BOX_OPEN,
         new SpriteTextBox({
           id: `text-box-for-${this.id}`,
           portraitFrame,
@@ -131,7 +131,7 @@ export class Npc extends InteractiveObject {
       );
     });
 
-    Events.on(TEXT_BOX_END, this, () => {
+    Events.on(TEXT_BOX_CLOSE, this, () => {
       const resetDirection = this.behaviorConfig[this.behaviorIndex]?.direction ?? 'DOWN';
       this._changeFacingDirection(resetDirection);
 
@@ -148,14 +148,14 @@ export class Npc extends InteractiveObject {
     });
 
     // Lock npc when game is paused, cutscene is playing or hero is changing level
-    [PAUSE_ON, TEXT_BOX_START, LEVEL_TRANSITION_START].forEach((event) => {
+    [PAUSE_ON, TEXT_BOX_OPEN, LEVEL_TRANSITION_START].forEach((event) => {
       Events.on(event, this, () => {
         this.isLocked = true;
         // Freeze animation
         this.body.animations?.pause();
       });
     });
-    [PAUSE_OFF, TEXT_BOX_END, LEVEL_TRANSITION_END].forEach((event) => {
+    [PAUSE_OFF, TEXT_BOX_CLOSE, LEVEL_TRANSITION_END].forEach((event) => {
       Events.on(event, this, () => {
         this.isLocked = false;
         // Resume animation

@@ -4,8 +4,10 @@ import {
   CUTSCENE_START,
   PAUSE_OFF,
   PAUSE_ON,
-  TEXT_BOX_END,
-  TEXT_BOX_START,
+  SELECTION_BOX_CLOSED,
+  SELECTION_BOX_OPENED,
+  TEXT_BOX_CLOSE,
+  TEXT_BOX_OPEN,
 } from '../../constants/events';
 import { Events } from '../../lib/Events';
 import { GameObject } from '../../lib/GameObject';
@@ -14,6 +16,7 @@ import { Camera } from '../Camera';
 import { Inventory } from '../Inventory';
 import type { Level } from '../Level';
 import { PauseMenu } from '../PauseMenu';
+import type { SelectionBox } from '../SelectionBox';
 import type { SpriteTextBox } from '../SpriteTextBox';
 
 export class Main extends GameObject {
@@ -21,6 +24,7 @@ export class Main extends GameObject {
   input = new Input();
   camera = new Camera();
   isTextBoxOpened = false;
+  isSelectionBoxOpened = false;
   isCutscenePlaying = false;
   isPaused = false;
 
@@ -38,14 +42,26 @@ export class Main extends GameObject {
     });
 
     // Launch text box handler
-    Events.on<SpriteTextBox>(TEXT_BOX_START, this, (textBox) => {
+    Events.on<SpriteTextBox>(TEXT_BOX_OPEN, this, (textBox) => {
       this.addChild(textBox);
       this.isTextBoxOpened = true;
 
       // unsubscribe from this text box after it's destroyed
-      const endingSub = Events.on(TEXT_BOX_END, this, () => {
+      const endingSub = Events.on(TEXT_BOX_CLOSE, this, () => {
         textBox.destroy();
         this.isTextBoxOpened = false;
+        Events.off(endingSub);
+      });
+    });
+
+    Events.on<SelectionBox>(SELECTION_BOX_OPENED, this, (selectionBox) => {
+      this.addChild(selectionBox);
+      this.isSelectionBoxOpened = true;
+
+      // unsubscribe from this selection box after it's destroyed
+      const endingSub = Events.on(SELECTION_BOX_CLOSED, this, () => {
+        selectionBox.destroy();
+        this.isSelectionBoxOpened = false;
         Events.off(endingSub);
       });
     });
@@ -73,10 +89,14 @@ export class Main extends GameObject {
   }
 
   override step(_delta: number, _root: Main): void {
-    if (this.input.getActionJustPressed('Escape') && !this.isCutscenePlaying && !this.isTextBoxOpened) {
+    if (this.input.getActionJustPressed('Escape') && this._canPause()) {
       this.isPaused = !this.isPaused;
       Events.emit(this.isPaused ? PAUSE_ON : PAUSE_OFF);
     }
+  }
+
+  private _canPause(): boolean {
+    return !this.isSelectionBoxOpened && !this.isCutscenePlaying && !this.isTextBoxOpened;
   }
 
   setLevel(newLevelInstance: Level): void {

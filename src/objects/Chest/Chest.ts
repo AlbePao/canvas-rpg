@@ -1,4 +1,4 @@
-import { HERO_PICKS_UP_ITEM, HERO_REQUESTS_ACTION, TEXT_BOX_END, TEXT_BOX_START } from '../../constants/events';
+import { HERO_PICKS_UP_ITEM, HERO_REQUESTS_ACTION, TEXT_BOX_CLOSE, TEXT_BOX_OPEN } from '../../constants/events';
 import { Events } from '../../lib/Events';
 import type { GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
@@ -23,7 +23,7 @@ export class Chest extends InteractiveObject {
 
     this.isSolid = true;
     this.status = status ?? 'CLOSED';
-    this.shouldRemove = removeAfterLoot;
+    this.shouldRemove = !!removeAfterLoot;
 
     this.body = new Sprite({
       id: `${id}-chest-sprite`,
@@ -68,7 +68,7 @@ export class Chest extends InteractiveObject {
 
         // Emit the textbox
         Events.emit<SpriteTextBox>(
-          TEXT_BOX_START,
+          TEXT_BOX_OPEN,
           new SpriteTextBox({
             id: `text-box-for-${this.id}`,
             portraitFrame,
@@ -76,7 +76,7 @@ export class Chest extends InteractiveObject {
           }),
         );
 
-        const endingSub = Events.on(TEXT_BOX_END, this, () => {
+        const endingSub = Events.on(TEXT_BOX_CLOSE, this, () => {
           // Collect the item after text box close
           this._pickUpItem(contentItem);
           Events.off(endingSub);

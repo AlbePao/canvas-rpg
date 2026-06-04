@@ -1,4 +1,4 @@
-import { SELECTION_BOX_CLOSED, SELECTION_BOX_OPENED, TEXT_BOX_END } from '../../constants/events';
+import { TEXT_BOX_CLOSE, TEXT_BOX_END } from '../../constants/events';
 import { ArrowIndicator } from '../../lib/ArrowIndicator';
 import { Events } from '../../lib/Events';
 import { GameObject } from '../../lib/GameObject';
@@ -7,7 +7,7 @@ import { BackdropBox } from '../BackdropBox';
 import type { Main } from '../Main';
 import { Sprite } from '../Sprite';
 import { getCharacterFrame, getCharacterWidth } from './spriteFontMap';
-import type { Line, SpriteTextStringConfig } from './spriteTextBox.types';
+import type { Line, SpriteTextBoxConfig } from './spriteTextBox.types';
 
 // Rendering constants for text layout
 const TEXT_BOX_PADDING_LEFT_WITH_PORTRAIT = 27;
@@ -24,7 +24,6 @@ const TEXT_CONTINUE_INDICATOR_PADDING_TOP = 48;
 // Typewriter animation constants
 const TYPEWRITER_DEFAULT_SPEED = 80; // milliseconds per character
 
-// TODO: add an arrow down on the text box when remaining text lines are > 1
 export class SpriteTextBox extends GameObject {
   readonly portrait?: Sprite;
   readonly backdrop = new BackdropBox({
@@ -49,9 +48,7 @@ export class SpriteTextBox extends GameObject {
   private _currentLineIndex = 0;
   private readonly _finalLineIndex: number;
 
-  private _isSelectionBoxOpened = false;
-
-  constructor({ id, string, portraitFrame, speed }: SpriteTextStringConfig) {
+  constructor({ id, string, portraitFrame, speed }: SpriteTextBoxConfig) {
     super({
       id,
       x: 2,
@@ -115,30 +112,22 @@ export class SpriteTextBox extends GameObject {
     }
   }
 
-  override ready(): void {
-    Events.on(SELECTION_BOX_OPENED, this, () => {
-      this._isSelectionBoxOpened = true;
-    });
-    Events.on(SELECTION_BOX_CLOSED, this, () => {
-      this._isSelectionBoxOpened = false;
-    });
-  }
-
   override step(delta: number, root: Main): void {
+    const { input, isSelectionBoxOpened } = root;
+
     // Don't interact if options selection box is opened
-    if (this._isSelectionBoxOpened) {
+    if (isSelectionBoxOpened) {
       return;
     }
 
     // Listen for input
-    const { input } = root;
-
     if (input.getActionJustPressed('Space')) {
       const { finalCharIndex } = this.lines[this._currentLineIndex];
 
       if (this._showingCharIndex < finalCharIndex) {
         // Skip
         this._showingCharIndex = finalCharIndex;
+
         return;
       }
 
@@ -150,8 +139,15 @@ export class SpriteTextBox extends GameObject {
         return;
       }
 
+      if (this._showingCharIndex === finalCharIndex && this._currentLineIndex === this._finalLineIndex) {
+        // Text box has shown all of its text, emit the end event so that it can trigger other events that requires the text box still opened, like a selection box
+        Events.emit(TEXT_BOX_END);
+
+        return;
+      }
+
       // Done with the textbox
-      Events.emit(TEXT_BOX_END);
+      Events.emit(TEXT_BOX_CLOSE);
     }
 
     // Word on typewriter
@@ -211,7 +207,7 @@ export class SpriteTextBox extends GameObject {
         // Add width of the character we just printed to cursor pos
         cursorX += width;
 
-        // Plus 1px  between character
+        // Plus 1px between character
         cursorX += 1;
 
         // Uptick the index we are counting

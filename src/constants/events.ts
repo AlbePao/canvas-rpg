@@ -12,7 +12,8 @@ export const LEVEL_TRANSITION_START = 'LEVEL_TRANSITION_START';
 export const LEVEL_TRANSITION_END = 'LEVEL_TRANSITION_END';
 
 // Text box events
-export const TEXT_BOX_START = 'TEXT_BOX_START';
+export const TEXT_BOX_OPEN = 'TEXT_BOX_OPEN';
+export const TEXT_BOX_CLOSE = 'TEXT_BOX_CLOSE';
 export const TEXT_BOX_END = 'TEXT_BOX_END';
 
 // Cutscene events
