@@ -238,6 +238,12 @@ export const TILESET_FRAME_MAP: TilesetFrameMap = {
   snowLedgeWater1BorderUpperLeft: 385,
   snowLedgeWater1BorderUpper: 386,
   snowLedgeWater1BorderUpperRight: 387,
+  columnMiddle1: 388,
+  columnCapital: 389,
+  columnCapitalBase: 390,
+  columnCapitalLeft: 391,
+  columnCapitalMiddle: 392,
+  columnCapitalRight: 393,
 
   // Ninth row (from 416 to 467)
   water1GrassLedgeBorderLeft: 416,
@@ -264,6 +270,12 @@ export const TILESET_FRAME_MAP: TilesetFrameMap = {
   snowLedgeWater1BorderLeft: 437,
   snowLedgeWater1Border: 438,
   snowLedgeWater1BorderRight: 439,
+  columnBreak1: 440,
+  columnMiddle2: 441,
+  columnBreak2: 442,
+  columnCapitalBaseLeft: 443,
+  columnCapitalBaseMiddle: 444,
+  columnCapitalBaseRight: 445,
 
   // Tenth row (from 468 to 519)
   water1GrassLedgeBorderLowerLeft: 468,
@@ -290,6 +302,12 @@ export const TILESET_FRAME_MAP: TilesetFrameMap = {
   snowLedgeWater1BorderLowerLeft: 489,
   snowLedgeWater1BorderLower: 490,
   snowLedgeWater1BorderLowerRight: 491,
+  column1Lower: 492,
+  column2Lower: 493,
+  column3Lower: 494,
+  column4Lower: 495,
+  column5Lower: 496,
+  column6Lower: 497,
 
   // Eleventh row (from 520 to 571)
   water2GrassLedgeBorderUpperLeft: 520,

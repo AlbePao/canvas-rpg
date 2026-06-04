@@ -130,6 +130,11 @@ export type LevelDecorationTileset =
   // Rocks
   | `rock${1 | 2}Base${TileBiome}`
 
+  // Columns
+  | `column${1 | 2 | 3 | 4 | 5 | 6}Lower`
+  | `column${'Middle' | 'Break'}${1 | 2}`
+  | `columnCapital${'Base' | ''}${'Left' | 'Middle' | 'Right' | ''}`
+
   // Spruce trees
   | `spruce${'Snow1' | 'Snow2' | 'Green'}${'Upper' | 'Middle' | 'Lower'}${'Left' | 'Right'}`
 
