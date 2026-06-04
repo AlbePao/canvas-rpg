@@ -115,6 +115,10 @@ export class Hero extends GameObject {
 
     // Turn to face direction when user taps a direction key without holding
     Events.on<Directions>(DIRECTION_TAP, this, (direction) => {
+      if (this.isLocked) {
+        return;
+      }
+
       this._changeFacingDirection(direction);
     });
   }
