@@ -25,7 +25,10 @@ export class Sprite extends GameObject {
     position, // where to draw it (top left corner)
     animations,
   }: SpriteConfig) {
-    super({ id });
+    super({
+      id,
+    });
+
     this.resource = resource;
     this.frameSize = frameSize ?? new Vector2(GRID_SIZE, GRID_SIZE);
     this.hFrames = hFrames ?? 1;

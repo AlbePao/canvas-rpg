@@ -14,7 +14,11 @@ export class PauseMenu extends GameObject {
   });
 
   constructor() {
-    super({ id: 'pauseMenu', x: 8, y: 4 });
+    super({
+      id: 'pauseMenu',
+      x: 8,
+      y: 4,
+    });
 
     // Draw on top layer
     this.drawLayer = 'HUD';
@@ -33,14 +37,14 @@ export class PauseMenu extends GameObject {
 
     // Draw the text
     let startIndex = drawPosX + 6;
-    'Pause'.split('').forEach((letter) => {
-      startIndex += getCharacterWidth(letter) + 1;
+    'Pause'.split('').forEach((char) => {
+      startIndex += getCharacterWidth(char) + 1;
       new Sprite({
-        id: `char-${0}`,
+        id: `${this.id}-char-${char}`,
         resource: Resources.images.font,
         hFrames: 13,
         vFrames: 6,
-        frame: getCharacterFrame(letter),
+        frame: getCharacterFrame(char),
       }).draw(ctx, startIndex, drawPosY + 12);
     });
   }

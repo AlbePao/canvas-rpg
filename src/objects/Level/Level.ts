@@ -14,6 +14,8 @@ export class Level extends GameObject {
       throw new Error('Level: id is missing');
     }
 
-    super({ id });
+    super({
+      id,
+    });
   }
 }

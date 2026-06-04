@@ -29,7 +29,9 @@ export class Main extends GameObject {
   isPaused = false;
 
   constructor() {
-    super({ id: 'main' });
+    super({
+      id: 'main',
+    });
   }
 
   override ready(): void {

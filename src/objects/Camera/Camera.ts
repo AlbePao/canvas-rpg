@@ -7,7 +7,10 @@ import type { Level } from '../Level';
 
 export class Camera extends GameObject {
   constructor() {
-    super({ id: 'camera' });
+    super({
+      id: 'camera',
+    });
+
     Events.on<Vector2>(HERO_POSITION, this, (heroPosition) => {
       this._centerPositionOnTarget(heroPosition);
     });

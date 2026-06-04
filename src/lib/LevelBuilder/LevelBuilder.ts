@@ -35,7 +35,9 @@ export class LevelBuilder extends Level {
 
     const { id, background, heroDefaultPosition, tiles, walls, gameObjects } = LEVELS[config.id];
 
-    super({ id });
+    super({
+      id,
+    });
 
     this.background = background
       ? new Sprite({
