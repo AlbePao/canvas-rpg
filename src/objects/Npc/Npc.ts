@@ -11,6 +11,7 @@ import {
   TEXT_BOX_OPEN,
 } from '../../constants/events';
 import { GRID_SIZE } from '../../constants/gridSize';
+import { emitPickupAnimation } from '../../helpers/emitPickupAnimation';
 import { getHeroSiblingObject, isHeroObject } from '../../helpers/getHeroSiblingObject';
 import { moveTowards } from '../../helpers/moveTowards';
 import { Animations } from '../../lib/Animations';
@@ -22,7 +23,7 @@ import { StoryFlags } from '../../lib/StoryFlags';
 import { Vector2 } from '../../lib/Vector2';
 import type { Directions } from '../../types/directions';
 import { InteractiveObject } from '../InteractiveObject';
-import { ITEMS_SPRITE_FRAME, type CollectibleItemData, type ItemKey } from '../Item';
+import type { ItemKey } from '../Item';
 import { Sprite } from '../Sprite';
 import { SpriteTextBox } from '../SpriteTextBox';
 import type { NpcBehavior, NpcConfig } from './npc.types';
@@ -39,7 +40,7 @@ import {
 
 export class Npc extends InteractiveObject {
   body: Sprite;
-  contentItem: ItemKey | null = null;
+  contentItemKey: ItemKey | null = null;
   isLocked = false;
   isWalking = false;
   walkingSpeed = 1;
@@ -108,7 +109,7 @@ export class Npc extends InteractiveObject {
         this._changeFacingDirection('RIGHT');
       }
 
-      const { addsFlag, portraitFrame, string, item } = content;
+      const { addsFlag, portraitFrame, string, itemKey, options } = content;
 
       // Potentially add a story flag
       if (addsFlag) {
@@ -116,8 +117,8 @@ export class Npc extends InteractiveObject {
       }
 
       // Save locally the item to pick when text box is closed and hero satisfies the story flags
-      if (item) {
-        this.contentItem = item;
+      if (itemKey) {
+        this.contentItemKey = itemKey;
       }
 
       // Emit the textbox
@@ -135,15 +136,11 @@ export class Npc extends InteractiveObject {
       const resetDirection = this.behaviorConfig[this.behaviorIndex]?.direction ?? 'DOWN';
       this._changeFacingDirection(resetDirection);
 
-      if (this.contentItem) {
+      if (this.contentItemKey) {
         // Now hero can collect the item
-        Events.emit<CollectibleItemData>(HERO_PICKS_UP_ITEM, {
-          id: crypto.randomUUID(),
-          frame: ITEMS_SPRITE_FRAME[this.contentItem],
-          shouldSkipPickupAnimation: false,
-        });
+        emitPickupAnimation(this.contentItemKey);
         // Reset the items once hero collects it
-        this.contentItem = null;
+        this.contentItemKey = null;
       }
     });
 

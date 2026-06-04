@@ -26,7 +26,7 @@ export const TILESET_LEVEL: LevelMap = {
         content: [
           {
             string: [],
-            item: 'hammer1',
+            itemKey: 'hammer1',
           },
         ],
       },
@@ -40,7 +40,7 @@ export const TILESET_LEVEL: LevelMap = {
         content: [
           {
             string: ['You found an hammer'],
-            item: 'hammer1',
+            itemKey: 'hammer1',
           },
         ],
       },
@@ -54,7 +54,7 @@ export const TILESET_LEVEL: LevelMap = {
         content: [
           {
             string: ['You found a rod'],
-            item: 'rod1',
+            itemKey: 'rod1',
           },
         ],
       },
@@ -69,7 +69,7 @@ export const TILESET_LEVEL: LevelMap = {
           {
             string: ['You found a slingshot!'],
             requires: [TALKED_TO_B],
-            item: 'slingshot1',
+            itemKey: 'slingshot1',
           },
           {
             string: ['I have to talk with B first...'],
@@ -86,7 +86,7 @@ export const TILESET_LEVEL: LevelMap = {
         content: [
           {
             string: [],
-            item: 'potion2',
+            itemKey: 'potion2',
           },
         ],
       },
@@ -97,14 +97,14 @@ export const TILESET_LEVEL: LevelMap = {
     {
       type: 'CollectibleItem',
       id: 'rod',
-      item: 'rod2',
+      itemKey: 'rod2',
       x: 7,
       y: 7,
     },
     {
       type: 'CollectibleItem',
       id: 'heart',
-      item: 'heart',
+      itemKey: 'heart',
       x: 10,
       y: 3,
       shouldSkipPickupAnimation: true,
@@ -227,7 +227,7 @@ export const TILESET_LEVEL: LevelMap = {
             requires: [TALKED_TO_B],
             bypass: [RECEIVED_ITEM_FROM_B],
             addsFlag: RECEIVED_ITEM_FROM_B,
-            item: 'hammer1',
+            itemKey: 'hammer1',
           },
           {
             string: ['Now you are more powerful!'],

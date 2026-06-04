@@ -19,12 +19,12 @@ export type InteractionContentConfig = {
   | {
       options?: SelectionOption[];
       addsFlag?: never;
-      item?: never;
+      itemKey?: never;
     }
   | {
       options?: never;
       addsFlag?: string;
-      item?: ItemKey;
+      itemKey?: ItemKey;
     }
 );
 
@@ -32,6 +32,6 @@ export interface InteractionContent {
   portraitFrame: number | null;
   string: string[];
   addsFlag: string | null;
-  item: ItemKey | null;
+  itemKey: ItemKey | null;
   options: SelectionOption[];
 }

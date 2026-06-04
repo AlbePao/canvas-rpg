@@ -552,7 +552,7 @@ const LevelExitSchema = z.object({
 const LevelCollectibleItemSchema = z.object({
   type: z.literal('CollectibleItem'),
   id: z.string(),
-  item: z.enum(ITEM_KEYS),
+  itemKey: z.enum(ITEM_KEYS),
   x: z.number().int(),
   y: z.number().int(),
   behaviorConfig: z.array(GameObjectBehaviorSchema).optional(),

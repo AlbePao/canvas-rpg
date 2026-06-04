@@ -1,12 +1,12 @@
-import { HERO_PICKS_UP_ITEM, HERO_REQUESTS_ACTION, TEXT_BOX_CLOSE, TEXT_BOX_OPEN } from '../../constants/events';
+import { HERO_REQUESTS_ACTION, TEXT_BOX_CLOSE, TEXT_BOX_OPEN } from '../../constants/events';
+import { emitPickupAnimation } from '../../helpers/emitPickupAnimation';
 import { Events } from '../../lib/Events';
 import type { GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
 import { StoryFlags } from '../../lib/StoryFlags';
 import { Vector2 } from '../../lib/Vector2';
 import { InteractiveObject } from '../InteractiveObject';
-import type { CollectibleItemData, ItemKey } from '../Item';
-import { ITEMS_SPRITE_FRAME } from '../Item';
+import type { ItemKey } from '../Item';
 import { Sprite } from '../Sprite';
 import { SpriteTextBox } from '../SpriteTextBox';
 import type { ChestConfig, ChestStatus } from './chest.types';
@@ -50,10 +50,10 @@ export class Chest extends InteractiveObject {
         return;
       }
 
-      const { addsFlag, portraitFrame, string, item } = content;
+      const { addsFlag, portraitFrame, string, itemKey } = content;
 
       if (string.length > 0) {
-        let contentItem: ItemKey | null = null;
+        let contentItemKey: ItemKey | null = null;
 
         // Potentially add a story flag
         if (addsFlag) {
@@ -61,8 +61,8 @@ export class Chest extends InteractiveObject {
         }
 
         // Save the item to pick when text box is closed and hero satisfies the story flags
-        if (item) {
-          contentItem = item;
+        if (itemKey) {
+          contentItemKey = itemKey;
           this._openChest();
         }
 
@@ -78,7 +78,7 @@ export class Chest extends InteractiveObject {
 
         const endingSub = Events.on(TEXT_BOX_CLOSE, this, () => {
           // Collect the item after text box close
-          this._pickUpItem(contentItem);
+          this._pickUpItem(contentItemKey);
           Events.off(endingSub);
         });
 
@@ -87,7 +87,7 @@ export class Chest extends InteractiveObject {
 
       // No text box to display, collect the item directly
       this._openChest();
-      this._pickUpItem(item);
+      this._pickUpItem(itemKey);
     });
   }
 
@@ -103,11 +103,7 @@ export class Chest extends InteractiveObject {
     }
 
     // Emit pick up item event
-    Events.emit<CollectibleItemData>(HERO_PICKS_UP_ITEM, {
-      id: crypto.randomUUID(),
-      frame: ITEMS_SPRITE_FRAME[itemKey],
-      shouldSkipPickupAnimation: false,
-    });
+    emitPickupAnimation(itemKey);
 
     if (this.shouldRemove) {
       this.destroy();

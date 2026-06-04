@@ -10,8 +10,8 @@ export class Item extends GameObject {
   constructor(config: ItemConfig) {
     super(config);
 
-    const { id, item } = config;
-    const frame = ITEMS_SPRITE_FRAME[item];
+    const { id, itemKey } = config;
+    const frame = ITEMS_SPRITE_FRAME[itemKey];
 
     this.data = {
       id: crypto.randomUUID(),

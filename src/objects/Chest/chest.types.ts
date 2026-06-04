@@ -10,5 +10,5 @@ export type ChestConfig = InteractiveObjectConfig & {
 
 export interface LootConfig {
   // Expand this in the future to support random loot of item or multiple items
-  item: ItemKey;
+  itemKey: ItemKey;
 }

@@ -36,7 +36,7 @@ export interface ItemData {
 }
 
 export type ItemConfig = GameObjectConfig & {
-  item: ItemKey;
+  itemKey: ItemKey;
 };
 
 export type CollectibleItemData = ItemData & {

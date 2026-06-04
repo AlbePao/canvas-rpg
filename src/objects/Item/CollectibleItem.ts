@@ -12,9 +12,9 @@ export class CollectibleItem extends Item {
   constructor(config: CollectibleItemConfig) {
     super(config);
 
-    const { item, shouldSkipPickupAnimation } = config;
+    const { itemKey, shouldSkipPickupAnimation } = config;
 
-    const frame = ITEMS_SPRITE_FRAME[item];
+    const frame = ITEMS_SPRITE_FRAME[itemKey];
 
     this.data = {
       id: crypto.randomUUID(),
