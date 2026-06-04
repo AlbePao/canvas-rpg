@@ -263,14 +263,10 @@ export class Hero extends GameObject {
   private _workOnItemPickUp(delta: number): void {
     this.itemPickUpTime -= delta;
     this.body.animations?.play('pickUpDown');
+
     if (this.itemPickUpTime <= 0) {
       this.itemPickUpShell?.destroy();
     }
-
-    // TODO: check for state machine
-    // this.state = 'PICKING_UP_ITEM'
-    // or
-    // this.state = 'IS_ATTACKING'
   }
 
   private _changeFacingDirection(direction: Directions): void {
