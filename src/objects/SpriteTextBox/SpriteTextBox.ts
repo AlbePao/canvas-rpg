@@ -120,10 +120,10 @@ export class SpriteTextBox extends GameObject {
       return;
     }
 
+    const { finalCharIndex } = this.lines[this._currentLineIndex];
+
     // Listen for input
     if (input.getActionJustPressed('Space')) {
-      const { finalCharIndex } = this.lines[this._currentLineIndex];
-
       if (this._showingCharIndex < finalCharIndex) {
         // Skip
         this._showingCharIndex = finalCharIndex;
@@ -135,13 +135,6 @@ export class SpriteTextBox extends GameObject {
         // Display next text line
         this._currentLineIndex += 1;
         this._showingCharIndex = 0;
-
-        return;
-      }
-
-      if (this._showingCharIndex === finalCharIndex && this._currentLineIndex === this._finalLineIndex) {
-        // Text box has shown all of its text, emit the end event so that it can trigger other events that requires the text box still opened, like a selection box
-        Events.emit(TEXT_BOX_END);
 
         return;
       }
@@ -159,6 +152,11 @@ export class SpriteTextBox extends GameObject {
 
       // Reset time counter for next character
       this._timeUntilNextShow = this._textSpeed;
+    }
+
+    if (this._showingCharIndex === finalCharIndex && this._currentLineIndex === this._finalLineIndex) {
+      // Text box has shown all of its text, emit the end event so that it can trigger other events that requires the text box still opened, like a selection box
+      Events.emit(TEXT_BOX_END);
     }
   }
 
