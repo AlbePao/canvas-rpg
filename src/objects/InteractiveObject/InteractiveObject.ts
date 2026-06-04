@@ -30,11 +30,14 @@ export class InteractiveObject extends GameObject {
       return null;
     }
 
+    const { string, addsFlag, item, options } = match;
+
     return {
       portraitFrame: this._textPortraitFrame ?? null,
-      string: match.string,
-      addsFlag: match.addsFlag ?? null,
-      item: match.item ?? null,
+      string,
+      addsFlag: addsFlag ?? null,
+      item: item ?? null,
+      options: options ?? [],
     };
   }
 }
