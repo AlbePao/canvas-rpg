@@ -1,3 +1,4 @@
 export const TALKED_TO_A = 'TALKED_TO_A';
 export const TALKED_TO_B = 'TALKED_TO_B';
 export const RECEIVED_ITEM_FROM_B = 'RECEIVED_ITEM_FROM_B';
+export const COLLECTED_SWORD = 'COLLECTED_SWORD';

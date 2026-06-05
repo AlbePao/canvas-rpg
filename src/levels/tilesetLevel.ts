@@ -1,4 +1,4 @@
-import { RECEIVED_ITEM_FROM_B, TALKED_TO_A, TALKED_TO_B } from '../constants/storyFlags';
+import { COLLECTED_SWORD, RECEIVED_ITEM_FROM_B, TALKED_TO_A, TALKED_TO_B } from '../constants/storyFlags';
 import type { LevelMap } from '../lib/LevelBuilder/levelBuilder.types';
 
 export const TILESET_LEVEL: LevelMap = {
@@ -234,7 +234,7 @@ export const TILESET_LEVEL: LevelMap = {
             requires: [RECEIVED_ITEM_FROM_B],
           },
           {
-            string: ['What a beautiful day to work in the cave!'],
+            string: ['What a beautiful day!'],
             bypass: [TALKED_TO_B],
             addsFlag: TALKED_TO_B,
           },
@@ -251,7 +251,7 @@ export const TILESET_LEVEL: LevelMap = {
     {
       type: 'Npc',
       id: 'npc3',
-      x: 1,
+      x: 9,
       y: 7,
       npc: 'ow3',
       interactionConfig: {
@@ -262,6 +262,23 @@ export const TILESET_LEVEL: LevelMap = {
               'The quick brown fox jumps over the lazy dog',
               'I need a break...',
             ],
+            bypass: [COLLECTED_SWORD],
+            options: [
+              {
+                text: 'I agree',
+                value: 'hi',
+                response: ['Great!'],
+              },
+              {
+                text: 'Meh...',
+                value: 'nice_to_meet_you',
+                response: ["Don't you think?"],
+              },
+            ],
+          },
+          {
+            string: ['Nice sword!'],
+            requires: [COLLECTED_SWORD],
           },
         ],
         portraitFrame: 0,
@@ -283,15 +300,19 @@ export const TILESET_LEVEL: LevelMap = {
                 text: 'Hi',
                 value: 'hi',
                 response: ['Beautiful day, huh?'],
-                // addsFlag?: string;
-                // item?: ItemKey;
               },
               {
                 text: 'Nice to meet you',
                 value: 'nice_to_meet_you',
                 response: ['My pleasure'],
-                // addsFlag?: string;
-                // item?: ItemKey;
+              },
+              {
+                text: 'Gimme that shiny damn thing',
+                value: 'collected_sword',
+                response: ["Yup, it's yours"],
+                addsFlag: COLLECTED_SWORD,
+                exclude: [COLLECTED_SWORD],
+                itemKey: 'sword',
               },
             ],
           },
