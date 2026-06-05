@@ -8,6 +8,10 @@ class StoryFlagsSingleton extends Singleton<StoryFlagsSingleton>() {
     this._flags.set(flag, true);
   }
 
+  has(flag: string): boolean {
+    return this._flags.has(flag);
+  }
+
   getRelevantScenario(scenarios: InteractionContentConfig[]): InteractionContentConfig | null {
     return (
       scenarios.find((scenario) => {
