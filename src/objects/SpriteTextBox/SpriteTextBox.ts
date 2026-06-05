@@ -1,4 +1,5 @@
 import { TEXT_BOX_CLOSE, TEXT_BOX_END } from '../../constants/events';
+import { createSpriteTextLines } from '../../helpers/createSpriteTextLines';
 import { ArrowIndicator } from '../../lib/ArrowIndicator';
 import { Events } from '../../lib/Events';
 import { Game } from '../../lib/Game';
@@ -7,7 +8,6 @@ import { Resources } from '../../lib/Resources';
 import { BackdropBox } from '../BackdropBox';
 import type { Main } from '../Main';
 import { Sprite } from '../Sprite';
-import { getCharacterFrame, getCharacterWidth } from './spriteFontMap';
 import type { Line, SpriteTextBoxConfig } from './spriteTextBox.types';
 
 // Rendering constants for text layout
@@ -66,43 +66,7 @@ export class SpriteTextBox extends GameObject {
     this._timeUntilNextShow = this._textSpeed;
 
     // Create an array of words in an an array of lines (because it helps with line wrapping later)
-    this._lines = string.map((content) => {
-      const words = content.split(' ').map((word) => {
-        // We need to know how wide this word is
-        let wordWidth = 0;
-
-        // Break each word into single characters
-        const chars = word.split('').map((char) => {
-          // Measure each one
-          const charWidth = getCharacterWidth(char);
-          wordWidth += charWidth;
-
-          // Also create a Sprite for each character in the word
-          return {
-            width: charWidth,
-            sprite: new Sprite({
-              id: `${id}-char-${char}`,
-              resource: Resources.images.font,
-              hFrames: 13,
-              vFrames: 6,
-              frame: getCharacterFrame(char),
-            }),
-          };
-        });
-
-        // Return a length and a list of characters per word
-        return {
-          wordWidth,
-          chars,
-        };
-      });
-
-      return {
-        words,
-        // Get the last char index of the current line
-        finalCharIndex: words.reduce((count, { chars }) => count + chars.length, 0),
-      };
-    });
+    this._lines = createSpriteTextLines(string, this.id);
 
     // Initialize indexes
     this._finalLineIndex = this._lines.length - 1;
