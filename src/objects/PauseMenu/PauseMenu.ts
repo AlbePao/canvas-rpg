@@ -1,5 +1,6 @@
 import { PAUSE_OFF } from '../../constants/events';
 import { Events } from '../../lib/Events';
+import { Game } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
 import { BackdropBox } from '../BackdropBox';
@@ -16,8 +17,8 @@ export class PauseMenu extends GameObject {
   constructor() {
     super({
       id: 'pauseMenu',
-      x: 8,
-      y: 4,
+      x: Game.pauseMenuWidth,
+      y: Game.pauseMenuHeight,
     });
 
     // Draw on top layer
