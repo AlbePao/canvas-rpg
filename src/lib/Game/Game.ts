@@ -9,8 +9,6 @@ class GameSingleton extends Singleton<GameSingleton>() {
   private _canvasWidth = 0;
   private _canvasHeight = 0;
 
-  readonly pauseMenuWidth = 8; // 128 pixel
-  readonly pauseMenuHeight = 4; // 64 pixel
   readonly textBoxBackdropWidth = 16; // 256 pixel
   readonly textBoxBackdropHeight = 3; // 48 pixel
 
