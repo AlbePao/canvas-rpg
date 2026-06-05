@@ -1,6 +1,7 @@
 import { TEXT_BOX_CLOSE, TEXT_BOX_END } from '../../constants/events';
 import { ArrowIndicator } from '../../lib/ArrowIndicator';
 import { Events } from '../../lib/Events';
+import { Game } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
 import { BackdropBox } from '../BackdropBox';
@@ -19,49 +20,53 @@ const TEXT_BOX_PORTRAIT_OFFSET_X = 6;
 const TEXT_BOX_PORTRAIT_OFFSET_Y = 6;
 const TEXT_BOX_CHARACTER_OFFSET_X = 5;
 const TEXT_CONTINUE_INDICATOR_PADDING_LEFT = 236;
-const TEXT_CONTINUE_INDICATOR_PADDING_TOP = 48;
+const TEXT_CONTINUE_INDICATOR_PADDING_TOP = 32;
 
 // Typewriter animation constants
 const TYPEWRITER_DEFAULT_SPEED = 80; // milliseconds per character
 
 export class SpriteTextBox extends GameObject {
-  readonly portrait?: Sprite;
-  readonly backdrop = new BackdropBox({
+  portrait?: Sprite;
+  private readonly _backdrop = new BackdropBox({
     id: `${this.id}-text-box-backdrop`,
-    width: 16, // 256 pixels
-    height: 4, // 64 pixels
+    width: Game.textBoxBackdropWidth,
+    height: Game.textBoxBackdropHeight,
   });
 
-  readonly lines: Line[];
+  private _lines: Line[] = [];
 
-  readonly continueIndicator = new ArrowIndicator({
+  private readonly _continueIndicator = new ArrowIndicator({
     id: `${this.id}-arrow-indicator`,
     direction: 'DOWN',
   });
 
   // Typewriter state
-  private readonly _textSpeed: number;
+  private _textSpeed = TYPEWRITER_DEFAULT_SPEED;
   private _showingCharIndex = 0;
-  private _timeUntilNextShow: number;
+  private _timeUntilNextShow = this._textSpeed;
 
   // Current line state
   private _currentLineIndex = 0;
-  private readonly _finalLineIndex: number;
+  private _finalLineIndex = 0;
 
   constructor({ id, string, portraitFrame, speed }: SpriteTextBoxConfig) {
     super({
       id,
       x: 2,
-      y: 7,
+      y: 8,
     });
 
     // Draw on top layer
     this.drawLayer = 'HUD';
+    this.updateLines({ id, string, portraitFrame, speed });
+  }
+
+  updateLines({ id, string, portraitFrame, speed }: SpriteTextBoxConfig): void {
     this._textSpeed = speed ?? TYPEWRITER_DEFAULT_SPEED;
     this._timeUntilNextShow = this._textSpeed;
 
     // Create an array of words in an an array of lines (because it helps with line wrapping later)
-    this.lines = string.map((content) => {
+    this._lines = string.map((content) => {
       const words = content.split(' ').map((word) => {
         // We need to know how wide this word is
         let wordWidth = 0;
@@ -99,7 +104,9 @@ export class SpriteTextBox extends GameObject {
       };
     });
 
-    this._finalLineIndex = this.lines.length - 1;
+    // Initialize indexes
+    this._finalLineIndex = this._lines.length - 1;
+    this._currentLineIndex = 0;
 
     // Create a portrait
     if (portraitFrame !== null) {
@@ -120,7 +127,7 @@ export class SpriteTextBox extends GameObject {
       return;
     }
 
-    const { finalCharIndex } = this.lines[this._currentLineIndex];
+    const { finalCharIndex } = this._lines[this._currentLineIndex];
 
     // Listen for input
     if (input.getActionJustPressed('Space')) {
@@ -156,13 +163,13 @@ export class SpriteTextBox extends GameObject {
 
     if (this._showingCharIndex === finalCharIndex && this._currentLineIndex === this._finalLineIndex) {
       // Text box has shown all of its text, emit the end event so that it can trigger other events that requires the text box still opened, like a selection box
-      Events.emit(TEXT_BOX_END);
+      Events.emit<SpriteTextBox>(TEXT_BOX_END, this);
     }
   }
 
   override drawImage(ctx: CanvasRenderingContext2D, drawPosX: number, drawPosY: number): void {
     // Draw the backdrop
-    this.backdrop.drawImage(ctx, drawPosX, drawPosY);
+    this._backdrop.drawImage(ctx, drawPosX, drawPosY);
 
     // Draw the portrait
     if (this.portrait) {
@@ -177,21 +184,19 @@ export class SpriteTextBox extends GameObject {
     let cursorY = drawPosY + TEXT_BOX_PADDING_TOP;
     let currentShowingIndex = 0;
 
-    const currentLineWords = this.lines[this._currentLineIndex].words;
+    const currentLineWords = this._lines[this._currentLineIndex].words;
 
-    currentLineWords.forEach((word, wordIndex) => {
+    currentLineWords.forEach(({ wordWidth, chars }, wordIndex) => {
       // Decide if we can fit this next word on this next line
       const spaceRemaining = drawPosX + TEXT_BOX_LINE_WIDTH_MAX - cursorX;
 
-      if (spaceRemaining < word.wordWidth) {
+      if (spaceRemaining < wordWidth) {
         cursorX = drawPosX + paddingLeft;
         cursorY += TEXT_BOX_LINE_VERTICAL_HEIGHT;
       }
 
-      const wordChars = word.chars;
-
       // Draw this whole segment of text
-      wordChars.forEach((char, charIndex) => {
+      chars.forEach((char, charIndex) => {
         // Stop here if we should not yet show the following character
         if (currentShowingIndex > this._showingCharIndex) {
           return;
@@ -213,11 +218,11 @@ export class SpriteTextBox extends GameObject {
 
         // If is the latest letter of the latest word of the line and it's not the last line, shows the continue indicator
         if (
-          charIndex === wordChars.length - 1 &&
+          charIndex === chars.length - 1 &&
           wordIndex === currentLineWords.length - 1 &&
           this._currentLineIndex < this._finalLineIndex
         ) {
-          this.continueIndicator.drawImage(
+          this._continueIndicator.drawImage(
             ctx,
             drawPosX + TEXT_CONTINUE_INDICATOR_PADDING_LEFT,
             drawPosY + TEXT_CONTINUE_INDICATOR_PADDING_TOP,
