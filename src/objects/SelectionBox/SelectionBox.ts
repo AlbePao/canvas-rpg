@@ -1,12 +1,31 @@
 import { SELECTION_BOX_CLOSED } from '../../constants/events';
+import { GRID_SIZE } from '../../constants/gridSize';
+import { createSpriteTextLines } from '../../helpers/createSpriteTextLines';
+import { ArrowIndicator } from '../../lib/ArrowIndicator';
 import { Events } from '../../lib/Events';
+import { Game } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
+import { StoryFlags } from '../../lib/StoryFlags';
+import { Vector2 } from '../../lib/Vector2';
+import { BackdropBox } from '../BackdropBox';
 import type { Main } from '../Main';
+import { getCharacterWidth, type Line } from '../SpriteTextBox';
 import type { SelectionBoxConfig, SelectionOption } from './selectionBox.types';
 
 export class SelectionBox extends GameObject {
-  options: SelectionOption[];
-  currentOptionIndex = 0;
+  private readonly _options: SelectionOption[];
+  private readonly _optionsLines: Line[];
+  private _currentOptionIndex = 0;
+
+  private readonly _backdrop = new BackdropBox({
+    id: `${this.id}-selection-box-backdrop`,
+    width: 0,
+    height: 0,
+  });
+  private readonly _indicator = new ArrowIndicator({
+    id: `${this.id}-arrow-indicator`,
+    direction: 'RIGHT',
+  });
 
   constructor(config: SelectionBoxConfig) {
     const { id, x, y, options } = config;
@@ -17,33 +36,87 @@ export class SelectionBox extends GameObject {
       y,
     });
 
-    this.options = options;
-  }
+    if (options.length < 1) {
+      throw new Error('SelectionBox: options array must have at least one element');
+    }
 
-  override ready(): void {
-    Events.on(SELECTION_BOX_CLOSED, this, () => {
-      this.destroy();
-    });
+    // Draw on top layer
+    this.drawLayer = 'HUD';
+
+    this._options = options.filter(({ exclude }) => (exclude ? exclude.some((flag) => !StoryFlags.has(flag)) : true));
+    this._optionsLines = createSpriteTextLines(
+      this._options.map(({ text }) => text),
+      `${this.id}`,
+    );
+
+    const width =
+      Math.max(
+        ...this._options.map(({ text }) =>
+          text.split('').reduce((lineWidth, char) => lineWidth + getCharacterWidth(char), 0),
+        ),
+      ) + 52; // Add padding for the indicator and some spacing
+
+    const height = this._options.length * GRID_SIZE + GRID_SIZE; // Each option is 16px tall + some padding
+
+    // Set backdrop size according to its options' size
+    this._backdrop.updateSize(width / GRID_SIZE, height / GRID_SIZE);
+
+    // Set the position of the selection box according to options size in relation to canvas width and text box height
+    const { canvasWidth, canvasHeight } = Game.getContainerSizes();
+    this.position = new Vector2(
+      x ?? canvasWidth - width - 32,
+      y ?? canvasHeight - height - Game.textBoxBackdropHeight * GRID_SIZE - 4,
+    );
   }
 
   override step(_delta: number, root: Main): void {
     const { input } = root;
 
     const isOptionSelected = input.getActionJustPressed('Space') || input.getActionJustPressed('Enter');
-    const isArrowPressed =
-      input.getActionJustPressed('ArrowUp') ||
-      input.getActionJustPressed('ArrowDown') ||
-      input.getActionJustPressed('KeyW') ||
-      input.getActionJustPressed('KeyS');
+    const isArrowUpPressed = input.getActionJustPressed('ArrowUp') || input.getActionJustPressed('KeyW');
+    const isArrowDownPressed = input.getActionJustPressed('ArrowDown') || input.getActionJustPressed('KeyS');
 
     if (isOptionSelected) {
-      Events.emit(SELECTION_BOX_CLOSED, {});
-    } else if (isArrowPressed) {
-      // TODO: increment or decrement selection index
+      // Emit selected option
+      Events.emit<SelectionOption>(SELECTION_BOX_CLOSED, this._options[this._currentOptionIndex]);
+    } else if (isArrowUpPressed) {
+      // Move arrow up
+      this._currentOptionIndex = (this._currentOptionIndex - 1 + this._options.length) % this._options.length;
+    } else if (isArrowDownPressed) {
+      // Move arrow down
+      this._currentOptionIndex = (this._currentOptionIndex + 1) % this._options.length;
     }
   }
 
-  override drawImage(_ctx: CanvasRenderingContext2D, _x: number, _y: number): void {
-    // TODO: draw selection box and its options
+  override drawImage(ctx: CanvasRenderingContext2D, drawPosX: number, drawPosY: number): void {
+    // Draw the backdrop
+    this._backdrop.drawImage(ctx, drawPosX, drawPosY);
+
+    // Draw the indicator
+    this._indicator.drawImage(ctx, drawPosX + 4, drawPosY + 9 + this._currentOptionIndex * GRID_SIZE);
+
+    // Draw options text lines
+    this._optionsLines.forEach(({ words }, index) => {
+      let cursorX = drawPosX + 18;
+      const cursorY = drawPosY + index * GRID_SIZE + 9;
+
+      words.forEach(({ chars }) => {
+        // Draw this whole segment of text
+        chars.forEach((char) => {
+          const { sprite, width } = char;
+          const widthCharOffset = cursorX - 5;
+          sprite.draw(ctx, widthCharOffset, cursorY);
+
+          // Add width of the character we just printed to cursor pos
+          cursorX += width;
+
+          // Plus 1px between character
+          cursorX += 1;
+        });
+
+        // Move the cursor over
+        cursorX += 3;
+      });
+    });
   }
 }
