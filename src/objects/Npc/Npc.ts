@@ -1,13 +1,15 @@
 import { STANDING_DIRECTIONS } from '../../constants/animationDirections';
 import {
   BEHAVIOR_END,
-  HERO_PICKS_UP_ITEM,
   HERO_REQUESTS_ACTION,
   LEVEL_TRANSITION_END,
   LEVEL_TRANSITION_START,
   PAUSE_OFF,
   PAUSE_ON,
+  SELECTION_BOX_CLOSED,
+  SELECTION_BOX_OPENED,
   TEXT_BOX_CLOSE,
+  TEXT_BOX_END,
   TEXT_BOX_OPEN,
 } from '../../constants/events';
 import { GRID_SIZE } from '../../constants/gridSize';
@@ -24,6 +26,7 @@ import { Vector2 } from '../../lib/Vector2';
 import type { Directions } from '../../types/directions';
 import { InteractiveObject } from '../InteractiveObject';
 import type { ItemKey } from '../Item';
+import { SelectionBox, type SelectionOption } from '../SelectionBox';
 import { Sprite } from '../Sprite';
 import { SpriteTextBox } from '../SpriteTextBox';
 import type { NpcBehavior, NpcConfig } from './npc.types';
@@ -121,15 +124,58 @@ export class Npc extends InteractiveObject {
         this.contentItemKey = itemKey;
       }
 
-      // Emit the textbox
-      Events.emit<SpriteTextBox>(
-        TEXT_BOX_OPEN,
-        new SpriteTextBox({
-          id: `text-box-for-${this.id}`,
-          portraitFrame,
-          string,
-        }),
-      );
+      // Instantiate and emit the textbox
+      const textBox = new SpriteTextBox({
+        id: `text-box-for-${this.id}`,
+        portraitFrame,
+        string,
+      });
+
+      Events.emit<SpriteTextBox>(TEXT_BOX_OPEN, textBox);
+
+      // After all text is displayed, open possibly selection box if options are available
+      if (options.length > 0) {
+        const textBoxEndSub = Events.on(TEXT_BOX_END, this, () => {
+          Events.emit<SelectionBox>(
+            SELECTION_BOX_OPENED,
+            new SelectionBox({
+              id: `selection-box-for-${this.id}`,
+              options,
+            }),
+          );
+
+          Events.off(textBoxEndSub);
+        });
+
+        const selectionBoxClosedSub = Events.on<SelectionOption>(SELECTION_BOX_CLOSED, this, (selectedOption) => {
+          const { response, addsFlag, itemKey } = selectedOption;
+
+          // Potentially add a story flag
+          if (addsFlag) {
+            StoryFlags.add(addsFlag);
+          }
+
+          if (response.length > 0) {
+            // Save locally the item to pick when text box is closed
+            if (itemKey) {
+              this.contentItemKey = itemKey;
+            }
+
+            // Update textbox instance with selected option response
+            textBox.updateLines({
+              id: `text-box-for-${this.id}`,
+              portraitFrame: content?.portraitFrame ?? null,
+              string: response,
+            });
+          } else if (itemKey) {
+            // No response, give item directly to the hero after closing the textbox
+            Events.emit(TEXT_BOX_CLOSE);
+            emitPickupAnimation(itemKey);
+          }
+
+          Events.off(selectionBoxClosedSub);
+        });
+      }
     });
 
     Events.on(TEXT_BOX_CLOSE, this, () => {
