@@ -33,9 +33,9 @@ function createBackdropFrames(): Sprite[] {
  * Borders are 1 cell thick; interior is tiled with center sprite.
  */
 export class BackdropBox extends GameObject {
-  private readonly _width: number; // Width in grid cells
-  private readonly _height: number; // Height in grid cells
-  private readonly _frames: readonly Sprite[] = [];
+  private _width: number; // Width in grid cells
+  private _height: number; // Height in grid cells
+  private readonly _frames = createBackdropFrames();
 
   constructor(config: BackdropBoxConfig) {
     const { id, x = 0, y = 0, width, height } = config;
@@ -48,7 +48,11 @@ export class BackdropBox extends GameObject {
 
     this._width = width;
     this._height = height;
-    this._frames = createBackdropFrames();
+  }
+
+  updateSize(width: number, height: number): void {
+    this._width = width;
+    this._height = height;
   }
 
   override drawImage(ctx: CanvasRenderingContext2D, drawPosX: number, drawPosY: number): void {
