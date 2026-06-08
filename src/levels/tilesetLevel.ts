@@ -63,7 +63,7 @@ export const TILESET_LEVEL: LevelMap = {
     },
     {
       type: 'Chest',
-      id: 'chest3',
+      id: 'chest4',
       interactionConfig: {
         content: [
           {
