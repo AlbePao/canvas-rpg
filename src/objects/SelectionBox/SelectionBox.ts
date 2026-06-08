@@ -13,9 +13,9 @@ import { getCharacterWidth, type Line } from '../SpriteTextBox';
 import type { SelectionBoxConfig, SelectionOption } from './selectionBox.types';
 
 export class SelectionBox extends GameObject {
-  private readonly _options: SelectionOption[];
+  protected readonly options: SelectionOption[];
+  protected currentOptionIndex = 0;
   private readonly _optionsLines: Line[];
-  private _currentOptionIndex = 0;
 
   private readonly _backdrop = new BackdropBox({
     id: `${this.id}-selection-box-backdrop`,
@@ -49,18 +49,18 @@ export class SelectionBox extends GameObject {
         (include ? include.some((flag) => StoryFlags.has(flag)) : true),
     );
     this._optionsLines = createSpriteTextLines(
-      this._options.map(({ text }) => text),
+      this.options.map(({ text }) => text),
       `${this.id}`,
     );
 
     const width =
       Math.max(
-        ...this._options.map(({ text }) =>
+        ...this.options.map(({ text }) =>
           text.split('').reduce((lineWidth, char) => lineWidth + getCharacterWidth(char), 0),
         ),
       ) + 52; // Add padding for the indicator and some spacing
 
-    const height = this._options.length * GRID_SIZE + GRID_SIZE; // Each option is 16px tall + some padding
+    const height = this.options.length * GRID_SIZE + GRID_SIZE; // Each option is 16px tall + some padding
 
     // Set backdrop size according to its options' size
     this._backdrop.updateSize(width / GRID_SIZE, height / GRID_SIZE);
@@ -82,13 +82,13 @@ export class SelectionBox extends GameObject {
 
     if (isOptionSelected) {
       // Emit selected option
-      Events.emit<SelectionOption>(SELECTION_BOX_CLOSED, this._options[this._currentOptionIndex]);
+      this.emitSelection();
     } else if (isArrowUpPressed) {
       // Move arrow up
-      this._currentOptionIndex = (this._currentOptionIndex - 1 + this._options.length) % this._options.length;
+      this.currentOptionIndex = (this.currentOptionIndex - 1 + this.options.length) % this.options.length;
     } else if (isArrowDownPressed) {
       // Move arrow down
-      this._currentOptionIndex = (this._currentOptionIndex + 1) % this._options.length;
+      this.currentOptionIndex = (this.currentOptionIndex + 1) % this.options.length;
     }
   }
 
@@ -97,7 +97,7 @@ export class SelectionBox extends GameObject {
     this._backdrop.drawImage(ctx, drawPosX, drawPosY);
 
     // Draw the indicator
-    this._indicator.drawImage(ctx, drawPosX + 4, drawPosY + 9 + this._currentOptionIndex * GRID_SIZE);
+    this._indicator.drawImage(ctx, drawPosX + 4, drawPosY + 9 + this.currentOptionIndex * GRID_SIZE);
 
     // Draw options text lines
     this._optionsLines.forEach(({ words }, index) => {
@@ -122,5 +122,9 @@ export class SelectionBox extends GameObject {
         cursorX += 3;
       });
     });
+  }
+
+  protected emitSelection(): void {
+    Events.emit<SelectionOption>(SELECTION_BOX_CLOSED, this.options[this.currentOptionIndex]);
   }
 }
