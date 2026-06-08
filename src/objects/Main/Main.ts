@@ -84,7 +84,6 @@ export class Main extends GameObject {
       // unsubscribe from this pause menu after it's destroyed
       const endingSub = Events.on(PAUSE_OFF, this, () => {
         pauseMenu.destroy();
-        // this.isPaused = false;
         Events.off(endingSub);
       });
     });

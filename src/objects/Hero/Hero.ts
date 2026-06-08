@@ -123,8 +123,6 @@ export class Hero extends GameObject {
     });
   }
 
-  // jump(direction:'IN_PLACE' | 'FORWARDS' | 'BACKWARDS'): void {}
-
   override step(delta: number, root: Main): void {
     // Don't do anything when locked
     if (this.isLocked) {
