@@ -10,8 +10,8 @@ export function moveTowards(person: GameObject, destinationPosition: Vector2, sp
 
   if (distance <= speed) {
     // If we're close enough, just move directly to the destination
-    person.position.x = destinationPosition.x;
-    person.position.y = destinationPosition.y;
+    person.position.x = Math.floor(destinationPosition.x);
+    person.position.y = Math.floor(destinationPosition.y);
     return 0;
   }
 
@@ -19,8 +19,8 @@ export function moveTowards(person: GameObject, destinationPosition: Vector2, sp
   const normalizedX = distanceTravelX / distance;
   const normalizedY = distanceTravelY / distance;
 
-  person.position.x += normalizedX * speed;
-  person.position.y += normalizedY * speed;
+  person.position.x += Math.floor(normalizedX * speed);
+  person.position.y += Math.floor(normalizedY * speed);
 
   // Return remaining distance without recalculation
   const remainingX = destinationPosition.x - person.position.x;
