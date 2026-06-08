@@ -155,7 +155,7 @@ export class Npc extends InteractiveObject {
             StoryFlags.add(addsFlag);
           }
 
-          if (response.length > 0) {
+          if (response && response.length > 0) {
             // Save locally the item to pick when text box is closed
             if (itemKey) {
               this.contentItemKey = itemKey;
