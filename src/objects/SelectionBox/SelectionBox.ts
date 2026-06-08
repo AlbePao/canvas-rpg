@@ -43,7 +43,11 @@ export class SelectionBox extends GameObject {
     // Draw on top layer
     this.drawLayer = 'HUD';
 
-    this._options = options.filter(({ exclude }) => (exclude ? exclude.some((flag) => !StoryFlags.has(flag)) : true));
+    this.options = options.filter(
+      ({ exclude, include }) =>
+        (exclude ? exclude.some((flag) => !StoryFlags.has(flag)) : true) &&
+        (include ? include.some((flag) => StoryFlags.has(flag)) : true),
+    );
     this._optionsLines = createSpriteTextLines(
       this._options.map(({ text }) => text),
       `${this.id}`,
