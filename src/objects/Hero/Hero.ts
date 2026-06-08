@@ -59,7 +59,7 @@ export class Hero extends GameObject {
     this.isSolid = true;
 
     const shadow = new Sprite({
-      id: `${config.id}-hero-shadow-sprite`,
+      id: `${id}-hero-shadow-sprite`,
       resource: Resources.images.shadow,
       frameSize: new Vector2(32, 32),
       position: new Vector2(-8, -19),

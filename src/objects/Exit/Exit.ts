@@ -16,7 +16,7 @@ export class Exit extends GameObject {
     const { id, heroNewPosition, newLevelId } = config;
 
     const exit = new Sprite({
-      id: `${config.id}-exit-sprite`,
+      id: `${id}-exit-sprite`,
       resource: Resources.images.exit,
     });
     this.addChild(exit);

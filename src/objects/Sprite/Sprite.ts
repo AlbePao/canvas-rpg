@@ -22,7 +22,7 @@ export class Sprite extends GameObject {
     vFrames, // how the sprite arranged vertically
     frame, // which frame we want to show
     scale, // how large to draw this image
-    position, // where to draw it (top left corner)
+    position, // where to draw it (from top left corner)
     animations,
   }: SpriteConfig) {
     super({
