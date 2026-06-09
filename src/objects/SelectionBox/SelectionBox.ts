@@ -1,15 +1,15 @@
 import { SELECTION_BOX_CLOSED } from '../../constants/events';
 import { GRID_SIZE } from '../../constants/gridSize';
-import { createSpriteTextLines } from '../../helpers/createSpriteTextLines';
+import { createSpriteTextLines, getCharacterWidth } from '../../helpers/spriteText';
 import { ArrowIndicator } from '../../lib/ArrowIndicator';
 import { Events } from '../../lib/Events';
 import { Game } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
 import { StoryFlags } from '../../lib/StoryFlags';
 import { Vector2 } from '../../lib/Vector2';
+import type { Line } from '../../types/text';
 import { BoxBackdrop } from '../BoxBackdrop';
 import type { Main } from '../Main';
-import { getCharacterWidth, type Line } from '../SpriteTextBox';
 import type { SelectionBoxConfig, SelectionOption } from './selectionBox.types';
 
 export class SelectionBox extends GameObject {

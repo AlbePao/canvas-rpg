@@ -1,14 +1,15 @@
 import { TEXT_BOX_CLOSE, TEXT_BOX_END } from '../../constants/events';
-import { createSpriteTextLines } from '../../helpers/createSpriteTextLines';
+import { createSpriteTextLines } from '../../helpers/spriteText';
 import { ArrowIndicator } from '../../lib/ArrowIndicator';
 import { Events } from '../../lib/Events';
 import { Game } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
+import type { Line } from '../../types/text';
 import { BoxBackdrop } from '../BoxBackdrop';
 import type { Main } from '../Main';
 import { Sprite } from '../Sprite';
-import type { Line, SpriteTextBoxConfig } from './spriteTextBox.types';
+import type { SpriteTextBoxConfig } from './spriteTextBox.types';
 
 // Rendering constants for text layout
 const TEXT_BOX_PADDING_LEFT_WITH_PORTRAIT = 27;

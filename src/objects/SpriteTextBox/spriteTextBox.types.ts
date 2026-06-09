@@ -1,20 +1,3 @@
-import type { Sprite } from '../Sprite';
-
-export interface Line {
-  words: Word[];
-  finalCharIndex: number;
-}
-
-export interface Word {
-  wordWidth: number;
-  chars: Char[];
-}
-
-export interface Char {
-  width: number;
-  sprite: Sprite;
-}
-
 export interface SpriteTextBoxConfig {
   id: string;
   portraitFrame: number | null;
