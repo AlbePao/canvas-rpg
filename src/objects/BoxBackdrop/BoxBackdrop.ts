@@ -3,7 +3,7 @@ import { GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
 import { Vector2 } from '../../lib/Vector2';
 import { Sprite } from '../Sprite';
-import type { BackdropBoxConfig } from './backdropBox.types';
+import type { BoxBackdropConfig } from './boxBackdrop.types';
 
 function createBackdropFrames(): Sprite[] {
   // Create the 9 frames from the textBox sheet (3x3 grid, each frame is GRID_SIZE x GRID_SIZE)
@@ -23,7 +23,7 @@ function createBackdropFrames(): Sprite[] {
 }
 
 /**
- * BackdropBox generates a composited textured box using a 3x3 grid sprite.
+ * BoxBackdrop generates a composited textured box using a 3x3 grid sprite.
  * The sprite layout is:
  * 0=top-left, 1=top-center, 2=top-right,
  * 3=left, 4=center, 5=right,
@@ -32,12 +32,12 @@ function createBackdropFrames(): Sprite[] {
  * Each frame is 16x16 pixels (GRID_SIZE).
  * Borders are 1 cell thick; interior is tiled with center sprite.
  */
-export class BackdropBox extends GameObject {
+export class BoxBackdrop extends GameObject {
   private _width: number; // Width in grid cells
   private _height: number; // Height in grid cells
   private readonly _frames = createBackdropFrames();
 
-  constructor(config: BackdropBoxConfig) {
+  constructor(config: BoxBackdropConfig) {
     const { id, x = 0, y = 0, width, height } = config;
 
     super({

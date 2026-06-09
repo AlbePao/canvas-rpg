@@ -5,7 +5,7 @@ import { Events } from '../../lib/Events';
 import { Game } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
-import { BackdropBox } from '../BackdropBox';
+import { BoxBackdrop } from '../BoxBackdrop';
 import type { Main } from '../Main';
 import { Sprite } from '../Sprite';
 import type { Line, SpriteTextBoxConfig } from './spriteTextBox.types';
@@ -27,7 +27,7 @@ const TYPEWRITER_DEFAULT_SPEED = 80; // milliseconds per character
 
 export class SpriteTextBox extends GameObject {
   portrait?: Sprite;
-  private readonly _backdrop = new BackdropBox({
+  private readonly _backdrop = new BoxBackdrop({
     id: `${this.id}-text-box-backdrop`,
     width: Game.textBoxBackdropWidth,
     height: Game.textBoxBackdropHeight,

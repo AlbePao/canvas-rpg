@@ -7,7 +7,7 @@ import { Game } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
 import { StoryFlags } from '../../lib/StoryFlags';
 import { Vector2 } from '../../lib/Vector2';
-import { BackdropBox } from '../BackdropBox';
+import { BoxBackdrop } from '../BoxBackdrop';
 import type { Main } from '../Main';
 import { getCharacterWidth, type Line } from '../SpriteTextBox';
 import type { SelectionBoxConfig, SelectionOption } from './selectionBox.types';
@@ -17,7 +17,7 @@ export class SelectionBox extends GameObject {
   protected currentOptionIndex = 0;
   private readonly _optionsLines: Line[];
 
-  private readonly _backdrop = new BackdropBox({
+  private readonly _backdrop = new BoxBackdrop({
     id: `${this.id}-selection-box-backdrop`,
     width: 0,
     height: 0,
