@@ -28,7 +28,7 @@ import { InteractiveObject } from '../InteractiveObject';
 import type { ItemKey } from '../Item';
 import { SelectionBox, type SelectionOption } from '../SelectionBox';
 import { Sprite } from '../Sprite';
-import { SpriteTextBox } from '../SpriteTextBox';
+import { TextBox } from '../TextBox';
 import type { NpcBehavior, NpcConfig } from './npc.types';
 import {
   NPC_STAND_DOWN,
@@ -125,13 +125,13 @@ export class Npc extends InteractiveObject {
       }
 
       // Instantiate and emit the textbox
-      const textBox = new SpriteTextBox({
+      const textBox = new TextBox({
         id: `text-box-for-${this.id}`,
         portraitFrame,
         string,
       });
 
-      Events.emit<SpriteTextBox>(TEXT_BOX_OPEN, textBox);
+      Events.emit<TextBox>(TEXT_BOX_OPEN, textBox);
 
       // After all text is displayed, open possibly selection box if options are available
       if (options.length > 0) {

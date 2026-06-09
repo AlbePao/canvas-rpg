@@ -17,7 +17,7 @@ import { Inventory } from '../Inventory';
 import type { Level } from '../Level';
 import { PauseMenu } from '../PauseMenu';
 import type { SelectionBox } from '../SelectionBox';
-import type { SpriteTextBox } from '../SpriteTextBox';
+import type { TextBox } from '../TextBox';
 
 export class Main extends GameObject {
   level: Level | null = null;
@@ -44,7 +44,7 @@ export class Main extends GameObject {
     });
 
     // Launch text box handler
-    Events.on<SpriteTextBox>(TEXT_BOX_OPEN, this, (textBox) => {
+    Events.on<TextBox>(TEXT_BOX_OPEN, this, (textBox) => {
       this.addChild(textBox);
       this.isTextBoxOpened = true;
 

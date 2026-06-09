@@ -8,7 +8,7 @@ import { Vector2 } from '../../lib/Vector2';
 import { InteractiveObject } from '../InteractiveObject';
 import type { ItemKey } from '../Item';
 import { Sprite } from '../Sprite';
-import { SpriteTextBox } from '../SpriteTextBox';
+import { TextBox } from '../TextBox';
 import type { ChestConfig, ChestStatus } from './chest.types';
 
 export class Chest extends InteractiveObject {
@@ -67,9 +67,9 @@ export class Chest extends InteractiveObject {
         }
 
         // Emit the textbox
-        Events.emit<SpriteTextBox>(
+        Events.emit<TextBox>(
           TEXT_BOX_OPEN,
-          new SpriteTextBox({
+          new TextBox({
             id: `text-box-for-${this.id}`,
             portraitFrame,
             string,

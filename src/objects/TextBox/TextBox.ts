@@ -9,7 +9,7 @@ import type { Line } from '../../types/text';
 import { BoxBackdrop } from '../BoxBackdrop';
 import type { Main } from '../Main';
 import { Sprite } from '../Sprite';
-import type { SpriteTextBoxConfig } from './spriteTextBox.types';
+import type { TextBoxConfig } from './textBox.types';
 
 // Rendering constants for text layout
 const TEXT_BOX_PADDING_LEFT_WITH_PORTRAIT = 27;
@@ -26,7 +26,7 @@ const TEXT_CONTINUE_INDICATOR_PADDING_TOP = 32;
 // Typewriter animation constants
 const TYPEWRITER_DEFAULT_SPEED = 80; // milliseconds per character
 
-export class SpriteTextBox extends GameObject {
+export class TextBox extends GameObject {
   portrait?: Sprite;
   private readonly _backdrop = new BoxBackdrop({
     id: `${this.id}-text-box-backdrop`,
@@ -50,7 +50,7 @@ export class SpriteTextBox extends GameObject {
   private _currentLineIndex = 0;
   private _finalLineIndex = 0;
 
-  constructor({ id, string, portraitFrame, speed }: SpriteTextBoxConfig) {
+  constructor({ id, string, portraitFrame, speed }: TextBoxConfig) {
     super({
       id,
       x: 2,
@@ -62,7 +62,7 @@ export class SpriteTextBox extends GameObject {
     this.updateLines({ id, string, portraitFrame, speed });
   }
 
-  updateLines({ id, string, portraitFrame, speed }: SpriteTextBoxConfig): void {
+  updateLines({ id, string, portraitFrame, speed }: TextBoxConfig): void {
     this._textSpeed = speed ?? TYPEWRITER_DEFAULT_SPEED;
     this._timeUntilNextShow = this._textSpeed;
 
@@ -128,7 +128,7 @@ export class SpriteTextBox extends GameObject {
 
     if (this._showingCharIndex === finalCharIndex && this._currentLineIndex === this._finalLineIndex) {
       // Text box has shown all of its text, emit the end event so that it can trigger other events that requires the text box still opened, like a selection box
-      Events.emit<SpriteTextBox>(TEXT_BOX_END, this);
+      Events.emit<TextBox>(TEXT_BOX_END, this);
     }
   }
 

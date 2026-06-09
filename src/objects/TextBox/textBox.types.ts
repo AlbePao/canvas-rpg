@@ -1,4 +1,4 @@
-export interface SpriteTextBoxConfig {
+export interface TextBoxConfig {
   id: string;
   portraitFrame: number | null;
   string: string[];
