@@ -3,6 +3,7 @@ import type { Animations } from '../../lib/Animations';
 import { GameObject } from '../../lib/GameObject';
 import type { Resource } from '../../lib/Resources';
 import { Vector2 } from '../../lib/Vector2';
+import type { Coords2D } from '../../types/coords';
 import type { SpriteConfig } from './sprite.types';
 
 export class Sprite extends GameObject {
@@ -49,7 +50,7 @@ export class Sprite extends GameObject {
   }
 
   // Calculate frame coordinates on-the-fly without allocations
-  private _getFrameCoordinates(frameIndex: number): { x: number; y: number } {
+  private _getFrameCoordinates(frameIndex: number): Coords2D {
     const frameX = frameIndex % this.hFrames;
     const frameY = Math.floor(frameIndex / this.hFrames);
     return {
