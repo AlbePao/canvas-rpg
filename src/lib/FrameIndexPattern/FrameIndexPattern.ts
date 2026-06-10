@@ -5,9 +5,9 @@ export class FrameIndexPattern {
   private readonly _animationConfig: AnimationConfig;
   private readonly _duration: number;
 
-  constructor(animationConfig: AnimationConfig) {
-    this._animationConfig = animationConfig;
-    this._duration = animationConfig.duration;
+  constructor(config: AnimationConfig) {
+    this._animationConfig = config;
+    this._duration = config.duration;
   }
 
   get frame(): number {
