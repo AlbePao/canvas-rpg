@@ -112,7 +112,7 @@ export class Npc extends InteractiveObject {
         this._changeFacingDirection('RIGHT');
       }
 
-      const { addsFlag, portraitFrame, string, itemKey, options } = content;
+      const { addsFlag, portraitFrame, text, itemKey, options } = content;
 
       // Potentially add a story flag
       if (addsFlag) {
@@ -128,7 +128,7 @@ export class Npc extends InteractiveObject {
       const textBox = new TextBox({
         id: `text-box-for-${this.id}`,
         portraitFrame,
-        string,
+        text,
       });
 
       Events.emit<TextBox>(TEXT_BOX_OPEN, textBox);
@@ -165,7 +165,7 @@ export class Npc extends InteractiveObject {
             textBox.updateLines({
               id: `text-box-for-${this.id}`,
               portraitFrame: content?.portraitFrame ?? null,
-              string: response,
+              text: response,
             });
           } else if (itemKey) {
             // No response, give item directly to the hero after closing the textbox

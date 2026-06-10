@@ -12,7 +12,7 @@ export interface InteractionConfig {
 }
 
 export type InteractionContentConfig = {
-  string: string[];
+  text: string[];
   requires?: string[];
   bypass?: string[];
 } & (
@@ -30,7 +30,7 @@ export type InteractionContentConfig = {
 
 export interface InteractionContent {
   portraitFrame: number | null;
-  string: string[];
+  text: string[];
   addsFlag: string | null;
   itemKey: ItemKey | null;
   options: SelectionOption[];

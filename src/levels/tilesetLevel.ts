@@ -25,7 +25,7 @@ export const TILESET_LEVEL: LevelMap = {
       interactionConfig: {
         content: [
           {
-            string: [],
+            text: [],
             itemKey: 'hammer1',
           },
         ],
@@ -39,7 +39,7 @@ export const TILESET_LEVEL: LevelMap = {
       interactionConfig: {
         content: [
           {
-            string: ['You found an hammer'],
+            text: ['You found an hammer'],
             itemKey: 'hammer1',
           },
         ],
@@ -53,7 +53,7 @@ export const TILESET_LEVEL: LevelMap = {
       interactionConfig: {
         content: [
           {
-            string: ['You found a rod'],
+            text: ['You found a rod'],
             itemKey: 'rod1',
           },
         ],
@@ -67,12 +67,12 @@ export const TILESET_LEVEL: LevelMap = {
       interactionConfig: {
         content: [
           {
-            string: ['You found a slingshot!'],
+            text: ['You found a slingshot!'],
             requires: [TALKED_TO_B],
             itemKey: 'slingshot1',
           },
           {
-            string: ['I have to talk with B first...'],
+            text: ['I have to talk with B first...'],
           },
         ],
       },
@@ -85,7 +85,7 @@ export const TILESET_LEVEL: LevelMap = {
       interactionConfig: {
         content: [
           {
-            string: [],
+            text: [],
             itemKey: 'potion2',
           },
         ],
@@ -182,17 +182,17 @@ export const TILESET_LEVEL: LevelMap = {
       interactionConfig: {
         content: [
           {
-            string: ["I just can't stand that guy."],
+            text: ["I just can't stand that guy."],
             requires: [TALKED_TO_B],
             bypass: [TALKED_TO_A],
             addsFlag: TALKED_TO_A,
           },
           {
-            string: ['He is just the worst!'],
+            text: ['He is just the worst!'],
             requires: [TALKED_TO_A],
           },
           {
-            string: ['Grumble grumble. Another day at work'],
+            text: ['Grumble grumble. Another day at work'],
           },
         ],
         portraitFrame: 1,
@@ -223,18 +223,18 @@ export const TILESET_LEVEL: LevelMap = {
       interactionConfig: {
         content: [
           {
-            string: ["Oh, here's your item"],
+            text: ["Oh, here's your item"],
             requires: [TALKED_TO_B],
             bypass: [RECEIVED_ITEM_FROM_B],
             addsFlag: RECEIVED_ITEM_FROM_B,
             itemKey: 'hammer1',
           },
           {
-            string: ['Now you are more powerful!'],
+            text: ['Now you are more powerful!'],
             requires: [RECEIVED_ITEM_FROM_B],
           },
           {
-            string: ['What a beautiful day!'],
+            text: ['What a beautiful day!'],
             bypass: [TALKED_TO_B],
             addsFlag: TALKED_TO_B,
           },
@@ -257,7 +257,7 @@ export const TILESET_LEVEL: LevelMap = {
       interactionConfig: {
         content: [
           {
-            string: [
+            text: [
               'Lorem Ipsum is simply dummy text of the printing and typesetting industry',
               'The quick brown fox jumps over the lazy dog',
               'I need a break...',
@@ -277,7 +277,7 @@ export const TILESET_LEVEL: LevelMap = {
             ],
           },
           {
-            string: ['Nice sword!'],
+            text: ['Nice sword!'],
             requires: [COLLECTED_SWORD],
           },
         ],
@@ -294,7 +294,7 @@ export const TILESET_LEVEL: LevelMap = {
       interactionConfig: {
         content: [
           {
-            string: ['Hi there!'],
+            text: ['Hi there!'],
             options: [
               {
                 text: 'Hi',

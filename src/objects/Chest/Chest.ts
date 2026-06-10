@@ -50,9 +50,9 @@ export class Chest extends InteractiveObject {
         return;
       }
 
-      const { addsFlag, portraitFrame, string, itemKey } = content;
+      const { addsFlag, portraitFrame, text, itemKey } = content;
 
-      if (string.length > 0) {
+      if (text.length > 0) {
         let contentItemKey: ItemKey | null = null;
 
         // Potentially add a story flag
@@ -72,7 +72,7 @@ export class Chest extends InteractiveObject {
           new TextBox({
             id: `text-box-for-${this.id}`,
             portraitFrame,
-            string,
+            text,
           }),
         );
 

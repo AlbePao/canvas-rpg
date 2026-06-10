@@ -522,7 +522,7 @@ const LevelBackgroundSchema = z.object({
 }) satisfies z.ZodType<LevelMap['background']>;
 
 const InteractionContentConfigSchema = z.object({
-  string: z.array(z.string()),
+  text: z.array(z.string()),
   requires: z.array(z.string()).optional(),
   bypass: z.array(z.string()).optional(),
   addsFlag: z.string().optional(),

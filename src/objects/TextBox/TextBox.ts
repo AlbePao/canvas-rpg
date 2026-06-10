@@ -51,7 +51,7 @@ export class TextBox extends GameObject {
   private _finalLineIndex = 0;
 
   constructor(config: TextBoxConfig) {
-    const { id, x = 2, y = 8, string, portraitFrame, speed } = config;
+    const { id, x = 2, y = 8, text, portraitFrame, speed } = config;
 
     super({
       id,
@@ -61,15 +61,15 @@ export class TextBox extends GameObject {
 
     // Draw on top layer
     this.drawLayer = 'HUD';
-    this.updateLines({ id, string, portraitFrame, speed });
+    this.updateLines({ id, text, portraitFrame, speed });
   }
 
-  updateLines({ id, string, portraitFrame, speed }: TextBoxConfig): void {
+  updateLines({ id, text, portraitFrame, speed }: TextBoxConfig): void {
     this._textSpeed = speed ?? TYPEWRITER_DEFAULT_SPEED;
     this._timeUntilNextShow = this._textSpeed;
 
     // Create an array of words in an an array of lines (because it helps with line wrapping later)
-    this._lines = createSpriteTextLines(string, this.id);
+    this._lines = createSpriteTextLines(text, this.id);
 
     // Initialize indexes
     this._finalLineIndex = this._lines.length - 1;
