@@ -82,7 +82,7 @@ export class SelectionBox extends GameObject {
 
     if (isOptionSelected) {
       // Emit selected option
-      this.emitSelection();
+      this.onOptionSelect();
     } else if (isArrowUpPressed) {
       // Move arrow up
       this.currentOptionIndex = (this.currentOptionIndex - 1 + this.options.length) % this.options.length;
@@ -124,7 +124,7 @@ export class SelectionBox extends GameObject {
     });
   }
 
-  protected emitSelection(): void {
+  protected onOptionSelect(): void {
     Events.emit<SelectionOption>(SELECTION_BOX_CLOSED, this.options[this.currentOptionIndex]);
   }
 }

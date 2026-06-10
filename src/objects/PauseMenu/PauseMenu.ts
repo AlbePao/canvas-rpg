@@ -23,7 +23,7 @@ export class PauseMenu extends SelectionBox {
     this.drawLayer = 'HUD';
   }
 
-  protected override emitSelection(): void {
+  protected override onOptionSelect(): void {
     console.log('selected pause option', this.options[this.currentOptionIndex]);
   }
 }
