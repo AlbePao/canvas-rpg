@@ -50,11 +50,13 @@ export class TextBox extends GameObject {
   private _currentLineIndex = 0;
   private _finalLineIndex = 0;
 
-  constructor({ id, string, portraitFrame, speed }: TextBoxConfig) {
+  constructor(config: TextBoxConfig) {
+    const { id, x = 2, y = 8, string, portraitFrame, speed } = config;
+
     super({
       id,
-      x: 2,
-      y: 8,
+      x,
+      y,
     });
 
     // Draw on top layer
