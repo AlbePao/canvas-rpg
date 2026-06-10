@@ -113,7 +113,7 @@ export class LevelBuilder extends Level {
   }
 
   override ready(): void {
-    Events.on<ExitData>(HERO_EXITS, this, ({ newLevelId, heroNewPosition }) => {
+    Events.on<ExitData>(HERO_EXITS, this, ({ newLevelId, newHeroPosition }) => {
       // TODO: uncomment when levels are defined from a json
       // if (!LevelsMapper.hasLevel(newLevelId)) {
       //   throw new Error(`LevelBuilder: level "${newLevelId}" not found in LevelsMapper`);
@@ -124,7 +124,7 @@ export class LevelBuilder extends Level {
           CHANGE_LEVEL,
           new LevelBuilder({
             id: newLevelId,
-            heroStartPosition: new Vector2(heroNewPosition.x, heroNewPosition.y),
+            heroStartPosition: new Vector2(newHeroPosition.x, newHeroPosition.y),
           }),
         );
       });

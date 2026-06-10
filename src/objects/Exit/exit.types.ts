@@ -4,7 +4,7 @@ import type { Coords2D } from '../../types/coords';
 
 interface ExitLevelData {
   newLevelId: string;
-  heroNewPosition: Coords2D;
+  newHeroPosition: Coords2D;
 }
 
 export type ExitConfig = GameObjectConfig & ExitLevelData;

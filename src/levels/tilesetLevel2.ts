@@ -13,7 +13,10 @@ export const TILESET_LEVEL2: LevelMap = {
       newLevelId: 'tilesetLevel',
       x: 0,
       y: -1,
-      heroNewPosition: { x: 1, y: 5 },
+      newHeroPosition: {
+        x: 1,
+        y: 5,
+      },
     },
   ],
   walls: [],

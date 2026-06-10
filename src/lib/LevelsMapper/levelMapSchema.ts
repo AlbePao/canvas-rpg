@@ -546,7 +546,7 @@ const LevelExitSchema = z.object({
   x: z.number().int(),
   y: z.number().int(),
   behaviorConfig: z.array(GameObjectBehaviorSchema).optional(),
-  heroNewPosition: Coords2DSchema,
+  newHeroPosition: Coords2DSchema,
 }) satisfies z.ZodType<LevelExit>;
 
 const LevelCollectibleItemSchema = z.object({

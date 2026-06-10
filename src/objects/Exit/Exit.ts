@@ -13,7 +13,7 @@ export class Exit extends GameObject {
   constructor(config: ExitConfig) {
     super(config);
 
-    const { id, heroNewPosition, newLevelId } = config;
+    const { id, newHeroPosition, newLevelId } = config;
 
     const exit = new Sprite({
       id: `${id}-exit-sprite`,
@@ -27,7 +27,7 @@ export class Exit extends GameObject {
       id,
       position: this.position,
       newLevelId,
-      heroNewPosition,
+      newHeroPosition,
     };
   }
 
