@@ -6,8 +6,8 @@ import {
   LEVEL_TRANSITION_START,
   PAUSE_OFF,
   PAUSE_ON,
-  SELECTION_BOX_CLOSED,
-  SELECTION_BOX_OPENED,
+  SELECTION_BOX_CLOSE,
+  SELECTION_BOX_OPEN,
   TEXT_BOX_CLOSE,
   TEXT_BOX_END,
   TEXT_BOX_OPEN,
@@ -137,7 +137,7 @@ export class Npc extends InteractiveObject {
       if (options.length > 0) {
         const textBoxEndSub = Events.on(TEXT_BOX_END, this, () => {
           Events.emit<SelectionBox>(
-            SELECTION_BOX_OPENED,
+            SELECTION_BOX_OPEN,
             new SelectionBox({
               id: `selection-box-for-${this.id}`,
               options,
@@ -147,7 +147,7 @@ export class Npc extends InteractiveObject {
           Events.off(textBoxEndSub);
         });
 
-        const selectionBoxClosedSub = Events.on<SelectionOption>(SELECTION_BOX_CLOSED, this, (selectedOption) => {
+        const selectionBoxClosedSub = Events.on<SelectionOption>(SELECTION_BOX_CLOSE, this, (selectedOption) => {
           const { response, addsFlag, itemKey } = selectedOption;
 
           // Potentially add a story flag

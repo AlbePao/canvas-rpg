@@ -1,4 +1,4 @@
-import { SELECTION_BOX_CLOSED } from '../../constants/events';
+import { SELECTION_BOX_CLOSE } from '../../constants/events';
 import { GRID_SIZE } from '../../constants/gridSize';
 import { createSpriteTextLines, getCharacterWidth } from '../../helpers/spriteText';
 import { ArrowIndicator } from '../../lib/ArrowIndicator';
@@ -125,6 +125,6 @@ export class SelectionBox extends GameObject {
   }
 
   protected onOptionSelect(): void {
-    Events.emit<SelectionOption>(SELECTION_BOX_CLOSED, this.options[this.currentOptionIndex]);
+    Events.emit<SelectionOption>(SELECTION_BOX_CLOSE, this.options[this.currentOptionIndex]);
   }
 }

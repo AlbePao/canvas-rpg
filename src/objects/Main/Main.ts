@@ -4,8 +4,8 @@ import {
   CUTSCENE_START,
   PAUSE_OFF,
   PAUSE_ON,
-  SELECTION_BOX_CLOSED,
-  SELECTION_BOX_OPENED,
+  SELECTION_BOX_CLOSE,
+  SELECTION_BOX_OPEN,
   TEXT_BOX_CLOSE,
   TEXT_BOX_OPEN,
 } from '../../constants/events';
@@ -56,12 +56,12 @@ export class Main extends GameObject {
       });
     });
 
-    Events.on<SelectionBox>(SELECTION_BOX_OPENED, this, (selectionBox) => {
+    Events.on<SelectionBox>(SELECTION_BOX_OPEN, this, (selectionBox) => {
       this.addChild(selectionBox);
       this.isSelectionBoxOpened = true;
 
       // unsubscribe from this selection box after it's destroyed
-      const endingSub = Events.on(SELECTION_BOX_CLOSED, this, () => {
+      const endingSub = Events.on(SELECTION_BOX_CLOSE, this, () => {
         selectionBox.destroy();
         this.isSelectionBoxOpened = false;
         Events.off(endingSub);
