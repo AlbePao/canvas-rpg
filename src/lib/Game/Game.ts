@@ -17,12 +17,13 @@ class GameSingleton extends Singleton<GameSingleton>() {
    */
   // async initializeGame(config: Partial<{ containerId: string }>): Promise<void> {
   initializeGame(config: GameConfig): void {
-    const { containerId, canvasWidth, canvasHeight } = config;
+    // TODO: put values in default constants
+    const { containerId, canvasWidth = 320, canvasHeight = 180 } = config;
 
     // Set the game configs
     this._containerId = `#${containerId}`;
-    this._canvasWidth = canvasWidth ?? 320;
-    this._canvasHeight = canvasHeight ?? 180;
+    this._canvasWidth = canvasWidth;
+    this._canvasHeight = canvasHeight;
 
     // Load all levels from JSON before starting the game
     // await Resources.loadResources();

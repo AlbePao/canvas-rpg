@@ -3,8 +3,8 @@ import { detectOverlap } from '../../helpers/detectOverlap';
 import { Events } from '../../lib/Events';
 import type { Vector2 } from '../../lib/Vector2';
 import { Item } from './Item';
+import { ITEMS_SPRITE_FRAME } from './item.constants';
 import type { CollectibleItemConfig, CollectibleItemData } from './item.types';
-import { ITEMS_SPRITE_FRAME } from './item.types';
 
 export class CollectibleItem extends Item {
   override data: CollectibleItemData;

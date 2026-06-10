@@ -13,7 +13,7 @@ export class GameObject {
   isSolid = false;
   drawLayer: GameObjectDrawLayer | null = null;
 
-  behaviorConfig: GameObjectBehavior[];
+  readonly behaviorConfig: GameObjectBehavior[];
 
   private _hasReadyBeenCalled = false;
   protected behaviorIndex = 0;
@@ -21,11 +21,11 @@ export class GameObject {
   private readonly _pendingTimeouts = new Set<number>();
 
   constructor(config: GameObjectConfig) {
-    const { id, x, y, behaviorConfig } = config;
+    const { id, x = 0, y = 0, behaviorConfig = [] } = config;
     this.id = id;
-    this.position = new Vector2(gridCells(x ?? 0), gridCells(y ?? 0));
+    this.position = new Vector2(gridCells(x), gridCells(y));
     // Set object behavior loop
-    this.behaviorConfig = behaviorConfig ?? [];
+    this.behaviorConfig = behaviorConfig;
   }
 
   stepEntry(delta: number, root: Main): void {

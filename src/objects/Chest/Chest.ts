@@ -19,10 +19,10 @@ export class Chest extends InteractiveObject {
   constructor(config: ChestConfig) {
     super(config);
 
-    const { id, status, removeAfterLoot } = config;
+    const { id, status = 'CLOSED', removeAfterLoot } = config;
 
     this.isSolid = true;
-    this.status = status ?? 'CLOSED';
+    this.status = status;
     this.shouldRemove = !!removeAfterLoot;
 
     this.body = new Sprite({

@@ -10,7 +10,7 @@ export class Decoration extends GameObject {
   body: Sprite;
 
   constructor(config: DecorationConfig) {
-    const { id, key, isSolid, drawLayer, x, y } = config;
+    const { id, key, isSolid, drawLayer = null, x = 0, y = 0 } = config;
 
     super({
       id,
@@ -25,12 +25,12 @@ export class Decoration extends GameObject {
       hFrames: 16,
       vFrames: 9,
       frame,
-      position: new Vector2(gridCells(x ?? 0), gridCells(y ?? 0)),
+      position: new Vector2(gridCells(x), gridCells(y)),
     });
 
     this.isSolid = !!isSolid;
 
     // Mark decorations to render on top or bottom of characters
-    this.drawLayer = drawLayer ?? null;
+    this.drawLayer = drawLayer;
   }
 }
