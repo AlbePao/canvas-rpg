@@ -14,19 +14,12 @@ export type ItemKey =
   | 'heart'
   | 'sword';
 
-type ItemsSpriteFrame = Record<ItemKey, number>;
+export type ItemConfig = GameObjectConfig & {
+  itemKey: ItemKey;
+};
 
-export const ITEMS_SPRITE_FRAME: ItemsSpriteFrame = {
-  hammer1: 0,
-  hammer2: 1,
-  slingshot1: 2,
-  slingshot2: 3,
-  rod1: 4,
-  rod2: 5,
-  potion1: 6,
-  potion2: 7,
-  heart: 8,
-  sword: 9,
+export type CollectibleItemConfig = ItemConfig & {
+  shouldSkipPickupAnimation?: boolean;
 };
 
 export interface ItemData {
@@ -35,14 +28,6 @@ export interface ItemData {
   position?: Vector2;
 }
 
-export type ItemConfig = GameObjectConfig & {
-  itemKey: ItemKey;
-};
-
 export type CollectibleItemData = ItemData & {
   shouldSkipPickupAnimation: boolean;
-};
-
-export type CollectibleItemConfig = ItemConfig & {
-  shouldSkipPickupAnimation?: boolean;
 };
