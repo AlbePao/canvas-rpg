@@ -22,6 +22,8 @@ export const BEHAVIOR_END = 'BEHAVIOR_END';
 // Pause events
 export const PAUSE_ON = 'PAUSE_ON';
 export const PAUSE_OFF = 'PAUSE_OFF';
+export const PAUSE_SUB_MENU_OPEN = 'PAUSE_SUB_MENU_OPEN';
+export const PAUSE_SUB_MENU_CLOSE = 'PAUSE_SUB_MENU_CLOS';
 
 // Input events
 export const DIRECTION_TAP = 'DIRECTION_TAP';
