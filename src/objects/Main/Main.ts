@@ -28,6 +28,8 @@ export class Main extends GameObject {
   isCutscenePlaying = false;
   isPaused = false;
 
+  private _activePauseMenu: PauseMenu | null = null;
+
   constructor() {
     super({
       id: 'main',
@@ -78,26 +80,37 @@ export class Main extends GameObject {
 
     // Launch pause menu handler
     Events.on(PAUSE_ON, this, () => {
+      this.isPaused = true;
       const pauseMenu = new PauseMenu();
+      this._activePauseMenu = pauseMenu;
       this.addChild(pauseMenu);
 
       // unsubscribe from this pause menu after it's destroyed
       const endingSub = Events.on(PAUSE_OFF, this, () => {
         pauseMenu.destroy();
+        this._activePauseMenu = null;
+        this.isPaused = false;
         Events.off(endingSub);
       });
     });
   }
 
-  override step(_delta: number, _root: Main): void {
-    if (this.input.getActionJustPressed('Escape') && this._canPause()) {
-      this.isPaused = !this.isPaused;
-      Events.emit(this.isPaused ? PAUSE_ON : PAUSE_OFF);
+  override step(): void {
+    if (this.input.getActionJustPressed('Escape') && this._canTogglePause()) {
+      Events.emit(this.isPaused ? PAUSE_OFF : PAUSE_ON);
     }
   }
 
-  private _canPause(): boolean {
-    return !this.isSelectionBoxOpened && !this.isCutscenePlaying && !this.isTextBoxOpened;
+  private _canTogglePause(): boolean {
+    if (this.isSelectionBoxOpened || this.isCutscenePlaying || this.isTextBoxOpened) {
+      return false;
+    }
+
+    if (this.isPaused && this._activePauseMenu && !this._activePauseMenu.canDismiss) {
+      return false;
+    }
+
+    return true;
   }
 
   setLevel(newLevelInstance: Level): void {
