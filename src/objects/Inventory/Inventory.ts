@@ -1,6 +1,6 @@
 import { HERO_PICKS_UP_ITEM } from '../../constants/events';
-import { GRID_SIZE } from '../../constants/gridSize';
 import { createItemSprite } from '../../helpers/createItemSprite';
+import { gridCells } from '../../helpers/grid';
 import { Events } from '../../lib/Events';
 import { GameObject } from '../../lib/GameObject';
 import { Vector2 } from '../../lib/Vector2';
@@ -50,7 +50,7 @@ export class Inventory extends GameObject {
       const sprite = createItemSprite({
         id: `${item.id}-inventory-sprite`,
         frame: item.frame,
-        position: new Vector2(index * GRID_SIZE, -8),
+        position: new Vector2(gridCells(index), -8),
       });
       this.addChild(sprite);
     });

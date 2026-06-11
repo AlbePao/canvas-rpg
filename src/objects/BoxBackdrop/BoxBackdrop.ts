@@ -1,4 +1,5 @@
 import { GRID_SIZE } from '../../constants/gridSize';
+import { gridCells } from '../../helpers/grid';
 import { GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
 import { Vector2 } from '../../lib/Vector2';
@@ -62,24 +63,24 @@ export class BoxBackdrop extends GameObject {
     // Draw top row
     this._frames[0].drawImage(ctx, baseX, baseY); // Top-left
     for (let col = 1; col < this._width - 1; col++) {
-      this._frames[1].drawImage(ctx, baseX + col * GRID_SIZE, baseY); // Top-center
+      this._frames[1].drawImage(ctx, baseX + gridCells(col), baseY); // Top-center
     }
-    this._frames[2].drawImage(ctx, baseX + (this._width - 1) * GRID_SIZE, baseY); // Top-right
+    this._frames[2].drawImage(ctx, baseX + gridCells(this._width - 1), baseY); // Top-right
 
     // Draw middle rows
     for (let row = 1; row < this._height - 1; row++) {
-      this._frames[3].drawImage(ctx, baseX, baseY + row * GRID_SIZE); // Left
+      this._frames[3].drawImage(ctx, baseX, baseY + gridCells(row)); // Left
       for (let col = 1; col < this._width - 1; col++) {
-        this._frames[4].drawImage(ctx, baseX + col * GRID_SIZE, baseY + row * GRID_SIZE); // Center
+        this._frames[4].drawImage(ctx, baseX + gridCells(col), baseY + gridCells(row)); // Center
       }
-      this._frames[5].drawImage(ctx, baseX + (this._width - 1) * GRID_SIZE, baseY + row * GRID_SIZE); // Right
+      this._frames[5].drawImage(ctx, baseX + gridCells(this._width - 1), baseY + gridCells(row)); // Right
     }
 
     // Draw bottom row
-    this._frames[6].drawImage(ctx, baseX, baseY + (this._height - 1) * GRID_SIZE); // Bottom-left
+    this._frames[6].drawImage(ctx, baseX, baseY + gridCells(this._height - 1)); // Bottom-left
     for (let col = 1; col < this._width - 1; col++) {
-      this._frames[7].drawImage(ctx, baseX + col * GRID_SIZE, baseY + (this._height - 1) * GRID_SIZE); // Bottom-center
+      this._frames[7].drawImage(ctx, baseX + gridCells(col), baseY + gridCells(this._height - 1)); // Bottom-center
     }
-    this._frames[8].drawImage(ctx, baseX + (this._width - 1) * GRID_SIZE, baseY + (this._height - 1) * GRID_SIZE); // Bottom-right
+    this._frames[8].drawImage(ctx, baseX + gridCells(this._width - 1), baseY + gridCells(this._height - 1)); // Bottom-right
   }
 }

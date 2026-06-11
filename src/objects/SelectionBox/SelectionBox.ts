@@ -1,5 +1,6 @@
 import { SELECTION_BOX_CLOSE } from '../../constants/events';
 import { GRID_SIZE } from '../../constants/gridSize';
+import { gridCells } from '../../helpers/grid';
 import { createSpriteTextLines, getCharacterWidth } from '../../helpers/spriteText';
 import { ArrowIndicator } from '../../lib/ArrowIndicator';
 import { Events } from '../../lib/Events';
@@ -27,13 +28,13 @@ export class SelectionBox extends GameObject {
     direction: 'RIGHT',
   });
 
+  private _isIndicatorLocked = false;
+
   constructor(config: SelectionBoxConfig) {
     const { id, x, y, options } = config;
 
     super({
       id,
-      x,
-      y,
     });
 
     if (options.length < 1) {
@@ -60,20 +61,23 @@ export class SelectionBox extends GameObject {
         ),
       ) + 52; // Add padding for the indicator and some spacing
 
-    const height = this.options.length * GRID_SIZE + GRID_SIZE; // Each option is 16px tall + some padding
+    const height = gridCells(this.options.length) + GRID_SIZE; // Each option is 16px tall + some padding
 
     // Set backdrop size according to its options' size
     this._backdrop.updateSize(width / GRID_SIZE, height / GRID_SIZE);
 
-    // Set the position of the selection box according to options size in relation to canvas width and text box height
+    // If position x and y are set from config, use that params, otherwise set the position according to options size in relation to canvas width and text box height
     const { canvasWidth, canvasHeight } = Game.getContainerSizes();
-    this.position = new Vector2(
-      x ?? canvasWidth - width - 32,
-      y ?? canvasHeight - height - Game.textBoxBackdropHeight * GRID_SIZE - 4,
-    );
+    const newX = x ? gridCells(x) : canvasWidth - width - 32;
+    const newY = y ? gridCells(y) : canvasHeight - height - gridCells(Game.textBoxBackdropHeight) - 4;
+    this.position = new Vector2(newX, newY);
   }
 
   override step(_delta: number, root: Main): void {
+    if (this._isIndicatorLocked) {
+      return;
+    }
+
     const { input } = root;
 
     const isOptionSelected = input.getActionJustPressed('Space') || input.getActionJustPressed('Enter');
@@ -97,12 +101,12 @@ export class SelectionBox extends GameObject {
     this._backdrop.drawImage(ctx, drawPosX, drawPosY);
 
     // Draw the indicator
-    this._indicator.drawImage(ctx, drawPosX + 4, drawPosY + 9 + this.currentOptionIndex * GRID_SIZE);
+    this._indicator.drawImage(ctx, drawPosX + 4, drawPosY + 9 + gridCells(this.currentOptionIndex));
 
     // Draw options text lines
     this._optionsLines.forEach(({ words }, index) => {
       let cursorX = drawPosX + 18;
-      const cursorY = drawPosY + index * GRID_SIZE + 9;
+      const cursorY = drawPosY + gridCells(index) + 9;
 
       words.forEach(({ chars }) => {
         // Draw this whole segment of text
@@ -126,5 +130,13 @@ export class SelectionBox extends GameObject {
 
   protected onOptionSelect(): void {
     Events.emit<SelectionOption>(SELECTION_BOX_CLOSE, this.options[this.currentOptionIndex]);
+  }
+
+  protected lockIndicator(): void {
+    this._isIndicatorLocked = true;
+  }
+
+  protected unlockIndicator(): void {
+    this._isIndicatorLocked = false;
   }
 }
