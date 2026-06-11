@@ -15,8 +15,8 @@ import { Npc } from '../../objects/Npc';
 import { Sprite } from '../../objects/Sprite';
 import { Events } from '../Events';
 import type { GameObject } from '../GameObject';
-import { LevelTransition } from '../LevelTransition';
 import { Resources } from '../Resources';
+import { ScreenTransition } from '../ScreenTransition';
 import { Vector2 } from '../Vector2';
 import type { LevelBuilderConfig, LevelMap } from './levelBuilder.types';
 
@@ -119,7 +119,7 @@ export class LevelBuilder extends Level {
       //   throw new Error(`LevelBuilder: level "${newLevelId}" not found in LevelsMapper`);
       // }
 
-      new LevelTransition(() => {
+      new ScreenTransition(() => {
         Events.emit(
           CHANGE_LEVEL,
           new LevelBuilder({

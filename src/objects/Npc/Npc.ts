@@ -2,8 +2,6 @@ import { STANDING_DIRECTIONS } from '../../constants/animationDirections';
 import {
   BEHAVIOR_END,
   HERO_REQUESTS_ACTION,
-  LEVEL_TRANSITION_END,
-  LEVEL_TRANSITION_START,
   PAUSE_OFF,
   PAUSE_ON,
   SELECTION_BOX_CLOSE,
@@ -21,6 +19,7 @@ import { Events } from '../../lib/Events';
 import { FrameIndexPattern } from '../../lib/FrameIndexPattern';
 import type { GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
+import { SCREEN_TRANSITION_END, SCREEN_TRANSITION_START } from '../../lib/ScreenTransition/screenTransition.constants';
 import { StoryFlags } from '../../lib/StoryFlags';
 import { Vector2 } from '../../lib/Vector2';
 import type { Directions } from '../../types/directions';
@@ -191,14 +190,14 @@ export class Npc extends InteractiveObject {
     });
 
     // Lock npc when game is paused, cutscene is playing or hero is changing level
-    [PAUSE_ON, TEXT_BOX_OPEN, LEVEL_TRANSITION_START].forEach((event) => {
+    [PAUSE_ON, TEXT_BOX_OPEN, SCREEN_TRANSITION_START].forEach((event) => {
       Events.on(event, this, () => {
         this._isLocked = true;
         // Freeze animation
         this._body.animations?.pause();
       });
     });
-    [PAUSE_OFF, TEXT_BOX_CLOSE, LEVEL_TRANSITION_END].forEach((event) => {
+    [PAUSE_OFF, TEXT_BOX_CLOSE, SCREEN_TRANSITION_END].forEach((event) => {
       Events.on(event, this, () => {
         this._isLocked = false;
         // Resume animation

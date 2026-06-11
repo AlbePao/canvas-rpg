@@ -4,8 +4,6 @@ import {
   HERO_PICKS_UP_ITEM,
   HERO_POSITION,
   HERO_REQUESTS_ACTION,
-  LEVEL_TRANSITION_END,
-  LEVEL_TRANSITION_START,
   PAUSE_OFF,
   PAUSE_ON,
   TEXT_BOX_CLOSE,
@@ -20,6 +18,7 @@ import { Events } from '../../lib/Events';
 import { FrameIndexPattern } from '../../lib/FrameIndexPattern';
 import { GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
+import { SCREEN_TRANSITION_END, SCREEN_TRANSITION_START } from '../../lib/ScreenTransition/screenTransition.constants';
 import { Vector2 } from '../../lib/Vector2';
 import type { Directions } from '../../types/directions';
 import type { CollectibleItemData } from '../Item';
@@ -98,14 +97,14 @@ export class Hero extends GameObject {
 
   override ready(): void {
     // Lock hero when game is paused, cutscene is playing or is changing level
-    [PAUSE_ON, TEXT_BOX_OPEN, LEVEL_TRANSITION_START].forEach((event) => {
+    [PAUSE_ON, TEXT_BOX_OPEN, SCREEN_TRANSITION_START].forEach((event) => {
       Events.on(event, this, () => {
         this._isLocked = true;
         // Freeze animation
         this.body.animations?.pause();
       });
     });
-    [PAUSE_OFF, TEXT_BOX_CLOSE, LEVEL_TRANSITION_END].forEach((event) => {
+    [PAUSE_OFF, TEXT_BOX_CLOSE, SCREEN_TRANSITION_END].forEach((event) => {
       Events.on(event, this, () => {
         this._isLocked = false;
         // Resume animation
