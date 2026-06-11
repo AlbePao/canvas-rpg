@@ -76,7 +76,7 @@ export class TextBox extends GameObject {
     this._currentLineIndex = 0;
 
     // Create a portrait
-    if (portraitFrame !== null) {
+    if (portraitFrame) {
       this.portrait = new Sprite({
         id: `${id}-portrait`,
         resource: Resources.images.portraits,
