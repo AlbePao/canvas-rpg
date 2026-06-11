@@ -1,34 +1,24 @@
-import { STANDING_DIRECTIONS } from '../../constants/animationDirections';
-import {
-  BEHAVIOR_END,
-  HERO_REQUESTS_ACTION,
-  PAUSE_OFF,
-  PAUSE_ON,
-  SELECTION_BOX_CLOSE,
-  SELECTION_BOX_OPEN,
-  TEXT_BOX_CLOSE,
-  TEXT_BOX_END,
-  TEXT_BOX_OPEN,
-} from '../../constants/events';
 import { GRID_SIZE } from '../../constants/gridSize';
+import { STANDING_DIRECTIONS } from '../../constants/standingDirections';
 import { emitPickupAnimation } from '../../helpers/emitPickupAnimation';
-import { getHeroSiblingObject, isHeroObject } from '../../helpers/getHeroSiblingObject';
+import { getHeroObject, isHeroObject } from '../../helpers/getHeroObject';
 import { moveTowards } from '../../helpers/moveTowards';
 import { Animations } from '../../lib/Animations';
 import { Events } from '../../lib/Events';
 import { FrameIndexPattern } from '../../lib/FrameIndexPattern';
-import type { GameObject } from '../../lib/GameObject';
+import { BEHAVIOR_END, type GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
-import { SCREEN_TRANSITION_END, SCREEN_TRANSITION_START } from '../../lib/ScreenTransition/screenTransition.constants';
+import { SCREEN_TRANSITION_END, SCREEN_TRANSITION_START } from '../../lib/ScreenTransition';
 import { StoryFlags } from '../../lib/StoryFlags';
 import { Vector2 } from '../../lib/Vector2';
 import type { Directions } from '../../types/directions';
+import { HERO_REQUESTS_ACTION } from '../Hero';
 import { InteractiveObject } from '../InteractiveObject';
 import type { ItemKey } from '../Item';
-import { SelectionBox, type SelectionOption } from '../SelectionBox';
+import { PAUSE_OFF, PAUSE_ON } from '../PauseMenu';
+import { SELECTION_BOX_CLOSE, SELECTION_BOX_OPEN, SelectionBox, type SelectionOption } from '../SelectionBox';
 import { Sprite } from '../Sprite';
-import { TextBox } from '../TextBox';
-import type { NpcBehavior, NpcConfig } from './npc.types';
+import { TEXT_BOX_CLOSE, TEXT_BOX_END, TEXT_BOX_OPEN, TextBox } from '../TextBox';
 import {
   NPC_STAND_DOWN,
   NPC_STAND_LEFT,
@@ -38,7 +28,8 @@ import {
   NPC_WALK_LEFT,
   NPC_WALK_RIGHT,
   NPC_WALK_UP,
-} from './npcAnimations';
+} from './npc.animations';
+import type { NpcBehavior, NpcConfig } from './npc.types';
 
 export class Npc extends InteractiveObject {
   private readonly _body: Sprite;
@@ -99,7 +90,7 @@ export class Npc extends InteractiveObject {
         return;
       }
 
-      const heroDirection = getHeroSiblingObject(this.parent)?.facingDirection;
+      const heroDirection = getHeroObject(this.parent)?.facingDirection;
 
       if (heroDirection === 'DOWN') {
         this._changeFacingDirection('UP');

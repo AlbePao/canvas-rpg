@@ -1,8 +1,8 @@
-import { PAUSE_SUB_MENU_CLOSE } from '../../constants/events';
 import { Events } from '../../lib/Events';
 import { GameObject } from '../../lib/GameObject';
 import { BoxBackdrop } from '../BoxBackdrop';
 import type { Main } from '../Main';
+import { PAUSE_SUB_MENU_CLOSE } from '../PauseMenu';
 
 export class InventoryBox extends GameObject {
   private readonly _backdrop = new BoxBackdrop({

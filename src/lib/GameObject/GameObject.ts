@@ -1,8 +1,8 @@
-import { BEHAVIOR_END } from '../../constants/events';
 import { gridCells } from '../../helpers/grid';
 import type { Main } from '../../objects/Main';
 import { Events } from '../Events';
 import { Vector2 } from '../Vector2';
+import { BEHAVIOR_END } from './gameObject.constants';
 import type { GameObjectBehavior, GameObjectConfig, GameObjectDrawLayer } from './gameObject.types';
 
 export class GameObject {

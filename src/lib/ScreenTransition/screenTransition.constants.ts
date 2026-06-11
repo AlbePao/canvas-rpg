@@ -4,6 +4,8 @@ import type { ScreenTransitionMap } from './screenTransition.types';
 export const SCREEN_TRANSITION_START = 'SCREEN_TRANSITION_START';
 export const SCREEN_TRANSITION_END = 'SCREEN_TRANSITION_END';
 
+export const SCREEN_TRANSITION_STYLES_ID = 'screen-transition-styles';
+
 // Screen transition css classes
 export const SCREEN_TRANSITION_CLASSNAME = 'ScreenTransition';
 

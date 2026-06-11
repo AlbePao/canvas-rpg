@@ -1,15 +1,5 @@
-import { STANDING_DIRECTIONS } from '../../constants/animationDirections';
-import {
-  DIRECTION_TAP,
-  HERO_PICKS_UP_ITEM,
-  HERO_POSITION,
-  HERO_REQUESTS_ACTION,
-  PAUSE_OFF,
-  PAUSE_ON,
-  TEXT_BOX_CLOSE,
-  TEXT_BOX_OPEN,
-} from '../../constants/events';
 import { GRID_SIZE } from '../../constants/gridSize';
+import { STANDING_DIRECTIONS } from '../../constants/standingDirections';
 import { createItemSprite } from '../../helpers/createItemSprite';
 import { isSpaceFree } from '../../helpers/grid';
 import { moveTowards } from '../../helpers/moveTowards';
@@ -17,15 +7,17 @@ import { Animations } from '../../lib/Animations';
 import { Events } from '../../lib/Events';
 import { FrameIndexPattern } from '../../lib/FrameIndexPattern';
 import { GameObject } from '../../lib/GameObject';
+import { DIRECTION_TAP } from '../../lib/Input';
 import { Resources } from '../../lib/Resources';
-import { SCREEN_TRANSITION_END, SCREEN_TRANSITION_START } from '../../lib/ScreenTransition/screenTransition.constants';
+import { SCREEN_TRANSITION_END, SCREEN_TRANSITION_START } from '../../lib/ScreenTransition';
 import { Vector2 } from '../../lib/Vector2';
 import type { Directions } from '../../types/directions';
 import type { CollectibleItemData } from '../Item';
 import type { Main } from '../Main';
 import { Npc } from '../Npc';
+import { PAUSE_OFF, PAUSE_ON } from '../PauseMenu';
 import { Sprite } from '../Sprite';
-import type { HeroConfig } from './hero.types';
+import { TEXT_BOX_CLOSE, TEXT_BOX_OPEN } from '../TextBox';
 import {
   HERO_PICK_UP_DOWN,
   HERO_STAND_DOWN,
@@ -36,7 +28,9 @@ import {
   HERO_WALK_LEFT,
   HERO_WALK_RIGHT,
   HERO_WALK_UP,
-} from './heroAnimations';
+} from './hero.animations';
+import { HERO_PICKS_UP_ITEM, HERO_POSITION, HERO_REQUESTS_ACTION } from './hero.constants';
+import type { HeroConfig } from './hero.types';
 
 export class Hero extends GameObject {
   facingDirection: Directions = 'DOWN';

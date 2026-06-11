@@ -1,14 +1,14 @@
-import { HERO_REQUESTS_ACTION, TEXT_BOX_CLOSE, TEXT_BOX_OPEN } from '../../constants/events';
 import { emitPickupAnimation } from '../../helpers/emitPickupAnimation';
 import { Events } from '../../lib/Events';
 import type { GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
 import { StoryFlags } from '../../lib/StoryFlags';
 import { Vector2 } from '../../lib/Vector2';
+import { HERO_REQUESTS_ACTION } from '../Hero';
 import { InteractiveObject } from '../InteractiveObject';
 import type { ItemKey } from '../Item';
 import { Sprite } from '../Sprite';
-import { TextBox } from '../TextBox';
+import { TEXT_BOX_CLOSE, TEXT_BOX_OPEN, TextBox } from '../TextBox';
 import type { ChestConfig, ChestStatus } from './chest.types';
 
 export class Chest extends InteractiveObject {

@@ -1,0 +1,5 @@
+// Hero events
+export const HERO_POSITION = 'HERO_POSITION';
+export const HERO_EXITS = 'HERO_EXITS';
+export const HERO_REQUESTS_ACTION = 'HERO_REQUESTS_ACTION';
+export const HERO_PICKS_UP_ITEM = 'HERO_PICKS_UP_ITEM';

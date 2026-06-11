@@ -1,23 +1,12 @@
-import {
-  CHANGE_LEVEL,
-  CUTSCENE_END,
-  CUTSCENE_START,
-  PAUSE_OFF,
-  PAUSE_ON,
-  SELECTION_BOX_CLOSE,
-  SELECTION_BOX_OPEN,
-  TEXT_BOX_CLOSE,
-  TEXT_BOX_OPEN,
-} from '../../constants/events';
 import { Events } from '../../lib/Events';
 import { GameObject } from '../../lib/GameObject';
 import { Input } from '../../lib/Input';
 import { Camera } from '../Camera';
 import { Inventory } from '../Inventory';
-import type { Level } from '../Level';
-import { PauseMenu } from '../PauseMenu';
-import type { SelectionBox } from '../SelectionBox';
-import type { TextBox } from '../TextBox';
+import { CHANGE_LEVEL, type Level } from '../Level';
+import { PAUSE_OFF, PAUSE_ON, PauseMenu } from '../PauseMenu';
+import { SELECTION_BOX_CLOSE, SELECTION_BOX_OPEN, type SelectionBox } from '../SelectionBox';
+import { TEXT_BOX_CLOSE, TEXT_BOX_OPEN, type TextBox } from '../TextBox';
 
 export class Main extends GameObject {
   level: Level | null = null;
@@ -70,13 +59,13 @@ export class Main extends GameObject {
       });
     });
 
-    Events.on(CUTSCENE_START, this, () => {
-      this.isCutscenePlaying = true;
-    });
+    // Events.on(CUTSCENE_START, this, () => {
+    //   this.isCutscenePlaying = true;
+    // });
 
-    Events.on(CUTSCENE_END, this, () => {
-      this.isCutscenePlaying = false;
-    });
+    // Events.on(CUTSCENE_END, this, () => {
+    //   this.isCutscenePlaying = false;
+    // });
 
     // Launch pause menu handler
     Events.on(PAUSE_ON, this, () => {

@@ -1,4 +1,3 @@
-import { CHANGE_LEVEL, HERO_EXITS } from '../../constants/events';
 import { gridCells } from '../../helpers/grid';
 import { objectKeys } from '../../helpers/objectKeys';
 import { TILESET_LEVEL } from '../../levels/tilesetLevel';
@@ -7,9 +6,9 @@ import { Chest } from '../../objects/Chest';
 import { Decoration } from '../../objects/Decoration';
 import type { ExitData } from '../../objects/Exit';
 import { Exit } from '../../objects/Exit';
-import { Hero } from '../../objects/Hero';
+import { Hero, HERO_EXITS } from '../../objects/Hero';
 import { CollectibleItem } from '../../objects/Item';
-import { Level } from '../../objects/Level';
+import { CHANGE_LEVEL, Level } from '../../objects/Level';
 import { LevelTile } from '../../objects/LevelTile';
 import { Npc } from '../../objects/Npc';
 import { Sprite } from '../../objects/Sprite';
@@ -20,6 +19,7 @@ import { ScreenTransition } from '../ScreenTransition';
 import { Vector2 } from '../Vector2';
 import type { LevelBuilderConfig, LevelMap } from './levelBuilder.types';
 
+// TODO: remove this mapping
 const LEVELS: Record<string, LevelMap> = {
   tilesetLevel: TILESET_LEVEL,
   tilesetLevel2: TILESET_LEVEL2,

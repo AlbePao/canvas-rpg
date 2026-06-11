@@ -1,4 +1,3 @@
-import { TEXT_BOX_CLOSE, TEXT_BOX_END } from '../../constants/events';
 import { createSpriteTextLines } from '../../helpers/spriteText';
 import { ArrowIndicator } from '../../lib/ArrowIndicator';
 import { Events } from '../../lib/Events';
@@ -9,22 +8,22 @@ import type { Line } from '../../types/text';
 import { BoxBackdrop } from '../BoxBackdrop';
 import type { Main } from '../Main';
 import { Sprite } from '../Sprite';
+import {
+  TEXT_BOX_CHARACTER_OFFSET_X,
+  TEXT_BOX_CLOSE,
+  TEXT_BOX_END,
+  TEXT_BOX_LINE_VERTICAL_HEIGHT,
+  TEXT_BOX_LINE_WIDTH_MAX,
+  TEXT_BOX_PADDING_LEFT_NO_PORTRAIT,
+  TEXT_BOX_PADDING_LEFT_WITH_PORTRAIT,
+  TEXT_BOX_PADDING_TOP,
+  TEXT_BOX_PORTRAIT_OFFSET_X,
+  TEXT_BOX_PORTRAIT_OFFSET_Y,
+  TEXT_CONTINUE_INDICATOR_PADDING_LEFT,
+  TEXT_CONTINUE_INDICATOR_PADDING_TOP,
+  TYPEWRITER_DEFAULT_SPEED,
+} from './textBox.constants';
 import type { TextBoxConfig } from './textBox.types';
-
-// Rendering constants for text layout
-const TEXT_BOX_PADDING_LEFT_WITH_PORTRAIT = 27;
-const TEXT_BOX_PADDING_LEFT_NO_PORTRAIT = 12;
-const TEXT_BOX_PADDING_TOP = 9;
-const TEXT_BOX_LINE_WIDTH_MAX = 240;
-const TEXT_BOX_LINE_VERTICAL_HEIGHT = 14;
-const TEXT_BOX_PORTRAIT_OFFSET_X = 6;
-const TEXT_BOX_PORTRAIT_OFFSET_Y = 6;
-const TEXT_BOX_CHARACTER_OFFSET_X = 5;
-const TEXT_CONTINUE_INDICATOR_PADDING_LEFT = 236;
-const TEXT_CONTINUE_INDICATOR_PADDING_TOP = 32;
-
-// Typewriter animation constants
-const TYPEWRITER_DEFAULT_SPEED = 80; // milliseconds per character
 
 export class TextBox extends GameObject {
   portrait?: Sprite;

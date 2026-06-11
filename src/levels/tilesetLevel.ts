@@ -1,5 +1,10 @@
-import { COLLECTED_SWORD, RECEIVED_ITEM_FROM_B, TALKED_TO_A, TALKED_TO_B } from '../constants/storyFlags';
 import type { LevelMap } from '../lib/LevelBuilder/levelBuilder.types';
+import {
+  COLLECTED_SWORD,
+  RECEIVED_ITEM_FROM_B,
+  TALKED_TO_A,
+  TALKED_TO_B,
+} from '../lib/StoryFlags/storyFlags.constants';
 
 export const TILESET_LEVEL: LevelMap = {
   id: 'tilesetLevel',

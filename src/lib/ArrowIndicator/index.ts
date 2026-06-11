@@ -1,2 +1,2 @@
-export * from './ArrowIndicator';
+export * from './arrowIndicator';
 export * from './arrowIndicator.types';

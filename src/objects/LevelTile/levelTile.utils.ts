@@ -6,7 +6,7 @@ import type {
   LevelWaterTileSet,
 } from '../../lib/LevelBuilder/tileset.types';
 import { TILESET_FRAME_MAP } from '../../lib/LevelBuilder/tilesetFrameMap';
-import { WATER_ANIMATIONS } from './levelTileAnimations';
+import { WATER_ANIMATIONS } from './levelTile.animations';
 
 function isWaterTile(tileName: LevelTileName): tileName is LevelWaterTileName {
   return tileName.toLowerCase().includes('water');

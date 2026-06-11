@@ -5,6 +5,6 @@ export function isHeroObject(object: GameObject): object is Hero {
   return object instanceof Hero;
 }
 
-export function getHeroSiblingObject(gameObject: GameObject | null): Hero | null {
+export function getHeroObject(gameObject: GameObject | null): Hero | null {
   return gameObject?.children.find((child) => isHeroObject(child)) ?? null;
 }

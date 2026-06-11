@@ -1,4 +1,3 @@
-import { SELECTION_BOX_CLOSE } from '../../constants/events';
 import { GRID_SIZE } from '../../constants/gridSize';
 import { gridCells } from '../../helpers/grid';
 import { createSpriteTextLines, getCharacterWidth } from '../../helpers/spriteText';
@@ -11,6 +10,7 @@ import { Vector2 } from '../../lib/Vector2';
 import type { Line } from '../../types/text';
 import { BoxBackdrop } from '../BoxBackdrop';
 import type { Main } from '../Main';
+import { SELECTION_BOX_CLOSE } from './selectionBox.constants';
 import type { SelectionBoxConfig, SelectionOption } from './selectionBox.types';
 
 export class SelectionBox extends GameObject {

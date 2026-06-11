@@ -6,10 +6,9 @@ import {
   SCREEN_TRANSITION_CLASSNAME,
   SCREEN_TRANSITION_END,
   SCREEN_TRANSITION_START,
+  SCREEN_TRANSITION_STYLES_ID,
 } from './screenTransition.constants';
 import type { ScreenTransitionConfig } from './screenTransition.types';
-
-const TRANSITION_STYLES_ID = 'screen-transition-styles';
 
 export class ScreenTransition {
   private readonly _element: HTMLDivElement;
@@ -18,11 +17,11 @@ export class ScreenTransition {
     const { transition } = config;
 
     // Remove existing style if present (from previous incomplete transition)
-    document.querySelector(`#${TRANSITION_STYLES_ID}`)?.remove();
+    document.querySelector(`#${SCREEN_TRANSITION_STYLES_ID}`)?.remove();
 
     // Inject styles
     const styleSheet = document.createElement('style');
-    styleSheet.id = TRANSITION_STYLES_ID;
+    styleSheet.id = SCREEN_TRANSITION_STYLES_ID;
     styleSheet.textContent = `${SCREEN_TRANSITION_BASE_CLASS}${SCREEN_TRANSITIONS[transition]}`;
     document.head.appendChild(styleSheet);
 
@@ -49,7 +48,7 @@ export class ScreenTransition {
       () => {
         // Remove element and styles
         this._element?.remove();
-        document.querySelector(`#${TRANSITION_STYLES_ID}`)?.remove();
+        document.querySelector(`#${SCREEN_TRANSITION_STYLES_ID}`)?.remove();
         Events.emit(SCREEN_TRANSITION_END);
       },
       { once: true },

@@ -1,9 +1,9 @@
-import { CHANGE_LEVEL, HERO_POSITION } from '../../constants/events';
 import { Events } from '../../lib/Events';
 import { Game } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
 import type { Vector2 } from '../../lib/Vector2';
-import type { Level } from '../Level';
+import { HERO_POSITION } from '../Hero';
+import { CHANGE_LEVEL, type Level } from '../Level';
 
 export class Camera extends GameObject {
   constructor() {

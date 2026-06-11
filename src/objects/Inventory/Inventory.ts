@@ -1,10 +1,10 @@
-import { HERO_PICKS_UP_ITEM } from '../../constants/events';
 import { createItemSprite } from '../../helpers/createItemSprite';
 import { gridCells } from '../../helpers/grid';
 import { Events } from '../../lib/Events';
 import { GameObject } from '../../lib/GameObject';
 import { Vector2 } from '../../lib/Vector2';
 import type { UUID } from '../../types/uuid';
+import { HERO_PICKS_UP_ITEM } from '../Hero';
 import type { CollectibleItemData } from '../Item';
 import type { InventoryItem } from './inventory.types';
 

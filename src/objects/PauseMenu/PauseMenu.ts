@@ -1,26 +1,15 @@
-import {
-  PAUSE_OFF,
-  PAUSE_SUB_MENU_CLOSE,
-  PAUSE_SUB_MENU_OPEN,
-  TEXT_BOX_CLOSE,
-  TEXT_BOX_OPEN,
-} from '../../constants/events';
 import { Events } from '../../lib/Events';
 import type { GameObject } from '../../lib/GameObject';
 import { InventoryBox } from '../InventoryBox';
 import { SelectionBox } from '../SelectionBox';
-import { TextBox } from '../TextBox';
-import type { PauseMenuOption } from './pauseMenu.types';
-
-const SAVE_TEXT_BOX_ID = 'save-text-box';
-const PAUSE_MENU_OPTIONS: PauseMenuOption[] = [
-  { text: 'Inventory', value: 'inventory' },
-  { text: 'Map', value: 'map' },
-  { text: 'Team', value: 'team' },
-  { text: 'Save', value: 'save' },
-  { text: 'Options', value: 'options' },
-  { text: 'Exit', value: 'exit' },
-] as const;
+import { TEXT_BOX_CLOSE, TEXT_BOX_OPEN, TextBox } from '../TextBox';
+import {
+  PAUSE_MENU_OPTIONS,
+  PAUSE_OFF,
+  PAUSE_SUB_MENU_CLOSE,
+  PAUSE_SUB_MENU_OPEN,
+  SAVE_TEXT_BOX_ID,
+} from './pauseMenu.constants';
 
 export class PauseMenu extends SelectionBox {
   get canDismiss(): boolean {

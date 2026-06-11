@@ -1,9 +1,9 @@
-import { HERO_EXITS, HERO_POSITION } from '../../constants/events';
 import { detectOverlap } from '../../helpers/detectOverlap';
 import { Events } from '../../lib/Events';
 import { GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
 import type { Vector2 } from '../../lib/Vector2';
+import { HERO_EXITS, HERO_POSITION } from '../Hero';
 import { Sprite } from '../Sprite';
 import type { ExitConfig, ExitData } from './exit.types';
 
