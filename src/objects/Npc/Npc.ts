@@ -42,13 +42,13 @@ import {
 } from './npcAnimations';
 
 export class Npc extends InteractiveObject {
-  body: Sprite;
-  contentItemKey: ItemKey | null = null;
-  isLocked = false;
-  isWalking = false;
-  walkingSpeed = 1;
+  private readonly _body: Sprite;
+  private _contentItemKey: ItemKey | null = null;
+  private _isLocked = false;
+  private _isWalking = false;
+  private _walkingSpeed = 1;
   facingDirection: Directions = 'DOWN';
-  destinationPosition: Vector2;
+  readonly destinationPosition: Vector2;
 
   constructor(config: NpcConfig) {
     super(config);
@@ -68,7 +68,7 @@ export class Npc extends InteractiveObject {
     this.addChild(shadow);
 
     // Body sprite
-    this.body = new Sprite({
+    this._body = new Sprite({
       id: `${id}-npc-body-sprite`,
       resource: Resources.images[npc],
       frameSize: new Vector2(32, 32),
@@ -86,7 +86,7 @@ export class Npc extends InteractiveObject {
         walkUp: new FrameIndexPattern(NPC_WALK_UP),
       }),
     });
-    this.addChild(this.body);
+    this.addChild(this._body);
 
     this.destinationPosition = this.position.duplicate();
   }
@@ -121,7 +121,7 @@ export class Npc extends InteractiveObject {
 
       // Save locally the item to pick when text box is closed and hero satisfies the story flags
       if (itemKey) {
-        this.contentItemKey = itemKey;
+        this._contentItemKey = itemKey;
       }
 
       // Instantiate and emit the textbox
@@ -158,7 +158,7 @@ export class Npc extends InteractiveObject {
           if (response && response.length > 0) {
             // Save locally the item to pick when text box is closed
             if (itemKey) {
-              this.contentItemKey = itemKey;
+              this._contentItemKey = itemKey;
             }
 
             // Update textbox instance with selected option response
@@ -182,56 +182,56 @@ export class Npc extends InteractiveObject {
       const resetDirection = this.behaviorConfig[this.behaviorIndex]?.direction ?? 'DOWN';
       this._changeFacingDirection(resetDirection);
 
-      if (this.contentItemKey) {
+      if (this._contentItemKey) {
         // Now hero can collect the item
-        emitPickupAnimation(this.contentItemKey);
+        emitPickupAnimation(this._contentItemKey);
         // Reset the items once hero collects it
-        this.contentItemKey = null;
+        this._contentItemKey = null;
       }
     });
 
     // Lock npc when game is paused, cutscene is playing or hero is changing level
     [PAUSE_ON, TEXT_BOX_OPEN, LEVEL_TRANSITION_START].forEach((event) => {
       Events.on(event, this, () => {
-        this.isLocked = true;
+        this._isLocked = true;
         // Freeze animation
-        this.body.animations?.pause();
+        this._body.animations?.pause();
       });
     });
     [PAUSE_OFF, TEXT_BOX_CLOSE, LEVEL_TRANSITION_END].forEach((event) => {
       Events.on(event, this, () => {
-        this.isLocked = false;
+        this._isLocked = false;
         // Resume animation
-        this.body.animations?.resume();
+        this._body.animations?.resume();
       });
     });
   }
 
   override step(): void {
-    if (!this.isWalking || this.isLocked) {
+    if (!this._isWalking || this._isLocked) {
       return;
     }
 
     // Move towards the walk target
-    const distance = moveTowards(this, this.destinationPosition, this.walkingSpeed);
+    const distance = moveTowards(this, this.destinationPosition, this._walkingSpeed);
     const hasArrived = distance <= 1;
 
     if (hasArrived) {
-      this.isWalking = false;
-      this.walkingSpeed = 1;
+      this._isWalking = false;
+      this._walkingSpeed = 1;
       this.position.x = this.destinationPosition.x;
       this.position.y = this.destinationPosition.y;
       Events.emit(BEHAVIOR_END, this.id);
     }
   }
 
-  override startBehavior(behavior: NpcBehavior): void {
+  protected override startBehavior(behavior: NpcBehavior): void {
     const { type } = behavior;
 
     if (type === 'stand') {
       const { direction, duration } = behavior;
 
-      if (!this.isLocked) {
+      if (!this._isLocked) {
         this._changeFacingDirection(direction);
       }
 
@@ -241,8 +241,7 @@ export class Npc extends InteractiveObject {
         }, duration);
       }
     } else if (type === 'walk') {
-      if (this.isLocked) {
-        // this.body.animations?.stop();
+      if (this._isLocked) {
         this.scheduleTimeout(() => {
           this.startBehavior(behavior);
         }, 10);
@@ -258,22 +257,22 @@ export class Npc extends InteractiveObject {
 
       if (direction === 'DOWN') {
         nextY += GRID_SIZE;
-        this.body.animations?.play('walkDown');
+        this._body.animations?.play('walkDown');
       }
       if (direction === 'UP') {
         nextY -= GRID_SIZE;
-        this.body.animations?.play('walkUp');
+        this._body.animations?.play('walkUp');
       }
       if (direction === 'LEFT') {
         nextX -= GRID_SIZE;
-        this.body.animations?.play('walkLeft');
+        this._body.animations?.play('walkLeft');
       }
       if (direction === 'RIGHT') {
         nextX += GRID_SIZE;
-        this.body.animations?.play('walkRight');
+        this._body.animations?.play('walkRight');
       }
 
-      this.walkingSpeed = speed ?? 1;
+      this._walkingSpeed = speed ?? 1;
       this.facingDirection = direction;
 
       // Validate the walk target is free
@@ -299,7 +298,7 @@ export class Npc extends InteractiveObject {
         return;
       }
 
-      this.isWalking = true;
+      this._isWalking = true;
       this.destinationPosition.x = nextX;
       this.destinationPosition.y = nextY;
     }
@@ -307,6 +306,6 @@ export class Npc extends InteractiveObject {
 
   private _changeFacingDirection(direction: Directions): void {
     this.facingDirection = direction;
-    this.body.animations?.play(STANDING_DIRECTIONS[direction]);
+    this._body.animations?.play(STANDING_DIRECTIONS[direction]);
   }
 }

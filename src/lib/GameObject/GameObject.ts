@@ -6,14 +6,14 @@ import { Vector2 } from '../Vector2';
 import type { GameObjectBehavior, GameObjectConfig, GameObjectDrawLayer } from './gameObject.types';
 
 export class GameObject {
-  id: string;
+  readonly id: string;
   position: Vector2;
   children: GameObject[] = [];
   parent: GameObject | null = null;
   isSolid = false;
   drawLayer: GameObjectDrawLayer | null = null;
 
-  readonly behaviorConfig: GameObjectBehavior[];
+  protected readonly behaviorConfig: GameObjectBehavior[];
 
   private _hasReadyBeenCalled = false;
   protected behaviorIndex = 0;
@@ -39,7 +39,7 @@ export class GameObject {
       this._hasReadyBeenCalled = true;
       this.ready();
       // Set and start behavior loop
-      this.setBehaviorLoop(root);
+      this._setBehaviorLoop(root);
     }
 
     // Call any implemented step code
@@ -65,12 +65,12 @@ export class GameObject {
     this.drawImage(ctx, drawPosX, drawPosY);
 
     // Pass on children
-    this.getDrawChildrenOrdered().forEach((child) => {
+    this._getDrawChildrenOrdered().forEach((child) => {
       child.draw(ctx, drawPosX, drawPosY);
     });
   }
 
-  getDrawChildrenOrdered(): GameObject[] {
+  private _getDrawChildrenOrdered(): GameObject[] {
     return [...this.children].sort((a, b) => {
       // FLOOR layer renders first (below everything)
       if (b.drawLayer === 'FLOOR') {
@@ -135,14 +135,14 @@ export class GameObject {
     return timeoutId;
   }
 
-  setBehaviorLoop(root: Main): void {
+  private _setBehaviorLoop(root: Main): void {
     if (this.behaviorConfig.length === 0) {
       return;
     }
 
     // If we have a behavior, kick off after a short delay - track this timeout
     this.scheduleTimeout(() => {
-      this.doBehaviorEvent(root);
+      this._doBehaviorEvent(root);
     }, 10);
 
     Events.on<string>(BEHAVIOR_END, this, (id) => {
@@ -158,11 +158,11 @@ export class GameObject {
       }
 
       // Do it again!
-      this.doBehaviorEvent(root);
+      this._doBehaviorEvent(root);
     });
   }
 
-  doBehaviorEvent(root: Main): void {
+  private _doBehaviorEvent(root: Main): void {
     const { isCutscenePlaying } = root;
     if (isCutscenePlaying || this.behaviorConfig.length === 0) {
       return;
@@ -174,7 +174,7 @@ export class GameObject {
       }
 
       this._retryTimeout = this.scheduleTimeout(() => {
-        this.doBehaviorEvent(root);
+        this._doBehaviorEvent(root);
       }, 1000);
 
       return;
@@ -183,7 +183,7 @@ export class GameObject {
     this.startBehavior(this.behaviorConfig[this.behaviorIndex]);
   }
 
-  startBehavior(_behavior: GameObjectBehavior): void {
+  protected startBehavior(_behavior: GameObjectBehavior): void {
     // ...
   }
 }

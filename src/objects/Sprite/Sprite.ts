@@ -7,13 +7,13 @@ import type { Coords2D } from '../../types/coords';
 import type { SpriteConfig } from './sprite.types';
 
 export class Sprite extends GameObject {
-  resource: Resource;
-  frameSize: Vector2;
-  hFrames: number;
-  vFrames: number;
+  private readonly _resource: Resource;
+  private readonly _frameSize: Vector2;
+  private readonly _hFrames: number;
+  readonly vFrames: number;
   frame: number;
-  scale: number;
-  animations: Animations | null;
+  private readonly _scale: number;
+  readonly animations: Animations | null;
 
   constructor({
     id, // id for the sprite
@@ -30,12 +30,12 @@ export class Sprite extends GameObject {
       id,
     });
 
-    this.resource = resource;
-    this.frameSize = frameSize ?? new Vector2(GRID_SIZE, GRID_SIZE);
-    this.hFrames = hFrames ?? 1;
+    this._resource = resource;
+    this._frameSize = frameSize ?? new Vector2(GRID_SIZE, GRID_SIZE);
+    this._hFrames = hFrames ?? 1;
     this.vFrames = vFrames ?? 1;
     this.frame = frame ?? 0;
-    this.scale = scale ?? 1;
+    this._scale = scale ?? 1;
     this.position = position ?? new Vector2(0, 0);
     this.animations = animations ?? null;
   }
@@ -51,35 +51,35 @@ export class Sprite extends GameObject {
 
   // Calculate frame coordinates on-the-fly without allocations
   private _getFrameCoordinates(frameIndex: number): Coords2D {
-    const frameX = frameIndex % this.hFrames;
-    const frameY = Math.floor(frameIndex / this.hFrames);
+    const frameX = frameIndex % this._hFrames;
+    const frameY = Math.floor(frameIndex / this._hFrames);
     return {
-      x: frameX * this.frameSize.x,
-      y: frameY * this.frameSize.y,
+      x: frameX * this._frameSize.x,
+      y: frameY * this._frameSize.y,
     };
   }
 
   override drawImage(ctx: CanvasRenderingContext2D, x: number, y: number): void {
-    if (!this.resource.isLoaded) {
+    if (!this._resource.isLoaded) {
       return;
     }
 
     // Calculate frame coordinates without allocating Vector2
     const { x: frameCoordX, y: frameCoordY } = this._getFrameCoordinates(this.frame);
 
-    const frameSizeX = this.frameSize.x;
-    const frameSizeY = this.frameSize.y;
+    const frameSizeX = this._frameSize.x;
+    const frameSizeY = this._frameSize.y;
 
     ctx.drawImage(
-      this.resource.image,
+      this._resource.image,
       frameCoordX,
       frameCoordY, // Top Y corner of frame
       frameSizeX, // How much to crop from the sprite sheet (X)
       frameSizeY, // How much to crop from the sprite sheet (Y)
       x, // Where to place this on canvas tag X (0)
       y, // Where to place this on canvas tag Y (0)
-      frameSizeX * this.scale, // How large to scale it (X)
-      frameSizeY * this.scale, // How large to scale it (Y)
+      frameSizeX * this._scale, // How large to scale it (X)
+      frameSizeY * this._scale, // How large to scale it (Y)
     );
   }
 }

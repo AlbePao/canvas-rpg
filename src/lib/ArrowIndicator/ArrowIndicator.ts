@@ -13,14 +13,14 @@ const ARROW_DIRECTION_TO_FRAME: Record<Directions, number> = {
 };
 
 export class ArrowIndicator extends GameObject {
-  body: Sprite;
+  private readonly _body: Sprite;
 
   constructor(config: ArrowIndicatorConfig) {
     super(config);
 
     const { direction } = config;
 
-    this.body = new Sprite({
+    this._body = new Sprite({
       id: `${this.id}-arrow-indicator`,
       resource: Resources.images.arrows,
       frameSize: new Vector2(11, 11),
@@ -31,6 +31,6 @@ export class ArrowIndicator extends GameObject {
   }
 
   override drawImage(ctx: CanvasRenderingContext2D, x: number, y: number): void {
-    this.body.draw(ctx, x, y);
+    this._body.draw(ctx, x, y);
   }
 }

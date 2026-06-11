@@ -5,7 +5,7 @@ import type { LevelTileConfig, LevelTileHeroBehavior } from './levelTile.types';
 import { getLevelTileFrame, getWaterAnimations } from './levelTile.utils';
 
 export class LevelTile extends GameObject {
-  body: Sprite;
+  readonly body: Sprite;
   readonly heroBehavior?: LevelTileHeroBehavior;
 
   constructor(config: LevelTileConfig) {

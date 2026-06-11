@@ -7,7 +7,7 @@ import type { LevelConfig } from './level.types';
 export class Level extends GameObject {
   heroStartPosition?: Vector2;
   background: Sprite | null = null;
-  walls: Walls = new Set<Coords>();
+  readonly walls: Walls = new Set<Coords>();
 
   constructor({ id }: LevelConfig) {
     if (!id) {

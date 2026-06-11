@@ -41,14 +41,14 @@ import {
 
 export class Hero extends GameObject {
   facingDirection: Directions = 'DOWN';
-  body: Sprite;
+  protected readonly body: Sprite;
   destinationPosition: Vector2;
-  lastX?: number;
-  lastY?: number;
-  itemPickUpTime = 0;
-  itemPickUpShell: GameObject | null = null;
-  isLocked = false;
-  walkingSpeed = 1;
+  private _lastX?: number;
+  private _lastY?: number;
+  private _itemPickUpTime = 0;
+  private _itemPickUpShell: GameObject | null = null;
+  private _isLocked = false;
+  private readonly _walkingSpeed = 1;
 
   constructor(config: HeroConfig) {
     super(config);
@@ -92,7 +92,7 @@ export class Hero extends GameObject {
 
     // React to picking up an item
     Events.on<CollectibleItemData>(HERO_PICKS_UP_ITEM, this, (data) => {
-      this.onPickUpItem(data);
+      this._onPickUpItem(data);
     });
   }
 
@@ -100,14 +100,14 @@ export class Hero extends GameObject {
     // Lock hero when game is paused, cutscene is playing or is changing level
     [PAUSE_ON, TEXT_BOX_OPEN, LEVEL_TRANSITION_START].forEach((event) => {
       Events.on(event, this, () => {
-        this.isLocked = true;
+        this._isLocked = true;
         // Freeze animation
         this.body.animations?.pause();
       });
     });
     [PAUSE_OFF, TEXT_BOX_CLOSE, LEVEL_TRANSITION_END].forEach((event) => {
       Events.on(event, this, () => {
-        this.isLocked = false;
+        this._isLocked = false;
         // Resume animation
         this.body.animations?.resume();
       });
@@ -115,7 +115,7 @@ export class Hero extends GameObject {
 
     // Turn to face direction when user taps a direction key without holding
     Events.on<Directions>(DIRECTION_TAP, this, (direction) => {
-      if (this.isLocked) {
+      if (this._isLocked) {
         return;
       }
 
@@ -125,12 +125,12 @@ export class Hero extends GameObject {
 
   override step(delta: number, root: Main): void {
     // Don't do anything when locked
-    if (this.isLocked) {
+    if (this._isLocked) {
       return;
     }
 
     // Lock movement if celebrating an item pickup
-    if (this.itemPickUpTime > 0) {
+    if (this._itemPickUpTime > 0) {
       this._workOnItemPickUp(delta);
       return;
     }
@@ -149,7 +149,7 @@ export class Hero extends GameObject {
       }
     }
 
-    const distance = moveTowards(this, this.destinationPosition, this.walkingSpeed);
+    const distance = moveTowards(this, this.destinationPosition, this._walkingSpeed);
     const hasArrived = distance <= 1;
 
     // Attempt to move again if the hero is at his position
@@ -157,16 +157,16 @@ export class Hero extends GameObject {
       this.tryMove(root);
     }
 
-    this.tryEmitPosition();
+    this._tryEmitPosition();
   }
 
-  tryEmitPosition(): void {
-    if (this.lastX === this.position.x && this.lastY === this.position.y) {
+  private _tryEmitPosition(): void {
+    if (this._lastX === this.position.x && this._lastY === this.position.y) {
       return;
     }
 
-    this.lastX = this.position.x;
-    this.lastY = this.position.y;
+    this._lastX = this.position.x;
+    this._lastY = this.position.y;
 
     Events.emit<Vector2>(HERO_POSITION, this.position);
   }
@@ -238,7 +238,7 @@ export class Hero extends GameObject {
     }
   }
 
-  onPickUpItem(data: CollectibleItemData): void {
+  private _onPickUpItem(data: CollectibleItemData): void {
     const { frame, position, shouldSkipPickupAnimation } = data;
 
     // If the item has requested to skip the pickup animation, just move there without any celebration
@@ -250,24 +250,24 @@ export class Hero extends GameObject {
     this.destinationPosition = position?.duplicate() ?? this.position.duplicate();
 
     // Start the pickup animation
-    this.itemPickUpTime = 500; // ms
-    this.itemPickUpShell = new GameObject({ id: `${this.id}-item-pickup-shell` });
-    this.itemPickUpShell.addChild(
+    this._itemPickUpTime = 500; // ms
+    this._itemPickUpShell = new GameObject({ id: `${this.id}-item-pickup-shell` });
+    this._itemPickUpShell.addChild(
       createItemSprite({
         id: `${this.id}-item-pickup-sprite`,
         frame,
         position: new Vector2(0, -36),
       }),
     );
-    this.addChild(this.itemPickUpShell);
+    this.addChild(this._itemPickUpShell);
   }
 
   private _workOnItemPickUp(delta: number): void {
-    this.itemPickUpTime -= delta;
+    this._itemPickUpTime -= delta;
     this.body.animations?.play('pickUpDown');
 
-    if (this.itemPickUpTime <= 0) {
-      this.itemPickUpShell?.destroy();
+    if (this._itemPickUpTime <= 0) {
+      this._itemPickUpShell?.destroy();
     }
   }
 

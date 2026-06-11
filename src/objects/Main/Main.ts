@@ -21,8 +21,8 @@ import type { TextBox } from '../TextBox';
 
 export class Main extends GameObject {
   level: Level | null = null;
-  input = new Input();
-  camera = new Camera();
+  readonly input = new Input();
+  readonly camera = new Camera();
   isTextBoxOpened = false;
   isSelectionBoxOpened = false;
   isCutscenePlaying = false;

@@ -31,7 +31,7 @@ const ASSETS_TO_LOAD: AssetsToLoad = {
 
 class ResourcesSingleton extends Singleton<ResourcesSingleton>() {
   // A bucket to keep all of our images
-  images: Record<ResourceKey, Resource> = {} as Record<ResourceKey, Resource>;
+  readonly images: Record<ResourceKey, Resource> = {} as Record<ResourceKey, Resource>;
 
   constructor() {
     super();

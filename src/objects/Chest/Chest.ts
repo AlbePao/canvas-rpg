@@ -12,9 +12,9 @@ import { TextBox } from '../TextBox';
 import type { ChestConfig, ChestStatus } from './chest.types';
 
 export class Chest extends InteractiveObject {
-  status: ChestStatus = 'CLOSED';
-  body: Sprite;
-  readonly shouldRemove?: boolean;
+  private _status: ChestStatus = 'CLOSED';
+  private readonly _body: Sprite;
+  private readonly _shouldRemove?: boolean;
 
   constructor(config: ChestConfig) {
     super(config);
@@ -22,10 +22,10 @@ export class Chest extends InteractiveObject {
     const { id, status = 'CLOSED', removeAfterLoot } = config;
 
     this.isSolid = true;
-    this.status = status;
-    this.shouldRemove = !!removeAfterLoot;
+    this._status = status;
+    this._shouldRemove = !!removeAfterLoot;
 
-    this.body = new Sprite({
+    this._body = new Sprite({
       id: `${id}-chest-sprite`,
       resource: Resources.images.chest,
       frameSize: new Vector2(16, 16),
@@ -33,14 +33,14 @@ export class Chest extends InteractiveObject {
       vFrames: 1,
       frame: status === 'OPEN' ? 1 : 0,
     });
-    this.addChild(this.body);
+    this.addChild(this._body);
   }
 
   override ready(): void {
     Events.on<GameObject>(HERO_REQUESTS_ACTION, this, ({ position }) => {
       const { x, y } = position;
 
-      if (!this.position.matches([x, y]) || this.status === 'OPEN') {
+      if (!this.position.matches([x, y]) || this._status === 'OPEN') {
         return;
       }
 
@@ -93,8 +93,8 @@ export class Chest extends InteractiveObject {
 
   private _openChest(): void {
     // Update chest state and sprite frame to open
-    this.status = 'OPEN';
-    this.body.frame = 1;
+    this._status = 'OPEN';
+    this._body.frame = 1;
   }
 
   private _pickUpItem(itemKey: ItemKey | null): void {
@@ -105,7 +105,7 @@ export class Chest extends InteractiveObject {
     // Emit pick up item event
     emitPickupAnimation(itemKey);
 
-    if (this.shouldRemove) {
+    if (this._shouldRemove) {
       this.destroy();
     }
   }

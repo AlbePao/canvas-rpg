@@ -7,7 +7,7 @@ import { Sprite } from '../Sprite';
 import type { DecorationConfig } from './decoration.types';
 
 export class Decoration extends GameObject {
-  body: Sprite;
+  readonly body: Sprite;
 
   constructor(config: DecorationConfig) {
     const { id, key, isSolid, drawLayer = null, x = 0, y = 0 } = config;
