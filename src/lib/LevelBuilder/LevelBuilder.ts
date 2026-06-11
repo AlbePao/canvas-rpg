@@ -120,7 +120,7 @@ export class LevelBuilder extends Level {
       // }
 
       new ScreenTransition(() => {
-        Events.emit(
+        Events.emit<LevelBuilder>(
           CHANGE_LEVEL,
           new LevelBuilder({
             id: newLevelId,

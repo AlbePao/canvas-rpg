@@ -220,7 +220,7 @@ export class Npc extends InteractiveObject {
       this._walkingSpeed = 1;
       this.position.x = this.destinationPosition.x;
       this.position.y = this.destinationPosition.y;
-      Events.emit(BEHAVIOR_END, this.id);
+      Events.emit<string>(BEHAVIOR_END, this.id);
     }
   }
 
@@ -236,7 +236,7 @@ export class Npc extends InteractiveObject {
 
       if (duration) {
         this.scheduleTimeout(() => {
-          Events.emit(BEHAVIOR_END, this.id);
+          Events.emit<string>(BEHAVIOR_END, this.id);
         }, duration);
       }
     } else if (type === 'walk') {

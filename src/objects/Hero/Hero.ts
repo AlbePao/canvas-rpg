@@ -144,7 +144,7 @@ export class Hero extends GameObject {
       );
 
       if (objectAtPosition) {
-        Events.emit(HERO_REQUESTS_ACTION, objectAtPosition);
+        Events.emit<GameObject>(HERO_REQUESTS_ACTION, objectAtPosition);
       }
     }
 

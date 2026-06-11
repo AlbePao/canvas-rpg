@@ -114,7 +114,7 @@ export class TextBox extends GameObject {
       }
 
       // Done with the textbox
-      Events.emit(TEXT_BOX_CLOSE);
+      Events.emit<TextBox>(TEXT_BOX_CLOSE, this);
     }
 
     // Word on typewriter

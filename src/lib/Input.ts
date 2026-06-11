@@ -120,7 +120,7 @@ export class Input {
     const wasAlreadyMoving = this._heldDirectionSet.has(direction);
 
     if (heldDuration < HOLD_THRESHOLD && !wasAlreadyMoving) {
-      Events.emit(DIRECTION_TAP, direction);
+      Events.emit<Directions>(DIRECTION_TAP, direction);
     }
 
     this._pressedDirections.delete(direction);
