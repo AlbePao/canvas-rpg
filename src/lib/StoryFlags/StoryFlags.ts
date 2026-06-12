@@ -2,6 +2,9 @@ import type { InteractionContentConfig } from '../../objects/InteractiveObject/i
 import { Singleton } from '../Singleton';
 
 class StoryFlagsSingleton extends Singleton<StoryFlagsSingleton>() {
+  get flags(): string[] {
+    return [...this._flags.keys()];
+  }
   private readonly _flags = new Map<string, boolean>();
 
   add(flag: string): void {
