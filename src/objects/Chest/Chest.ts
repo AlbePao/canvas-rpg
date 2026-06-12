@@ -1,10 +1,9 @@
-import { emitPickupAnimation } from '../../helpers/emitPickupAnimation';
 import { Events } from '../../lib/Events';
 import type { GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
 import { StoryFlags } from '../../lib/StoryFlags';
 import { Vector2 } from '../../lib/Vector2';
-import { HERO_REQUESTS_ACTION } from '../Hero';
+import { emitHeroItemPickup, HERO_REQUESTS_ACTION } from '../Hero';
 import { InteractiveObject } from '../InteractiveObject';
 import type { ItemKey } from '../Item';
 import { Sprite } from '../Sprite';
@@ -103,7 +102,7 @@ export class Chest extends InteractiveObject {
     }
 
     // Emit pick up item event
-    emitPickupAnimation(itemKey);
+    emitHeroItemPickup(itemKey);
 
     if (this._shouldRemove) {
       this.destroy();

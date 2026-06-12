@@ -1,11 +1,11 @@
-import { createItemSprite } from '../../helpers/createItemSprite';
-import { gridCells } from '../../helpers/grid';
 import { Events } from '../../lib/Events';
+import { Game } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
 import { Vector2 } from '../../lib/Vector2';
 import type { UUID } from '../../types/uuid';
 import { HERO_PICKS_UP_ITEM } from '../Hero';
 import type { CollectibleItemData } from '../Item';
+import { createItemSprite } from '../Item';
 import type { InventoryItem } from './inventory.types';
 
 export class Inventory extends GameObject {
@@ -46,12 +46,8 @@ export class Inventory extends GameObject {
     this.children = [];
 
     // Create fresh sprites for current items
-    this._items.forEach((item, index) => {
-      const sprite = createItemSprite({
-        id: `${item.id}-inventory-sprite`,
-        frame: item.frame,
-        position: new Vector2(gridCells(index), -8),
-      });
+    this._items.forEach(({ id, frame }, index) => {
+      const sprite = createItemSprite(`${id}-inventory-sprite`, frame, new Vector2(Game.toGridSize(index), -8));
       this.addChild(sprite);
     });
   }

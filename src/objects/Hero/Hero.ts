@@ -1,11 +1,8 @@
-import { GRID_SIZE } from '../../constants/gridSize';
 import { STANDING_DIRECTIONS } from '../../constants/standingDirections';
-import { createItemSprite } from '../../helpers/createItemSprite';
-import { isSpaceFree } from '../../helpers/grid';
-import { moveTowards } from '../../helpers/moveTowards';
 import { Animations } from '../../lib/Animations';
 import { Events } from '../../lib/Events';
 import { FrameIndexPattern } from '../../lib/FrameIndexPattern';
+import { Game } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
 import { DIRECTION_TAP } from '../../lib/Input';
 import { Resources } from '../../lib/Resources';
@@ -13,6 +10,7 @@ import { SCREEN_TRANSITION_END, SCREEN_TRANSITION_START } from '../../lib/Screen
 import { Vector2 } from '../../lib/Vector2';
 import type { Directions } from '../../types/directions';
 import type { CollectibleItemData } from '../Item';
+import { createItemSprite } from '../Item';
 import type { Main } from '../Main';
 import { Npc } from '../Npc';
 import { PAUSE_OFF, PAUSE_ON } from '../PauseMenu';
@@ -142,7 +140,7 @@ export class Hero extends GameObject {
       }
     }
 
-    const distance = moveTowards(this, this.destinationPosition, this._walkingSpeed);
+    const distance = Game.moveTowards(this, this.destinationPosition, this._walkingSpeed);
     const hasArrived = distance <= 1;
 
     // Attempt to move again if the hero is at his position
@@ -189,28 +187,29 @@ export class Hero extends GameObject {
 
     let nextX = this.destinationPosition.x;
     let nextY = this.destinationPosition.y;
+    const gridSize = Game.getGridSize();
 
     if (input.direction === 'DOWN') {
-      nextY += GRID_SIZE;
+      nextY += gridSize;
       this.body.animations?.play('walkDown');
     }
     if (input.direction === 'UP') {
-      nextY -= GRID_SIZE;
+      nextY -= gridSize;
       this.body.animations?.play('walkUp');
     }
     if (input.direction === 'LEFT') {
-      nextX -= GRID_SIZE;
+      nextX -= gridSize;
       this.body.animations?.play('walkLeft');
     }
     if (input.direction === 'RIGHT') {
-      nextX += GRID_SIZE;
+      nextX += gridSize;
       this.body.animations?.play('walkRight');
     }
 
     this.facingDirection = input.direction;
 
     // Validation that the next destination is free
-    const spaceIsFree = level && isSpaceFree(level.walls, nextX, nextY);
+    const spaceIsFree = level && Game.isSpaceFree(level.walls, nextX, nextY);
     const solidBodyAtSpace = this.parent?.children.find((child) => {
       // Check if solid body is at the target position
       if (child.isSolid && child.position.x === nextX && child.position.y === nextY) {
@@ -245,13 +244,7 @@ export class Hero extends GameObject {
     // Start the pickup animation
     this._itemPickUpTime = 500; // ms
     this._itemPickUpShell = new GameObject({ id: `${this.id}-item-pickup-shell` });
-    this._itemPickUpShell.addChild(
-      createItemSprite({
-        id: `${this.id}-item-pickup-sprite`,
-        frame,
-        position: new Vector2(0, -36),
-      }),
-    );
+    this._itemPickUpShell.addChild(createItemSprite(`${this.id}-item-pickup-sprite`, frame, new Vector2(0, -36)));
     this.addChild(this._itemPickUpShell);
   }
 

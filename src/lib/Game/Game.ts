@@ -1,13 +1,17 @@
 import { Main } from '../../objects/Main';
+import type { Coords, Walls } from '../../types/coords';
 import { GameLoop } from '../GameLoop';
+import type { GameObject } from '../GameObject';
 import { LevelBuilder } from '../LevelBuilder';
 import { Singleton } from '../Singleton';
+import type { Vector2 } from '../Vector2';
 import type { GameCanvasSize, GameConfig } from './game.types';
 
 class GameSingleton extends Singleton<GameSingleton>() {
   private _containerId = '';
   private _canvasWidth = 0;
   private _canvasHeight = 0;
+  private readonly _gridSize = 16;
 
   readonly textBoxBackdropWidth = 16; // 256 pixel
   readonly textBoxBackdropHeight = 3; // 48 pixel
@@ -106,11 +110,62 @@ class GameSingleton extends Singleton<GameSingleton>() {
     return this._containerId;
   }
 
+  getGridSize(): number {
+    return this._gridSize;
+  }
+
   getContainerSizes(): GameCanvasSize {
     return {
       canvasWidth: this._canvasWidth,
       canvasHeight: this._canvasHeight,
     };
+  }
+
+  toGridSize = (value: number): number => value * this._gridSize;
+
+  detectOverlap(heroPosition: Vector2, objectPosition: Vector2): boolean {
+    // detect overlap
+    const roundedHeroX = Math.round(heroPosition.x);
+    const roundedHeroY = Math.round(heroPosition.y);
+
+    return roundedHeroX === objectPosition.x && roundedHeroY === objectPosition.y;
+  }
+
+  isSpaceFree = (walls: Walls, x: number, y: number): boolean => {
+    // Convert to string for easy lookup
+    const str: Coords = `${x},${y}`;
+    // Check if walls has an entry at this spot
+    const isWallPresent = walls.has(str);
+
+    return !isWallPresent;
+  };
+
+  moveTowards(person: GameObject, destinationPosition: Vector2, speed: number): number {
+    const distanceTravelX = destinationPosition.x - person.position.x;
+    const distanceTravelY = destinationPosition.y - person.position.y;
+
+    // Calculate distance once (using square formula directly)
+    const distance = Math.sqrt(distanceTravelX * distanceTravelX + distanceTravelY * distanceTravelY);
+
+    if (distance <= speed) {
+      // If we're close enough, just move directly to the destination
+      person.position.x = Math.floor(destinationPosition.x);
+      person.position.y = Math.floor(destinationPosition.y);
+      return 0;
+    }
+
+    // Normalize and move by speed
+    const normalizedX = distanceTravelX / distance;
+    const normalizedY = distanceTravelY / distance;
+
+    person.position.x += Math.floor(normalizedX * speed);
+    person.position.y += Math.floor(normalizedY * speed);
+
+    // Return remaining distance without recalculation
+    const remainingX = destinationPosition.x - person.position.x;
+    const remainingY = destinationPosition.y - person.position.y;
+
+    return Math.sqrt(remainingX * remainingX + remainingY * remainingY);
   }
 }
 

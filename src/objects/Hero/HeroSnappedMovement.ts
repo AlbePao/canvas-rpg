@@ -1,5 +1,4 @@
-import { GRID_SIZE } from '../../constants/gridSize';
-import { isSpaceFree } from '../../helpers/grid';
+import { Game } from '../../lib/Game';
 import type { Main } from '../Main';
 import { Hero } from './Hero';
 
@@ -48,7 +47,7 @@ export class HeroSnappedMovement extends Hero {
     let nextGridY = this.destinationPosition.y;
 
     const characterPace = 1;
-    const gridSize = GRID_SIZE / 2;
+    const gridSize = Game.getGridSize() / 2;
 
     if (input.direction === 'DOWN') {
       nextCharacterY += characterPace;
@@ -86,7 +85,7 @@ export class HeroSnappedMovement extends Hero {
     this.facingDirection = input.direction;
 
     // Validation that the next destination is free
-    const spaceIsFree = level && isSpaceFree(level.walls, nextGridX, nextGridY);
+    const spaceIsFree = level && Game.isSpaceFree(level.walls, nextGridX, nextGridY);
     const solidBodyAtSpace = this.parent?.children.find(
       (child) => child.isSolid && child.position.x === nextGridX && child.position.y === nextGridY,
     );

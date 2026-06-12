@@ -1,6 +1,6 @@
-import { GRID_SIZE } from '../constants/gridSize';
 import type { Coords2D, TileCoords } from '../types/coords';
 import type { Directions } from '../types/directions';
+import { Game } from './Game';
 
 export class Vector2 implements Coords2D {
   x = 0;
@@ -20,19 +20,20 @@ export class Vector2 implements Coords2D {
   }
 
   toNeighborCoords(direction: Directions): TileCoords {
+    const gridSize = Game.getGridSize();
     let { x, y } = this;
 
     if (direction === 'LEFT') {
-      x -= GRID_SIZE;
+      x -= gridSize;
     }
     if (direction === 'RIGHT') {
-      x += GRID_SIZE;
+      x += gridSize;
     }
     if (direction === 'UP') {
-      y -= GRID_SIZE;
+      y -= gridSize;
     }
     if (direction === 'DOWN') {
-      y += GRID_SIZE;
+      y += gridSize;
     }
 
     return [x, y];

@@ -1,4 +1,3 @@
-import { gridCells } from '../../helpers/grid';
 import { objectKeys } from '../../helpers/objectKeys';
 import { TILESET_LEVEL } from '../../levels/tilesetLevel';
 import { TILESET_LEVEL2 } from '../../levels/tilesetLevel2';
@@ -13,6 +12,7 @@ import { LevelTile } from '../../objects/LevelTile';
 import { Npc } from '../../objects/Npc';
 import { Sprite } from '../../objects/Sprite';
 import { Events } from '../Events';
+import { Game } from '../Game';
 import type { GameObject } from '../GameObject';
 import { Resources } from '../Resources';
 import { ScreenTransition } from '../ScreenTransition';
@@ -39,6 +39,8 @@ export class LevelBuilder extends Level {
       id,
     });
 
+    const { toGridSize } = Game;
+
     this.background = background
       ? new Sprite({
           id: `${id}-background-sprite`,
@@ -59,7 +61,7 @@ export class LevelBuilder extends Level {
       const worldTileSprite = new LevelTile({
         id: `${id}-world-tile-${coords}`,
         tileName,
-        position: new Vector2(gridCells(x), gridCells(y)),
+        position: new Vector2(toGridSize(x), toGridSize(y)),
       });
 
       worldTileSprite.drawLayer = 'FLOOR';
@@ -69,7 +71,7 @@ export class LevelBuilder extends Level {
     // Add walls
     walls.forEach((wallCoords) => {
       const [x, y] = wallCoords.split(',').map(Number);
-      this.walls.add(`${gridCells(x)},${gridCells(y)}`);
+      this.walls.add(`${toGridSize(x)},${toGridSize(y)}`);
     });
 
     // Add game objects

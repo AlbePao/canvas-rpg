@@ -1,18 +1,15 @@
-import { GRID_SIZE } from '../../constants/gridSize';
 import { STANDING_DIRECTIONS } from '../../constants/standingDirections';
-import { emitPickupAnimation } from '../../helpers/emitPickupAnimation';
-import { getHeroObject, isHeroObject } from '../../helpers/getHeroObject';
-import { moveTowards } from '../../helpers/moveTowards';
 import { Animations } from '../../lib/Animations';
 import { Events } from '../../lib/Events';
 import { FrameIndexPattern } from '../../lib/FrameIndexPattern';
+import { Game } from '../../lib/Game';
 import { BEHAVIOR_END, type GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
 import { SCREEN_TRANSITION_END, SCREEN_TRANSITION_START } from '../../lib/ScreenTransition';
 import { StoryFlags } from '../../lib/StoryFlags';
 import { Vector2 } from '../../lib/Vector2';
 import type { Directions } from '../../types/directions';
-import { HERO_REQUESTS_ACTION } from '../Hero';
+import { emitHeroItemPickup, getHeroObject, HERO_REQUESTS_ACTION, isHeroObject } from '../Hero';
 import { InteractiveObject } from '../InteractiveObject';
 import type { ItemKey } from '../Item';
 import { PAUSE_OFF, PAUSE_ON } from '../PauseMenu';
@@ -160,7 +157,7 @@ export class Npc extends InteractiveObject {
           } else if (itemKey) {
             // No response, give item directly to the hero after closing the textbox
             Events.emit(TEXT_BOX_CLOSE);
-            emitPickupAnimation(itemKey);
+            emitHeroItemPickup(itemKey);
           }
 
           Events.off(selectionBoxClosedSub);
@@ -174,7 +171,7 @@ export class Npc extends InteractiveObject {
 
       if (this._contentItemKey) {
         // Now hero can collect the item
-        emitPickupAnimation(this._contentItemKey);
+        emitHeroItemPickup(this._contentItemKey);
         // Reset the items once hero collects it
         this._contentItemKey = null;
       }
@@ -203,7 +200,7 @@ export class Npc extends InteractiveObject {
     }
 
     // Move towards the walk target
-    const distance = moveTowards(this, this.destinationPosition, this._walkingSpeed);
+    const distance = Game.moveTowards(this, this.destinationPosition, this._walkingSpeed);
     const hasArrived = distance <= 1;
 
     if (hasArrived) {
@@ -240,25 +237,26 @@ export class Npc extends InteractiveObject {
       }
 
       const { direction, speed } = behavior;
+      const gridSize = Game.getGridSize();
 
       // Calculate the walk target based on direction and distance
       let nextX = this.destinationPosition.x;
       let nextY = this.destinationPosition.y;
 
       if (direction === 'DOWN') {
-        nextY += GRID_SIZE;
+        nextY += gridSize;
         this._body.animations?.play('walkDown');
       }
       if (direction === 'UP') {
-        nextY -= GRID_SIZE;
+        nextY -= gridSize;
         this._body.animations?.play('walkUp');
       }
       if (direction === 'LEFT') {
-        nextX -= GRID_SIZE;
+        nextX -= gridSize;
         this._body.animations?.play('walkLeft');
       }
       if (direction === 'RIGHT') {
-        nextX += GRID_SIZE;
+        nextX += gridSize;
         this._body.animations?.play('walkRight');
       }
 

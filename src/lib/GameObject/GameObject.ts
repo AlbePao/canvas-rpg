@@ -1,6 +1,6 @@
-import { gridCells } from '../../helpers/grid';
 import type { Main } from '../../objects/Main';
 import { Events } from '../Events';
+import { Game } from '../Game';
 import { Vector2 } from '../Vector2';
 import { BEHAVIOR_END } from './gameObject.constants';
 import type { GameObjectBehavior, GameObjectConfig, GameObjectDrawLayer } from './gameObject.types';
@@ -22,8 +22,10 @@ export class GameObject {
 
   constructor(config: GameObjectConfig) {
     const { id, x = 0, y = 0, behaviorConfig = [] } = config;
+    const { toGridSize } = Game;
+
     this.id = id;
-    this.position = new Vector2(gridCells(x), gridCells(y));
+    this.position = new Vector2(toGridSize(x), toGridSize(y));
     // Set object behavior loop
     this.behaviorConfig = behaviorConfig;
   }

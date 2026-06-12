@@ -39,6 +39,9 @@ export class SelectionBox extends GameObject {
       throw new Error('SelectionBox: options array must have at least one element');
     }
 
+    const gridSize = Game.getGridSize();
+    const { toGridSize } = Game;
+
     // Draw on top layer
     this.drawLayer = 'HUD';
 
@@ -59,15 +62,15 @@ export class SelectionBox extends GameObject {
         ),
       ) + 52; // Add padding for the indicator and some spacing
 
-    const height = gridCells(this.options.length) + GRID_SIZE; // Each option is 16px tall + some padding
+    const height = toGridSize(this.options.length) + gridSize; // Each option is 16px tall + some padding
 
     // Set backdrop size according to its options' size
-    this._backdrop.updateSize(width / GRID_SIZE, height / GRID_SIZE);
+    this._backdrop.updateSize(width / gridSize, height / gridSize);
 
     // If position x and y are set from config, use that params, otherwise set the position according to options size in relation to canvas width and text box height
     const { canvasWidth, canvasHeight } = Game.getContainerSizes();
-    const newX = x ? gridCells(x) : canvasWidth - width - 32;
-    const newY = y ? gridCells(y) : canvasHeight - height - gridCells(Game.textBoxBackdropHeight) - 4;
+    const newX = x ? toGridSize(x) : canvasWidth - width - 32;
+    const newY = y ? toGridSize(y) : canvasHeight - height - toGridSize(Game.textBoxBackdropHeight) - 4;
     this.position = new Vector2(newX, newY);
   }
 
@@ -95,16 +98,18 @@ export class SelectionBox extends GameObject {
   }
 
   override drawImage(ctx: CanvasRenderingContext2D, drawPosX: number, drawPosY: number): void {
+    const { toGridSize } = Game;
+
     // Draw the backdrop
     this._backdrop.drawImage(ctx, drawPosX, drawPosY);
 
     // Draw the indicator
-    this._indicator.drawImage(ctx, drawPosX + 4, drawPosY + 9 + gridCells(this.currentOptionIndex));
+    this._indicator.drawImage(ctx, drawPosX + 4, drawPosY + 9 + toGridSize(this.currentOptionIndex));
 
     // Draw options text lines
     this._optionsLines.forEach(({ words }, index) => {
       let cursorX = drawPosX + 18;
-      const cursorY = drawPosY + gridCells(index) + 9;
+      const cursorY = drawPosY + toGridSize(index) + 9;
 
       words.forEach(({ chars }) => {
         // Draw this whole segment of text

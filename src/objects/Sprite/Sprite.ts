@@ -1,5 +1,5 @@
-import { GRID_SIZE } from '../../constants/gridSize';
 import type { Animations } from '../../lib/Animations';
+import { Game } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
 import type { Resource } from '../../lib/Resources';
 import { Vector2 } from '../../lib/Vector2';
@@ -30,8 +30,10 @@ export class Sprite extends GameObject {
       id,
     });
 
+    const gridSize = Game.getGridSize();
+
     this._resource = resource;
-    this._frameSize = frameSize ?? new Vector2(GRID_SIZE, GRID_SIZE);
+    this._frameSize = frameSize ?? new Vector2(gridSize, gridSize);
     this._hFrames = hFrames ?? 1;
     this.vFrames = vFrames ?? 1;
     this.frame = frame ?? 0;
