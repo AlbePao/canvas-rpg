@@ -2,6 +2,7 @@ import { Events } from '../../lib/Events';
 import { Game } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
 import type { Vector2 } from '../../lib/Vector2';
+import type { Coords2D } from '../../types/coords';
 import { HERO_POSITION } from '../Hero';
 import { CHANGE_LEVEL, type Level } from '../Level';
 
@@ -22,7 +23,7 @@ export class Camera extends GameObject {
     });
   }
 
-  private _centerPositionOnTarget(position: Vector2): void {
+  private _centerPositionOnTarget(position: Coords2D): void {
     // Create a new position based on the incoming position
     const personHalf = 8;
     const { canvasWidth, canvasHeight } = Game.getContainerSizes();

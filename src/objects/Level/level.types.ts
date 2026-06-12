@@ -1,6 +1,6 @@
-import type { Vector2 } from '../../lib/Vector2';
+import type { Coords2D } from '../../types/coords';
 
 export interface LevelConfig {
   id?: string;
-  heroStartPosition?: Vector2;
+  heroStartPosition?: Coords2D;
 }

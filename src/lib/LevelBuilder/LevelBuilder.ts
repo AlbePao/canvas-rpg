@@ -105,7 +105,7 @@ export class LevelBuilder extends Level {
     });
 
     // Add hero
-    this.heroStartPosition = config?.heroStartPosition ?? new Vector2(heroDefaultPosition.x, heroDefaultPosition.y);
+    this.heroStartPosition = config?.heroStartPosition ?? { x: heroDefaultPosition.x, y: heroDefaultPosition.y };
     const hero = new Hero({
       id: `${id}-hero`,
       x: this.heroStartPosition.x,
@@ -126,7 +126,7 @@ export class LevelBuilder extends Level {
           CHANGE_LEVEL,
           new LevelBuilder({
             id: newLevelId,
-            heroStartPosition: new Vector2(newHeroPosition.x, newHeroPosition.y),
+            heroStartPosition: newHeroPosition,
           }),
         );
       });
