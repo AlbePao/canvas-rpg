@@ -1,13 +1,11 @@
-import { GRID_SIZE } from '../../constants/gridSize';
-import { gridCells } from '../../helpers/grid';
 import { createSpriteTextLines, getCharacterWidth } from '../../helpers/spriteText';
-import { ArrowIndicator } from '../../lib/ArrowIndicator';
 import { Events } from '../../lib/Events';
 import { Game } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
 import { StoryFlags } from '../../lib/StoryFlags';
 import { Vector2 } from '../../lib/Vector2';
 import type { Line } from '../../types/text';
+import { ArrowIndicator } from '../ArrowIndicator';
 import { BoxBackdrop } from '../BoxBackdrop';
 import type { Main } from '../Main';
 import { SELECTION_BOX_CLOSE } from './selectionBox.constants';

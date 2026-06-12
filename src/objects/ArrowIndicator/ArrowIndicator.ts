@@ -1,8 +1,8 @@
-import { Sprite } from '../../objects/Sprite';
+import { GameObject } from '../../lib/GameObject';
+import { Resources } from '../../lib/Resources';
+import { Vector2 } from '../../lib/Vector2';
 import type { Directions } from '../../types/directions';
-import { GameObject } from '../GameObject';
-import { Resources } from '../Resources';
-import { Vector2 } from '../Vector2';
+import { Sprite } from '../Sprite';
 import type { ArrowIndicatorConfig } from './arrowIndicator.types';
 
 const ARROW_DIRECTION_TO_FRAME: Record<Directions, number> = {

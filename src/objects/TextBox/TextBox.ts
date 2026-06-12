@@ -1,10 +1,10 @@
 import { createSpriteTextLines } from '../../helpers/spriteText';
-import { ArrowIndicator } from '../../lib/ArrowIndicator';
 import { Events } from '../../lib/Events';
 import { Game } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
 import type { Line } from '../../types/text';
+import { ArrowIndicator } from '../ArrowIndicator';
 import { BoxBackdrop } from '../BoxBackdrop';
 import type { Main } from '../Main';
 import { Sprite } from '../Sprite';
