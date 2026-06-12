@@ -1,4 +1,4 @@
-export type TransitionName = 'fade';
+export type TransitionName = 'fadeWhite' | 'fadeBlack' | 'none';
 
 export type ScreenTransitionMap = Record<TransitionName, string>;
 

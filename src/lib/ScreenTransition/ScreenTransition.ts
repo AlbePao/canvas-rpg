@@ -13,7 +13,7 @@ import type { ScreenTransitionConfig } from './screenTransition.types';
 export class ScreenTransition {
   private readonly _element: HTMLDivElement;
 
-  constructor(callback: () => void, config: ScreenTransitionConfig = { transition: 'fade' }) {
+  constructor(callback: () => void, config: ScreenTransitionConfig = { transition: 'fadeWhite' }) {
     const { transition } = config;
 
     // Remove existing style if present (from previous incomplete transition)

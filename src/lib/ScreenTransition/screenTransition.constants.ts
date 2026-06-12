@@ -20,33 +20,52 @@ export const SCREEN_TRANSITION_BASE_CLASS = `
   }
 `;
 
+export const SCREEN_TRANSITION_FADE_KEYFRAMES = `
+  @keyframes screen-transition-fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes screen-transition-fade-out {
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }
+`;
+
 export const SCREEN_TRANSITIONS: ScreenTransitionMap = {
-  fade: `
+  none: `
     .${SCREEN_TRANSITION_CLASSNAME}.fade-in {
-      background: #fff;
-      animation: scene-transition-fade-in 0.2s forwards;
+      animation: screen-transition-fade-in 0s forwards;
     }
 
     .${SCREEN_TRANSITION_CLASSNAME}.fade-out {
-      animation: scene-transition-fade-out 0.2s forwards;
+      animation: screen-transition-fade-out 0s forwards;
     }
 
-    @keyframes scene-transition-fade-in {
-      from {
-        opacity: 0;
-      }
-      to {
-        opacity: 1;
-      }
+    ${SCREEN_TRANSITION_FADE_KEYFRAMES}
+  `,
+  fadeWhite: `
+    .${SCREEN_TRANSITION_CLASSNAME}.fade-in {
+      background: #fff;
+      animation: screen-transition-fade-in 0.2s forwards;
     }
 
-    @keyframes scene-transition-fade-out {
-      from {
-        opacity: 1;
-      }
-      to {
-        opacity: 0;
-      }
+    .${SCREEN_TRANSITION_CLASSNAME}.fade-out {
+      animation: screen-transition-fade-out 0.2s forwards;
     }
+
+    ${SCREEN_TRANSITION_FADE_KEYFRAMES}
+  `,
+  fadeBlack: `
+    .${SCREEN_TRANSITION_CLASSNAME}.fade-in {
+      background: #000;
+      animation: screen-transition-fade-in 0.3s forwards;
+    }
+
+    .${SCREEN_TRANSITION_CLASSNAME}.fade-out {
+      animation: screen-transition-fade-out 0.3s forwards;
+    }
+
+    ${SCREEN_TRANSITION_FADE_KEYFRAMES}
   `,
 };
