@@ -2,7 +2,6 @@ import { Main } from '../../objects/Main';
 import type { Coords, Walls } from '../../types/coords';
 import { GameLoop } from '../GameLoop';
 import type { GameObject } from '../GameObject';
-import { LevelBuilder } from '../LevelBuilder';
 import { Singleton } from '../Singleton';
 import type { Vector2 } from '../Vector2';
 import type { GameCanvasSize, GameConfig } from './game.types';
@@ -64,11 +63,7 @@ class GameSingleton extends Singleton<GameSingleton>() {
 
     // Establish the root scene
     const mainScene = new Main();
-    mainScene.setLevel(
-      new LevelBuilder({
-        id: 'tilesetLevel',
-      }),
-    );
+    mainScene.startTitleScreen();
 
     // Establish update and draw loops
     const update = (delta: number): void => {

@@ -1,17 +1,19 @@
 import { Events } from '../../lib/Events';
 import { GameObject } from '../../lib/GameObject';
 import { Input } from '../../lib/Input';
+import { Progress } from '../../lib/Progress';
 import { Camera } from '../Camera';
-import { Inventory } from '../Inventory';
 import { CHANGE_LEVEL, type Level } from '../Level';
 import { PAUSE_OFF, PAUSE_ON, PauseMenu } from '../PauseMenu';
 import { SELECTION_BOX_CLOSE, SELECTION_BOX_OPEN, type SelectionBox } from '../SelectionBox';
 import { TEXT_BOX_CLOSE, TEXT_BOX_OPEN, type TextBox } from '../TextBox';
+import { TitleScreen } from '../TitleScreen';
 
 export class Main extends GameObject {
   level: Level | null = null;
   readonly input = new Input();
   readonly camera = new Camera();
+  readonly progress = new Progress();
   isTextBoxOpened = false;
   isSelectionBoxOpened = false;
   isCutscenePlaying = false;
@@ -26,12 +28,9 @@ export class Main extends GameObject {
   }
 
   override ready(): void {
-    const inventory = new Inventory();
-    this.addChild(inventory);
-
     // Change level handler
     Events.on<Level>(CHANGE_LEVEL, this, (newLevelInstance) => {
-      this.setLevel(newLevelInstance);
+      this._setLevel(newLevelInstance);
     });
 
     // Launch text box handler
@@ -102,7 +101,11 @@ export class Main extends GameObject {
     return true;
   }
 
-  setLevel(newLevelInstance: Level): void {
+  startTitleScreen(): void {
+    this.addChild(new TitleScreen({ saveFile: this.progress.getSaveFile() }));
+  }
+
+  private _setLevel(newLevelInstance: Level): void {
     if (this.level) {
       this.level.destroy();
     }
