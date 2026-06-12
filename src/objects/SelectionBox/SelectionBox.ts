@@ -104,12 +104,12 @@ export class SelectionBox extends GameObject {
     this._backdrop.drawImage(ctx, drawPosX, drawPosY);
 
     // Draw the indicator
-    this._indicator.drawImage(ctx, drawPosX + 4, drawPosY + 9 + toGridSize(this.currentOptionIndex));
+    this._indicator.drawImage(ctx, drawPosX + 4, drawPosY + 10 + toGridSize(this.currentOptionIndex));
 
     // Draw options text lines
     this._optionsLines.forEach(({ words }, index) => {
       let cursorX = drawPosX + 18;
-      const cursorY = drawPosY + toGridSize(index) + 9;
+      const cursorY = drawPosY + toGridSize(index) + 10;
 
       words.forEach(({ chars }) => {
         // Draw this whole segment of text
