@@ -1,6 +1,5 @@
 import type { GameObjectConfig } from '../../lib/GameObject';
 import type { Vector2 } from '../../lib/Vector2';
-import type { UUID } from '../../types/uuid';
 
 export type ItemKey =
   | 'hammer1'
@@ -23,7 +22,7 @@ export type CollectibleItemConfig = ItemConfig & {
 };
 
 export interface ItemData {
-  id: UUID;
+  id: ItemKey;
   frame: number;
   position?: Vector2;
 }

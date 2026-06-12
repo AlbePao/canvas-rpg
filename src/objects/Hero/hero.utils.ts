@@ -14,7 +14,7 @@ export function getHeroObject(gameObject: GameObject | null): Hero | null {
 
 export function emitHeroItemPickup(itemKey: ItemKey, shouldSkipPickupAnimation = false): void {
   Events.emit<CollectibleItemData>(HERO_PICKS_UP_ITEM, {
-    id: crypto.randomUUID(),
+    id: itemKey,
     frame: ITEMS_SPRITE_FRAME[itemKey],
     shouldSkipPickupAnimation,
   });

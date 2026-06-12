@@ -2,20 +2,19 @@ import { Events } from '../../lib/Events';
 import { Game } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
 import { Vector2 } from '../../lib/Vector2';
-import type { UUID } from '../../types/uuid';
 import { HERO_PICKS_UP_ITEM } from '../Hero';
-import type { CollectibleItemData } from '../Item';
+import type { CollectibleItemData, ItemKey } from '../Item';
 import { createItemSprite } from '../Item';
 import type { InventoryItem } from './inventory.types';
 
 export class Inventory extends GameObject {
   private readonly _items: InventoryItem[] = [
     {
-      id: crypto.randomUUID(),
+      id: 'hammer1',
       frame: 4,
     },
     {
-      id: crypto.randomUUID(),
+      id: 'hammer2',
       frame: 1,
     },
   ];
@@ -52,7 +51,7 @@ export class Inventory extends GameObject {
     });
   }
 
-  removeFromInventory(id: UUID): void {
+  removeFromInventory(id: ItemKey): void {
     const indexToRemove = this._items.findIndex((item) => item.id === id);
     if (indexToRemove !== -1) {
       this._items.splice(indexToRemove, 1);

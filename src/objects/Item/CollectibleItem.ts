@@ -17,10 +17,10 @@ export class CollectibleItem extends Item {
     const frame = ITEMS_SPRITE_FRAME[itemKey];
 
     this.data = {
-      id: crypto.randomUUID(),
+      id: itemKey,
       frame,
       position: this.position,
-      shouldSkipPickupAnimation: shouldSkipPickupAnimation ?? false,
+      shouldSkipPickupAnimation: !!shouldSkipPickupAnimation,
     };
   }
 
