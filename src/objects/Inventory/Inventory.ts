@@ -10,11 +10,11 @@ import type { InventoryItem } from './inventory.types';
 export class Inventory extends GameObject {
   private readonly _items: InventoryItem[] = [
     {
-      id: 'hammer1',
+      itemKey: 'hammer1',
       frame: 4,
     },
     {
-      id: 'hammer2',
+      itemKey: 'hammer2',
       frame: 1,
     },
   ];
@@ -27,8 +27,8 @@ export class Inventory extends GameObject {
     this.drawLayer = 'HUD';
 
     // React to hero picking up an item
-    Events.on<CollectibleItemData>(HERO_PICKS_UP_ITEM, this, ({ id, frame }) => {
-      this._items.push({ id, frame });
+    Events.on<CollectibleItemData>(HERO_PICKS_UP_ITEM, this, ({ itemKey, frame }) => {
+      this._items.push({ itemKey, frame });
       this._rebuildInventoryDisplay();
     });
 
@@ -45,14 +45,14 @@ export class Inventory extends GameObject {
     this.children = [];
 
     // Create fresh sprites for current items
-    this._items.forEach(({ id, frame }, index) => {
-      const sprite = createItemSprite(`${id}-inventory-sprite`, frame, new Vector2(Game.toGridSize(index), -8));
+    this._items.forEach(({ itemKey, frame }, index) => {
+      const sprite = createItemSprite(`${itemKey}-inventory-sprite`, frame, new Vector2(Game.toGridSize(index), -8));
       this.addChild(sprite);
     });
   }
 
-  removeFromInventory(id: ItemKey): void {
-    const indexToRemove = this._items.findIndex((item) => item.id === id);
+  removeFromInventory(itemKey: ItemKey): void {
+    const indexToRemove = this._items.findIndex((item) => item.itemKey === itemKey);
     if (indexToRemove !== -1) {
       this._items.splice(indexToRemove, 1);
       this._rebuildInventoryDisplay();

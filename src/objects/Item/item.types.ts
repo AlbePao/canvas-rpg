@@ -22,7 +22,7 @@ export type CollectibleItemConfig = ItemConfig & {
 };
 
 export interface ItemData {
-  id: ItemKey;
+  itemKey: ItemKey;
   frame: number;
   position?: Vector2;
 }

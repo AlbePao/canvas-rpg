@@ -14,7 +14,7 @@ export class Item extends GameObject {
     const frame = ITEMS_SPRITE_FRAME[itemKey];
 
     this.data = {
-      id: itemKey,
+      itemKey,
       frame,
       position: this.position,
     };
