@@ -49,7 +49,7 @@ export class TitleScreen extends GameObject {
 
     this._optionsLines = createSpriteTextLines(
       this._options.map(({ text }) => text),
-      `${this.id}`,
+      this.id,
     );
 
     const width = 5;

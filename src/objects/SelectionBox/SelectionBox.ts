@@ -52,7 +52,7 @@ export class SelectionBox extends GameObject {
     );
     this._optionsLines = createSpriteTextLines(
       this.options.map(({ text }) => text),
-      `${this.id}`,
+      this.id,
     );
 
     const width =
