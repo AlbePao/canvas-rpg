@@ -4,7 +4,7 @@ import { BoxBackdrop } from '../BoxBackdrop';
 import type { Main } from '../Main';
 import { PAUSE_SUB_MENU_CLOSE } from '../PauseMenu';
 
-export class InventoryBox extends GameObject {
+export class InventoryMenu extends GameObject {
   private readonly _backdrop = new BoxBackdrop({
     id: `${this.id}-inventory-box-backdrop`,
     width: 4,

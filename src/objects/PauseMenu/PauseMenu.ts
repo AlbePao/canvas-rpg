@@ -1,6 +1,6 @@
 import { Events } from '../../lib/Events';
 import type { GameObject } from '../../lib/GameObject';
-import { InventoryBox } from '../InventoryBox';
+import { InventoryMenu } from '../InventoryMenu';
 import { SelectionBox } from '../SelectionBox';
 import { TEXT_BOX_CLOSE, TEXT_BOX_OPEN, TextBox } from '../TextBox';
 import {
@@ -76,7 +76,7 @@ export class PauseMenu extends SelectionBox {
 
     // Open other options sub menus
     if (value === 'inventory') {
-      Events.emit<InventoryBox>(PAUSE_SUB_MENU_OPEN, new InventoryBox());
+      Events.emit<InventoryMenu>(PAUSE_SUB_MENU_OPEN, new InventoryMenu());
     }
   }
 }
