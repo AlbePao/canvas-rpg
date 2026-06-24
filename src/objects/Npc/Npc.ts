@@ -237,26 +237,25 @@ export class Npc extends InteractiveObject {
       }
 
       const { direction, speed } = behavior;
-      const gridSize = Game.gridSize;
 
       // Calculate the walk target based on direction and distance
       let nextX = this.destinationPosition.x;
       let nextY = this.destinationPosition.y;
 
       if (direction === 'DOWN') {
-        nextY += gridSize;
+        nextY += Game.gridSize;
         this._body.animations?.play('walkDown');
       }
       if (direction === 'UP') {
-        nextY -= gridSize;
+        nextY -= Game.gridSize;
         this._body.animations?.play('walkUp');
       }
       if (direction === 'LEFT') {
-        nextX -= gridSize;
+        nextX -= Game.gridSize;
         this._body.animations?.play('walkLeft');
       }
       if (direction === 'RIGHT') {
-        nextX += gridSize;
+        nextX += Game.gridSize;
         this._body.animations?.play('walkRight');
       }
 

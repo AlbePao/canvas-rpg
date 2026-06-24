@@ -30,10 +30,8 @@ export class Sprite extends GameObject {
       id,
     });
 
-    const gridSize = Game.gridSize;
-
     this._resource = resource;
-    this._frameSize = frameSize ?? new Vector2(gridSize, gridSize);
+    this._frameSize = frameSize ?? new Vector2(Game.gridSize, Game.gridSize);
     this._hFrames = hFrames ?? 1;
     this.vFrames = vFrames ?? 1;
     this.frame = frame ?? 0;

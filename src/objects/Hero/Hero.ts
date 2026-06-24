@@ -187,22 +187,21 @@ export class Hero extends GameObject {
 
     let nextX = this.destinationPosition.x;
     let nextY = this.destinationPosition.y;
-    const gridSize = Game.gridSize;
 
     if (input.direction === 'DOWN') {
-      nextY += gridSize;
+      nextY += Game.gridSize;
       this.body.animations?.play('walkDown');
     }
     if (input.direction === 'UP') {
-      nextY -= gridSize;
+      nextY -= Game.gridSize;
       this.body.animations?.play('walkUp');
     }
     if (input.direction === 'LEFT') {
-      nextX -= gridSize;
+      nextX -= Game.gridSize;
       this.body.animations?.play('walkLeft');
     }
     if (input.direction === 'RIGHT') {
-      nextX += gridSize;
+      nextX += Game.gridSize;
       this.body.animations?.play('walkRight');
     }
 

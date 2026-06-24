@@ -39,8 +39,7 @@ export class SelectionBox extends GameObject {
       throw new Error('SelectionBox: options array must have at least one element');
     }
 
-    const gridSize = Game.gridSize;
-    const { toGridSize } = Game;
+    const { toGridSize, gridSize } = Game;
 
     // Draw on top layer
     this.drawLayer = 'HUD';
