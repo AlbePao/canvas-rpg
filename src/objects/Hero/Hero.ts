@@ -8,6 +8,7 @@ import { DIRECTION_TAP } from '../../lib/Input';
 import { Resources } from '../../lib/Resources';
 import { SCREEN_TRANSITION_END, SCREEN_TRANSITION_START } from '../../lib/ScreenTransition';
 import { Vector2 } from '../../lib/Vector2';
+import type { Coords2D } from '../../types/coords';
 import type { Directions } from '../../types/directions';
 import type { CollectibleItemData } from '../Item';
 import { createItemSprite } from '../Item';
@@ -40,6 +41,15 @@ export class Hero extends GameObject {
   private _itemPickUpShell: GameObject | null = null;
   private _isLocked = false;
   private readonly _walkingSpeed = 1;
+
+  get gridCoords(): Coords2D {
+    const { x, y } = this.position;
+
+    return {
+      x: x / Game.gridSize,
+      y: y / Game.gridSize,
+    };
+  }
 
   constructor(config: HeroConfig) {
     super(config);
@@ -80,14 +90,14 @@ export class Hero extends GameObject {
     this.addChild(this.body);
 
     this.destinationPosition = this.position.duplicate();
+  }
 
+  override ready(): void {
     // React to picking up an item
     Events.on<CollectibleItemData>(HERO_PICKS_UP_ITEM, this, (data) => {
       this._onPickUpItem(data);
     });
-  }
 
-  override ready(): void {
     // Lock hero when game is paused, cutscene is playing or is changing level
     [PAUSE_ON, TEXT_BOX_OPEN, SCREEN_TRANSITION_START].forEach((event) => {
       Events.on(event, this, () => {
