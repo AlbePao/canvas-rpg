@@ -6,7 +6,7 @@ import { Sprite } from '../Sprite';
 import type { BoxBackdropConfig } from './boxBackdrop.types';
 
 function createBackdropFrames(): Sprite[] {
-  const gridSize = Game.getGridSize();
+  const gridSize = Game.gridSize;
 
   // Create the 9 frames from the textBox sheet (3x3 grid, each frame is gridSize x gridSize)
   const frameArray: Sprite[] = [];

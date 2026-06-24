@@ -20,7 +20,7 @@ export class Vector2 implements Coords2D {
   }
 
   toNeighborCoords(direction: Directions): TileCoords {
-    const gridSize = Game.getGridSize();
+    const gridSize = Game.gridSize;
     let { x, y } = this;
 
     if (direction === 'LEFT') {

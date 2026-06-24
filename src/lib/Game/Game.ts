@@ -7,9 +7,24 @@ import type { Vector2 } from '../Vector2';
 import type { GameCanvasSize, GameConfig } from './game.types';
 
 class GameSingleton extends Singleton<GameSingleton>() {
+  get containerId(): string {
+    return this._containerId;
+  }
   private _containerId = '';
+
+  get containerSizes(): GameCanvasSize {
+    return {
+      canvasWidth: this._canvasWidth,
+      canvasHeight: this._canvasHeight,
+    };
+  }
+
   private _canvasWidth = 0;
   private _canvasHeight = 0;
+
+  get gridSize(): number {
+    return this._gridSize;
+  }
   private readonly _gridSize = 16;
 
   readonly textBoxBackdropWidth = 16; // 256 pixel
@@ -99,21 +114,6 @@ class GameSingleton extends Singleton<GameSingleton>() {
     // Start the game
     const gameLoop = new GameLoop(update, draw);
     gameLoop.start();
-  }
-
-  getContainerId(): string {
-    return this._containerId;
-  }
-
-  getGridSize(): number {
-    return this._gridSize;
-  }
-
-  getContainerSizes(): GameCanvasSize {
-    return {
-      canvasWidth: this._canvasWidth,
-      canvasHeight: this._canvasHeight,
-    };
   }
 
   toGridSize = (value: number): number => value * this._gridSize;

@@ -28,7 +28,7 @@ export class ScreenTransition {
     this._element = document.createElement('div');
     this._element.classList.add(SCREEN_TRANSITION_CLASSNAME, 'fade-in');
 
-    document.querySelector(Game.getContainerId())?.appendChild(this._element);
+    document.querySelector(Game.containerId)?.appendChild(this._element);
     Events.emit(SCREEN_TRANSITION_START);
 
     this._element.addEventListener(

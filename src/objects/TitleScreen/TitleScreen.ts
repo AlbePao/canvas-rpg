@@ -45,7 +45,7 @@ export class TitleScreen extends GameObject {
       { text: 'Options', value: 'options' },
     ].filter((option) => !!option);
 
-    const gridSize = Game.getGridSize();
+    const gridSize = Game.gridSize;
 
     this._optionsLines = createSpriteTextLines(
       this._options.map(({ text }) => text),
@@ -59,7 +59,7 @@ export class TitleScreen extends GameObject {
     this._backdrop.updateSize(width, height);
 
     // Set the position according to options size in relation to canvas width and text box height
-    const { canvasWidth, canvasHeight } = Game.getContainerSizes();
+    const { canvasWidth, canvasHeight } = Game.containerSizes;
     const newX = (canvasWidth - width * gridSize) / 2;
     const newY = (canvasHeight - height * gridSize) / 2;
     this.position = new Vector2(newX, newY);

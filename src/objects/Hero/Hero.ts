@@ -187,7 +187,7 @@ export class Hero extends GameObject {
 
     let nextX = this.destinationPosition.x;
     let nextY = this.destinationPosition.y;
-    const gridSize = Game.getGridSize();
+    const gridSize = Game.gridSize;
 
     if (input.direction === 'DOWN') {
       nextY += gridSize;

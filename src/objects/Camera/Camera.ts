@@ -26,7 +26,7 @@ export class Camera extends GameObject {
   private _centerPositionOnTarget(position: Coords2D): void {
     // Create a new position based on the incoming position
     const personHalf = 8;
-    const { canvasWidth, canvasHeight } = Game.getContainerSizes();
+    const { canvasWidth, canvasHeight } = Game.containerSizes;
     const halfWidth = -personHalf + canvasWidth / 2;
     const halfHeight = -personHalf + canvasHeight / 2;
     // Reuse existing Vector2, just update x/y

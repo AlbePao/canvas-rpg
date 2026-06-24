@@ -237,7 +237,7 @@ export class Npc extends InteractiveObject {
       }
 
       const { direction, speed } = behavior;
-      const gridSize = Game.getGridSize();
+      const gridSize = Game.gridSize;
 
       // Calculate the walk target based on direction and distance
       let nextX = this.destinationPosition.x;

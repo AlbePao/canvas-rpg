@@ -39,7 +39,7 @@ export class SelectionBox extends GameObject {
       throw new Error('SelectionBox: options array must have at least one element');
     }
 
-    const gridSize = Game.getGridSize();
+    const gridSize = Game.gridSize;
     const { toGridSize } = Game;
 
     // Draw on top layer
@@ -68,7 +68,7 @@ export class SelectionBox extends GameObject {
     this._backdrop.updateSize(width / gridSize, height / gridSize);
 
     // If position x and y are set from config, use that params, otherwise set the position according to options size in relation to canvas width and text box height
-    const { canvasWidth, canvasHeight } = Game.getContainerSizes();
+    const { canvasWidth, canvasHeight } = Game.containerSizes;
     const newX = x ? toGridSize(x) : canvasWidth - width - 32;
     const newY = y ? toGridSize(y) : canvasHeight - height - toGridSize(Game.textBoxBackdropHeight) - 4;
     this.position = new Vector2(newX, newY);

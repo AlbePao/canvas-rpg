@@ -47,7 +47,7 @@ export class HeroSnappedMovement extends Hero {
     let nextGridY = this.destinationPosition.y;
 
     const characterPace = 1;
-    const gridSize = Game.getGridSize() / 2;
+    const gridSize = Game.gridSize / 2;
 
     if (input.direction === 'DOWN') {
       nextCharacterY += characterPace;
