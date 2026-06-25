@@ -2,18 +2,21 @@ import { createSpriteTextLines } from '../../helpers/spriteText';
 import { Events } from '../../lib/Events';
 import { Game } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
+import { Inventory } from '../../lib/Inventory';
 import { LevelBuilder, type LevelBuilderConfig } from '../../lib/LevelBuilder';
+import { Progress } from '../../lib/Progress';
 import { ScreenTransition } from '../../lib/ScreenTransition';
+import { StoryFlags } from '../../lib/StoryFlags';
 import { Vector2 } from '../../lib/Vector2';
 import type { Line } from '../../types/text';
 import { ArrowIndicator } from '../ArrowIndicator';
 import { BoxBackdrop } from '../BoxBackdrop';
 import { CHANGE_LEVEL } from '../Level';
 import type { Main } from '../Main';
-import type { TitleScreenConfig, TitleScreenOption } from './titleScreen.types';
+import type { TitleScreenOption } from './titleScreen.types';
 
 export class TitleScreen extends GameObject {
-  private readonly _saveFile: unknown;
+  private readonly _saveFile = Progress.saveFile;
   private readonly _options: TitleScreenOption[];
   private _currentOptionIndex = 0;
   private readonly _optionsLines: Line[];
@@ -28,31 +31,26 @@ export class TitleScreen extends GameObject {
     direction: 'RIGHT',
   });
 
-  constructor(config: TitleScreenConfig) {
+  constructor() {
     super({
       id: 'title-screen',
     });
 
-    const { saveFile } = config;
-
     // Draw on top layer
     this.drawLayer = 'HUD';
 
-    this._saveFile = saveFile;
     this._options = [
       this._saveFile ? { text: 'Load Game', value: 'load_game' } : null,
       { text: 'New Game', value: 'new_game' },
       { text: 'Options', value: 'options' },
     ].filter((option) => !!option);
 
-    const gridSize = Game.gridSize;
-
     this._optionsLines = createSpriteTextLines(
       this._options.map(({ text }) => text),
       this.id,
     );
 
-    const width = 5;
+    const width = 5.5;
     const height = this._options.length + 1;
 
     // Set backdrop size according to its options' size
@@ -60,8 +58,8 @@ export class TitleScreen extends GameObject {
 
     // Set the position according to options size in relation to canvas width and text box height
     const { canvasWidth, canvasHeight } = Game.containerSizes;
-    const newX = (canvasWidth - width * gridSize) / 2;
-    const newY = (canvasHeight - height * gridSize) / 2;
+    const newX = (canvasWidth - width * Game.gridSize) / 2;
+    const newY = (canvasHeight - height * Game.gridSize) / 2;
     this.position = new Vector2(newX, newY);
   }
 
@@ -126,16 +124,39 @@ export class TitleScreen extends GameObject {
     }
 
     if (value === 'load_game') {
-      // TODO: load save file data, then load level
-      // this._saveFile
-      this._loadLevel({ id: 'tilesetLevel' });
+      this._loadGame();
       return;
     }
 
-    this._loadLevel({ id: 'tilesetLevel' });
+    this._startGame({ id: 'tilesetLevel' });
   }
 
-  private _loadLevel(config: LevelBuilderConfig): void {
+  private _loadGame(): void {
+    if (!this._saveFile) {
+      return;
+    }
+
+    const {
+      levelId,
+      storyFlags,
+      hero: { position, inventory },
+    } = this._saveFile;
+
+    storyFlags.forEach((flag) => {
+      StoryFlags.add(flag);
+    });
+
+    inventory.forEach(({ itemKey }) => {
+      Inventory.add(itemKey);
+    });
+
+    this._startGame({
+      id: levelId,
+      heroStartPosition: position,
+    });
+  }
+
+  private _startGame(config: LevelBuilderConfig): void {
     new ScreenTransition(
       () => {
         Events.emit<LevelBuilder>(CHANGE_LEVEL, new LevelBuilder(config));

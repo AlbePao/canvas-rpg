@@ -1,19 +1,21 @@
 import { Events } from '../../lib/Events';
 import { GameObject } from '../../lib/GameObject';
 import { Input } from '../../lib/Input';
+import { Inventory } from '../../lib/Inventory';
 import { Progress } from '../../lib/Progress';
+import { StoryFlags } from '../../lib/StoryFlags';
 import { Camera } from '../Camera';
+import { getHeroObject } from '../Hero';
 import { CHANGE_LEVEL, type Level } from '../Level';
-import { PAUSE_OFF, PAUSE_ON, PauseMenu } from '../PauseMenu';
+import { PAUSE_OFF, PAUSE_ON, PAUSE_SAVE_GAME, PauseMenu, SAVE_TEXT_BOX_ID } from '../PauseMenu';
 import { SELECTION_BOX_CLOSE, SELECTION_BOX_OPEN, type SelectionBox } from '../SelectionBox';
-import { TEXT_BOX_CLOSE, TEXT_BOX_OPEN, type TextBox } from '../TextBox';
+import { TEXT_BOX_CLOSE, TEXT_BOX_OPEN, TextBox } from '../TextBox';
 import { TitleScreen } from '../TitleScreen';
 
 export class Main extends GameObject {
   level: Level | null = null;
   readonly input = new Input();
   readonly camera = new Camera();
-  readonly progress = new Progress();
   isTextBoxOpened = false;
   isSelectionBoxOpened = false;
   isCutscenePlaying = false;
@@ -81,6 +83,36 @@ export class Main extends GameObject {
         Events.off(endingSub);
       });
     });
+
+    // Save game handler
+    Events.on(PAUSE_SAVE_GAME, this, () => {
+      const hero = getHeroObject(this.level);
+
+      if (!this.level || !hero) {
+        return;
+      }
+
+      const { gridCoords, facingDirection } = hero;
+
+      Progress.save({
+        levelId: this.level.id,
+        storyFlags: StoryFlags.flags,
+        hero: {
+          position: gridCoords,
+          direction: facingDirection,
+          inventory: Inventory.getAll(),
+        },
+      });
+
+      Events.emit<TextBox>(
+        TEXT_BOX_OPEN,
+        new TextBox({
+          id: SAVE_TEXT_BOX_ID,
+          text: ['Progress saved!'],
+          speed: 2,
+        }),
+      );
+    });
   }
 
   override step(): void {
@@ -102,7 +134,7 @@ export class Main extends GameObject {
   }
 
   startTitleScreen(): void {
-    this.addChild(new TitleScreen({ saveFile: this.progress.getSaveFile() }));
+    this.addChild(new TitleScreen());
   }
 
   private _setLevel(newLevelInstance: Level): void {
