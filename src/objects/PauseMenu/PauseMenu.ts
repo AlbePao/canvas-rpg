@@ -2,10 +2,12 @@ import { Events } from '../../lib/Events';
 import type { GameObject } from '../../lib/GameObject';
 import { InventoryMenu } from '../InventoryMenu';
 import { SelectionBox } from '../SelectionBox';
-import { TEXT_BOX_CLOSE, TEXT_BOX_OPEN, TextBox } from '../TextBox';
+import type { TextBox } from '../TextBox';
+import { TEXT_BOX_CLOSE } from '../TextBox';
 import {
   PAUSE_MENU_OPTIONS,
   PAUSE_OFF,
+  PAUSE_SAVE_GAME,
   PAUSE_SUB_MENU_CLOSE,
   PAUSE_SUB_MENU_OPEN,
   SAVE_TEXT_BOX_ID,
@@ -62,15 +64,7 @@ export class PauseMenu extends SelectionBox {
 
     // Save and open text box
     if (value === 'save') {
-      // TODO: add save feature, then open text box
-      Events.emit<TextBox>(
-        TEXT_BOX_OPEN,
-        new TextBox({
-          id: SAVE_TEXT_BOX_ID,
-          text: ['Progress saved!'],
-          speed: 2,
-        }),
-      );
+      Events.emit(PAUSE_SAVE_GAME);
       return;
     }
 
