@@ -96,7 +96,9 @@ export class TextBox extends GameObject {
     const { finalCharIndex } = this._lines[this._currentLineIndex];
 
     // Listen for input
-    if (input.getActionJustPressed('Space')) {
+    const isSelected = input.getActionJustPressed('Space') || input.getActionJustPressed('Enter');
+
+    if (isSelected) {
       if (this._showingCharIndex < finalCharIndex) {
         // Skip
         this._showingCharIndex = finalCharIndex;
