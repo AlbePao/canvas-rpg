@@ -1,4 +1,4 @@
-import type { LevelMap } from '../lib/LevelBuilder/levelBuilder.types';
+import type { LevelMap } from '../lib/LevelBuilder';
 
 export const TILESET_LEVEL2: LevelMap = {
   id: 'tilesetLevel2',

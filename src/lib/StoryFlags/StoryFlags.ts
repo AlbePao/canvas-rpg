@@ -1,4 +1,4 @@
-import type { InteractionContentConfig } from '../../objects/InteractiveObject/interactiveObject.types';
+import type { InteractionContentConfig } from '../../objects/InteractiveObject';
 import { Singleton } from '../Singleton';
 
 class StoryFlagsSingleton extends Singleton<StoryFlagsSingleton>() {

@@ -1,4 +1,4 @@
-import type { LevelMap } from '../lib/LevelBuilder/levelBuilder.types';
+import type { LevelMap } from '../lib/LevelBuilder';
 import {
   COLLECTED_SWORD,
   RECEIVED_ITEM_FROM_B,
