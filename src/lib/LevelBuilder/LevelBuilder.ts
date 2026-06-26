@@ -5,8 +5,8 @@ import { Chest } from '../../objects/Chest';
 import { Decoration } from '../../objects/Decoration';
 import type { ExitData } from '../../objects/Exit';
 import { Exit } from '../../objects/Exit';
-import { Hero, HERO_EXITS } from '../../objects/Hero';
-import { CollectibleItem } from '../../objects/Item';
+import { Hero, HERO_COLLECTS_ITEM, HERO_EXITS, HERO_OPENS_CHEST } from '../../objects/Hero';
+import { CollectibleItem, type CollectibleItemData } from '../../objects/Item';
 import { CHANGE_LEVEL, Level } from '../../objects/Level';
 import { LevelTile } from '../../objects/LevelTile';
 import { Npc } from '../../objects/Npc';
@@ -14,6 +14,8 @@ import { Sprite } from '../../objects/Sprite';
 import { Events } from '../Events';
 import { Game } from '../Game';
 import type { GameObject } from '../GameObject';
+import { Inventory } from '../Inventory';
+import { LevelStateManager } from '../LevelStateManager';
 import { Resources } from '../Resources';
 import { ScreenTransition } from '../ScreenTransition';
 import { Vector2 } from '../Vector2';
@@ -74,9 +76,22 @@ export class LevelBuilder extends Level {
       this.walls.add(`${toGridSize(x)},${toGridSize(y)}`);
     });
 
+    const gameObjectIds = gameObjects.map(({ id }) => id);
+    const hasDuplicatedIds = new Set(gameObjectIds).size !== gameObjectIds.length;
+
+    if (hasDuplicatedIds) {
+      throw new Error('LevelBuilder: two or more game objects have tha same id');
+    }
+
     // Add game objects
     gameObjects.forEach((gameObject) => {
-      const { type } = gameObject;
+      const { type, id } = gameObject;
+      const objectState = LevelStateManager.getObjectState(this.id, id);
+
+      if (objectState?.removed) {
+        return;
+      }
+
       let object: GameObject | null = null;
 
       if (type === 'CollectibleItem') {
@@ -84,7 +99,7 @@ export class LevelBuilder extends Level {
       }
 
       if (type === 'Chest') {
-        object = new Chest(gameObject);
+        object = new Chest({ ...gameObject, status: objectState?.status });
       }
 
       if (type === 'Npc') {
@@ -115,6 +130,21 @@ export class LevelBuilder extends Level {
   }
 
   override ready(): void {
+    Events.on<CollectibleItemData>(HERO_COLLECTS_ITEM, this, ({ id, itemKey }) => {
+      // Add collected item to inventory list
+      Inventory.add(itemKey);
+      // Update level item status
+      LevelStateManager.setObjectState(this.id, id, { removed: true });
+    });
+
+    Events.on<Chest>(HERO_OPENS_CHEST, this, ({ id, removeAfterLoot, status }) => {
+      // Update level chest status
+      LevelStateManager.setObjectState(this.id, id, {
+        removed: removeAfterLoot,
+        status,
+      });
+    });
+
     Events.on<ExitData>(HERO_EXITS, this, ({ newLevelId, newHeroPosition }) => {
       // TODO: uncomment when levels are defined from a json
       // if (!LevelsMapper.hasLevel(newLevelId)) {

@@ -11,9 +11,17 @@ import { TEXT_BOX_CLOSE, TEXT_BOX_OPEN, TextBox } from '../TextBox';
 import type { ChestConfig, ChestStatus } from './chest.types';
 
 export class Chest extends InteractiveObject {
-  private _status: ChestStatus = 'CLOSED';
   private readonly _body: Sprite;
-  private readonly _shouldRemove?: boolean;
+
+  public get status(): ChestStatus {
+    return this._status;
+  }
+  private _status: ChestStatus = 'CLOSED';
+
+  get removeAfterLoot(): boolean {
+    return this._removeAfterLoot;
+  }
+  private readonly _removeAfterLoot: boolean;
 
   constructor(config: ChestConfig) {
     super(config);
@@ -22,7 +30,7 @@ export class Chest extends InteractiveObject {
 
     this.isSolid = true;
     this._status = status;
-    this._shouldRemove = !!removeAfterLoot;
+    this._removeAfterLoot = !!removeAfterLoot;
 
     this._body = new Sprite({
       id: `${id}-chest-sprite`,
@@ -107,7 +115,7 @@ export class Chest extends InteractiveObject {
     // Emit chest opened event
     Events.emit<Chest>(HERO_OPENS_CHEST, this);
 
-    if (this._shouldRemove) {
+    if (this._removeAfterLoot) {
       this.destroy();
     }
   }
