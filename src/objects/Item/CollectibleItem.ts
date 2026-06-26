@@ -1,7 +1,7 @@
 import { Events } from '../../lib/Events';
 import { Game } from '../../lib/Game';
 import type { Vector2 } from '../../lib/Vector2';
-import { HERO_PICKS_UP_ITEM, HERO_POSITION } from '../Hero';
+import { HERO_COLLECTS_ITEM, HERO_POSITION } from '../Hero';
 import { Item } from './Item';
 import { ITEMS_SPRITE_FRAME } from './item.constants';
 import type { CollectibleItemConfig, CollectibleItemData } from './item.types';
@@ -12,15 +12,16 @@ export class CollectibleItem extends Item {
   constructor(config: CollectibleItemConfig) {
     super(config);
 
-    const { itemKey, shouldSkipPickupAnimation } = config;
+    const { id, itemKey, skipCollectAnimation } = config;
 
     const frame = ITEMS_SPRITE_FRAME[itemKey];
 
     this.data = {
+      id,
       itemKey,
       frame,
       position: this.position,
-      shouldSkipPickupAnimation: !!shouldSkipPickupAnimation,
+      skipCollectAnimation: !!skipCollectAnimation,
     };
   }
 
@@ -37,6 +38,6 @@ export class CollectibleItem extends Item {
     this.destroy();
 
     // Alert other things that we picker up a collectible item
-    Events.emit<CollectibleItemData>(HERO_PICKS_UP_ITEM, this.data);
+    Events.emit<CollectibleItemData>(HERO_COLLECTS_ITEM, this.data);
   }
 }

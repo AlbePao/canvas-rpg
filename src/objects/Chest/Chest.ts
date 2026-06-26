@@ -3,7 +3,7 @@ import type { GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
 import { StoryFlags } from '../../lib/StoryFlags';
 import { Vector2 } from '../../lib/Vector2';
-import { emitHeroItemPickup, HERO_REQUESTS_ACTION } from '../Hero';
+import { emitHeroItemCollect, HERO_OPENS_CHEST, HERO_REQUESTS_ACTION } from '../Hero';
 import { InteractiveObject } from '../InteractiveObject';
 import type { ItemKey } from '../Item';
 import { Sprite } from '../Sprite';
@@ -77,7 +77,7 @@ export class Chest extends InteractiveObject {
 
         const endingSub = Events.on(TEXT_BOX_CLOSE, this, () => {
           // Collect the item after text box close
-          this._pickUpItem(contentItemKey);
+          this._collectItem(contentItemKey);
           Events.off(endingSub);
         });
 
@@ -86,7 +86,7 @@ export class Chest extends InteractiveObject {
 
       // No text box to display, collect the item directly
       this._openChest();
-      this._pickUpItem(itemKey);
+      this._collectItem(itemKey);
     });
   }
 
@@ -96,13 +96,16 @@ export class Chest extends InteractiveObject {
     this._body.frame = 1;
   }
 
-  private _pickUpItem(itemKey: ItemKey | null): void {
+  private _collectItem(itemKey: ItemKey | null): void {
     if (!itemKey) {
       return;
     }
 
-    // Emit pick up item event
-    emitHeroItemPickup(itemKey);
+    // Emit item collect event
+    emitHeroItemCollect(itemKey);
+
+    // Emit chest opened event
+    Events.emit<Chest>(HERO_OPENS_CHEST, this);
 
     if (this._shouldRemove) {
       this.destroy();

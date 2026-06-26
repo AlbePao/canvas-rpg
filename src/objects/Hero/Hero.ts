@@ -28,7 +28,7 @@ import {
   HERO_WALK_RIGHT,
   HERO_WALK_UP,
 } from './hero.animations';
-import { HERO_PICKS_UP_ITEM, HERO_POSITION, HERO_REQUESTS_ACTION } from './hero.constants';
+import { HERO_COLLECTS_ITEM, HERO_POSITION, HERO_REQUESTS_ACTION } from './hero.constants';
 import type { HeroConfig } from './hero.types';
 
 export class Hero extends GameObject {
@@ -94,8 +94,8 @@ export class Hero extends GameObject {
 
   override ready(): void {
     // React to picking up an item
-    Events.on<CollectibleItemData>(HERO_PICKS_UP_ITEM, this, (data) => {
-      this._onPickUpItem(data);
+    Events.on<CollectibleItemData>(HERO_COLLECTS_ITEM, this, (data) => {
+      this._onCollectItem(data);
     });
 
     // Lock hero when game is paused, cutscene is playing or is changing level
@@ -239,11 +239,11 @@ export class Hero extends GameObject {
     }
   }
 
-  private _onPickUpItem(data: CollectibleItemData): void {
-    const { frame, position, shouldSkipPickupAnimation } = data;
+  private _onCollectItem(data: CollectibleItemData): void {
+    const { frame, position, skipCollectAnimation } = data;
 
     // If the item has requested to skip the pickup animation, just move there without any celebration
-    if (shouldSkipPickupAnimation) {
+    if (skipCollectAnimation) {
       return;
     }
 

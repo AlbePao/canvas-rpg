@@ -18,7 +18,7 @@ export type ItemConfig = GameObjectConfig & {
 };
 
 export type CollectibleItemConfig = ItemConfig & {
-  shouldSkipPickupAnimation?: boolean;
+  skipCollectAnimation?: boolean;
 };
 
 export interface ItemData {
@@ -28,5 +28,6 @@ export interface ItemData {
 }
 
 export type CollectibleItemData = ItemData & {
-  shouldSkipPickupAnimation: boolean;
+  id: string;
+  skipCollectAnimation: boolean;
 };

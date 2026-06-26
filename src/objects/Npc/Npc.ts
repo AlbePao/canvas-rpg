@@ -9,7 +9,7 @@ import { SCREEN_TRANSITION_END, SCREEN_TRANSITION_START } from '../../lib/Screen
 import { StoryFlags } from '../../lib/StoryFlags';
 import { Vector2 } from '../../lib/Vector2';
 import type { Directions } from '../../types/directions';
-import { emitHeroItemPickup, getHeroObject, HERO_REQUESTS_ACTION, isHeroObject } from '../Hero';
+import { emitHeroItemCollect, getHeroObject, HERO_REQUESTS_ACTION, isHeroObject } from '../Hero';
 import { InteractiveObject } from '../InteractiveObject';
 import type { ItemKey } from '../Item';
 import { PAUSE_OFF, PAUSE_ON } from '../PauseMenu';
@@ -157,7 +157,7 @@ export class Npc extends InteractiveObject {
           } else if (itemKey) {
             // No response, give item directly to the hero after closing the textbox
             Events.emit(TEXT_BOX_CLOSE);
-            emitHeroItemPickup(itemKey);
+            emitHeroItemCollect(itemKey);
           }
 
           Events.off(selectionBoxClosedSub);
@@ -171,7 +171,7 @@ export class Npc extends InteractiveObject {
 
       if (this._contentItemKey) {
         // Now hero can collect the item
-        emitHeroItemPickup(this._contentItemKey);
+        emitHeroItemCollect(this._contentItemKey);
         // Reset the items once hero collects it
         this._contentItemKey = null;
       }

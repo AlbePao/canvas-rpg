@@ -112,7 +112,7 @@ export const TILESET_LEVEL: LevelMap = {
       itemKey: 'heart',
       x: 10,
       y: 3,
-      shouldSkipPickupAnimation: true,
+      skipCollectAnimation: true,
     },
     {
       type: 'Decoration',

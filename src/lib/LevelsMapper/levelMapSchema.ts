@@ -556,7 +556,7 @@ const LevelCollectibleItemSchema = z.object({
   x: z.number().int(),
   y: z.number().int(),
   behaviorConfig: z.array(GameObjectBehaviorSchema).optional(),
-  shouldSkipPickupAnimation: z.boolean().optional(),
+  skipCollectAnimation: z.boolean().optional(),
 }) satisfies z.ZodType<LevelCollectibleItem>;
 
 const LevelDecorationSchema = z.object({
