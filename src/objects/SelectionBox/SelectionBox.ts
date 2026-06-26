@@ -46,8 +46,8 @@ export class SelectionBox extends GameObject {
 
     this.options = options.filter(
       ({ exclude, include }) =>
-        (exclude ? exclude.some((flag) => !StoryFlags.has(flag)) : true) &&
-        (include ? include.some((flag) => StoryFlags.has(flag)) : true),
+        (exclude?.some((flag) => !StoryFlags.has(flag)) ?? true) &&
+        (include?.some((flag) => StoryFlags.has(flag)) ?? true),
     );
     this._optionsLines = createSpriteTextLines(
       this.options.map(({ text }) => text),
