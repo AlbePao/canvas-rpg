@@ -3,12 +3,12 @@ import { Events } from '../../lib/Events';
 import { Game } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
 import { Inventory, type InventoryItem } from '../../lib/Inventory';
-import { Vector2 } from '../../lib/Vector2';
 import type { Line } from '../../types/text';
 import { ArrowIndicator } from '../ArrowIndicator';
 import { BoxBackdrop } from '../BoxBackdrop';
 import type { Main } from '../Main';
 import { PAUSE_SUB_MENU_CLOSE } from '../PauseMenu';
+import { SELECTION_BOX_CLOSE, SELECTION_BOX_OPEN, SelectionBox, type SelectionOption } from '../SelectionBox';
 
 export class InventoryMenu extends GameObject {
   protected readonly items: InventoryItem[];
@@ -51,18 +51,26 @@ export class InventoryMenu extends GameObject {
         ...this.items.map(({ name }) =>
           name.split('').reduce((lineWidth, char) => lineWidth + getCharacterWidth(char), 0),
         ),
-      ) + 52; // Add padding for the indicator and some spacing
+      ) + 76; // Add padding for the indicator and some spacing
 
     const height = toGridSize(this.items.length) + gridSize; // Each option is 16px tall + some padding
 
-    // Set backdrop size according to its options' size
+    // Set backdrop size according to its item text size
     this._backdrop.updateSize(width / gridSize, height / gridSize);
+  }
 
-    // Set the position according to options size in relation to canvas width and text box height
-    const { canvasWidth, canvasHeight } = Game.containerSizes;
-    const newX = canvasWidth - width - 32;
-    const newY = canvasHeight - height - toGridSize(Game.textBoxBackdropHeight) - 4;
-    this.position = new Vector2(newX, newY);
+  override ready(): void {
+    Events.on(SELECTION_BOX_OPEN, this, () => {
+      this.lockIndicator();
+    });
+
+    Events.on<SelectionOption>(SELECTION_BOX_CLOSE, this, ({ value }) => {
+      this.unlockIndicator();
+
+      if (value !== 'cancel') {
+        console.log('do something...');
+      }
+    });
   }
 
   override step(_delta: number, root: Main): void {
@@ -76,13 +84,13 @@ export class InventoryMenu extends GameObject {
     if (input.getActionJustPressed('ArrowLeft') || input.getActionJustPressed('KeyA')) {
       Events.emit(PAUSE_SUB_MENU_CLOSE);
     }
-    const isOptionSelected = input.getActionJustPressed('Space') || input.getActionJustPressed('Enter');
+    const isItemSelected = input.getActionJustPressed('Space') || input.getActionJustPressed('Enter');
     const isArrowUpPressed = input.getActionJustPressed('ArrowUp') || input.getActionJustPressed('KeyW');
     const isArrowDownPressed = input.getActionJustPressed('ArrowDown') || input.getActionJustPressed('KeyS');
 
-    if (isOptionSelected) {
-      // Emit selected option
-      this.onOptionSelect();
+    if (isItemSelected) {
+      // Open selected item handler
+      this.onItemSelect();
     } else if (isArrowUpPressed) {
       // Move arrow up
       this.currentItemIndex = (this.currentItemIndex - 1 + this.items.length) % this.items.length;
@@ -126,8 +134,18 @@ export class InventoryMenu extends GameObject {
     });
   }
 
-  protected onOptionSelect(): void {
-    // ...
+  protected onItemSelect(): void {
+    Events.emit<SelectionBox>(
+      SELECTION_BOX_OPEN,
+      new SelectionBox({
+        id: `selection-box-for-${this.id}`,
+        options: [
+          { text: 'Use', value: 'use_item' },
+          { text: 'Throw', value: 'throw_item' },
+          { text: 'Cancel', value: 'cancel' },
+        ],
+      }),
+    );
   }
 
   protected lockIndicator(): void {
