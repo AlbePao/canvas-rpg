@@ -1,41 +1,38 @@
 import { Singleton } from '../Singleton';
-import type { LevelObjectState, LevelState } from './levelStateManager.types';
+import type { LevelObjectState, LevelsState, LevelState } from './levelStateManager.types';
 
 class LevelStateManagerSingleton extends Singleton<LevelStateManagerSingleton>() {
-  private readonly _levels = new Map<string, LevelState>();
+  get state(): LevelsState {
+    return this._state;
+  }
+  set state(state: LevelsState) {
+    this._state = state;
+  }
+  private _state: LevelsState = {};
 
   private _getLevel(levelId: string): LevelState {
-    let level = this._levels.get(levelId);
+    let level = this._state[levelId];
 
     if (!level) {
-      level = new Map();
-      this._levels.set(levelId, level);
+      level = {};
+      this._state[levelId] = level;
     }
 
     return level;
   }
 
   getObjectState(levelId: string, objectId: string): LevelObjectState | null {
-    return this._getLevel(levelId).get(objectId) ?? null;
+    return this._getLevel(levelId)[objectId] ?? null;
   }
 
   setObjectState(levelId: string, objectId: string, state: LevelObjectState): void {
     const level = this._getLevel(levelId);
+    const current = level[objectId];
 
-    const current = level.get(objectId) ?? {};
-
-    level.set(objectId, {
+    this._state[levelId][objectId] = {
       ...current,
       ...state,
-    });
-  }
-
-  removeLevel(levelId: string): void {
-    this._levels.delete(levelId);
-  }
-
-  clear(): void {
-    this._levels.clear();
+    };
   }
 }
 
