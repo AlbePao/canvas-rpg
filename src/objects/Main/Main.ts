@@ -2,6 +2,7 @@ import { Events } from '../../lib/Events';
 import { GameObject } from '../../lib/GameObject';
 import { Input } from '../../lib/Input';
 import { Inventory } from '../../lib/Inventory';
+import { LevelStateManager } from '../../lib/LevelStateManager';
 import { Progress } from '../../lib/Progress';
 import { StoryFlags } from '../../lib/StoryFlags';
 import { Camera } from '../Camera';
@@ -97,6 +98,7 @@ export class Main extends GameObject {
       Progress.save({
         levelId: this.level.id,
         storyFlags: StoryFlags.flags,
+        levelsState: LevelStateManager.state,
         hero: {
           position: gridCoords,
           direction: facingDirection,

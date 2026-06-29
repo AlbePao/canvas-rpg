@@ -4,6 +4,7 @@ import { Game } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
 import { Inventory } from '../../lib/Inventory';
 import { LevelBuilder, type LevelBuilderConfig } from '../../lib/LevelBuilder';
+import { LevelStateManager } from '../../lib/LevelStateManager';
 import { Progress } from '../../lib/Progress';
 import { ScreenTransition } from '../../lib/ScreenTransition';
 import { StoryFlags } from '../../lib/StoryFlags';
@@ -139,8 +140,11 @@ export class TitleScreen extends GameObject {
     const {
       levelId,
       storyFlags,
+      levelsState,
       hero: { position, inventory },
     } = this._saveFile;
+
+    LevelStateManager.state = levelsState;
 
     storyFlags.forEach((flag) => {
       StoryFlags.add(flag);
