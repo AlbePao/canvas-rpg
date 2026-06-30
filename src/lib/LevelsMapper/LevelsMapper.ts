@@ -1,6 +1,6 @@
 import { Singleton } from '../Singleton';
 import type { LevelMapJsonType } from './levelMapSchema';
-import { LevelMapJsonSchema, LEVELS_IDS } from './levelMapSchema';
+import { LevelMapJsonSchema, LevelsIdsScrema } from './levelMapSchema';
 
 interface LoadLevelResult {
   id: string;
@@ -24,8 +24,16 @@ class LevelsMapperSingleton extends Singleton<LevelsMapperSingleton>() {
   async loadLevels(): Promise<void> {
     const loadResults: LoadLevelResult[] = [];
 
-    // TODO: load level ids from a global config
-    for (const levelId of LEVELS_IDS) {
+    const levelsIdsResponse = await fetch(`/json/levelsIds.json`);
+
+    if (!levelsIdsResponse.ok) {
+      throw new Error('LevelsMapper: unable to find levels ids list');
+    }
+
+    const data = await levelsIdsResponse.json();
+    const levelsIds = LevelsIdsScrema.parse(data);
+
+    for (const levelId of levelsIds) {
       try {
         const response = await fetch(`/json/${levelId}.json`);
 
@@ -67,7 +75,7 @@ class LevelsMapperSingleton extends Singleton<LevelsMapperSingleton>() {
     // Report results
     const successCount = loadResults.filter((r) => r.success).length;
     const failureCount = loadResults.filter((r) => !r.success).length;
-    const totalCount = LEVELS_IDS.length;
+    const totalCount = levelsIds.length;
 
     if (failureCount > 0) {
       console.warn(`Loaded ${successCount}/${totalCount} levels`);

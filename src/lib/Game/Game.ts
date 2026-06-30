@@ -2,6 +2,7 @@ import { Main } from '../../objects/Main';
 import type { Coords, Walls } from '../../types/coords';
 import { GameLoop } from '../GameLoop';
 import type { GameObject } from '../GameObject';
+import { LevelsMapper } from '../LevelsMapper';
 import { Singleton } from '../Singleton';
 import type { Vector2 } from '../Vector2';
 import type { GameCanvasSize, GameConfig } from './game.types';
@@ -33,8 +34,7 @@ class GameSingleton extends Singleton<GameSingleton>() {
   /**
    * Initialize the game: load levels, set up the scene, and start the game loop
    */
-  // async initializeGame(config: Partial<{ containerId: string }>): Promise<void> {
-  initializeGame(config: GameConfig): void {
+  async initializeGame(config: GameConfig): Promise<void> {
     // TODO: put values in default constants
     const { containerId, canvasWidth = 320, canvasHeight = 180 } = config;
 
@@ -44,8 +44,7 @@ class GameSingleton extends Singleton<GameSingleton>() {
     this._canvasHeight = canvasHeight;
 
     // Load all levels from JSON before starting the game
-    // await Resources.loadResources();
-    // await LevelsMapper.loadLevels();
+    await LevelsMapper.loadLevels();
 
     // Grabbing the container to create canvas inside
     const gameContainer = document.querySelector<HTMLDivElement>(this._containerId);

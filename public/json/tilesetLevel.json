@@ -1,0 +1,700 @@
+{
+  "id": "tilesetLevel",
+  "heroDefaultPosition": {
+    "x": 1,
+    "y": 5
+  },
+  "gameObjects": [
+    {
+      "type": "Exit",
+      "id": "exitGrass1",
+      "newLevelId": "tilesetLevel2",
+      "x": 1,
+      "y": 4,
+      "newHeroPosition": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "type": "Chest",
+      "id": "chest1",
+      "interactionConfig": {
+        "content": [
+          {
+            "text": [],
+            "itemKey": "slingshot2"
+          }
+        ]
+      },
+      "x": 2,
+      "y": 0
+    },
+    {
+      "type": "Chest",
+      "id": "chest2",
+      "interactionConfig": {
+        "content": [
+          {
+            "text": [
+              "You found an hammer"
+            ],
+            "itemKey": "hammer1"
+          }
+        ]
+      },
+      "x": 4,
+      "y": 0
+    },
+    {
+      "type": "Chest",
+      "id": "chest3",
+      "interactionConfig": {
+        "content": [
+          {
+            "text": [
+              "You found a rod"
+            ],
+            "itemKey": "rod1"
+          }
+        ]
+      },
+      "x": 6,
+      "y": 0
+    },
+    {
+      "type": "Chest",
+      "id": "chest4",
+      "interactionConfig": {
+        "content": [
+          {
+            "text": [
+              "You found a slingshot!"
+            ],
+            "requires": [
+              "TALKED_TO_B"
+            ],
+            "itemKey": "slingshot1"
+          },
+          {
+            "text": [
+              "I have to talk with B first..."
+            ]
+          }
+        ]
+      },
+      "x": 8,
+      "y": 0
+    },
+    {
+      "type": "Chest",
+      "id": "chest5",
+      "interactionConfig": {
+        "content": [
+          {
+            "text": [],
+            "itemKey": "potion1"
+          }
+        ]
+      },
+      "removeAfterLoot": true,
+      "x": 10,
+      "y": 0
+    },
+    {
+      "type": "Chest",
+      "id": "chest6",
+      "interactionConfig": {
+        "content": [
+          {
+            "text": [],
+            "itemKey": "potion2"
+          }
+        ]
+      },
+      "x": 12,
+      "y": 0
+    },
+    {
+      "type": "CollectibleItem",
+      "id": "rod",
+      "itemKey": "rod2",
+      "x": 7,
+      "y": 7
+    },
+    {
+      "type": "CollectibleItem",
+      "id": "heart",
+      "itemKey": "heart",
+      "x": 10,
+      "y": 3,
+      "skipCollectAnimation": true
+    },
+    {
+      "type": "Decoration",
+      "id": "rock1-decoration",
+      "key": "rock1BaseGrass",
+      "x": 7,
+      "y": 0,
+      "isSolid": true
+    },
+    {
+      "type": "Decoration",
+      "id": "rock2-decoration",
+      "key": "rock1BaseGrass",
+      "x": 10,
+      "y": 1,
+      "isSolid": true
+    },
+    {
+      "type": "Decoration",
+      "id": "rock3-decoration",
+      "key": "rock1BaseGrass",
+      "x": 11,
+      "y": 1,
+      "isSolid": true
+    },
+    {
+      "type": "Decoration",
+      "id": "rock4-decoration",
+      "key": "rock1BaseGrass",
+      "x": 11,
+      "y": 2,
+      "isSolid": true
+    },
+    {
+      "type": "Decoration",
+      "id": "rock5-decoration",
+      "key": "rock1BaseGrass",
+      "x": 1,
+      "y": 3,
+      "isSolid": true
+    },
+    {
+      "type": "Decoration",
+      "id": "rockGrass-decoration",
+      "key": "rock2BaseGrass",
+      "x": 2,
+      "y": 3,
+      "isSolid": true
+    },
+    {
+      "type": "Decoration",
+      "id": "rockGrass1-decoration",
+      "key": "rock2BaseGrass",
+      "x": 2,
+      "y": 4,
+      "isSolid": true
+    },
+    {
+      "type": "Decoration",
+      "id": "rock6-decoration",
+      "key": "rock1BaseGrass",
+      "x": 1,
+      "y": 3,
+      "isSolid": true
+    },
+    {
+      "type": "Npc",
+      "id": "npc1",
+      "x": 6,
+      "y": 3,
+      "npc": "ow1",
+      "interactionConfig": {
+        "content": [
+          {
+            "text": [
+              "I just can't stand that guy."
+            ],
+            "requires": [
+              "TALKED_TO_B"
+            ],
+            "bypass": [
+              "TALKED_TO_A"
+            ],
+            "addsFlag": "TALKED_TO_A"
+          },
+          {
+            "text": [
+              "He is just the worst!"
+            ],
+            "requires": [
+              "TALKED_TO_A"
+            ]
+          },
+          {
+            "text": [
+              "Grumble grumble. Another day at work"
+            ]
+          }
+        ],
+        "portraitFrame": 1
+      },
+      "behaviorConfig": [
+        {
+          "type": "walk",
+          "direction": "DOWN",
+          "speed": 1.2
+        },
+        {
+          "type": "walk",
+          "direction": "DOWN",
+          "speed": 1.2
+        },
+        {
+          "type": "walk",
+          "direction": "DOWN",
+          "speed": 1.2
+        },
+        {
+          "type": "stand",
+          "direction": "LEFT",
+          "duration": 1200
+        },
+        {
+          "type": "walk",
+          "direction": "RIGHT"
+        },
+        {
+          "type": "walk",
+          "direction": "RIGHT"
+        },
+        {
+          "type": "stand",
+          "direction": "DOWN",
+          "duration": 1200
+        },
+        {
+          "type": "walk",
+          "direction": "UP",
+          "speed": 1.2
+        },
+        {
+          "type": "walk",
+          "direction": "UP",
+          "speed": 1.2
+        },
+        {
+          "type": "walk",
+          "direction": "UP",
+          "speed": 1.2
+        },
+        {
+          "type": "stand",
+          "direction": "RIGHT",
+          "duration": 1200
+        },
+        {
+          "type": "walk",
+          "direction": "LEFT"
+        },
+        {
+          "type": "walk",
+          "direction": "LEFT"
+        },
+        {
+          "type": "stand",
+          "direction": "UP",
+          "duration": 1200
+        }
+      ]
+    },
+    {
+      "type": "Npc",
+      "id": "npc2",
+      "x": 9,
+      "y": 4,
+      "npc": "ow2",
+      "interactionConfig": {
+        "content": [
+          {
+            "text": [
+              "Oh, here's your item"
+            ],
+            "requires": [
+              "TALKED_TO_B"
+            ],
+            "bypass": [
+              "RECEIVED_ITEM_FROM_B"
+            ],
+            "addsFlag": "RECEIVED_ITEM_FROM_B",
+            "itemKey": "hammer2"
+          },
+          {
+            "text": [
+              "Now you are more powerful!"
+            ],
+            "requires": [
+              "RECEIVED_ITEM_FROM_B"
+            ]
+          },
+          {
+            "text": [
+              "What a beautiful day!"
+            ],
+            "bypass": [
+              "TALKED_TO_B"
+            ],
+            "addsFlag": "TALKED_TO_B"
+          }
+        ],
+        "portraitFrame": 0
+      },
+      "behaviorConfig": [
+        {
+          "type": "stand",
+          "direction": "DOWN",
+          "duration": 1000
+        },
+        {
+          "type": "stand",
+          "direction": "LEFT",
+          "duration": 1000
+        },
+        {
+          "type": "stand",
+          "direction": "UP",
+          "duration": 1000
+        },
+        {
+          "type": "stand",
+          "direction": "RIGHT",
+          "duration": 1000
+        }
+      ]
+    },
+    {
+      "type": "Npc",
+      "id": "npc3",
+      "x": 9,
+      "y": 7,
+      "npc": "ow3",
+      "interactionConfig": {
+        "content": [
+          {
+            "text": [
+              "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
+              "The quick brown fox jumps over the lazy dog",
+              "I need a break..."
+            ],
+            "bypass": [
+              "COLLECTED_SWORD"
+            ],
+            "options": [
+              {
+                "text": "I agree",
+                "value": "hi",
+                "response": [
+                  "Great!"
+                ]
+              },
+              {
+                "text": "Meh...",
+                "value": "nice_to_meet_you",
+                "response": [
+                  "Don't you think?"
+                ]
+              }
+            ]
+          },
+          {
+            "text": [
+              "Nice sword!"
+            ],
+            "requires": [
+              "COLLECTED_SWORD"
+            ]
+          }
+        ],
+        "portraitFrame": 0
+      },
+      "behaviorConfig": [
+        {
+          "type": "stand",
+          "direction": "LEFT"
+        }
+      ]
+    },
+    {
+      "type": "Npc",
+      "id": "npc4",
+      "x": 1,
+      "y": 0,
+      "npc": "ow4",
+      "interactionConfig": {
+        "content": [
+          {
+            "text": [
+              "Hi there!"
+            ],
+            "options": [
+              {
+                "text": "Hi",
+                "value": "hi",
+                "response": [
+                  "Beautiful day, huh?"
+                ]
+              },
+              {
+                "text": "Nice to meet you",
+                "value": "nice_to_meet_you",
+                "response": [
+                  "My pleasure"
+                ]
+              },
+              {
+                "text": "Gimme that shiny damn thing",
+                "value": "collected_sword",
+                "response": [
+                  "Yup, it's yours"
+                ],
+                "addsFlag": "COLLECTED_SWORD",
+                "exclude": [
+                  "COLLECTED_SWORD"
+                ],
+                "itemKey": "sword"
+              },
+              {
+                "text": "I've talked to B",
+                "value": "talked_to_b",
+                "response": [
+                  "Great!"
+                ],
+                "include": [
+                  "TALKED_TO_B"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "behaviorConfig": [
+        {
+          "type": "stand",
+          "direction": "UP",
+          "duration": 800
+        },
+        {
+          "type": "stand",
+          "direction": "RIGHT",
+          "duration": 800
+        },
+        {
+          "type": "stand",
+          "direction": "DOWN",
+          "duration": 1200
+        }
+      ]
+    }
+  ],
+  "walls": [
+    "0,-1",
+    "1,-1",
+    "2,-1",
+    "3,-1",
+    "4,-1",
+    "5,-1",
+    "6,-1",
+    "7,-1",
+    "8,-1",
+    "9,-1",
+    "10,-1",
+    "11,-1",
+    "12,-1",
+    "13,-1",
+    "14,-1",
+    "15,-1",
+    "0,0",
+    "0,1",
+    "0,2",
+    "0,3",
+    "0,4",
+    "0,5",
+    "0,6",
+    "0,7",
+    "0,8",
+    "15,0",
+    "15,1",
+    "15,2",
+    "15,3",
+    "15,4",
+    "15,5",
+    "15,6",
+    "15,7",
+    "15,8",
+    "0,8",
+    "1,8",
+    "2,8",
+    "3,8",
+    "4,8",
+    "5,8",
+    "6,8",
+    "7,8",
+    "8,8",
+    "9,8",
+    "10,8",
+    "11,8",
+    "12,8",
+    "13,8",
+    "14,8",
+    "15,8",
+    "3,2",
+    "4,2",
+    "5,2",
+    "3,3",
+    "4,3",
+    "5,3",
+    "3,5",
+    "4,5",
+    "5,5",
+    "3,6",
+    "4,6",
+    "5,6"
+  ],
+  "tiles": {
+    "0,0": "grassCliffBorderUpperLeft",
+    "1,0": "grassCliffBorderUpper",
+    "2,0": "grassCliffBorderUpper",
+    "3,0": "grassCliffBorderUpper",
+    "4,0": "grassCliffBorderUpper",
+    "5,0": "grassCliffBorderUpper",
+    "6,0": "grassCliffBorderUpper",
+    "7,0": "grassCliffBorderUpper",
+    "8,0": "grassCliffBorderUpper",
+    "9,0": "grassCliffBorderUpper",
+    "10,0": "grassCliffBorderUpper",
+    "11,0": "grassCliffBorderUpper",
+    "12,0": "grassCliffBorderUpper",
+    "13,0": "grassCliffBorderUpper",
+    "14,0": "grassCliffBorderUpper",
+    "15,0": "grassCliffBorderUpperRight",
+    "0,1": "grassCliffBorderLeft",
+    "1,1": "grass",
+    "2,1": "grass",
+    "3,1": "grass",
+    "4,1": "grass",
+    "5,1": "grass",
+    "6,1": "grass",
+    "7,1": "grass",
+    "8,1": "grass",
+    "9,1": "grass",
+    "10,1": "grass",
+    "11,1": "grass",
+    "12,1": "grass",
+    "13,1": "grass",
+    "14,1": "grass",
+    "15,1": "grassCliffBorderRight",
+    "0,2": "grassCliffBorderLeft",
+    "1,2": "grass",
+    "2,2": "grass",
+    "3,2": "waterAnimatedGrassLedgeBorderUpperLeft",
+    "4,2": "waterAnimatedGrassLedgeBorderUpper",
+    "5,2": "waterAnimatedGrassLedgeBorderUpperRight",
+    "6,2": "grass",
+    "7,2": "grass",
+    "8,2": "grass",
+    "9,2": "grass",
+    "10,2": "grass",
+    "11,2": "grass",
+    "12,2": "grass",
+    "13,2": "grass",
+    "14,2": "grass",
+    "15,2": "grassCliffBorderRight",
+    "0,3": "grassCliffBorderLeft",
+    "1,3": "grass",
+    "2,3": "grass",
+    "3,3": "waterAnimatedGrassLedgeBorderLowerLeft",
+    "4,3": "waterAnimatedGrassLedgeBorderLower",
+    "5,3": "waterAnimatedGrassLedgeBorderLowerRight",
+    "6,3": "grass",
+    "7,3": "grass",
+    "8,3": "grass",
+    "9,3": "grass",
+    "10,3": "grass",
+    "11,3": "grass",
+    "12,3": "grass",
+    "13,3": "grass",
+    "14,3": "grass",
+    "15,3": "grassCliffBorderRight",
+    "0,4": "grassCliffBorderLeft",
+    "1,4": "grass",
+    "2,4": "grass",
+    "3,4": "grass",
+    "4,4": "grass",
+    "5,4": "grass",
+    "6,4": "grass",
+    "7,4": "grass",
+    "8,4": "grass",
+    "9,4": "grass",
+    "10,4": "grass",
+    "11,4": "ledgeGrassLower1",
+    "12,4": "ledgeGrassLower2",
+    "13,4": "grass",
+    "14,4": "grass",
+    "15,4": "grassCliffBorderRight",
+    "0,5": "grassCliffBorderLeft",
+    "1,5": "grass",
+    "2,5": "grass",
+    "3,5": "waterGrassLedgeBorderUpperLeft",
+    "4,5": "waterGrassLedgeBorderUpper",
+    "5,5": "waterGrassLedgeBorderUpperRight",
+    "6,5": "grass",
+    "7,5": "grass",
+    "8,5": "grass",
+    "9,5": "grass",
+    "10,5": "grass",
+    "11,5": "grass",
+    "12,5": "grass",
+    "13,5": "grass",
+    "14,5": "grass",
+    "15,5": "grassCliffBorderRight",
+    "0,6": "grassCliffBorderLeft",
+    "1,6": "grass",
+    "2,6": "grass",
+    "3,6": "waterGrassLedgeBorderLowerLeft",
+    "4,6": "waterGrassLedgeBorderLower",
+    "5,6": "waterGrassLedgeBorderLowerRight",
+    "6,6": "grass",
+    "7,6": "grass",
+    "8,6": "grass",
+    "9,6": "grass",
+    "10,6": "grass",
+    "11,6": "grass",
+    "12,6": "grass",
+    "13,6": "grass",
+    "14,6": "grass",
+    "15,6": "grassCliffBorderRight",
+    "0,7": "grassCliffBorderLeft",
+    "1,7": "grass",
+    "2,7": "grass",
+    "3,7": "grass",
+    "4,7": "grass",
+    "5,7": "grass",
+    "6,7": "grass",
+    "7,7": "grass",
+    "8,7": "grass",
+    "9,7": "grass",
+    "10,7": "grass",
+    "11,7": "grass",
+    "12,7": "grass",
+    "13,7": "grass",
+    "14,7": "grass",
+    "15,7": "grassCliffBorderRight",
+    "0,8": "grassCliffBorderLowerLeft",
+    "1,8": "grassCliffBorderLower",
+    "2,8": "grassCliffBorderLower",
+    "3,8": "grassCliffBorderLower",
+    "4,8": "grassCliffBorderLower",
+    "5,8": "grassCliffBorderLower",
+    "6,8": "grassCliffBorderLower",
+    "7,8": "grassCliffBorderLower",
+    "8,8": "grassCliffBorderLower",
+    "9,8": "grassCliffBorderLower",
+    "10,8": "grassCliffBorderLower",
+    "11,8": "grassCliffBorderLower",
+    "12,8": "grassCliffBorderLower",
+    "13,8": "grassCliffBorderLower",
+    "14,8": "grassCliffBorderLower",
+    "15,8": "grassCliffBorderLowerRight"
+  }
+}

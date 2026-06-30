@@ -8,8 +8,6 @@ import type { Coords, Coords2D } from '../../types/coords';
 import type { BgKey } from '../Resources';
 import type { LevelTileName } from './tileset.types';
 
-export type LevelsId = 'tilesetLevel' | 'tilesetLevel2';
-
 export type LevelBuilderConfig = LevelConfig & {
   id: string;
 };
