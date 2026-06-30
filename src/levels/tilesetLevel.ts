@@ -31,7 +31,7 @@ export const TILESET_LEVEL: LevelMap = {
         content: [
           {
             text: [],
-            itemKey: 'hammer1',
+            itemKey: 'slingshot2',
           },
         ],
       },
@@ -91,12 +91,26 @@ export const TILESET_LEVEL: LevelMap = {
         content: [
           {
             text: [],
-            itemKey: 'potion2',
+            itemKey: 'potion1',
           },
         ],
       },
       removeAfterLoot: true,
       x: 10,
+      y: 0,
+    },
+    {
+      type: 'Chest',
+      id: 'chest6',
+      interactionConfig: {
+        content: [
+          {
+            text: [],
+            itemKey: 'potion2',
+          },
+        ],
+      },
+      x: 12,
       y: 0,
     },
     {
@@ -232,7 +246,7 @@ export const TILESET_LEVEL: LevelMap = {
             requires: [TALKED_TO_B],
             bypass: [RECEIVED_ITEM_FROM_B],
             addsFlag: RECEIVED_ITEM_FROM_B,
-            itemKey: 'hammer1',
+            itemKey: 'hammer2',
           },
           {
             text: ['Now you are more powerful!'],
