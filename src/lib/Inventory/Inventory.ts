@@ -20,7 +20,16 @@ class InventorySingleton extends Singleton<InventorySingleton>() {
   }
 
   getAll(): InventoryItem[] {
-    return [...this._itemsMap.values()];
+    return [...this._itemsMap.values()].sort((a, b) => {
+      if (a.name < b.name) {
+        return -1;
+      }
+
+      if (a.name > b.name) {
+        return 1;
+      }
+      return 0;
+    });
   }
 
   get(itemKey: ItemKey): InventoryItem | null {
