@@ -2,9 +2,9 @@ import type { AssetsToLoad } from './resources.types';
 
 // Every image we want to download
 export const ASSETS_TO_LOAD: AssetsToLoad = {
-  bgCave: '/sprites/backgrounds/cave.png',
-  bgSky: '/sprites/backgrounds/sky.png',
-  bgVolcano: '/sprites/backgrounds/volcano.png',
+  bgBeach: '/sprites/backgrounds/beach.png',
+  bgSnow: '/sprites/backgrounds/snow.png',
+  bgWoods: '/sprites/backgrounds/woods.png',
   ow1: '/sprites/npcs/ow1.png',
   ow2: '/sprites/npcs/ow2.png',
   ow3: '/sprites/npcs/ow3.png',

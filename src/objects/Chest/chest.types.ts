@@ -1,6 +1,7 @@
 import type { InteractiveObjectConfig } from '../InteractiveObject';
 
-export type ChestStatus = 'OPEN' | 'CLOSED';
+export const CHEST_STATUSES = ['OPEN', 'CLOSED'] as const;
+export type ChestStatus = (typeof CHEST_STATUSES)[number];
 
 export type ChestConfig = InteractiveObjectConfig & {
   status?: ChestStatus;

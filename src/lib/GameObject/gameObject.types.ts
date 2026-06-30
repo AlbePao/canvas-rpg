@@ -14,4 +14,5 @@ export interface GameObjectBehavior {
   direction: Directions;
 }
 
-export type GameObjectDrawLayer = 'HUD' | 'WORLD_TOP' | 'FLOOR';
+export const GAME_OBJECT_DRAW_LAYERS = ['HUD', 'WORLD_TOP', 'FLOOR'] as const;
+export type GameObjectDrawLayer = (typeof GAME_OBJECT_DRAW_LAYERS)[number];
