@@ -15,6 +15,7 @@ import { TitleScreen } from '../TitleScreen';
 
 export class Main extends GameObject {
   level: Level | null = null;
+  private _currentScreen: 'GAME' | 'TITLE' | 'BATTLE' = 'TITLE';
   readonly input = new Input();
   readonly camera = new Camera();
   isTextBoxOpened = false;
@@ -124,11 +125,13 @@ export class Main extends GameObject {
   }
 
   private _canTogglePause(): boolean {
-    if (this.isSelectionBoxOpened || this.isCutscenePlaying || this.isTextBoxOpened) {
-      return false;
-    }
-
-    if (this.isPaused && this._activePauseMenu && !this._activePauseMenu.canDismiss) {
+    if (
+      this._currentScreen !== 'GAME' ||
+      this.isSelectionBoxOpened ||
+      this.isCutscenePlaying ||
+      this.isTextBoxOpened ||
+      (this.isPaused && this._activePauseMenu && !this._activePauseMenu.canDismiss)
+    ) {
       return false;
     }
 
@@ -140,6 +143,11 @@ export class Main extends GameObject {
   }
 
   private _setLevel(newLevelInstance: Level): void {
+    // If level is set programmatically like from title screen or a cutscene, set current screen as game
+    if (this._currentScreen !== 'GAME') {
+      this._currentScreen = 'GAME';
+    }
+
     if (this.level) {
       this.level.destroy();
     }
