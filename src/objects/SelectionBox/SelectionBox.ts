@@ -15,6 +15,8 @@ export class SelectionBox extends GameObject {
   protected readonly options: SelectionOption[];
   protected currentOptionIndex = 0;
   private readonly _optionsLines: Line[];
+  // Handles the index of the first visible element in the viewport
+  private _scrollOffset = 0;
 
   private readonly _backdrop = new BoxBackdrop({
     id: `${this.id}-selection-box-backdrop`,
@@ -90,12 +92,24 @@ export class SelectionBox extends GameObject {
     } else if (isArrowUpPressed) {
       // Move arrow up
       this.currentOptionIndex = (this.currentOptionIndex - 1 + this.options.length) % this.options.length;
+      this._updateScrollOffset();
     } else if (isArrowDownPressed) {
       // Move arrow down
       this.currentOptionIndex = (this.currentOptionIndex + 1) % this.options.length;
+      this._updateScrollOffset();
     }
   }
 
+  // Update scroll shift
+  private _updateScrollOffset(): void {
+    if (this.currentOptionIndex < this._scrollOffset) {
+      // If current index has gone above the start of the viewport
+      this._scrollOffset = this.currentOptionIndex;
+    } else if (this.currentOptionIndex >= this._scrollOffset) {
+      // If current index has gone below the start of the viewport
+      this._scrollOffset = this.currentOptionIndex + 1;
+    }
+  }
   override drawImage(ctx: CanvasRenderingContext2D, drawPosX: number, drawPosY: number): void {
     const { toGridSize } = Game;
 
