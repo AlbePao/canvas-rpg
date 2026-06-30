@@ -117,6 +117,7 @@ class GameSingleton extends Singleton<GameSingleton>() {
   }
 
   toGridSize = (value: number): number => value * this._gridSize;
+  fromGridSize = (value: number): number => value / this._gridSize;
 
   detectOverlap(heroPosition: Vector2, objectPosition: Vector2): boolean {
     // detect overlap
