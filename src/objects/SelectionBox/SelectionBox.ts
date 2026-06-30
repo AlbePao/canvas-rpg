@@ -117,11 +117,8 @@ export class SelectionBox extends GameObject {
           const widthCharOffset = cursorX - 5;
           sprite.draw(ctx, widthCharOffset, cursorY);
 
-          // Add width of the character we just printed to cursor pos
-          cursorX += width;
-
-          // Plus 1px between character
-          cursorX += 1;
+          // Add width of the character we just printed to cursor pos, plus 1px between character
+          cursorX += width + 1;
         });
 
         // Move the cursor over

@@ -2,18 +2,32 @@ import { createSpriteTextLines, getCharacterWidth } from '../../helpers/spriteTe
 import { Events } from '../../lib/Events';
 import { Game } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
-import { Inventory, type InventoryItem } from '../../lib/Inventory';
+import { Inventory } from '../../lib/Inventory';
 import type { Line } from '../../types/text';
 import { ArrowIndicator } from '../ArrowIndicator';
 import { BoxBackdrop } from '../BoxBackdrop';
 import type { Main } from '../Main';
 import { PAUSE_SUB_MENU_CLOSE } from '../PauseMenu';
 import { SELECTION_BOX_CLOSE, SELECTION_BOX_OPEN, SelectionBox, type SelectionOption } from '../SelectionBox';
+import type { ListItem } from './inventoryMenu.types';
+
+const VISIBLE_ITEMS = 8;
 
 export class InventoryMenu extends GameObject {
-  protected readonly items: InventoryItem[];
-  protected currentItemIndex = 0;
-  protected readonly itemsLines: Line[];
+  private readonly _items = Inventory.getAll();
+  protected readonly itemsList: ListItem[] = [
+    ...this._items.map(({ itemKey, name }) => ({
+      value: itemKey,
+      text: name,
+      quantity: Inventory.get(itemKey)?.quantity ?? 0,
+    })),
+    // Fake item to handle inventory menu close
+    { value: 'go_back', text: 'Go back', quantity: 0 },
+  ];
+  protected currentIndex = 0;
+  // Gestisce l'indice del primo elemento visibile nel viewport
+  private _scrollOffset = 0;
+  protected readonly itemsListLines: Line[];
 
   private readonly _backdrop = new BoxBackdrop({
     id: `${this.id}-inventory-box-backdrop`,
@@ -28,32 +42,34 @@ export class InventoryMenu extends GameObject {
   private _isIndicatorLocked = false;
 
   constructor() {
+    // The x and y position are related to PauseMenu position
     super({
       id: 'inventory-box',
       x: 6,
       y: 0,
     });
 
-    this.items = Inventory.getAll();
-
     const { toGridSize, gridSize } = Game;
 
     // Draw on top layer
     this.drawLayer = 'HUD';
 
-    this.itemsLines = createSpriteTextLines(
-      this.items.map(({ name }) => name),
+    this.itemsListLines = createSpriteTextLines(
+      this.itemsList.map(({ text }) => text),
       this.id,
     );
 
     const width =
       Math.max(
-        ...this.items.map(({ name }) =>
-          name.split('').reduce((lineWidth, char) => lineWidth + getCharacterWidth(char), 0),
+        ...this.itemsList.map(({ text }) =>
+          text.split('').reduce((lineWidth, char) => lineWidth + getCharacterWidth(char), 0),
         ),
       ) + 76; // Add padding for the indicator and some spacing
 
-    const height = toGridSize(this.items.length) + gridSize; // Each option is 16px tall + some padding
+    // BEST PRACTICE: L'altezza deve basarsi sul numero MINIMO tra gli elementi totali e quelli visibili.
+    // Evita che il box sia gigante se hai solo 2 oggetti.
+    const actualVisibleCount = Math.min(this.itemsList.length, VISIBLE_ITEMS);
+    const height = toGridSize(actualVisibleCount) + gridSize; // Each option is 16px tall + some padding
 
     // Set backdrop size according to its item text size
     this._backdrop.updateSize(width / gridSize, height / gridSize);
@@ -79,40 +95,60 @@ export class InventoryMenu extends GameObject {
     }
 
     const { input } = root;
+    const isLeftArrowPressed = input.getActionJustPressed('ArrowLeft') || input.getActionJustPressed('KeyA');
 
-    // Close inventory menu if user presses esc while it's open
-    if (input.getActionJustPressed('ArrowLeft') || input.getActionJustPressed('KeyA')) {
+    // Close inventory menu if player presses left arrow keys while it's open
+    if (isLeftArrowPressed) {
       Events.emit(PAUSE_SUB_MENU_CLOSE);
+      return;
     }
-    const isItemSelected = input.getActionJustPressed('Space') || input.getActionJustPressed('Enter');
+
+    const isSelected = input.getActionJustPressed('Space') || input.getActionJustPressed('Enter');
     const isArrowUpPressed = input.getActionJustPressed('ArrowUp') || input.getActionJustPressed('KeyW');
     const isArrowDownPressed = input.getActionJustPressed('ArrowDown') || input.getActionJustPressed('KeyS');
 
-    if (isItemSelected) {
+    if (isSelected) {
       // Open selected item handler
       this.onItemSelect();
     } else if (isArrowUpPressed) {
       // Move arrow up
-      this.currentItemIndex = (this.currentItemIndex - 1 + this.items.length) % this.items.length;
+      this.currentIndex = (this.currentIndex - 1 + this.itemsList.length) % this.itemsList.length;
+      this._updateScrollOffset();
     } else if (isArrowDownPressed) {
       // Move arrow down
-      this.currentItemIndex = (this.currentItemIndex + 1) % this.items.length;
+      this.currentIndex = (this.currentIndex + 1) % this.itemsList.length;
+      this._updateScrollOffset();
+    }
+  }
+
+  // Update scroll shift
+  private _updateScrollOffset(): void {
+    if (this.currentIndex < this._scrollOffset) {
+      // If current index has gone above the start of the viewport
+      this._scrollOffset = this.currentIndex;
+    } else if (this.currentIndex >= this._scrollOffset + VISIBLE_ITEMS) {
+      // If current index has gone below the start of the viewport
+      this._scrollOffset = this.currentIndex - VISIBLE_ITEMS + 1;
     }
   }
 
   override drawImage(ctx: CanvasRenderingContext2D, drawPosX: number, drawPosY: number): void {
     const { toGridSize } = Game;
 
-    // Draw the backdrop
+    // Draw the backdrop for max 8 elements
     this._backdrop.drawImage(ctx, drawPosX, drawPosY);
 
-    // Draw the indicator
-    this.indicator.drawImage(ctx, drawPosX + 4, drawPosY + 10 + toGridSize(this.currentItemIndex));
+    // Draw the indicator to the relative index to the visible viewport
+    const relativeIndex = this.currentIndex - this._scrollOffset;
+    this.indicator.drawImage(ctx, drawPosX + 4, drawPosY + 10 + toGridSize(relativeIndex));
 
-    // Draw options text lines
-    this.itemsLines.forEach(({ words }, index) => {
+    // Draw visible options text lines
+    const visibleLines = this.itemsListLines.slice(this._scrollOffset, this._scrollOffset + VISIBLE_ITEMS);
+
+    visibleLines.forEach(({ words }, renderIndex) => {
       let cursorX = drawPosX + 18;
-      const cursorY = drawPosY + toGridSize(index) + 10;
+      // Use renderIndex instead of absolute index to position correctly inside the box
+      const cursorY = drawPosY + toGridSize(renderIndex) + 10;
 
       words.forEach(({ chars }) => {
         // Draw this whole segment of text
@@ -121,11 +157,8 @@ export class InventoryMenu extends GameObject {
           const widthCharOffset = cursorX - 5;
           sprite.draw(ctx, widthCharOffset, cursorY);
 
-          // Add width of the character we just printed to cursor pos
-          cursorX += width;
-
-          // Plus 1px between character
-          cursorX += 1;
+          // Add width of the character we just printed to cursor pos, plus 1px between character
+          cursorX += width + 1;
         });
 
         // Move the cursor over
@@ -135,6 +168,15 @@ export class InventoryMenu extends GameObject {
   }
 
   protected onItemSelect(): void {
+    const { value } = this.itemsList[this.currentIndex];
+
+    // Close menu if player selects Go Back option
+    if (value === 'go_back') {
+      Events.emit(PAUSE_SUB_MENU_CLOSE);
+      return;
+    }
+
+    // Open item handling selection box
     Events.emit<SelectionBox>(
       SELECTION_BOX_OPEN,
       new SelectionBox({
