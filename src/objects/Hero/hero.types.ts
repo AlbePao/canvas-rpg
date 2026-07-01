@@ -1,3 +1,3 @@
 import type { GameObjectConfig } from '../../lib/GameObject';
 
-export type HeroConfig = GameObjectConfig;
+export type HeroConfig = Pick<GameObjectConfig, 'id' | 'x' | 'y'>;
