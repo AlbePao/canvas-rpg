@@ -28,6 +28,7 @@ export class Decoration extends GameObject {
       frame,
       position: new Vector2(toGridSize(x), toGridSize(y)),
     });
+    this.addChild(this.body);
 
     this.isSolid = !!isSolid;
 
