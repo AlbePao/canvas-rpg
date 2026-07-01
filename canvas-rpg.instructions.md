@@ -25,8 +25,8 @@ Key principles:
 
 - Composition over inheritance: nest GameObjects via `addChild()`
 - Deterministic gameplay: same inputs = same outputs
-- Grid-based movement: store positions as grid cells (integers), render as pixels via `gridCells(n)` helper
-- Event-driven communication: use `Events.instance` singleton for inter-object messaging
+- Grid-based movement: store positions as grid cells (integers), render as pixels via `Game.instance.toGridSize(n)`
+- Event-driven communication: use `Events.on(eventName, this, callback)` — requires `this` as caller for auto-cleanup
 
 ## File Organization
 
@@ -36,7 +36,7 @@ Key principles:
 - **Types/Interfaces**: Separate `.types.ts` file with lowercase prefix (`hero.types.ts`)
 - **Constants**: UPPER_SNAKE_CASE in constants files (`GRID_SIZE`, `HERO_WALK_SPEED`)
 - **Helpers/Utilities**: camelCase file names (`createItemSprite.ts`, `moveTowards.ts`)
-- **Private members**: Use `#privateField` syntax or `_underscorePrefix`
+- **Private members**: `_underscorePrefix` (required — enforced by ESLint `@typescript-eslint/naming-convention`)
 
 ### Directory Structure
 
@@ -60,8 +60,7 @@ Group imports in this order:
 ```typescript
 import { Events } from 'src/lib/Events';
 import { GameObject } from 'src/lib/GameObject';
-import { HERO_POSITION } from 'src/constants/events';
-import { gridCells } from 'src/helpers/grid';
+import { HERO_POSITION } from '../Hero/hero.constants'; // import from the feature's *.constants.ts
 import { HeroAnimations } from './heroAnimations';
 import type { HeroConfig } from './hero.types';
 ```
@@ -101,7 +100,7 @@ Before committing code:
 - ✅ No unused variables or imports
 - ✅ All functions have explicit return types
 - ✅ Events are unsubscribed in cleanup
-- ✅ No hardcoded pixel values (use `gridCells()`)
+- ✅ No hardcoded pixel values (use `Game.instance.toGridSize(n)`)
 - ✅ All types extracted to `.types.ts` file
 - ✅ Deterministic gameplay (no time-dependent logic)
 - ✅ Memory leaks addressed (event cleanup, child disposal)
@@ -112,19 +111,19 @@ See [AGENTS.md - Troubleshooting Guide](AGENTS.md#troubleshooting-guide) for com
 
 **Quick reference**:
 
-- **Movement issues**: Check `Input.ts`, `HeroSnappedMovement.ts`, `destinationPosition`
+- **Movement issues**: Check `Input.ts` (`HOLD_THRESHOLD`, hold vs tap logic), `Hero.ts` (`destinationPosition`)
 - **Sprite problems**: Verify sprite ID in `ASSETS_TO_LOAD`, check frame indices bounds
-- **Event not firing**: Confirm event name in `events.ts`, subscriber in `ready()` (not constructor)
+- **Event not firing**: Confirm event name in the feature's `*.constants.ts`, subscriber in `ready()` (not constructor), `this` passed as caller
 - **Memory leaks**: Ensure `destroy()` called, event subscribers cleaned up
-- **Collision issues**: Check `isSolid = true`, walls in level, `isSpaceFree()` logic
+- **Collision issues**: Check `isSolid = true`, walls in level, `Game.instance.isSpaceFree()` logic
 
 ## Where to Find Things
 
-| Need                | Location                                                                           |
-| ------------------- | ---------------------------------------------------------------------------------- |
-| Full architecture   | [AGENTS.md](AGENTS.md)                                                             |
-| GameObject examples | [AGENTS.md - Adding Game Content](AGENTS.md#adding-game-content)                   |
-| Event patterns      | [src/constants/events.ts](src/constants/events.ts)                                 |
-| Level structure     | [public/json/](public/json/)                                                       |
-| Story flags         | [src/constants/storyFlags.ts](src/constants/storyFlags.ts)                         |
-| Animations          | [src/objects/Hero/heroAnimations.ts](src/objects/Hero/heroAnimations.ts) (example) |
+| Need                | Location                                                                                   |
+| ------------------- | ------------------------------------------------------------------------------------------ |
+| Full architecture   | [AGENTS.md](AGENTS.md)                                                                     |
+| GameObject examples | [AGENTS.md - Adding Game Content](AGENTS.md#adding-game-content)                           |
+| Event constants     | Feature's `*.constants.ts` (e.g., [hero.constants.ts](src/objects/Hero/hero.constants.ts)) |
+| Level structure     | [public/json/](public/json/)                                                               |
+| Story flags         | [src/lib/StoryFlags/storyFlags.constants.ts](src/lib/StoryFlags/storyFlags.constants.ts)   |
+| Animations          | [src/objects/Hero/heroAnimations.ts](src/objects/Hero/heroAnimations.ts) (example)         |

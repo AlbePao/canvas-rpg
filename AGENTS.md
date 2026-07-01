@@ -16,9 +16,9 @@ A TypeScript-based 2D RPG game built with HTML5 Canvas and Vite. This document h
 **Essential Directories**:
 
 - `src/objects/` - All game objects (Hero, NPCs, Items, etc.)
-- `src/lib/` - Core game systems (GameLoop, Events, Input, etc.)
-- `src/constants/` - Events, story flags, grid size
-- `src/helpers/` - Utilities (grid collision, movement, etc.)
+- `src/lib/` - Core game systems (Game, GameLoop, Events, Input, etc.)
+- `src/constants/` - Items registry and standing directions (events live in feature directories)
+- `src/helpers/` - Utilities (text rendering, typed `Object.keys`)
 - `public/json/` - Level definitions (JSON-based levels)
 - `public/sprites/` - Sprite sheet assets
 
@@ -36,9 +36,12 @@ A TypeScript-based 2D RPG game built with HTML5 Canvas and Vite. This document h
 
 The game uses a **fixed timestep (16.67ms/frame)** update/render cycle:
 
-1. **main.ts**: Canvas setup and game initialization
-2. **GameLoop.ts**: Manages update and draw phases
-3. **Main.ts**: Root scene container (manages levels, camera, HUD)
+1. **main.ts**: Entry point — calls `Game.initializeGame()`
+2. **[Game.ts](src/lib/Game/Game.ts)**: High-level singleton — loads levels, creates canvas, sets up `Main`, starts `GameLoop`
+3. **[GameLoop.ts](src/lib/GameLoop.ts)**: Low-level frame scheduler — drives fixed-timestep updates and render
+4. **[Main.ts](src/objects/Main/Main.ts)**: Root scene — manages levels, camera, HUD, pause, dialogue, title screen
+
+**Flow**: `main.ts → Game.initializeGame() → GameLoop → Main.stepEntry()` each frame.
 
 **Pattern**: Every frame calls `step(delta, root)` on all GameObjects for deterministic gameplay.
 
@@ -67,34 +70,46 @@ class GameObject {
 Global event bus at [Events.ts](src/lib/Events.ts). Subscribe with:
 
 ```typescript
-Events.instance.on('HERO_EXITS', (level: Level) => {...});
+// Requires caller (GameObject) for automatic cleanup on destroy()
+Events.on(HERO_EXITS, this, (data: { newLevelId: string }) => { ... });
+
+// Emit globally
+Events.emit(HERO_POSITION, { x, y });
 ```
 
-Common events (see [events.ts](src/constants/events.ts)):
+**Important**: `Events.on()` requires `this` (the calling GameObject) as the second argument. This enables automatic cleanup when the object is destroyed.
 
-- `HERO_POSITION` - Hero moved (emits {x, y})
-- `HERO_REQUESTS_ACTION` - Hero pressed Space
-- `HERO_PICKS_UP_ITEM` - Item collected
-- `START_TEXT_BOX` / `END_TEXT_BOX` - Dialogue
-- `HERO_EXITS` - Level transition trigger
+Common events (each defined in the relevant feature's `*.constants.ts` file):
 
-Events auto-cleanup when GameObjects are destroyed.
+- `HERO_POSITION` ([hero.constants.ts](src/objects/Hero/hero.constants.ts)) - Hero moved (emits {x, y})
+- `HERO_REQUESTS_ACTION` ([hero.constants.ts](src/objects/Hero/hero.constants.ts)) - Hero pressed Space
+- `HERO_COLLECTS_ITEM` ([hero.constants.ts](src/objects/Hero/hero.constants.ts)) - Item collected
+- `HERO_EXITS` ([hero.constants.ts](src/objects/Hero/hero.constants.ts)) - Level transition trigger
+- `HERO_OPENS_CHEST` ([hero.constants.ts](src/objects/Hero/hero.constants.ts)) - Chest opened
+- `CHANGE_LEVEL` ([level.constants.ts](src/objects/Level/level.constants.ts)) - New level loaded
+- `TEXT_BOX_OPEN` / `TEXT_BOX_CLOSE` / `TEXT_BOX_END` ([textBox.constants.ts](src/objects/TextBox/textBox.constants.ts)) - Dialogue lifecycle
+- `PAUSE_ON` / `PAUSE_OFF` ([pauseMenu.constants.ts](src/objects/PauseMenu/pauseMenu.constants.ts)) - Pause toggle
+
+Events auto-cleanup when `GameObject.destroy()` is called.
 
 ### Grid System
 
-**Grid size**: 16px cells
+**Grid size**: 16px cells (defined in [game.constants.ts](src/lib/Game/game.constants.ts))
 
-Helpers in [grid.ts](src/helpers/grid.ts):
+Grid/movement utilities live on the **[Game singleton](src/lib/Game/Game.ts)**:
 
-- `gridCells(n)` - Converts grid cells to pixels (n \* 16)
-- `isSpaceFree(x, y, walls)` - Collision detection
-- `Vector2` - Position math for grid movement
+- `Game.instance.toGridSize(n)` - Converts grid cells to pixels (n × GRID_SIZE)
+- `Game.instance.fromGridSize(n)` - Converts pixels back to grid cells
+- `Game.instance.isSpaceFree(walls, x, y)` - Collision detection against wall set
+- `Game.instance.detectOverlap(heroPos, objPos)` - Positional overlap check
+- `Game.instance.moveTowards(obj, dest, speed)` - Smooth lerp toward destination
+- [Vector2.ts](src/lib/Vector2.ts) - Position math and neighbor coordinate helpers
 
 Movement uses **destination-based interpolation** (not frame-by-frame):
 
 ```typescript
-destinationPosition = new Vector2(target.x, target.y);
-moveTowards(current, destination, speed); // Smooth lerp
+const dest = new Vector2(target.x, target.y);
+Game.instance.moveTowards(hero, dest, speed); // Smooth lerp
 ```
 
 ## File Organization Conventions
@@ -148,44 +163,44 @@ export interface TrapConfig extends GameObjectConfig {
 **Step 2: Create the class** (`src/objects/Trap/Trap.ts`):
 
 ```typescript
-import { GameObject } from 'src/lib/GameObject';
 import { Events } from 'src/lib/Events';
-import { HERO_POSITION } from 'src/constants/events';
+import { GameObject } from 'src/lib/GameObject';
+import { HERO_POSITION } from '../Hero/hero.constants';
 import type { TrapConfig } from './trap.types';
 
 export class Trap extends GameObject {
-  private spriteId: string;
-  private damageAmount: number;
-  private isTriggered = false;
+  private readonly _spriteId: string;
+  private readonly _damageAmount: number;
+  private _isTriggered = false;
 
-  constructor(x: number, y: number, config: TrapConfig) {
-    super(x, y, config);
-    this.spriteId = config.spriteId;
-    this.damageAmount = config.damageAmount;
+  constructor(config: TrapConfig) {
+    super(config);
+    this._spriteId = config.spriteId;
+    this._damageAmount = config.damageAmount;
   }
 
-  ready(): void {
-    // Subscribe to hero position to detect overlap
-    Events.instance.on(HERO_POSITION, ({ x, y }: { x: number; y: number }) => {
-      this.checkHeroCollision(x, y);
+  override ready(): void {
+    // Subscribe to hero position to detect overlap (auto-cleaned on destroy)
+    Events.on(HERO_POSITION, this, ({ x, y }: { x: number; y: number }) => {
+      this._checkHeroCollision(x, y);
     });
   }
 
-  step(_delta: number, _root): void {
+  override step(_delta: number, _root: Main): void {
     // Could add animation/state updates here
   }
 
-  drawImage(ctx: CanvasRenderingContext2D, x: number, y: number): void {
-    const sprite = Resources.instance.getSpriteImage(this.spriteId);
+  override drawImage(ctx: CanvasRenderingContext2D, x: number, y: number): void {
+    const sprite = Resources.instance.getSpriteImage(this._spriteId);
     if (sprite) {
       ctx.drawImage(sprite, x + this.position.x * 16, y + this.position.y * 16, 16, 16);
     }
   }
 
-  private checkHeroCollision(heroX: number, heroY: number): void {
-    if (this.position.x === heroX && this.position.y === heroY && !this.isTriggered) {
-      this.isTriggered = true;
-      Events.instance.emit('HERO_DAMAGED', { damage: this.damageAmount });
+  private _checkHeroCollision(heroX: number, heroY: number): void {
+    if (this.position.x === heroX && this.position.y === heroY && !this._isTriggered) {
+      this._isTriggered = true;
+      Events.emit(HERO_DAMAGED, { damage: this._damageAmount });
     }
   }
 }
@@ -198,7 +213,7 @@ export { Trap } from './Trap';
 export type { TrapConfig } from './trap.types';
 ```
 
-**Step 4: Register the event** (in `src/constants/events.ts`):
+**Step 4: Register the event** (in `src/objects/Trap/trap.constants.ts`):
 
 ```typescript
 export const HERO_DAMAGED = 'HERO_DAMAGED';
@@ -264,21 +279,19 @@ new Npc(5, 10, {
 });
 ```
 
-**Important**: Always define flags in [storyFlags.ts](src/constants/storyFlags.ts) first.
+**Important**: Always define flags in [storyFlags.constants.ts](src/lib/StoryFlags/storyFlags.constants.ts) first.
 
 ### 3. Adding Collectible Items
 
 Use [CollectibleItem.ts](src/objects/Item/CollectibleItem.ts) or [Item.ts](src/objects/Item/Item.ts):
 
 ```typescript
-const rod = new CollectibleItem(3, 3, { spriteId: 'rod' });
+const rod = new CollectibleItem({ spriteId: 'rod' });
 level.addChild(rod);
 
-// Listen for pickup events
-Events.instance.on('HERO_PICKS_UP_ITEM', (item: Item) => {
-  console.log(`Picked up: ${item.spriteId}`);
-  // Add to inventory
-  inventory.addItem(item);
+// Listen for item collection events
+Events.on(HERO_COLLECTS_ITEM, this, (itemKey: ItemKey) => {
+  Inventory.add(itemKey);
 });
 ```
 
@@ -357,43 +370,87 @@ The camera follows the hero and manages the viewport. It's a child GameObject of
 **Usage** (automatic):
 
 ```typescript
-Events.instance.emit('HERO_POSITION', { x: 5, y: 10 });
+Events.emit(HERO_POSITION, { x: 5, y: 10 });
 // Camera auto-follows
 ```
 
 ### Inventory System
 
-**File**: [src/objects/Inventory/Inventory.ts](src/objects/Inventory/Inventory.ts)
+**File**: [src/lib/Inventory/Inventory.ts](src/lib/Inventory/Inventory.ts)
 
-Manages items collected by the hero. Displays in HUD layer.
+Singleton that tracks collected items by `ItemKey`. Not a rendered GameObject.
 
-- **Methods**: `addItem(item)`, `removeItem(itemId)`, `hasItem(spriteId)`
-- **Rendering**: Custom canvas rendering of inventory grid
-- **Lifecycle**: Created in Main, renders in `drawLayer: 'HUD'`
+- **Methods**: `Inventory.add(itemKey)`, `Inventory.get(itemKey)`, `Inventory.getAll()`
+- **Items registry**: [src/constants/itemsRegistry.ts](src/constants/itemsRegistry.ts) maps `ItemKey → ItemStat`
+- **UI rendering**: [src/objects/InventoryMenu/](src/objects/InventoryMenu/) (pause sub-screen)
 
 **Usage**:
 
 ```typescript
-const inventory = new Inventory();
-inventory.addItem(new Item(0, 0, { spriteId: 'rod' }));
+Inventory.add('hammer1'); // Add item by key
+const all = Inventory.getAll(); // Sorted array of InventoryItem
 ```
 
-### Level Transition
+### Screen Transition
 
-**File**: [src/lib/LevelTransition.ts](src/lib/LevelTransition.ts)
+**File**: [src/lib/ScreenTransition/ScreenTransition.ts](src/lib/ScreenTransition/ScreenTransition.ts)
 
-Manages fade-out/fade-in CSS animations when changing levels.
+Manages fade-out/fade-in CSS animations between scenes.
 
-- **Triggered by**: `HERO_EXITS` event (with `{ newLevelId }`parameter)
-- **Mechanism**: Creates HTML overlay with CSS animation, waits for `animationend` event
+- **Triggered by**: `HERO_EXITS` event or title screen navigation
+- **Mechanism**: Creates HTML overlay with CSS animation, emits `SCREEN_TRANSITION_START` / `SCREEN_TRANSITION_END`
 - **Important**: This is a CSS-based animation, **not** Canvas-based
 
-**Usage**:
+### Progress & Save System
 
-```typescript
-Events.instance.emit('HERO_EXITS', { newLevelId: 'forest' });
-// LevelTransition handles the fade
-```
+**File**: [src/lib/Progress/Progress.ts](src/lib/Progress/Progress.ts)
+
+Singleton for localStorage-based game persistence.
+
+- **Save**: `Progress.save(data: ProgressData)` — serializes to `localStorage['saveData']`
+- **Load**: `Progress.saveFile: ProgressData | null` — returns parsed save or `null`
+- **Data**: `{ levelId, storyFlags, levelsState, hero: { position, direction, inventory } }`
+- **Triggered by**: `PAUSE_SAVE_GAME` event from PauseMenu
+
+### LevelStateManager
+
+**File**: [src/lib/LevelStateManager/LevelStateManager.ts](src/lib/LevelStateManager/LevelStateManager.ts)
+
+Tracks per-level object state across level transitions (e.g. opened chests remain open).
+
+- **Set**: `LevelStateManager.setObjectState(levelId, objectId, state)`
+- **Get**: `LevelStateManager.getObjectState(levelId, objectId): LevelObjectState | null`
+- **Shape**: `LevelsState = Record<levelId, Record<objectId, LevelObjectState>>`
+
+### TitleScreen
+
+**File**: [src/objects/TitleScreen/TitleScreen.ts](src/objects/TitleScreen/TitleScreen.ts)
+
+Start-up menu shown before gameplay begins. Extends `SelectionBox`.
+
+- **Options**: Load Game (only when `Progress.saveFile` exists), New Game, Options (TODO)
+- **Started by**: `Main.startTitleScreen()`
+- **Transition**: Emits a `ScreenTransition` then switches to gameplay
+
+### PauseMenu
+
+**File**: [src/objects/PauseMenu/PauseMenu.ts](src/objects/PauseMenu/PauseMenu.ts)
+
+In-game pause overlay. Extends `SelectionBox`.
+
+- **Toggle**: `PAUSE_ON` / `PAUSE_OFF` events (Escape key)
+- **Options**: Inventory, Team, Save, Options, Exit
+- **Save flow**: `PAUSE_SAVE_GAME` → `Progress.save()` → confirmation TextBox
+- **Sub-menu**: `PAUSE_SUB_MENU_OPEN` / `PAUSE_SUB_MENU_CLOSE` prevents closing while sub-menu is open
+
+### Behavior System
+
+GameObjects support sequenced async behaviors via `behaviorConfig: GameObjectBehavior[]`.
+
+- **Define**: Pass `behaviorConfig` array in the constructor config
+- **Delays**: Use `scheduleTimeout()` (protected method on GameObject) — tracked and cleared on `destroy()`
+- **Completion**: Emits `BEHAVIOR_END` ([gameObject.constants.ts](src/lib/GameObject/gameObject.constants.ts)) when the full sequence finishes
+- **Usage**: NPCs use this for walk/stand/patrol behavior loops
 
 ### Resource Loading
 
@@ -418,14 +475,14 @@ ctx.drawImage(sprite, x, y, 16, 16);
 
 When should you use events vs direct function calls?
 
-| Scenario                        | Use                                            | Reason                                                     |
-| ------------------------------- | ---------------------------------------------- | ---------------------------------------------------------- |
-| Hero position changes           | Events: `HERO_POSITION`                        | Multiple objects need to know (Camera, NPC triggers, etc.) |
-| Item pickup                     | Events: `HERO_PICKS_UP_ITEM`                   | Inventory and UI both listen                               |
-| Button click in local component | Direct call                                    | Only affects that component                                |
-| Level transition                | Events: `HERO_EXITS`                           | Multiple systems coordinate cleanup                        |
-| Sprite animation frame change   | Direct call to `sprite.animations.play()`      | Local to that GameObject                                   |
-| Global flag update              | Direct call to `StoryFlags.instance.setFlag()` | Not event-driven by design                                 |
+| Scenario                        | Use                                       | Reason                                                     |
+| ------------------------------- | ----------------------------------------- | ---------------------------------------------------------- |
+| Hero position changes           | Events: `HERO_POSITION`                   | Multiple objects need to know (Camera, NPC triggers, etc.) |
+| Item pickup                     | Events: `HERO_PICKS_UP_ITEM`              | Inventory and UI both listen                               |
+| Button click in local component | Direct call                               | Only affects that component                                |
+| Level transition                | Events: `HERO_EXITS`                      | Multiple systems coordinate cleanup                        |
+| Sprite animation frame change   | Direct call to `sprite.animations.play()` | Local to that GameObject                                   |
+| Global flag update              | Direct call to `StoryFlags.add(flag)`     | Not event-driven by design                                 |
 
 **Pattern**:
 
@@ -439,9 +496,8 @@ When should you use events vs direct function calls?
 
 **Check**:
 
-1. [Input.ts](src/lib/Input.ts) - Direction queue might be full (known TODO)
-2. [HeroSnappedMovement.ts](src/objects/Hero/HeroSnappedMovement.ts) - Movement speed constants
-3. `destinationPosition` - Might be set to same as current position
+1. [Input.ts](src/lib/Input/Input.ts) - Check `HOLD_THRESHOLD` (120ms) and direction hold vs tap logic
+2. [Hero.ts](src/objects/Hero/Hero.ts) - `destinationPosition` may be set to same as current position
 
 **Solution**:
 
@@ -500,15 +556,16 @@ console.log('Walls:', this.walls); // Should be Set<string> of "x,y" coords
 
 **Check**:
 
-1. Event name matches exactly (check [events.ts](src/constants/events.ts))
+1. Event name matches exactly (check the relevant feature's `*.constants.ts` file)
 2. Subscriber created in `ready()`, not constructor
-3. Data format matches what emitter sends
+3. `caller` (second arg to `Events.on`) is `this` — required for auto-cleanup
+4. Data format matches what emitter sends
 
 **Solution**:
 
 ```typescript
-// Debug all events
-Events.instance.on('*', (eventName: string) => {
+// Debug all events — note: requires a valid caller GameObject
+Events.on('*', this, (eventName: string) => {
   console.log(`EVENT: ${eventName}`);
 });
 ```
@@ -532,13 +589,10 @@ this.removeChild(gameObject);
 
 These are documented TODOs in the codebase that may affect development:
 
-| File                                                            | Issue                                    | Impact                  | Status            |
-| --------------------------------------------------------------- | ---------------------------------------- | ----------------------- | ----------------- |
-| [main.ts#L18](src/main.ts#L18)                                  | Async level initialization commented out | JSON levels not loading | ⚠️ Blocks feature |
-| [Hero.ts#L253](src/objects/Hero/Hero.ts#L253)                   | State machine refactor                   | Code clarity issue      | 📋 Enhancement    |
-| [Input.ts#L9](src/lib/Input.ts#L9)                              | Responsive key taps (tap vs hold)        | UX improvement          | 📋 Enhancement    |
-| [LevelBuilder.ts#L34](src/lib/LevelBuilder/LevelBuilder.ts#L34) | Uncomment JSON loading logic             | JSON levels not loading | ⚠️ Blocks feature |
-| [LevelsMapper.ts#L27](src/lib/LevelsMapper/LevelsMapper.ts#L27) | Load level IDs from config               | Data-driven design      | 📋 Enhancement    |
+| File                                                                   | Issue                                          | Impact                                 | Status         |
+| ---------------------------------------------------------------------- | ---------------------------------------------- | -------------------------------------- | -------------- |
+| [LevelStateManager.ts](src/lib/LevelStateManager/LevelStateManager.ts) | Save hero data in state for battle transitions | Battle system can't restore hero state | 📋 Enhancement |
+| [TitleScreen.ts](src/objects/TitleScreen/TitleScreen.ts)               | Options menu not implemented                   | Options unavailable                    | 📋 Enhancement |
 
 ## Testing Strategy
 
@@ -550,30 +604,29 @@ Currently, **no tests exist** in this project. Here's how to add tests:
 npm install -D vitest @vitest/ui
 ```
 
-**Example test** (create `src/helpers/__tests__/grid.test.ts`):
+**Example test** (create `src/lib/__tests__/storyFlags.test.ts`):
 
 ```typescript
 import { describe, it, expect } from 'vitest';
-import { isSpaceFree } from '../grid';
+import { StoryFlags } from 'src/lib/StoryFlags';
 
-describe('grid.ts', () => {
-  it('should detect free space', () => {
-    const walls = new Set(['0,0', '1,0']);
-    expect(isSpaceFree(2, 2, walls)).toBe(true);
+describe('StoryFlags', () => {
+  it('should add and detect a flag', () => {
+    StoryFlags.add('talked_to_npc');
+    expect(StoryFlags.has('talked_to_npc')).toBe(true);
   });
 
-  it('should detect occupied space', () => {
-    const walls = new Set(['0,0', '1,0']);
-    expect(isSpaceFree(0, 0, walls)).toBe(false);
+  it('should not find a missing flag', () => {
+    expect(StoryFlags.has('nonexistent')).toBe(false);
   });
 });
 ```
 
 ### What to Test First
 
-1. **Collision detection** ([grid.ts](src/helpers/grid.ts)) - Critical game logic
+1. **Collision detection** (`Game.instance.isSpaceFree()`) - Critical game logic
 2. **Event system** ([Events.ts](src/lib/Events.ts)) - Core architecture
-3. **Movement math** ([moveTowards.ts](src/helpers/moveTowards.ts)) - Determinism required
+3. **Movement math** (`Game.instance.moveTowards()`) - Determinism required
 4. **Animation timing** ([FrameIndexPattern.ts](src/lib/FrameIndexPattern/FrameIndexPattern.ts)) - Frame accuracy
 5. **Story flags** ([StoryFlags.ts](src/lib/StoryFlags/StoryFlags.ts)) - State correctness
 
@@ -593,7 +646,7 @@ describe('grid.ts', () => {
 - **Classes**: PascalCase (`Hero`, `Npc`, `GameLoop`)
 - **Functions/variables**: camelCase (`moveTowards`, `isSpaceFree`)
 - **Constants**: UPPER_SNAKE_CASE (`GRID_SIZE`, `HERO_POSITION`)
-- **Private members**: `#privateField` or prefixed with `_`
+- **Private members**: `_underscorePrefix` (required by ESLint — `@typescript-eslint/naming-convention`)
 
 ### File Naming
 
@@ -615,8 +668,8 @@ import { Events } from 'src/lib/Events';
 import type { GameObjectConfig } from 'src/lib/GameObject';
 
 // 3. Constants and helpers
-import { HERO_POSITION } from 'src/constants/events';
-import { isSpaceFree } from 'src/helpers/grid';
+import { HERO_POSITION } from '../Hero/hero.constants'; // feature-scoped constants
+import { objectKeys } from 'src/helpers/objectKeys';
 
 // 4. Relative imports (from same directory or parents)
 import type { MyThingConfig } from './myThing.types';
@@ -628,26 +681,26 @@ import type { MyThingConfig } from './myThing.types';
 
 ```typescript
 export class MyThing extends GameObject {
-  private state = 'idle';
+  private _state = 'idle';
 
-  ready() {
+  override ready(): void {
     // Setup events, animations, initial state
-    Events.instance.on('SOME_EVENT', () => this.onEvent());
+    Events.on(SOME_EVENT, this, () => this._onEvent());
   }
 
-  step(delta: number, root: Main) {
+  override step(delta: number, root: Main): void {
     // Update state, move, animate
-    if (this.state === 'moving') {
+    if (this._state === 'moving') {
       // ...
     }
   }
 
-  drawImage(ctx: CanvasRenderingContext2D, x: number, y: number) {
+  override drawImage(ctx: CanvasRenderingContext2D, x: number, y: number): void {
     // Draw at (x + this.position.x, y + this.position.y)
   }
 
-  private onEvent() {
-    this.state = 'idle';
+  private _onEvent(): void {
+    this._state = 'idle';
   }
 }
 ```
@@ -669,10 +722,10 @@ import type { MyThingConfig } from './myThing.types';
 
 ```typescript
 // Emit event
-Events.instance.emit('MY_EVENT', { value: 42 });
+Events.emit(MY_EVENT, { value: 42 });
 
-// Listen in another object
-Events.instance.on('MY_EVENT', (data: { value: number }) => {
+// Listen in another object (requires 'this' for auto-cleanup on destroy)
+Events.on(MY_EVENT, this, (data: { value: number }) => {
   console.log(data.value);
 });
 ```
@@ -682,9 +735,7 @@ Events.instance.on('MY_EVENT', (data: { value: number }) => {
 ```typescript
 export class Container extends GameObject {
   ready() {
-    const child = new SomeGameObject({
-      /* config */
-    });
+    const child = new SomeGameObject({/* config */});
     this.addChild(child);
   }
 }
@@ -694,31 +745,39 @@ export class Container extends GameObject {
 
 ### Constants
 
-- [events.ts](src/constants/events.ts) - Event names
-- [animationDirections.ts](src/constants/animationDirections.ts) - Direction enums
-- [gridSize.ts](src/constants/gridSize.ts) - Grid/sizing constants
-- [storyFlags.ts](src/constants/storyFlags.ts) - Global story flags
+Events and constants are **scoped to their feature directory** — not centralized:
+
+- [src/objects/Hero/hero.constants.ts](src/objects/Hero/hero.constants.ts) - Hero events
+- [src/objects/Level/level.constants.ts](src/objects/Level/level.constants.ts) - Level events
+- [src/objects/TextBox/textBox.constants.ts](src/objects/TextBox/textBox.constants.ts) - Dialogue events
+- [src/objects/PauseMenu/pauseMenu.constants.ts](src/objects/PauseMenu/pauseMenu.constants.ts) - Pause events
+- [src/lib/StoryFlags/storyFlags.constants.ts](src/lib/StoryFlags/storyFlags.constants.ts) - Global story flags
+- [src/lib/GameObject/gameObject.constants.ts](src/lib/GameObject/gameObject.constants.ts) - Behavior end event
+- [src/constants/itemsRegistry.ts](src/constants/itemsRegistry.ts) - Items registry (ItemKey → ItemStat)
+- [src/constants/standingDirections.ts](src/constants/standingDirections.ts) - Direction constants
 
 ### Helpers
 
-- [grid.ts](src/helpers/grid.ts) - Grid utilities, collision
-- [moveTowards.ts](src/helpers/moveTowards.ts) - Smooth movement
-- [createItemSprite.ts](src/helpers/createItemSprite.ts) - Item sprite factory
+- [src/helpers/objectKeys.ts](src/helpers/objectKeys.ts) - Type-safe `Object.keys()` wrapper
+- [src/helpers/spriteText.ts](src/helpers/spriteText.ts) - Character frame/width mapping for text
 
 ### Singletons
 
-- `Events.instance` - Global event bus
-- `Resources.instance` - Sprite sheet loader
-- `StoryFlags.instance` - Game state flags
+- `Events` ([src/lib/Events.ts](src/lib/Events.ts)) - Global event bus
+- `Game` ([src/lib/Game/Game.ts](src/lib/Game/Game.ts)) - Game init, grid/movement utilities
+- `Resources` ([src/lib/Resources/Resources.ts](src/lib/Resources/Resources.ts)) - Sprite image loader
+- `StoryFlags` ([src/lib/StoryFlags/StoryFlags.ts](src/lib/StoryFlags/StoryFlags.ts)) - Game state flags
+- `Inventory` ([src/lib/Inventory/Inventory.ts](src/lib/Inventory/Inventory.ts)) - Item collection
+- `Progress` ([src/lib/Progress/Progress.ts](src/lib/Progress/Progress.ts)) - Save/load to localStorage
+- `LevelStateManager` ([src/lib/LevelStateManager/LevelStateManager.ts](src/lib/LevelStateManager/LevelStateManager.ts)) - Per-level object state
 
-## Debugging Tips
+### Debugging Tips
 
 ### Logging Position/State
 
 ```typescript
-step(delta, root) {
+override step(delta: number, root: Main): void {
   console.log(`Hero at (${this.position.x}, ${this.position.y})`);
-  console.log(`Facing: ${this.facingDirection}`);
 }
 ```
 
@@ -736,21 +795,23 @@ if (this.isSolid) {
 ### Event Debugging
 
 ```typescript
-Events.instance.on('*', (eventName, data) => {
-  console.log(`EVENT: ${eventName}`, data);
+Events.on('*', this, (eventName: string) => {
+  console.log(`EVENT: ${eventName}`);
 });
 ```
 
 ## Common Mistakes to Avoid
 
 1. **Forgot `type` keyword**: Always use `import type { ... }` for types
-2. **Direct field mutation**: Use `set()` on signals, not direct assignment
-3. **Hardcoded positions**: Use `gridCells()` helper or constants
-4. **Missing grid coordinates**: Store positions as grid cells (0-indexed), render as pixels
-5. **Forgetting `.types.ts`**: Always extract types to separate file
-6. **Non-deterministic logic**: Fixed timestep expects reproducible behavior; use fixed deltas
-7. **Memory leaks**: Always unsubscribe from events in cleanup
-8. **Drawing outside bounds**: Check camera viewport before rendering expensive objects
+2. **Wrong Events API**: Use `Events.on(event, this, cb)` with `this` as caller — not `Events.instance.on(event, cb)`
+3. **Wrong events import**: Import event constants from the feature's `*.constants.ts`, not a central `events.ts`
+4. **Hardcoded pixel positions**: Use `Game.instance.toGridSize(n)` for grid-to-pixel conversion
+5. **Missing grid coordinates**: Store positions as grid cells (0-indexed), render as pixels
+6. **Forgetting `.types.ts`**: Always extract types to separate file
+7. **Non-deterministic logic**: Fixed timestep expects reproducible behavior; use fixed deltas
+8. **Memory leaks**: Event auto-cleanup requires `caller` (pass `this`), but also ensure `destroy()` is called on removed children
+9. **Private field naming**: Private members MUST use `_` prefix (enforced by ESLint `@typescript-eslint/naming-convention`)
+10. **Drawing outside bounds**: Check camera viewport before rendering expensive objects
 
 ## Where to Make Changes
 
@@ -763,15 +824,15 @@ Events.instance.on('*', (eventName, data) => {
 ### For New Features
 
 - **New game object**: Add in [src/objects/](src/objects/)
-- **New animation**: Add to respective `.ts` file (e.g., `heroAnimations.ts`)
-- **New event**: Add to [events.ts](src/constants/events.ts) and emit/listen as needed
-- **New level**: Create JSON in `public/json/` and use LevelBuilder
+- **New animation**: Add to respective animations file (e.g., `heroAnimations.ts`)
+- **New event**: Define in the feature's `*.constants.ts` and emit/listen as needed
+- **New level**: Create JSON in `public/json/`, add ID to `public/json/levelsIds.json`
 
 ### For Optimization
 
 - Profile rendering in [Main.ts](src/objects/Main/Main.ts) draw method
-- Check collision detection performance in [grid.ts](src/helpers/grid.ts)
-- Optimize sprite batching in [Sprite.ts](src/lib/Sprite/Sprite.ts)
+- Check collision detection via `Game.instance.isSpaceFree()`
+- Optimize sprite batching in [Sprite.ts](src/objects/Sprite/Sprite.ts)
 
 ## Architecture Documentation
 
