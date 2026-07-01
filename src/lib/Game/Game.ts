@@ -5,6 +5,13 @@ import type { GameObject } from '../GameObject';
 import { LevelsMapper } from '../LevelsMapper';
 import { Singleton } from '../Singleton';
 import type { Vector2 } from '../Vector2';
+import {
+  DEFAULT_CANVAS_HEIGHT,
+  DEFAULT_CANVAS_WIDTH,
+  GRID_SIZE,
+  TEXT_BOX_BACKDROP_HEIGHT,
+  TEXT_BOX_BACKDROP_WIDTH,
+} from './game.constants';
 import type { GameCanvasSize, GameConfig } from './game.types';
 
 class GameSingleton extends Singleton<GameSingleton>() {
@@ -26,17 +33,16 @@ class GameSingleton extends Singleton<GameSingleton>() {
   get gridSize(): number {
     return this._gridSize;
   }
-  private readonly _gridSize = 16;
+  private readonly _gridSize = GRID_SIZE;
 
-  readonly textBoxBackdropWidth = 16; // 256 pixel
-  readonly textBoxBackdropHeight = 3; // 48 pixel
+  readonly textBoxBackdropWidth = TEXT_BOX_BACKDROP_WIDTH;
+  readonly textBoxBackdropHeight = TEXT_BOX_BACKDROP_HEIGHT;
 
   /**
    * Initialize the game: load levels, set up the scene, and start the game loop
    */
   async initializeGame(config: GameConfig): Promise<void> {
-    // TODO: put values in default constants
-    const { containerId, canvasWidth = 320, canvasHeight = 180 } = config;
+    const { containerId, canvasWidth = DEFAULT_CANVAS_WIDTH, canvasHeight = DEFAULT_CANVAS_HEIGHT } = config;
 
     // Set the game configs
     this._containerId = `#${containerId}`;
