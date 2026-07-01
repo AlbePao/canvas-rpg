@@ -25,9 +25,11 @@ export class InventoryMenu extends GameObject {
     { value: 'go_back', text: 'Go back', quantity: 0 },
   ];
   protected currentIndex = 0;
-  // Gestisce l'indice del primo elemento visibile nel viewport
+  // Handles the index of the first visible element in the viewport
   private _scrollOffset = 0;
   protected readonly itemsListLines: Line[];
+  private readonly _width: number;
+  private readonly _height: number;
 
   private readonly _backdrop = new BoxBackdrop({
     id: `${this.id}-inventory-box-backdrop`,
@@ -59,20 +61,18 @@ export class InventoryMenu extends GameObject {
       this.id,
     );
 
-    const width =
+    this._width =
       Math.max(
         ...this.itemsList.map(({ text }) =>
           text.split('').reduce((lineWidth, char) => lineWidth + getCharacterWidth(char), 0),
         ),
       ) + 76; // Add padding for the indicator and some spacing
 
-    // BEST PRACTICE: L'altezza deve basarsi sul numero MINIMO tra gli elementi totali e quelli visibili.
-    // Evita che il box sia gigante se hai solo 2 oggetti.
     const actualVisibleCount = Math.min(this.itemsList.length, VISIBLE_ITEMS);
-    const height = toGridSize(actualVisibleCount) + gridSize; // Each option is 16px tall + some padding
+    this._height = toGridSize(actualVisibleCount) + gridSize; // Each option is 16px tall + some padding
 
     // Set backdrop size according to its item text size
-    this._backdrop.updateSize(width / gridSize, height / gridSize);
+    this._backdrop.updateSize(this._width / gridSize, this._height / gridSize);
   }
 
   override ready(): void {
@@ -123,13 +123,26 @@ export class InventoryMenu extends GameObject {
 
   // Update scroll shift
   private _updateScrollOffset(): void {
-    if (this.currentIndex < this._scrollOffset) {
-      // If current index has gone above the start of the viewport
-      this._scrollOffset = this.currentIndex;
-    } else if (this.currentIndex >= this._scrollOffset + VISIBLE_ITEMS) {
-      // If current index has gone below the start of the viewport
-      this._scrollOffset = this.currentIndex - VISIBLE_ITEMS + 1;
+    const maxScrollOffset = Math.max(0, this.itemsList.length - VISIBLE_ITEMS);
+    const relativeIndex = this.currentIndex - this._scrollOffset;
+
+    // If the relative index reaches or exceeds the last visible slot (VISIBLE_ITEMS - 1), force the scrollOffset to move to put the cursor back on the second-to-last slot (VISIBLE_ITEMS - 2)
+    if (relativeIndex >= VISIBLE_ITEMS - 1) {
+      this._scrollOffset = this.currentIndex - VISIBLE_ITEMS + 2;
     }
+
+    // To ensure the same visual cleanliness when going up, go down with the offset if touch the first slot (relativeIndex 0), keeping the cursor on the second slot (relativeIndex 1)
+    if (relativeIndex <= 0 && this.currentIndex > 0) {
+      this._scrollOffset = this.currentIndex - 1;
+    }
+
+    // Inventory head-to-tail jump
+    if (this.currentIndex < this._scrollOffset) {
+      this._scrollOffset = this.currentIndex;
+    }
+
+    // Apply physical limits: the offset cannot be negative nor exceed the maximum possible
+    this._scrollOffset = Math.max(0, Math.min(this._scrollOffset, maxScrollOffset));
   }
 
   override drawImage(ctx: CanvasRenderingContext2D, drawPosX: number, drawPosY: number): void {
@@ -181,6 +194,8 @@ export class InventoryMenu extends GameObject {
       SELECTION_BOX_OPEN,
       new SelectionBox({
         id: `selection-box-for-${this.id}`,
+        x: this._width / 16,
+        y: 0,
         options: [
           { text: 'Use', value: 'use_item' },
           { text: 'Throw', value: 'throw_item' },
