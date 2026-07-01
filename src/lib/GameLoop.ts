@@ -40,15 +40,19 @@ export class GameLoop {
   };
 
   start(): void {
-    if (!this._isRunning) {
-      this._isRunning = true;
-      this._rafId = requestAnimationFrame(this.mainLoop);
+    if (this._isRunning) {
+      return;
     }
+
+    this._isRunning = true;
+    this._lastFrameTime = performance.now();
+    this._rafId = requestAnimationFrame(this.mainLoop);
   }
 
   stop(): void {
     if (this._rafId) {
       cancelAnimationFrame(this._rafId);
+      this._rafId = null;
     }
 
     this._isRunning = false;
