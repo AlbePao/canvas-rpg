@@ -73,6 +73,10 @@ export class GameObject {
   }
 
   private _getDrawChildrenOrdered(): GameObject[] {
+    if (this.children.length < 2) {
+      return this.children;
+    }
+
     return [...this.children].sort((a, b) => {
       // FLOOR layer renders first (below everything)
       if (b.drawLayer === 'FLOOR') {
