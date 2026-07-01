@@ -1,6 +1,4 @@
 import { objectKeys } from '../../helpers/objectKeys';
-import { TILESET_LEVEL } from '../../levels/tilesetLevel';
-import { TILESET_LEVEL2 } from '../../levels/tilesetLevel2';
 import { Chest } from '../../objects/Chest';
 import { Decoration } from '../../objects/Decoration';
 import type { ExitData } from '../../objects/Exit';
@@ -15,27 +13,22 @@ import { Events } from '../Events';
 import { Game } from '../Game';
 import type { GameObject } from '../GameObject';
 import { Inventory } from '../Inventory';
+import { LevelsMapper } from '../LevelsMapper';
 import { LevelStateManager } from '../LevelStateManager';
 import { Resources } from '../Resources';
 import { ScreenTransition } from '../ScreenTransition';
 import { Vector2 } from '../Vector2';
-import type { LevelBuilderConfig, LevelMap } from './levelBuilder.types';
-
-// TODO: remove this mapping
-const LEVELS: Record<string, LevelMap> = {
-  tilesetLevel: TILESET_LEVEL,
-  tilesetLevel2: TILESET_LEVEL2,
-};
+import type { LevelBuilderConfig } from './levelBuilder.types';
 
 export class LevelBuilder extends Level {
   constructor(config: LevelBuilderConfig) {
-    // TODO: uncomment when levels are defined from a json
-    // const levelMap = LevelsMapper.getLevel(config.id);
-    // if (!levelMap) {
-    //   throw new Error(`LevelBuilder: level "${config.id}" not found in LevelsMapper`);
-    // }
+    const level = LevelsMapper.getLevel(config.id);
 
-    const { id, background, heroDefaultPosition, tiles, walls, gameObjects } = LEVELS[config.id];
+    if (!level) {
+      throw new Error(`LevelBuilder: level "${config.id}" not found in LevelsMapper`);
+    }
+
+    const { id, background, heroDefaultPosition, tiles, walls, gameObjects } = level;
 
     super({
       id,
@@ -146,10 +139,9 @@ export class LevelBuilder extends Level {
     });
 
     Events.on<ExitData>(HERO_EXITS, this, ({ newLevelId, newHeroPosition }) => {
-      // TODO: uncomment when levels are defined from a json
-      // if (!LevelsMapper.hasLevel(newLevelId)) {
-      //   throw new Error(`LevelBuilder: level "${newLevelId}" not found in LevelsMapper`);
-      // }
+      if (!LevelsMapper.hasLevel(newLevelId)) {
+        throw new Error(`LevelBuilder: level "${newLevelId}" not found in LevelsMapper`);
+      }
 
       new ScreenTransition(() => {
         Events.emit<LevelBuilder>(
