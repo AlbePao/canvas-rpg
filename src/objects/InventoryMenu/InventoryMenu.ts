@@ -1,4 +1,4 @@
-import { createSpriteTextLines, getCharacterWidth } from '../../helpers/spriteText';
+import { calculateTextWidth, createSpriteTextLines } from '../../helpers/spriteText';
 import { Events } from '../../lib/Events';
 import { Game } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
@@ -61,12 +61,7 @@ export class InventoryMenu extends GameObject {
       this.id,
     );
 
-    this._width =
-      Math.max(
-        ...this.itemsList.map(({ text }) =>
-          text.split('').reduce((lineWidth, char) => lineWidth + getCharacterWidth(char), 0),
-        ),
-      ) + 76; // Add padding for the indicator and some spacing
+    this._width = Math.max(...this.itemsList.map(({ text }) => calculateTextWidth(text))) + 76; // Add padding for the indicator and some spacing
 
     const actualVisibleCount = Math.min(this.itemsList.length, VISIBLE_ITEMS);
     this._height = toGridSize(actualVisibleCount) + gridSize; // Each option is 16px tall + some padding

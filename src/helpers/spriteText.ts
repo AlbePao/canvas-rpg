@@ -33,6 +33,10 @@ width.set('!', 1);
 
 export const getCharacterWidth = (char: string): number => width.get(char) ?? DEFAULT_WIDTH;
 
+// Shared by any UI that needs to size a box around rendered sprite-text (InventoryMenu, SelectionBox, etc.)
+export const calculateTextWidth = (text: string): number =>
+  text.split('').reduce((lineWidth, char) => lineWidth + getCharacterWidth(char), 0);
+
 // Characters frames
 const frameMap = new Map<string, number>();
 ['abcdefghijklmnopqrstuvwxyz', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', '0123456789 __', ".!-,?'"]

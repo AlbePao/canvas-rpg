@@ -1,4 +1,4 @@
-import { createSpriteTextLines, getCharacterWidth } from '../../helpers/spriteText';
+import { calculateTextWidth, createSpriteTextLines } from '../../helpers/spriteText';
 import { Events } from '../../lib/Events';
 import { Game } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
@@ -56,12 +56,7 @@ export class SelectionBox extends GameObject {
       this.id,
     );
 
-    const width =
-      Math.max(
-        ...this.options.map(({ text }) =>
-          text.split('').reduce((lineWidth, char) => lineWidth + getCharacterWidth(char), 0),
-        ),
-      ) + 52; // Add padding for the indicator and some spacing
+    const width = Math.max(...this.options.map(({ text }) => calculateTextWidth(text))) + 52; // Add padding for the indicator and some spacing
 
     const height = toGridSize(this.options.length) + gridSize; // Each option is 16px tall + some padding
 
