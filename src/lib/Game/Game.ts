@@ -21,14 +21,11 @@ class GameSingleton extends Singleton<GameSingleton>() {
   private _containerId = '';
 
   get containerSizes(): GameCanvasSize {
-    return {
-      canvasWidth: this._canvasWidth,
-      canvasHeight: this._canvasHeight,
-    };
+    return this._containerSizes;
   }
 
-  private _canvasWidth = 0;
-  private _canvasHeight = 0;
+  // Cached object reused across getter calls to avoid a new allocation on every read (canvas size is set once at init and never changes afterwards).
+  private readonly _containerSizes: GameCanvasSize = { canvasWidth: 0, canvasHeight: 0 };
 
   get gridSize(): number {
     return this._gridSize;
@@ -46,8 +43,8 @@ class GameSingleton extends Singleton<GameSingleton>() {
 
     // Set the game configs
     this._containerId = `#${containerId}`;
-    this._canvasWidth = canvasWidth;
-    this._canvasHeight = canvasHeight;
+    this._containerSizes.canvasWidth = canvasWidth;
+    this._containerSizes.canvasHeight = canvasHeight;
 
     // Load all levels from JSON before starting the game
     await LevelsMapper.loadLevels();
@@ -67,8 +64,8 @@ class GameSingleton extends Singleton<GameSingleton>() {
     // Creating the canvas to draw to
     const canvas = document.createElement('canvas');
     canvas.setAttribute('id', 'game-canvas');
-    canvas.setAttribute('width', `${this._canvasWidth}`);
-    canvas.setAttribute('height', `${this._canvasHeight}`);
+    canvas.setAttribute('width', `${canvasWidth}`);
+    canvas.setAttribute('height', `${canvasHeight}`);
     canvas.style.width = '100%';
     canvas.style.backgroundColor = '#333';
     canvas.style.imageRendering = 'pixelated';
@@ -145,28 +142,27 @@ class GameSingleton extends Singleton<GameSingleton>() {
     const distanceTravelX = destinationPosition.x - person.position.x;
     const distanceTravelY = destinationPosition.y - person.position.y;
 
-    // Calculate distance once (using square formula directly)
-    const distance = Math.sqrt(distanceTravelX * distanceTravelX + distanceTravelY * distanceTravelY);
+    // Compare squared magnitudes first to avoid a sqrt call entirely on the (common) arrival frame
+    const distanceSquared = distanceTravelX * distanceTravelX + distanceTravelY * distanceTravelY;
 
-    if (distance <= speed) {
+    if (distanceSquared <= speed * speed) {
       // If we're close enough, just move directly to the destination
       person.position.x = destinationPosition.x;
       person.position.y = destinationPosition.y;
       return 0;
     }
 
-    // Normalize and move by speed
+    // Only pay for sqrt once we know normalization is actually needed
+    const distance = Math.sqrt(distanceSquared);
     const normalizedX = distanceTravelX / distance;
     const normalizedY = distanceTravelY / distance;
 
     person.position.x += normalizedX * speed;
     person.position.y += normalizedY * speed;
 
-    // Return remaining distance without recalculation
-    const remainingX = destinationPosition.x - person.position.x;
-    const remainingY = destinationPosition.y - person.position.y;
-
-    return Math.sqrt(remainingX * remainingX + remainingY * remainingY);
+    // Moving by `speed` along the normalized direction reduces the distance by exactly `speed`
+    // (the normalized vector has magnitude 1), so no second sqrt is needed to get the remainder.
+    return distance - speed;
   }
 }
 
