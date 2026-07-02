@@ -10,11 +10,13 @@ export class Decoration extends GameObject {
   readonly body: Sprite;
 
   constructor(config: DecorationConfig) {
-    const { id, key, isSolid, drawLayer = null, x = 0, y = 0 } = config;
+    const { id, key, isSolid = false, drawLayer = null, x = 0, y = 0 } = config;
 
     super({
       id,
     });
+
+    this.isSolid = isSolid;
 
     const frame = TILESET_FRAME_MAP[key];
     const { toGridSize } = Game;
@@ -29,8 +31,6 @@ export class Decoration extends GameObject {
       position: new Vector2(toGridSize(x), toGridSize(y)),
     });
     this.addChild(this.body);
-
-    this.isSolid = !!isSolid;
 
     // Mark decorations to render on top or bottom of characters
     this.drawLayer = drawLayer;
