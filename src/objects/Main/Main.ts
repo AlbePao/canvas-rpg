@@ -18,10 +18,24 @@ export class Main extends GameObject {
   private _currentScreen: 'GAME' | 'TITLE' | 'BATTLE' = 'TITLE';
   readonly input = new Input();
   readonly camera = new Camera();
-  isTextBoxOpened = false;
-  isSelectionBoxOpened = false;
-  isCutscenePlaying = false;
-  isPaused = false;
+
+  private _isTextBoxOpened = false;
+  private _isSelectionBoxOpened = false;
+  private _isCutscenePlaying = false;
+  private _isPaused = false;
+
+  get isTextBoxOpened(): boolean {
+    return this._isTextBoxOpened;
+  }
+  get isSelectionBoxOpened(): boolean {
+    return this._isSelectionBoxOpened;
+  }
+  get isCutscenePlaying(): boolean {
+    return this._isCutscenePlaying;
+  }
+  get isPaused(): boolean {
+    return this._isPaused;
+  }
 
   private _activePauseMenu: PauseMenu | null = null;
 
@@ -59,39 +73,40 @@ export class Main extends GameObject {
     // Launch text box handler
     Events.on<TextBox>(TEXT_BOX_OPEN, this, (textBox) => {
       this.addChild(textBox);
-      this.isTextBoxOpened = true;
+      this._isTextBoxOpened = true;
 
       // unsubscribe from this text box after it's destroyed
       const endingSub = Events.on(TEXT_BOX_CLOSE, this, () => {
         textBox.destroy();
-        this.isTextBoxOpened = false;
+        this._isTextBoxOpened = false;
         Events.off(endingSub);
       });
     });
 
     Events.on<SelectionBox>(SELECTION_BOX_OPEN, this, (selectionBox) => {
       this.addChild(selectionBox);
-      this.isSelectionBoxOpened = true;
+      this._isSelectionBoxOpened = true;
 
       // unsubscribe from this selection box after it's destroyed
       const endingSub = Events.on(SELECTION_BOX_CLOSE, this, () => {
         selectionBox.destroy();
-        this.isSelectionBoxOpened = false;
+        this._isSelectionBoxOpened = false;
         Events.off(endingSub);
       });
     });
 
-    // Events.on(CUTSCENE_START, this, () => {
-    //   this.isCutscenePlaying = true;
-    // });
+    // TODO: put CUTSCENE_START and CUTSCENE_END in a constant
+    Events.on('CUTSCENE_START', this, () => {
+      this._isCutscenePlaying = true;
+    });
 
-    // Events.on(CUTSCENE_END, this, () => {
-    //   this.isCutscenePlaying = false;
-    // });
+    Events.on('CUTSCENE_END', this, () => {
+      this._isCutscenePlaying = false;
+    });
 
     // Launch pause menu handler
     Events.on(PAUSE_ON, this, () => {
-      this.isPaused = true;
+      this._isPaused = true;
       const pauseMenu = new PauseMenu();
       this._activePauseMenu = pauseMenu;
       this.addChild(pauseMenu);
@@ -100,7 +115,7 @@ export class Main extends GameObject {
       const endingSub = Events.on(PAUSE_OFF, this, () => {
         pauseMenu.destroy();
         this._activePauseMenu = null;
-        this.isPaused = false;
+        this._isPaused = false;
         Events.off(endingSub);
       });
     });
@@ -139,17 +154,17 @@ export class Main extends GameObject {
 
   override step(): void {
     if (this.input.getActionJustPressed('Escape') && this._canTogglePause()) {
-      Events.emit(this.isPaused ? PAUSE_OFF : PAUSE_ON);
+      Events.emit(this._isPaused ? PAUSE_OFF : PAUSE_ON);
     }
   }
 
   private _canTogglePause(): boolean {
     if (
       this._currentScreen !== 'GAME' ||
-      this.isSelectionBoxOpened ||
-      this.isCutscenePlaying ||
-      this.isTextBoxOpened ||
-      (this.isPaused && this._activePauseMenu && !this._activePauseMenu.canDismiss)
+      this._isSelectionBoxOpened ||
+      this._isCutscenePlaying ||
+      this._isTextBoxOpened ||
+      (this._isPaused && this._activePauseMenu && !this._activePauseMenu.canDismiss)
     ) {
       return false;
     }
@@ -181,13 +196,13 @@ export class Main extends GameObject {
 
   drawObjects(ctx: CanvasRenderingContext2D): void {
     this._nonHudChildren.forEach((child) => {
-        child.draw(ctx, 0, 0);
+      child.draw(ctx, 0, 0);
     });
   }
 
   drawForeground(ctx: CanvasRenderingContext2D): void {
     this._hudChildren.forEach((child) => {
-        child.draw(ctx, 0, 0);
+      child.draw(ctx, 0, 0);
     });
   }
 }
