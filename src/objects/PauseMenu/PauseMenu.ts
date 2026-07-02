@@ -1,6 +1,7 @@
 import { Events } from '../../lib/Events';
 import type { GameObject } from '../../lib/GameObject';
 import { InventoryMenu } from '../InventoryMenu';
+import type { Main } from '../Main';
 import { SelectionBox } from '../SelectionBox';
 import type { TextBox } from '../TextBox';
 import { TEXT_BOX_CLOSE } from '../TextBox';
@@ -18,6 +19,17 @@ export class PauseMenu extends SelectionBox {
     return this._canDismiss;
   }
   private _canDismiss = true;
+
+  /**
+   * `GameObject.stepEntry()` steps children *before* their parent, and the shared `Input`
+   * "just pressed" state isn't cleared until the whole tree has stepped for this frame (see
+   * `Game.ts`). That means if a child sub-menu (e.g. `InventoryMenu`) reacts to Enter/Space by
+   * closing itself, this class's own `step()` (inherited from `SelectionBox`) would still run
+   * *afterwards in that same frame* and see the exact same still-"just pressed" key, immediately
+   * re-selecting the current option (e.g. re-opening "Inventory"). To avoid this, unlocking the
+   * indicator is deferred to the start of the *next* frame instead of happening synchronously.
+   */
+  private _pendingIndicatorUnlock = false;
 
   constructor() {
     super({
@@ -37,7 +49,7 @@ export class PauseMenu extends SelectionBox {
       const endingSub = Events.on(PAUSE_SUB_MENU_CLOSE, this, () => {
         pauseSubMenu.destroy();
         this._canDismiss = true;
-        this.unlockIndicator();
+        this._pendingIndicatorUnlock = true;
         Events.off(endingSub);
       });
     });
@@ -45,9 +57,23 @@ export class PauseMenu extends SelectionBox {
     Events.on<TextBox>(TEXT_BOX_CLOSE, this, ({ id }) => {
       if (id === SAVE_TEXT_BOX_ID) {
         this._canDismiss = true;
-        this.unlockIndicator();
+        this._pendingIndicatorUnlock = true;
       }
     });
+  }
+
+  override step(delta: number, root: Main): void {
+    /**
+     * Consume the pending unlock before processing any input this frame, and skip this frame's
+     * input entirely so the key press that closed the sub menu/text box can't be reused here.
+     */
+    if (this._pendingIndicatorUnlock) {
+      this._pendingIndicatorUnlock = false;
+      this.unlockIndicator();
+      return;
+    }
+
+    super.step(delta, root);
   }
 
   protected override onOptionSelect(): void {

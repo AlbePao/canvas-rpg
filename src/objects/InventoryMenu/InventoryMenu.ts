@@ -165,6 +165,7 @@ export class InventoryMenu extends GameObject {
       // Use renderIndex instead of absolute index to position correctly inside the box
       const cursorY = drawPosY + toGridSize(renderIndex) + 10;
 
+      // TODO: draw item icon and quantity next to the text
       words.forEach(({ chars }) => {
         // Draw this whole segment of text
         chars.forEach((char) => {
@@ -187,10 +188,6 @@ export class InventoryMenu extends GameObject {
 
     // Close menu if player selects Go Back option
     if (value === 'go_back') {
-      /**
-       * TODO: fix this unexpected behavior: when user presses enter, the
-       * inventory box closes and reopens immediately because of listener on pause menu.
-       */
       Events.emit(PAUSE_SUB_MENU_CLOSE);
       return;
     }
