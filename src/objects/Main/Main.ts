@@ -25,10 +25,29 @@ export class Main extends GameObject {
 
   private _activePauseMenu: PauseMenu | null = null;
 
+  // Cached HUD/non-HUD split so drawObjects/drawForeground don't re-filter `children` every frame
+  private _hudChildren: GameObject[] = [];
+  private _nonHudChildren: GameObject[] = [];
+
   constructor() {
     super({
       id: 'main',
     });
+  }
+
+  override addChild(gameObject: GameObject): void {
+    super.addChild(gameObject);
+    if (gameObject.drawLayer === 'HUD') {
+      this._hudChildren.push(gameObject);
+    } else {
+      this._nonHudChildren.push(gameObject);
+    }
+  }
+
+  override removeChild(gameObject: GameObject): void {
+    super.removeChild(gameObject);
+    this._hudChildren = this._hudChildren.filter((child) => child !== gameObject);
+    this._nonHudChildren = this._nonHudChildren.filter((child) => child !== gameObject);
   }
 
   override ready(): void {
@@ -161,18 +180,14 @@ export class Main extends GameObject {
   }
 
   drawObjects(ctx: CanvasRenderingContext2D): void {
-    this.children.forEach((child) => {
-      if (child.drawLayer !== 'HUD') {
+    this._nonHudChildren.forEach((child) => {
         child.draw(ctx, 0, 0);
-      }
     });
   }
 
   drawForeground(ctx: CanvasRenderingContext2D): void {
-    this.children.forEach((child) => {
-      if (child.drawLayer === 'HUD') {
+    this._hudChildren.forEach((child) => {
         child.draw(ctx, 0, 0);
-      }
     });
   }
 }
