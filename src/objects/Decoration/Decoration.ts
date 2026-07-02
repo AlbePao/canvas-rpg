@@ -16,6 +16,7 @@ export class Decoration extends GameObject {
       id,
     });
 
+    // TODO: fix missing collision detection for decorations that are solid (e.g. rocks, trees, etc.)
     this.isSolid = isSolid;
 
     const frame = TILESET_FRAME_MAP[key];

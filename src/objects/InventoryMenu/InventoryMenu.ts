@@ -180,6 +180,7 @@ export class InventoryMenu extends GameObject {
 
     // Close menu if player selects Go Back option
     if (value === 'go_back') {
+      // TODO: fix this unexpected behavior: when user presses enter, the inventory box closes and reopens immediately because of listener on pause menu.
       Events.emit(PAUSE_SUB_MENU_CLOSE);
       return;
     }
