@@ -1,10 +1,13 @@
 import { z } from 'zod';
 import { CHEST_STATUSES } from '../../objects/Chest';
+import type { InteractionConfig, InteractionContentConfig } from '../../objects/InteractiveObject';
 import { ITEM_KEYS } from '../../objects/Item';
+import type { MovableObjectBehavior } from '../../objects/MovableObject';
 import type { NpcBehavior } from '../../objects/Npc';
+import type { SelectionOption } from '../../objects/SelectionBox';
 import type { Coords, Coords2D } from '../../types/coords';
 import { DIRECTIONS } from '../../types/directions';
-import { GAME_OBJECT_DRAW_LAYERS, type GameObjectBehavior } from '../GameObject';
+import { GAME_OBJECT_DRAW_LAYERS } from '../GameObject';
 import type {
   LevelChestItem,
   LevelCollectibleItem,
@@ -36,23 +39,48 @@ const LevelBackgroundSchema = z.object({
   frameSize: Coords2DSchema,
 }) satisfies z.ZodType<LevelMap['background']>;
 
-const InteractionContentConfigSchema = z.object({
-  text: z.array(z.string()),
-  requires: z.array(z.string()).optional(),
-  bypass: z.array(z.string()).optional(),
+const SelectionOptionSchema = z.object({
+  text: z.string(),
+  value: z.string(),
+  response: z.array(z.string()).optional(),
   addsFlag: z.string().optional(),
-  item: z.enum(ITEM_KEYS).optional(),
-});
+  exclude: z.array(z.string()).optional(),
+  include: z.array(z.string()).optional(),
+  itemKey: z.enum(ITEM_KEYS).optional(),
+}) satisfies z.ZodType<SelectionOption>;
+
+const InteractionContentConfigSchema = z
+  .object({
+    text: z.array(z.string()),
+    requires: z.array(z.string()).optional(),
+    bypass: z.array(z.string()).optional(),
+  })
+  .and(
+    z.union([
+      // First branch: has "options", but NOT "addsFlag" or "itemKey"
+      z.object({
+        options: z.array(SelectionOptionSchema).optional(),
+        addsFlag: z.never().optional(),
+        itemKey: z.never().optional(),
+      }),
+      // Second branch: does NOT have "options", but can have "addsFlag" and "itemKey"
+      z.object({
+        options: z.never().optional(),
+        addsFlag: z.string().optional(),
+        itemKey: z.enum(ITEM_KEYS).optional(),
+      }),
+    ]),
+  ) satisfies z.ZodType<InteractionContentConfig>;
 
 const InteractionConfigSchema = z.object({
   portraitFrame: z.number().int().nullable().optional(),
   content: z.array(InteractionContentConfigSchema),
-});
+}) satisfies z.ZodType<InteractionConfig>;
 
-const GameObjectBehaviorSchema = z.object({
+const MovableObjectBehaviorSchema = z.object({
   type: z.unknown(),
   direction: z.enum(DIRECTIONS),
-}) satisfies z.ZodType<GameObjectBehavior>;
+}) satisfies z.ZodType<MovableObjectBehavior>;
 
 const LevelExitSchema = z.object({
   type: z.literal('Exit'),
@@ -60,7 +88,7 @@ const LevelExitSchema = z.object({
   newLevelId: LevelIdSchema,
   x: z.number().int(),
   y: z.number().int(),
-  behaviorConfig: z.array(GameObjectBehaviorSchema).optional(),
+  behaviorConfig: z.array(MovableObjectBehaviorSchema).optional(),
   newHeroPosition: Coords2DSchema,
 }) satisfies z.ZodType<LevelExit>;
 
@@ -70,7 +98,7 @@ const LevelCollectibleItemSchema = z.object({
   itemKey: z.enum(ITEM_KEYS),
   x: z.number().int(),
   y: z.number().int(),
-  behaviorConfig: z.array(GameObjectBehaviorSchema).optional(),
+  behaviorConfig: z.array(MovableObjectBehaviorSchema).optional(),
   skipCollectAnimation: z.boolean().optional(),
 }) satisfies z.ZodType<LevelCollectibleItem>;
 
@@ -82,7 +110,7 @@ const LevelDecorationSchema = z.object({
   y: z.number().int(),
   isSolid: z.boolean().optional(),
   drawLayer: z.enum(GAME_OBJECT_DRAW_LAYERS).optional(),
-  behaviorConfig: z.array(GameObjectBehaviorSchema).optional(),
+  behaviorConfig: z.array(MovableObjectBehaviorSchema).optional(),
 }) satisfies z.ZodType<LevelDecoration>;
 
 const LevelChestSchema = z.object({
@@ -90,7 +118,7 @@ const LevelChestSchema = z.object({
   id: z.string(),
   x: z.number().int(),
   y: z.number().int(),
-  behaviorConfig: z.array(GameObjectBehaviorSchema).optional(),
+  behaviorConfig: z.array(MovableObjectBehaviorSchema).optional(),
   status: z.enum(CHEST_STATUSES).optional(),
   removeAfterLoot: z.boolean().optional(),
   interactionConfig: InteractionConfigSchema,
