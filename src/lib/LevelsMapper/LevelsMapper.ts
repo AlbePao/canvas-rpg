@@ -84,8 +84,6 @@ class LevelsMapperSingleton extends Singleton<LevelsMapperSingleton>() {
           console.warn(`${result.id}: ${result.error}`);
         }
       });
-    } else {
-      console.log(`Loaded ${successCount} levels from JSON`);
     }
 
     if (successCount === 0) {

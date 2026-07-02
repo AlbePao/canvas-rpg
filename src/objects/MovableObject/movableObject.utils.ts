@@ -21,9 +21,6 @@ export function getMovableObjectDestination(child: GameObject): Vector2 | null {
  */
 export function isPositionBlocked(children: GameObject[], x: number, y: number): boolean {
   return children.some((child) => {
-    if (child.id === 'tilesetLevel-hero') {
-      console.log(child.isSolid, child.position.x, child.position.y, x, y);
-    }
     if (child.isSolid && child.position.x === x && child.position.y === y) {
       return true;
     }
