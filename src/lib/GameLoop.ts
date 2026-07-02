@@ -23,12 +23,13 @@ export class GameLoop {
     const deltaTime = timestamp - this._lastFrameTime;
     this._lastFrameTime = timestamp;
 
-    // Accumulate time since the last frame; capped to prevent a spiral of death
-    // when the tab was backgrounded and returns with a large accumulated delta.
+    /**
+     * Accumulate time since the last frame; capped to prevent a spiral of death
+     * when the tab was backgrounded and returns with a large accumulated delta.
+     */
     this._accumulatedTime = Math.min(this._accumulatedTime + deltaTime, this._timeStep * 5);
 
-    // Fixed time step updates
-    // If there's enough accumulated time to run one or more fixed updates
+    // Fixed time step updates if there's enough accumulated time to run one or more fixed updates
     while (this._accumulatedTime >= this._timeStep) {
       this.update(this._timeStep); // Here we pass the fixed time step
       this._accumulatedTime -= this._timeStep;

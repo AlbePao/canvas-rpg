@@ -130,7 +130,10 @@ export class TextBox extends GameObject {
     }
 
     if (this._showingCharIndex === finalCharIndex && this._currentLineIndex === this._finalLineIndex) {
-      // Text box has shown all of its text, emit the end event so that it can trigger other events that requires the text box still opened, like a selection box
+      /**
+       * Text box has shown all of its text, emit the end event so that it can
+       * trigger other events that requires the text box still opened, like a selection box
+       */
       Events.emit<TextBox>(TEXT_BOX_END, this);
     }
   }
@@ -181,7 +184,10 @@ export class TextBox extends GameObject {
         // Uptick the index we are counting
         currentShowingIndex += 1;
 
-        // If is the latest letter of the latest word of the line and it's not the last line, shows the continue indicator
+        /**
+         * If is the latest letter of the latest word of the line and
+         * it's not the last line, shows the continue indicator
+         */
         if (
           charIndex === chars.length - 1 &&
           wordIndex === currentLineWords.length - 1 &&

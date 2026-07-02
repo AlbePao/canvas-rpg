@@ -160,8 +160,10 @@ class GameSingleton extends Singleton<GameSingleton>() {
     person.position.x += normalizedX * speed;
     person.position.y += normalizedY * speed;
 
-    // Moving by `speed` along the normalized direction reduces the distance by exactly `speed`
-    // (the normalized vector has magnitude 1), so no second sqrt is needed to get the remainder.
+    /**
+     * Moving by `speed` along the normalized direction reduces the distance by
+     * exactly `speed` (the normalized vector has magnitude 1), so no second sqrt is needed to get the remainder.
+     */
     return distance - speed;
   }
 }

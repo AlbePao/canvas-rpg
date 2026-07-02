@@ -61,7 +61,8 @@ export class InventoryMenu extends GameObject {
       this.id,
     );
 
-    this._width = Math.max(...this.itemsList.map(({ text }) => calculateTextWidth(text))) + 76; // Add padding for the indicator and some spacing
+    // Calculate inventory menu width and add padding for the indicator and some spacing
+    this._width = Math.max(...this.itemsList.map(({ text }) => calculateTextWidth(text))) + 76;
 
     const actualVisibleCount = Math.min(this.itemsList.length, VISIBLE_ITEMS);
     this._height = toGridSize(actualVisibleCount) + gridSize; // Each option is 16px tall + some padding
@@ -121,12 +122,18 @@ export class InventoryMenu extends GameObject {
     const maxScrollOffset = Math.max(0, this.itemsList.length - VISIBLE_ITEMS);
     const relativeIndex = this.currentIndex - this._scrollOffset;
 
-    // If the relative index reaches or exceeds the last visible slot (VISIBLE_ITEMS - 1), force the scrollOffset to move to put the cursor back on the second-to-last slot (VISIBLE_ITEMS - 2)
+    /**
+     * If the relative index reaches or exceeds the last visible slot (VISIBLE_ITEMS - 1), force
+     * the scrollOffset to move to put the cursor back on the second-to-last slot (VISIBLE_ITEMS - 2)
+     */
     if (relativeIndex >= VISIBLE_ITEMS - 1) {
       this._scrollOffset = this.currentIndex - VISIBLE_ITEMS + 2;
     }
 
-    // To ensure the same visual cleanliness when going up, go down with the offset if touch the first slot (relativeIndex 0), keeping the cursor on the second slot (relativeIndex 1)
+    /**
+     * To ensure the same visual cleanliness when going up, go down with the
+     * offset if touch the first slot (relativeIndex 0), keeping the cursor on the second slot (relativeIndex 1)
+     */
     if (relativeIndex <= 0 && this.currentIndex > 0) {
       this._scrollOffset = this.currentIndex - 1;
     }
@@ -180,7 +187,10 @@ export class InventoryMenu extends GameObject {
 
     // Close menu if player selects Go Back option
     if (value === 'go_back') {
-      // TODO: fix this unexpected behavior: when user presses enter, the inventory box closes and reopens immediately because of listener on pause menu.
+      /**
+       * TODO: fix this unexpected behavior: when user presses enter, the
+       * inventory box closes and reopens immediately because of listener on pause menu.
+       */
       Events.emit(PAUSE_SUB_MENU_CLOSE);
       return;
     }

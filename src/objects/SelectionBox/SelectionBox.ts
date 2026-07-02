@@ -56,14 +56,18 @@ export class SelectionBox extends GameObject {
       this.id,
     );
 
-    const width = Math.max(...this.options.map(({ text }) => calculateTextWidth(text))) + 52; // Add padding for the indicator and some spacing
+    // Calculate selection box width and add padding for the indicator and some spacing
+    const width = Math.max(...this.options.map(({ text }) => calculateTextWidth(text))) + 52;
 
     const height = toGridSize(this.options.length) + gridSize; // Each option is 16px tall + some padding
 
     // Set backdrop size according to its options' size
     this._backdrop.updateSize(width / gridSize, height / gridSize);
 
-    // If position x and y are set from config, use that params, otherwise set the position according to options size in relation to canvas width and text box height
+    /**
+     * If position x and y are set from config, use that params, otherwise
+     * set the position according to options size in relation to canvas width and text box height
+     */
     const { canvasWidth, canvasHeight } = Game.containerSizes;
     const newX = x ? toGridSize(x) : canvasWidth - width - 32;
     const newY = y ? toGridSize(y) : canvasHeight - height - toGridSize(Game.textBoxBackdropHeight) - 4;

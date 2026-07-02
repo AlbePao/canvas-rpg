@@ -20,7 +20,7 @@ class EventsSingleton extends Singleton<EventsSingleton>() {
   private readonly _listenersByCaller = new Map<GameObject, Set<number>>();
   private _nextId = 0;
 
-  // emit event
+  // Emit event
   emit<T>(eventName: string, value?: T): void {
     const listeners = this._listenersByEvent.get(eventName);
     if (!listeners) {
@@ -33,7 +33,7 @@ class EventsSingleton extends Singleton<EventsSingleton>() {
     }
   }
 
-  // subscribe to something happening
+  // Subscribe to something happening
   on<T>(eventName: string, caller: GameObject, callback: EventCallback<T>): number {
     const id = ++this._nextId;
     const listener: Listener<T> = { id, caller, callback };
@@ -59,7 +59,7 @@ class EventsSingleton extends Singleton<EventsSingleton>() {
     return id;
   }
 
-  // remove the subscription
+  // Remove the subscription
   off(id: number): void {
     const listener = this._listenerIndex.get(id);
     if (!listener) {
@@ -81,6 +81,7 @@ class EventsSingleton extends Singleton<EventsSingleton>() {
     this._listenerIndex.delete(id);
   }
 
+  // Unsubscribe all events for a specific caller
   unsubscribe(caller: GameObject): void {
     const ids = this._listenersByCaller.get(caller);
     if (!ids) {
