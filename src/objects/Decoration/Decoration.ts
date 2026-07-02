@@ -1,4 +1,3 @@
-import { Game } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
 import { TILESET_FRAME_MAP } from '../../lib/LevelBuilder/tilesetFrameMap';
 import { Resources } from '../../lib/Resources';
@@ -14,13 +13,13 @@ export class Decoration extends GameObject {
 
     super({
       id,
+      x,
+      y,
     });
 
-    // TODO: fix missing collision detection for decorations that are solid (e.g. rocks, trees, etc.)
     this.isSolid = isSolid;
 
     const frame = TILESET_FRAME_MAP[key];
-    const { toGridSize } = Game;
 
     this.body = new Sprite({
       id,
@@ -29,7 +28,6 @@ export class Decoration extends GameObject {
       hFrames: 16,
       vFrames: 9,
       frame,
-      position: new Vector2(toGridSize(x), toGridSize(y)),
     });
     this.addChild(this.body);
 
