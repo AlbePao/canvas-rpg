@@ -2,8 +2,7 @@ import type { Main } from '../../objects/Main';
 import { Events } from '../Events';
 import { Game } from '../Game';
 import { Vector2 } from '../Vector2';
-import { BEHAVIOR_END } from './gameObject.constants';
-import type { GameObjectBehavior, GameObjectConfig, GameObjectDrawLayer } from './gameObject.types';
+import type { GameObjectConfig, GameObjectDrawLayer } from './gameObject.types';
 
 export class GameObject {
   readonly id: string;
@@ -13,21 +12,20 @@ export class GameObject {
   isSolid = false;
   drawLayer: GameObjectDrawLayer | null = null;
 
-  protected readonly behaviorConfig: GameObjectBehavior[];
-
   private _hasReadyBeenCalled = false;
-  protected behaviorIndex = 0;
-  private _retryTimeout: number | null = null;
   private readonly _pendingTimeouts = new Set<number>();
 
+  // Draw-order buckets: populated by addChild/removeChild so draw() never allocates
+  private _floorChildren: GameObject[] = [];
+  private _worldTopChildren: GameObject[] = [];
+  private _defaultChildren: GameObject[] = [];
+
   constructor(config: GameObjectConfig) {
-    const { id, x = 0, y = 0, behaviorConfig = [] } = config;
+    const { id, x = 0, y = 0 } = config;
     const { toGridSize } = Game;
 
     this.id = id;
     this.position = new Vector2(toGridSize(x), toGridSize(y));
-    // Set object behavior loop
-    this.behaviorConfig = behaviorConfig;
   }
 
   stepEntry(delta: number, root: Main): void {
@@ -40,8 +38,8 @@ export class GameObject {
     if (!this._hasReadyBeenCalled) {
       this._hasReadyBeenCalled = true;
       this.ready();
-      // Set and start behavior loop
-      this._setBehaviorLoop(root);
+      // Hook for subclasses that need one-time setup requiring `root` (e.g. MovableObject's behavior loop)
+      this.afterReady(root);
     }
 
     // Call any implemented step code
@@ -50,6 +48,11 @@ export class GameObject {
 
   // Called before the first 'step'
   ready(): void {
+    //
+  }
+
+  // Called once, right after `ready()`, on the first frame. Unlike `ready()` this receives `root`.
+  protected afterReady(_root: Main): void {
     //
   }
 
@@ -66,34 +69,29 @@ export class GameObject {
     // Do the actual rendering for Images
     this.drawImage(ctx, drawPosX, drawPosY);
 
-    // Pass on children
-    this._getDrawChildrenOrdered().forEach((child) => {
+    // FLOOR children first (insertion order — static tiles)
+    for (const child of this._floorChildren) {
       child.draw(ctx, drawPosX, drawPosY);
-    });
-  }
-
-  private _getDrawChildrenOrdered(): GameObject[] {
-    if (this.children.length < 2) {
-      return this.children;
     }
 
-    return [...this.children].sort((a, b) => {
-      // FLOOR layer renders first (below everything)
-      if (b.drawLayer === 'FLOOR') {
-        return 1;
-      }
+    /**
+     * Default children sorted by Y position in-place (no allocation).
+     * Most frames the relative Y-order hasn't changed since last
+     * frame (idle NPCs, static decorations, etc.), so skip the O(n log n)
+     * sort call whenever a cheap O(n) scan finds the array is already ordered.
+     */
+    if (this._defaultChildren.length >= 2 && !this._isSortedByY(this._defaultChildren)) {
+      this._defaultChildren.sort((a, b) => (a.position.y > b.position.y ? 1 : -1));
+    }
 
-      // WORLD_TOP layer renders last (above Y-sorted objects)
-      if (a.drawLayer === 'WORLD_TOP' && b.drawLayer !== 'WORLD_TOP') {
-        return 1;
-      }
-      if (b.drawLayer === 'WORLD_TOP' && a.drawLayer !== 'WORLD_TOP') {
-        return -1;
-      }
+    for (const child of this._defaultChildren) {
+      child.draw(ctx, drawPosX, drawPosY);
+    }
 
-      // Default: sort by Y position (top of sprite)
-      return a.position.y > b.position.y ? 1 : -1;
-    });
+    // WORLD_TOP children last (above Y-sorted objects)
+    for (const child of this._worldTopChildren) {
+      child.draw(ctx, drawPosX, drawPosY);
+    }
   }
 
   drawImage(_ctx: CanvasRenderingContext2D, _x: number, _y: number): void {
@@ -108,11 +106,6 @@ export class GameObject {
     });
     this._pendingTimeouts.clear();
 
-    if (this._retryTimeout) {
-      clearTimeout(this._retryTimeout);
-      this._retryTimeout = null;
-    }
-
     Events.unsubscribe(this);
 
     this.children.forEach((child) => {
@@ -125,11 +118,42 @@ export class GameObject {
   addChild(gameObject: GameObject): void {
     gameObject.parent = this;
     this.children.push(gameObject);
+    this._addToLayerBucket(gameObject);
   }
 
   removeChild(gameObject: GameObject): void {
     Events.unsubscribe(gameObject);
     this.children = this.children.filter((g) => gameObject !== g);
+    this._removeFromLayerBucket(gameObject);
+  }
+
+  private _addToLayerBucket(child: GameObject): void {
+    if (child.drawLayer === 'FLOOR') {
+      this._floorChildren.push(child);
+    } else if (child.drawLayer === 'WORLD_TOP') {
+      this._worldTopChildren.push(child);
+    } else {
+      this._defaultChildren.push(child);
+    }
+  }
+
+  private _removeFromLayerBucket(child: GameObject): void {
+    if (child.drawLayer === 'FLOOR') {
+      this._floorChildren = this._floorChildren.filter((g) => g !== child);
+    } else if (child.drawLayer === 'WORLD_TOP') {
+      this._worldTopChildren = this._worldTopChildren.filter((g) => g !== child);
+    } else {
+      this._defaultChildren = this._defaultChildren.filter((g) => g !== child);
+    }
+  }
+
+  private _isSortedByY(children: GameObject[]): boolean {
+    for (let i = 1; i < children.length; i += 1) {
+      if (children[i - 1].position.y > children[i].position.y) {
+        return false;
+      }
+    }
+    return true;
   }
 
   protected scheduleTimeout(callback: () => void, delay: number): number {
@@ -139,57 +163,5 @@ export class GameObject {
     }, delay);
     this._pendingTimeouts.add(timeoutId);
     return timeoutId;
-  }
-
-  private _setBehaviorLoop(root: Main): void {
-    if (this.behaviorConfig.length === 0) {
-      return;
-    }
-
-    // If we have a behavior, kick off after a short delay - track this timeout
-    this.scheduleTimeout(() => {
-      this._doBehaviorEvent(root);
-    }, 10);
-
-    Events.on<string>(BEHAVIOR_END, this, (id) => {
-      if (id !== this.id) {
-        return;
-      }
-
-      // Setting the next event to fire
-      this.behaviorIndex += 1;
-
-      if (this.behaviorIndex === this.behaviorConfig.length) {
-        this.behaviorIndex = 0;
-      }
-
-      // Do it again!
-      this._doBehaviorEvent(root);
-    });
-  }
-
-  private _doBehaviorEvent(root: Main): void {
-    const { isCutscenePlaying } = root;
-    if (isCutscenePlaying || this.behaviorConfig.length === 0) {
-      return;
-    }
-
-    if (isCutscenePlaying) {
-      if (this._retryTimeout) {
-        clearTimeout(this._retryTimeout);
-      }
-
-      this._retryTimeout = this.scheduleTimeout(() => {
-        this._doBehaviorEvent(root);
-      }, 1000);
-
-      return;
-    }
-
-    this.startBehavior(this.behaviorConfig[this.behaviorIndex]);
-  }
-
-  protected startBehavior(_behavior: GameObjectBehavior): void {
-    // ...
   }
 }

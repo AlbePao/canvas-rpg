@@ -1,4 +1,3 @@
-import { STANDING_DIRECTIONS } from '../../constants/standingDirections';
 import { Animations } from '../../lib/Animations';
 import { Events } from '../../lib/Events';
 import { FrameIndexPattern } from '../../lib/FrameIndexPattern';
@@ -6,17 +5,14 @@ import { Game } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
 import { DIRECTION_TAP } from '../../lib/Input';
 import { Resources } from '../../lib/Resources';
-import { SCREEN_TRANSITION_END, SCREEN_TRANSITION_START } from '../../lib/ScreenTransition';
 import { Vector2 } from '../../lib/Vector2';
 import type { Coords2D } from '../../types/coords';
 import type { Directions } from '../../types/directions';
 import type { CollectibleItemData } from '../Item';
 import { createItemSprite } from '../Item';
 import type { Main } from '../Main';
-import { Npc } from '../Npc';
-import { PAUSE_OFF, PAUSE_ON } from '../PauseMenu';
+import { isPositionBlocked, MovableObject } from '../MovableObject';
 import { Sprite } from '../Sprite';
-import { TEXT_BOX_CLOSE, TEXT_BOX_OPEN } from '../TextBox';
 import {
   HERO_PICK_UP_DOWN,
   HERO_STAND_DOWN,
@@ -31,41 +27,35 @@ import {
 import { HERO_COLLECTS_ITEM, HERO_POSITION, HERO_REQUESTS_ACTION } from './hero.constants';
 import type { HeroConfig } from './hero.types';
 
-export class Hero extends GameObject {
-  facingDirection: Directions = 'DOWN';
+export class Hero extends MovableObject {
   protected readonly body: Sprite;
-  destinationPosition: Vector2;
   private _lastX?: number;
   private _lastY?: number;
   private _itemPickUpTime = 0;
   private _itemPickUpShell: GameObject | null = null;
-  private _isLocked = false;
-  private readonly _walkingSpeed = 1;
 
   get gridCoords(): Coords2D {
     const { x, y } = this.position;
 
     return {
-      x: x / Game.gridSize,
-      y: y / Game.gridSize,
+      x: Game.fromGridSize(x),
+      y: Game.fromGridSize(y),
     };
   }
 
   constructor(config: HeroConfig) {
-    super(config);
+    // Hero isn't a dialogue-bearing object, so give MovableObject/InteractiveObject an empty interaction config
+    super({
+      ...config,
+      interactionConfig: { content: [] },
+    });
 
     const { id } = config;
 
     // Opt into being solid
     this.isSolid = true;
 
-    const shadow = new Sprite({
-      id: `${id}-hero-shadow-sprite`,
-      resource: Resources.images.shadow,
-      frameSize: new Vector2(32, 32),
-      position: new Vector2(-8, -19),
-    });
-    this.addChild(shadow);
+    this.addChild(this.createShadowSprite(`${id}-hero-shadow-sprite`));
 
     this.body = new Sprite({
       id: `${id}-hero-body-sprite`,
@@ -88,45 +78,29 @@ export class Hero extends GameObject {
       }),
     });
     this.addChild(this.body);
-
-    this.destinationPosition = this.position.duplicate();
   }
 
   override ready(): void {
+    super.ready();
+
     // React to picking up an item
     Events.on<CollectibleItemData>(HERO_COLLECTS_ITEM, this, (data) => {
       this._onCollectItem(data);
     });
 
-    // Lock hero when game is paused, cutscene is playing or is changing level
-    [PAUSE_ON, TEXT_BOX_OPEN, SCREEN_TRANSITION_START].forEach((event) => {
-      Events.on(event, this, () => {
-        this._isLocked = true;
-        // Freeze animation
-        this.body.animations?.pause();
-      });
-    });
-    [PAUSE_OFF, TEXT_BOX_CLOSE, SCREEN_TRANSITION_END].forEach((event) => {
-      Events.on(event, this, () => {
-        this._isLocked = false;
-        // Resume animation
-        this.body.animations?.resume();
-      });
-    });
-
     // Turn to face direction when player taps a direction key without holding
     Events.on<Directions>(DIRECTION_TAP, this, (direction) => {
-      if (this._isLocked) {
+      if (this.isLocked) {
         return;
       }
 
-      this._changeFacingDirection(direction);
+      this.changeFacingDirection(direction);
     });
   }
 
   override step(delta: number, root: Main): void {
     // Don't do anything when locked
-    if (this._isLocked) {
+    if (this.isLocked) {
       return;
     }
 
@@ -150,7 +124,7 @@ export class Hero extends GameObject {
       }
     }
 
-    const distance = Game.moveTowards(this, this.destinationPosition, this._walkingSpeed);
+    const distance = Game.moveTowards(this, this.destinationPosition, this.walkingSpeed);
     const hasArrived = distance <= 1;
 
     // Attempt to move again if the hero is at his position
@@ -219,21 +193,9 @@ export class Hero extends GameObject {
 
     // Validation that the next destination is free
     const spaceIsFree = level && Game.isSpaceFree(level.walls, nextX, nextY);
-    const solidBodyAtSpace = this.parent?.children.find((child) => {
-      // Check if solid body is at the target position
-      if (child.isSolid && child.position.x === nextX && child.position.y === nextY) {
-        return true;
-      }
+    const isBlocked = isPositionBlocked(this.parent?.children ?? [], nextX, nextY);
 
-      // Check if NPC is walking to that position (reserve the space)
-      if (child instanceof Npc && child.destinationPosition.x === nextX && child.destinationPosition.y === nextY) {
-        return true;
-      }
-
-      return false;
-    });
-
-    if (spaceIsFree && !solidBodyAtSpace) {
+    if (spaceIsFree && !isBlocked) {
       this.destinationPosition.x = nextX;
       this.destinationPosition.y = nextY;
     }
@@ -264,10 +226,5 @@ export class Hero extends GameObject {
     if (this._itemPickUpTime <= 0) {
       this._itemPickUpShell?.destroy();
     }
-  }
-
-  private _changeFacingDirection(direction: Directions): void {
-    this.facingDirection = direction;
-    this.body.animations?.play(STANDING_DIRECTIONS[direction]);
   }
 }

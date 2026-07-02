@@ -1,18 +1,14 @@
-import { STANDING_DIRECTIONS } from '../../constants/standingDirections';
 import { Animations } from '../../lib/Animations';
 import { Events } from '../../lib/Events';
 import { FrameIndexPattern } from '../../lib/FrameIndexPattern';
 import { Game } from '../../lib/Game';
-import { BEHAVIOR_END, type GameObject } from '../../lib/GameObject';
+import type { GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
-import { SCREEN_TRANSITION_END, SCREEN_TRANSITION_START } from '../../lib/ScreenTransition';
 import { StoryFlags } from '../../lib/StoryFlags';
 import { Vector2 } from '../../lib/Vector2';
-import type { Directions } from '../../types/directions';
-import { emitHeroItemCollect, getHeroObject, HERO_REQUESTS_ACTION, isHeroObject } from '../Hero';
-import { InteractiveObject } from '../InteractiveObject';
+import { emitHeroItemCollect, getHeroObject, HERO_REQUESTS_ACTION } from '../Hero';
 import type { ItemKey } from '../Item';
-import { PAUSE_OFF, PAUSE_ON } from '../PauseMenu';
+import { BEHAVIOR_END, isPositionBlocked, MovableObject } from '../MovableObject';
 import { SELECTION_BOX_CLOSE, SELECTION_BOX_OPEN, SelectionBox, type SelectionOption } from '../SelectionBox';
 import { Sprite } from '../Sprite';
 import { TEXT_BOX_CLOSE, TEXT_BOX_END, TEXT_BOX_OPEN, TextBox } from '../TextBox';
@@ -28,14 +24,15 @@ import {
 } from './npc.animations';
 import type { NpcBehavior, NpcConfig } from './npc.types';
 
-export class Npc extends InteractiveObject {
-  private readonly _body: Sprite;
+export class Npc extends MovableObject {
+  protected readonly body: Sprite;
   private _contentItemKey: ItemKey | null = null;
-  private _isLocked = false;
+  /**
+   * Tracks whether THIS Npc is the one currently awaiting its own text box to
+   * close, since TEXT_BOX_CLOSE is a global event fired for any text box in the game.
+   */
+  private _isAwaitingTextBoxClose = false;
   private _isWalking = false;
-  private _walkingSpeed = 1;
-  facingDirection: Directions = 'DOWN';
-  readonly destinationPosition: Vector2;
 
   constructor(config: NpcConfig) {
     super(config);
@@ -46,16 +43,10 @@ export class Npc extends InteractiveObject {
     this.isSolid = true;
 
     // Shadow under feet is separated from body to stay in place when npc is doing some actions, like walking or jumping
-    const shadow = new Sprite({
-      id: `${id}-npc-shadow-sprite`,
-      resource: Resources.images.shadow,
-      frameSize: new Vector2(32, 32),
-      position: new Vector2(-8, -19),
-    });
-    this.addChild(shadow);
+    this.addChild(this.createShadowSprite(`${id}-npc-shadow-sprite`));
 
     // Body sprite
-    this._body = new Sprite({
+    this.body = new Sprite({
       id: `${id}-npc-body-sprite`,
       resource: Resources.images[npc],
       frameSize: new Vector2(32, 32),
@@ -73,12 +64,12 @@ export class Npc extends InteractiveObject {
         walkUp: new FrameIndexPattern(NPC_WALK_UP),
       }),
     });
-    this.addChild(this._body);
-
-    this.destinationPosition = this.position.duplicate();
+    this.addChild(this.body);
   }
 
   override ready(): void {
+    super.ready();
+
     Events.on<GameObject>(HERO_REQUESTS_ACTION, this, ({ position }) => {
       const content = this.getTextContent();
       const { x, y } = position;
@@ -90,13 +81,13 @@ export class Npc extends InteractiveObject {
       const heroDirection = getHeroObject(this.parent)?.facingDirection;
 
       if (heroDirection === 'DOWN') {
-        this._changeFacingDirection('UP');
+        this.changeFacingDirection('UP');
       } else if (heroDirection === 'UP') {
-        this._changeFacingDirection('DOWN');
+        this.changeFacingDirection('DOWN');
       } else if (heroDirection === 'RIGHT') {
-        this._changeFacingDirection('LEFT');
+        this.changeFacingDirection('LEFT');
       } else if (heroDirection === 'LEFT') {
-        this._changeFacingDirection('RIGHT');
+        this.changeFacingDirection('RIGHT');
       }
 
       const { addsFlag, portraitFrame, text, itemKey, options } = content;
@@ -119,6 +110,7 @@ export class Npc extends InteractiveObject {
       });
 
       Events.emit<TextBox>(TEXT_BOX_OPEN, textBox);
+      this._isAwaitingTextBoxClose = true;
 
       // After all text is displayed, open possibly selection box if options are available
       if (options.length > 0) {
@@ -166,8 +158,17 @@ export class Npc extends InteractiveObject {
     });
 
     Events.on(TEXT_BOX_CLOSE, this, () => {
+      /**
+       * TEXT_BOX_CLOSE fires for ANY text box closing (another Npc, aChest, the save confirmation, etc.),
+       * so only react when this Npc actually has one open/pending.
+       */
+      if (!this._isAwaitingTextBoxClose) {
+        return;
+      }
+      this._isAwaitingTextBoxClose = false;
+
       const resetDirection = this.behaviorConfig[this.behaviorIndex]?.direction ?? 'DOWN';
-      this._changeFacingDirection(resetDirection);
+      this.changeFacingDirection(resetDirection);
 
       if (this._contentItemKey) {
         // Now hero can collect the item
@@ -176,36 +177,20 @@ export class Npc extends InteractiveObject {
         this._contentItemKey = null;
       }
     });
-
-    // Lock npc when game is paused, cutscene is playing or hero is changing level
-    [PAUSE_ON, TEXT_BOX_OPEN, SCREEN_TRANSITION_START].forEach((event) => {
-      Events.on(event, this, () => {
-        this._isLocked = true;
-        // Freeze animation
-        this._body.animations?.pause();
-      });
-    });
-    [PAUSE_OFF, TEXT_BOX_CLOSE, SCREEN_TRANSITION_END].forEach((event) => {
-      Events.on(event, this, () => {
-        this._isLocked = false;
-        // Resume animation
-        this._body.animations?.resume();
-      });
-    });
   }
 
   override step(): void {
-    if (!this._isWalking || this._isLocked) {
+    if (!this._isWalking || this.isLocked) {
       return;
     }
 
     // Move towards the walk target
-    const distance = Game.moveTowards(this, this.destinationPosition, this._walkingSpeed);
+    const distance = Game.moveTowards(this, this.destinationPosition, this.walkingSpeed);
     const hasArrived = distance <= 1;
 
     if (hasArrived) {
       this._isWalking = false;
-      this._walkingSpeed = 1;
+      this.walkingSpeed = 1;
       this.position.x = this.destinationPosition.x;
       this.position.y = this.destinationPosition.y;
       Events.emit<string>(BEHAVIOR_END, this.id);
@@ -218,8 +203,8 @@ export class Npc extends InteractiveObject {
     if (type === 'stand') {
       const { direction, duration } = behavior;
 
-      if (!this._isLocked) {
-        this._changeFacingDirection(direction);
+      if (!this.isLocked) {
+        this.changeFacingDirection(direction);
       }
 
       if (duration) {
@@ -228,7 +213,7 @@ export class Npc extends InteractiveObject {
         }, duration);
       }
     } else if (type === 'walk') {
-      if (this._isLocked) {
+      if (this.isLocked) {
         this.scheduleTimeout(() => {
           this.startBehavior(behavior);
         }, 10);
@@ -244,41 +229,29 @@ export class Npc extends InteractiveObject {
 
       if (direction === 'DOWN') {
         nextY += Game.gridSize;
-        this._body.animations?.play('walkDown');
+        this.body.animations?.play('walkDown');
       }
       if (direction === 'UP') {
         nextY -= Game.gridSize;
-        this._body.animations?.play('walkUp');
+        this.body.animations?.play('walkUp');
       }
       if (direction === 'LEFT') {
         nextX -= Game.gridSize;
-        this._body.animations?.play('walkLeft');
+        this.body.animations?.play('walkLeft');
       }
       if (direction === 'RIGHT') {
         nextX += Game.gridSize;
-        this._body.animations?.play('walkRight');
+        this.body.animations?.play('walkRight');
       }
 
-      this._walkingSpeed = speed ?? 1;
+      this.walkingSpeed = speed ?? 1;
       this.facingDirection = direction;
 
       // Validate the walk target is free
-      const solidBodyAtSpace = this.parent?.children.find((child) => {
-        // Check if solid body is at the target position
-        if (child.isSolid && child.position.x === nextX && child.position.y === nextY) {
-          return true;
-        }
+      const isBlocked = isPositionBlocked(this.parent?.children ?? [], nextX, nextY);
 
-        // Check if Hero is walking to that position (reserve the space)
-        if (isHeroObject(child) && child.destinationPosition.x === nextX && child.destinationPosition.y === nextY) {
-          return true;
-        }
-
-        return false;
-      });
-
-      if (solidBodyAtSpace) {
-        this._changeFacingDirection(direction);
+      if (isBlocked) {
+        this.changeFacingDirection(direction);
         this.scheduleTimeout(() => {
           this.startBehavior(behavior);
         }, 10);
@@ -289,10 +262,5 @@ export class Npc extends InteractiveObject {
       this.destinationPosition.x = nextX;
       this.destinationPosition.y = nextY;
     }
-  }
-
-  private _changeFacingDirection(direction: Directions): void {
-    this.facingDirection = direction;
-    this._body.animations?.play(STANDING_DIRECTIONS[direction]);
   }
 }
