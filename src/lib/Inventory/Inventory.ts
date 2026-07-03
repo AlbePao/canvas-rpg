@@ -1,5 +1,5 @@
-import { ITEMS_REGISTRY } from '../../constants/itemsRegistry';
 import type { ItemKey } from '../../objects/Item';
+import { ITEMS_REGISTRY } from '../Item';
 import { Singleton } from '../Singleton';
 import type { InventoryItem } from './inventory.types';
 

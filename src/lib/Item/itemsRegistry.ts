@@ -1,4 +1,4 @@
-import type { ItemKey } from '../objects/Item';
+import type { ItemKey } from '../../objects/Item';
 
 export interface ItemStat {
   itemKey: ItemKey;

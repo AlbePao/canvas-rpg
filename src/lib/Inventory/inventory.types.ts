@@ -1,4 +1,4 @@
-import type { ItemStat } from '../../constants/itemsRegistry';
+import type { ItemStat } from '../Item';
 
 export type InventoryCategory = '';
 
