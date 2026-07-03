@@ -7,6 +7,7 @@ import type { Line } from '../../types/text';
 import { ArrowIndicator } from '../ArrowIndicator';
 import { BoxBackdrop } from '../BoxBackdrop';
 import type { Main } from '../Main';
+import { SELECTION_BOX_CLOSE, SELECTION_BOX_OPEN } from '../SelectionBox';
 import { Sprite } from '../Sprite';
 import {
   TEXT_BOX_CHARACTER_OFFSET_X,
@@ -49,6 +50,8 @@ export class TextBox extends GameObject {
   private _currentLineIndex = 0;
   private _finalLineIndex = 0;
 
+  private _isSelectionBoxOpened = false;
+
   constructor(config: TextBoxConfig) {
     const { id, x = 2, y = 8, text, portraitFrame, speed } = config;
 
@@ -61,6 +64,16 @@ export class TextBox extends GameObject {
     // Draw on top layer
     this.drawLayer = 'HUD';
     this.updateLines({ id, text, portraitFrame, speed });
+  }
+
+  override ready(): void {
+    Events.on(SELECTION_BOX_OPEN, this, () => {
+      this._isSelectionBoxOpened = true;
+    });
+
+    Events.on(SELECTION_BOX_CLOSE, this, () => {
+      this._isSelectionBoxOpened = false;
+    });
   }
 
   updateLines({ id, text, portraitFrame, speed }: TextBoxConfig): void {
@@ -86,10 +99,10 @@ export class TextBox extends GameObject {
   }
 
   override step(delta: number, root: Main): void {
-    const { input, isSelectionBoxOpened } = root;
+    const { input } = root;
 
     // Don't interact if options selection box is opened
-    if (isSelectionBoxOpened) {
+    if (this._isSelectionBoxOpened) {
       return;
     }
 
