@@ -1,6 +1,7 @@
 import { Events } from '../../lib/Events';
 import type { GameObject } from '../../lib/GameObject';
 import { InventoryMenu } from '../InventoryMenu';
+import { OptionsMenu } from '../OptionsMenu';
 import { SelectionBox } from '../SelectionBox';
 import type { TextBox } from '../TextBox';
 import { TEXT_BOX_CLOSE } from '../TextBox';
@@ -87,15 +88,28 @@ export class PauseMenu extends SelectionBox {
     // Lock indicator when other options are selected
     this.lockIndicator();
 
-    // Save and open text box
+    // Open inventory screen
+    if (value === 'inventory') {
+      Events.emit<InventoryMenu>(PAUSE_SUB_MENU_OPEN, new InventoryMenu());
+      return;
+    }
+
+    // Open team management screen
+    if (value === 'team') {
+      console.log('team management...');
+      return;
+    }
+
+    // Save game progress and open text box
     if (value === 'save') {
       Events.emit(PAUSE_SAVE_GAME);
       return;
     }
 
-    // Open other options sub menus
-    if (value === 'inventory') {
-      Events.emit<InventoryMenu>(PAUSE_SUB_MENU_OPEN, new InventoryMenu());
+    // Open options submenu
+    if (value === 'options') {
+      Events.emit<OptionsMenu>(PAUSE_SUB_MENU_OPEN, new OptionsMenu());
+      return;
     }
   }
 }
