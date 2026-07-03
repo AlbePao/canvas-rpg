@@ -9,11 +9,11 @@ import { BATTLE_END, BATTLE_START } from '../Battle';
 import { Camera } from '../Camera';
 import { getHeroObject } from '../Hero';
 import { CHANGE_LEVEL, type Level } from '../Level';
+import { CUTSCENE_END, CUTSCENE_START } from '../MovableObject';
 import { PAUSE_OFF, PAUSE_ON, PAUSE_SAVE_GAME, PauseMenu, SAVE_TEXT_BOX_ID } from '../PauseMenu';
 import { SELECTION_BOX_CLOSE, SELECTION_BOX_OPEN, type SelectionBox } from '../SelectionBox';
 import { TEXT_BOX_CLOSE, TEXT_BOX_OPEN, TextBox } from '../TextBox';
 import { TitleScreen } from '../TitleScreen';
-import { CUTSCENE_END, CUTSCENE_START } from './main.constants';
 import type { MainScreen } from './main.types';
 
 export class Main extends GameObject {
