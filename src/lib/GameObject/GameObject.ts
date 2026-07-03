@@ -38,8 +38,6 @@ export class GameObject {
     if (!this._hasReadyBeenCalled) {
       this._hasReadyBeenCalled = true;
       this.ready();
-      // Hook for subclasses that need one-time setup requiring `root` (e.g. MovableObject's behavior loop)
-      this.afterReady(root);
     }
 
     // Call any implemented step code
@@ -48,11 +46,6 @@ export class GameObject {
 
   // Called before the first 'step'
   ready(): void {
-    //
-  }
-
-  // Called once, right after `ready()`, on the first frame. Unlike `ready()` this receives `root`.
-  protected afterReady(_root: Main): void {
     //
   }
 
