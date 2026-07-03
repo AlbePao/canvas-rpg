@@ -1,15 +1,11 @@
 import { Events } from '../../lib/Events';
 import { Resources } from '../../lib/Resources';
-import { SCREEN_TRANSITION_END, SCREEN_TRANSITION_START } from '../../lib/ScreenTransition';
 import { Vector2 } from '../../lib/Vector2';
 import type { Directions } from '../../types/directions';
 import { InteractiveObject } from '../InteractiveObject';
-import type { Main } from '../Main';
-import { PAUSE_OFF, PAUSE_ON } from '../PauseMenu';
 import { Sprite } from '../Sprite';
-import { TEXT_BOX_CLOSE, TEXT_BOX_OPEN } from '../TextBox';
-import { BEHAVIOR_END } from './movableObject.constants';
-import type { MovableObjectBehavior, MovableObjectConfig } from './movableObject.types';
+import { BEHAVIOR_END, MOVABLE_OBJECT_LOCK_SOURCES, MOVABLE_OBJECT_UNLOCK_SOURCES } from './movableObject.constants';
+import type { MovableObjectBehavior, MovableObjectConfig, MovableObjectLockReason } from './movableObject.types';
 import { getStandingFrame } from './movableObject.utils';
 
 /**
@@ -26,6 +22,9 @@ export abstract class MovableObject extends InteractiveObject {
   protected isLocked = false;
   protected walkingSpeed = 1;
 
+  // Tracks which lock sources are currently active, so movement only unlocks once ALL of them have cleared
+  private readonly _activeLocks = new Set<MovableObjectLockReason>();
+
   protected readonly behaviorConfig: MovableObjectBehavior[];
   protected behaviorIndex = 0;
   private _retryTimeout: number | null = null;
@@ -39,45 +38,41 @@ export abstract class MovableObject extends InteractiveObject {
 
   override ready(): void {
     // Lock movement + freeze animation while paused, a text box is open, or the level is transitioning
-    [PAUSE_ON, TEXT_BOX_OPEN, SCREEN_TRANSITION_START].forEach((event) => {
+    MOVABLE_OBJECT_LOCK_SOURCES.forEach(([event, reason]) => {
       Events.on(event, this, () => {
-        this._tryLockMovement();
+        this._activeLocks.add(reason);
+        this.isLocked = true;
+        this.body.animations?.pause();
       });
     });
-    [PAUSE_OFF, TEXT_BOX_CLOSE, SCREEN_TRANSITION_END].forEach((event) => {
+
+    // Unlock movement + resume animation only once every lock source has cleared
+    MOVABLE_OBJECT_UNLOCK_SOURCES.forEach(([event, reason]) => {
       Events.on(event, this, () => {
-        this._tryUnlockMovement();
+        this._activeLocks.delete(reason);
+
+        if (this._activeLocks.size === 0) {
+          this.isLocked = false;
+          this.body.animations?.resume();
+        }
       });
     });
-  }
 
-  private _tryLockMovement(): void {
-    this.isLocked = true;
-    this.body.animations?.pause();
-  }
-
-  private _tryUnlockMovement(): void {
-    this.isLocked = false;
-    this.body.animations?.resume();
-  }
-
-  // Set and start the behavior loop once `root` is available
-  protected override afterReady(root: Main): void {
-    this._setBehaviorLoop(root);
+    this._setBehaviorLoop();
   }
 
   protected startBehavior(_behavior: MovableObjectBehavior): void {
     // ...
   }
 
-  private _setBehaviorLoop(root: Main): void {
+  private _setBehaviorLoop(): void {
     if (this.behaviorConfig.length === 0) {
       return;
     }
 
     // If we have a behavior, kick off after a short delay - track this timeout
     this.scheduleTimeout(() => {
-      this._doBehaviorEvent(root);
+      this._doBehaviorEvent();
     }, 10);
 
     Events.on<string>(BEHAVIOR_END, this, (id) => {
@@ -93,12 +88,13 @@ export abstract class MovableObject extends InteractiveObject {
       }
 
       // Do it again!
-      this._doBehaviorEvent(root);
+      this._doBehaviorEvent();
     });
   }
 
-  private _doBehaviorEvent(root: Main): void {
-    const { isCutscenePlaying } = root;
+  private _doBehaviorEvent(): void {
+    const isCutscenePlaying = this._activeLocks.has('cutscene');
+
     if (isCutscenePlaying || this.behaviorConfig.length === 0) {
       return;
     }
@@ -109,7 +105,7 @@ export abstract class MovableObject extends InteractiveObject {
       }
 
       this._retryTimeout = this.scheduleTimeout(() => {
-        this._doBehaviorEvent(root);
+        this._doBehaviorEvent();
       }, 1000);
 
       return;

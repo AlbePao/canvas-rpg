@@ -9,3 +9,7 @@ export interface MovableObjectBehavior {
   type: unknown;
   direction: Directions;
 }
+
+export type MovableObjectLockReason = 'battle' | 'cutscene' | 'pause' | 'textBox' | 'transition';
+
+export type MovableObjectLockSource = [string, MovableObjectLockReason];
