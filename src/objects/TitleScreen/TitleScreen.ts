@@ -57,18 +57,21 @@ export class TitleScreen extends GameObject {
     this._backdrop.updateSize(width, height);
 
     // Set the position according to options size in relation to canvas width and text box height
-    const { canvasWidth, canvasHeight } = Game.containerSizes;
-    const newX = (canvasWidth - width * Game.gridSize) / 2;
-    const newY = (canvasHeight - height * Game.gridSize) / 2;
+    const { containerSizes, gridSize } = Game;
+    const { canvasWidth, canvasHeight } = containerSizes;
+    const newX = (canvasWidth - width * gridSize) / 2;
+    const newY = (canvasHeight - height * gridSize) / 2;
     this.position = new Vector2(newX, newY);
   }
 
   override step(_delta: number): void {
-    const { input } = Game;
+    const {
+      input: { getActionJustPressed },
+    } = Game;
 
-    const isOptionSelected = input.getActionJustPressed('Space') || input.getActionJustPressed('Enter');
-    const isArrowUpPressed = input.getActionJustPressed('ArrowUp') || input.getActionJustPressed('KeyW');
-    const isArrowDownPressed = input.getActionJustPressed('ArrowDown') || input.getActionJustPressed('KeyS');
+    const isOptionSelected = getActionJustPressed('Space') || getActionJustPressed('Enter');
+    const isArrowUpPressed = getActionJustPressed('ArrowUp') || getActionJustPressed('KeyW');
+    const isArrowDownPressed = getActionJustPressed('ArrowDown') || getActionJustPressed('KeyS');
 
     if (isOptionSelected) {
       this._onOptionSelect();

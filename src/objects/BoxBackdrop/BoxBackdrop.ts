@@ -8,11 +8,13 @@ import type { BoxBackdropConfig } from './boxBackdrop.types';
 function createBackdropFrames(): Sprite[] {
   // Create the 9 frames from the textBox sheet (3x3 grid, each frame is gridSize x gridSize)
   const frameArray: Sprite[] = [];
+  const { gridSize } = Game;
+
   for (let i = 0; i < 9; i++) {
     frameArray[i] = new Sprite({
       id: `backdrop-frame-${i}`,
       resource: Resources.images.textBox,
-      frameSize: new Vector2(Game.gridSize, Game.gridSize),
+      frameSize: new Vector2(gridSize, gridSize),
       hFrames: 3,
       vFrames: 3,
       frame: i,

@@ -40,7 +40,7 @@ export class SelectionBox extends GameObject {
       throw new Error('SelectionBox: options array must have at least one element');
     }
 
-    const { toGridSize, gridSize } = Game;
+    const { toGridSize, gridSize, containerSizes, textBoxBackdropHeight } = Game;
 
     // Draw on top layer
     this.drawLayer = 'HUD';
@@ -67,9 +67,9 @@ export class SelectionBox extends GameObject {
      * If position x and y are set from config, use that params, otherwise
      * set the position according to options size in relation to canvas width and text box height
      */
-    const { canvasWidth, canvasHeight } = Game.containerSizes;
+    const { canvasWidth, canvasHeight } = containerSizes;
     const newX = x ? toGridSize(x) : canvasWidth - width - 32;
-    const newY = y ? toGridSize(y) : canvasHeight - height - toGridSize(Game.textBoxBackdropHeight) - 4;
+    const newY = y ? toGridSize(y) : canvasHeight - height - toGridSize(textBoxBackdropHeight) - 4;
     this.position = new Vector2(newX, newY);
   }
 
@@ -78,11 +78,13 @@ export class SelectionBox extends GameObject {
       return;
     }
 
-    const { input } = Game;
+    const {
+      input: { getActionJustPressed },
+    } = Game;
 
-    const isOptionSelected = input.getActionJustPressed('Space') || input.getActionJustPressed('Enter');
-    const isArrowUpPressed = input.getActionJustPressed('ArrowUp') || input.getActionJustPressed('KeyW');
-    const isArrowDownPressed = input.getActionJustPressed('ArrowDown') || input.getActionJustPressed('KeyS');
+    const isOptionSelected = getActionJustPressed('Space') || getActionJustPressed('Enter');
+    const isArrowUpPressed = getActionJustPressed('ArrowUp') || getActionJustPressed('KeyW');
+    const isArrowDownPressed = getActionJustPressed('ArrowDown') || getActionJustPressed('KeyS');
 
     if (isOptionSelected) {
       // Emit selected option

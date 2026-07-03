@@ -227,20 +227,22 @@ export class Npc extends MovableObject {
       let nextX = this.destinationPosition.x;
       let nextY = this.destinationPosition.y;
 
+      const { gridSize } = Game;
+
       if (direction === 'DOWN') {
-        nextY += Game.gridSize;
+        nextY += gridSize;
         this.body.animations?.play('walkDown');
       }
       if (direction === 'UP') {
-        nextY -= Game.gridSize;
+        nextY -= gridSize;
         this.body.animations?.play('walkUp');
       }
       if (direction === 'LEFT') {
-        nextX -= Game.gridSize;
+        nextX -= gridSize;
         this.body.animations?.play('walkLeft');
       }
       if (direction === 'RIGHT') {
-        nextX += Game.gridSize;
+        nextX += gridSize;
         this.body.animations?.play('walkRight');
       }
 

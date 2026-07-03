@@ -87,8 +87,10 @@ export class InventoryMenu extends GameObject {
       return;
     }
 
-    const { input } = Game;
-    const isLeftArrowPressed = input.getActionJustPressed('ArrowLeft') || input.getActionJustPressed('KeyA');
+    const {
+      input: { getActionJustPressed },
+    } = Game;
+    const isLeftArrowPressed = getActionJustPressed('ArrowLeft') || getActionJustPressed('KeyA');
 
     // Close inventory menu if player presses left arrow keys while it's open
     if (isLeftArrowPressed) {
@@ -96,9 +98,9 @@ export class InventoryMenu extends GameObject {
       return;
     }
 
-    const isSelected = input.getActionJustPressed('Space') || input.getActionJustPressed('Enter');
-    const isArrowUpPressed = input.getActionJustPressed('ArrowUp') || input.getActionJustPressed('KeyW');
-    const isArrowDownPressed = input.getActionJustPressed('ArrowDown') || input.getActionJustPressed('KeyS');
+    const isSelected = getActionJustPressed('Space') || getActionJustPressed('Enter');
+    const isArrowUpPressed = getActionJustPressed('ArrowUp') || getActionJustPressed('KeyW');
+    const isArrowDownPressed = getActionJustPressed('ArrowDown') || getActionJustPressed('KeyS');
 
     if (isSelected) {
       // Open selected item handler

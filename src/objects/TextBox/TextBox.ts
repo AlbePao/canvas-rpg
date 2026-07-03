@@ -98,7 +98,9 @@ export class TextBox extends GameObject {
   }
 
   override step(delta: number): void {
-    const { input } = Game;
+    const {
+      input: { getActionJustPressed },
+    } = Game;
 
     // Don't interact if options selection box is opened
     if (this._isSelectionBoxOpened) {
@@ -108,7 +110,7 @@ export class TextBox extends GameObject {
     const { finalCharIndex } = this._lines[this._currentLineIndex];
 
     // Listen for input
-    const isSelected = input.getActionJustPressed('Space') || input.getActionJustPressed('Enter');
+    const isSelected = getActionJustPressed('Space') || getActionJustPressed('Enter');
 
     if (isSelected) {
       if (this._showingCharIndex < finalCharIndex) {

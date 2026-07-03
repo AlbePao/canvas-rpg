@@ -21,18 +21,19 @@ export class Vector2 implements Coords2D {
 
   toNeighborCoords(direction: Directions): TileCoords {
     let { x, y } = this;
+    const { gridSize } = Game;
 
     if (direction === 'LEFT') {
-      x -= Game.gridSize;
+      x -= gridSize;
     }
     if (direction === 'RIGHT') {
-      x += Game.gridSize;
+      x += gridSize;
     }
     if (direction === 'UP') {
-      y -= Game.gridSize;
+      y -= gridSize;
     }
     if (direction === 'DOWN') {
-      y += Game.gridSize;
+      y += gridSize;
     }
 
     return [x, y];

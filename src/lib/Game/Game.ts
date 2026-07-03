@@ -144,7 +144,7 @@ class GameSingleton extends Singleton<GameSingleton>() {
     return !isWallPresent;
   };
 
-  moveTowards(person: GameObject, destinationPosition: Vector2, speed: number): number {
+  moveTowards = (person: GameObject, destinationPosition: Vector2, speed: number): number => {
     const distanceTravelX = destinationPosition.x - person.position.x;
     const distanceTravelY = destinationPosition.y - person.position.y;
 
@@ -171,7 +171,7 @@ class GameSingleton extends Singleton<GameSingleton>() {
      * exactly `speed` (the normalized vector has magnitude 1), so no second sqrt is needed to get the remainder.
      */
     return distance - speed;
-  }
+  };
 }
 
 // Singleton instance

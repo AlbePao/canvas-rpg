@@ -17,9 +17,14 @@ function alignToGrid(val: number, alignTo: number): number {
 export class HeroSnappedMovement extends Hero {
   // Based on https://dev.to/robotspacefish/game-studies-link-s-movement-in-the-legend-of-zelda-48od
   override tryMove(): void {
-    const { input, level } = Game;
+    const {
+      input: { direction },
+      level,
+      gridSize,
+      isSpaceFree,
+    } = Game;
 
-    if (!input.direction) {
+    if (!direction) {
       if (this.facingDirection === 'LEFT') {
         this.body.animations?.play('standLeft');
       }
@@ -46,45 +51,45 @@ export class HeroSnappedMovement extends Hero {
     let nextGridY = this.destinationPosition.y;
 
     const characterPace = 1;
-    const gridSize = Game.gridSize / 2;
+    const halfGridSize = gridSize / 2;
 
-    if (input.direction === 'DOWN') {
+    if (direction === 'DOWN') {
       nextCharacterY += characterPace;
-      nextCharacterX += alignToGrid(nextCharacterX, gridSize);
-      nextGridY += gridSize;
-      nextGridX += alignToGrid(nextGridX, gridSize);
+      nextCharacterX += alignToGrid(nextCharacterX, halfGridSize);
+      nextGridY += halfGridSize;
+      nextGridX += alignToGrid(nextGridX, halfGridSize);
 
       this.body.animations?.play('walkDown');
     }
-    if (input.direction === 'UP') {
+    if (direction === 'UP') {
       nextCharacterY -= characterPace;
-      nextCharacterX += alignToGrid(nextCharacterX, gridSize);
-      nextGridY -= gridSize;
-      nextGridX += alignToGrid(nextGridX, gridSize);
+      nextCharacterX += alignToGrid(nextCharacterX, halfGridSize);
+      nextGridY -= halfGridSize;
+      nextGridX += alignToGrid(nextGridX, halfGridSize);
 
       this.body.animations?.play('walkUp');
     }
-    if (input.direction === 'LEFT') {
+    if (direction === 'LEFT') {
       nextCharacterX -= characterPace;
-      nextCharacterY += alignToGrid(nextCharacterY, gridSize);
-      nextGridX -= gridSize;
-      nextGridY += alignToGrid(nextGridY, gridSize);
+      nextCharacterY += alignToGrid(nextCharacterY, halfGridSize);
+      nextGridX -= halfGridSize;
+      nextGridY += alignToGrid(nextGridY, halfGridSize);
 
       this.body.animations?.play('walkLeft');
     }
-    if (input.direction === 'RIGHT') {
+    if (direction === 'RIGHT') {
       nextCharacterX += characterPace;
-      nextCharacterY += alignToGrid(nextCharacterY, gridSize);
-      nextGridX += gridSize;
-      nextGridY += alignToGrid(nextGridY, gridSize);
+      nextCharacterY += alignToGrid(nextCharacterY, halfGridSize);
+      nextGridX += halfGridSize;
+      nextGridY += alignToGrid(nextGridY, halfGridSize);
 
       this.body.animations?.play('walkRight');
     }
 
-    this.facingDirection = input.direction;
+    this.facingDirection = direction;
 
     // Validation that the next destination is free
-    const spaceIsFree = level && Game.isSpaceFree(level.walls, nextGridX, nextGridY);
+    const spaceIsFree = level && isSpaceFree(level.walls, nextGridX, nextGridY);
     const solidBodyAtSpace = this.parent?.children.find(
       (child) => child.isSolid && child.position.x === nextGridX && child.position.y === nextGridY,
     );

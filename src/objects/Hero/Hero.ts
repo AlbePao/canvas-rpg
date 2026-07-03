@@ -35,10 +35,11 @@ export class Hero extends MovableObject {
 
   get gridCoords(): Coords2D {
     const { x, y } = this.position;
+    const { fromGridSize } = Game;
 
     return {
-      x: Game.fromGridSize(x),
-      y: Game.fromGridSize(y),
+      x: fromGridSize(x),
+      y: fromGridSize(y),
     };
   }
 
@@ -110,9 +111,12 @@ export class Hero extends MovableObject {
     }
 
     // Check for input
-    const { input } = Game;
+    const {
+      input: { getActionJustPressed },
+      moveTowards,
+    } = Game;
 
-    if (input.getActionJustPressed('Space')) {
+    if (getActionJustPressed('Space')) {
       // Look for an object at the next space (according to where Hero is facing)
       const objectAtPosition = this.parent?.children.find((child) =>
         child.position.matches(this.position.toNeighborCoords(this.facingDirection)),
@@ -123,7 +127,7 @@ export class Hero extends MovableObject {
       }
     }
 
-    const distance = Game.moveTowards(this, this.destinationPosition, this.walkingSpeed);
+    const distance = moveTowards(this, this.destinationPosition, this.walkingSpeed);
     const hasArrived = distance <= 1;
 
     // Attempt to move again if the hero is at his position
@@ -146,9 +150,14 @@ export class Hero extends MovableObject {
   }
 
   protected tryMove(): void {
-    const { input, level } = Game;
+    const {
+      input: { direction },
+      level,
+      gridSize,
+      isSpaceFree,
+    } = Game;
 
-    if (!input.direction) {
+    if (!direction) {
       if (this.facingDirection === 'LEFT') {
         this.body.animations?.play('standLeft');
       }
@@ -171,27 +180,27 @@ export class Hero extends MovableObject {
     let nextX = this.destinationPosition.x;
     let nextY = this.destinationPosition.y;
 
-    if (input.direction === 'DOWN') {
-      nextY += Game.gridSize;
+    if (direction === 'DOWN') {
+      nextY += gridSize;
       this.body.animations?.play('walkDown');
     }
-    if (input.direction === 'UP') {
-      nextY -= Game.gridSize;
+    if (direction === 'UP') {
+      nextY -= gridSize;
       this.body.animations?.play('walkUp');
     }
-    if (input.direction === 'LEFT') {
-      nextX -= Game.gridSize;
+    if (direction === 'LEFT') {
+      nextX -= gridSize;
       this.body.animations?.play('walkLeft');
     }
-    if (input.direction === 'RIGHT') {
-      nextX += Game.gridSize;
+    if (direction === 'RIGHT') {
+      nextX += gridSize;
       this.body.animations?.play('walkRight');
     }
 
-    this.facingDirection = input.direction;
+    this.facingDirection = direction;
 
     // Validation that the next destination is free
-    const spaceIsFree = level && Game.isSpaceFree(level.walls, nextX, nextY);
+    const spaceIsFree = level && isSpaceFree(level.walls, nextX, nextY);
     const isBlocked = isPositionBlocked(this.parent?.children ?? [], nextX, nextY);
 
     if (spaceIsFree && !isBlocked) {

@@ -49,9 +49,7 @@ export class Input {
     return this._pressedKeys.has(keyCode);
   }
 
-  getActionJustPressed(keyCode: string): boolean {
-    return this._justPressedKeys.has(keyCode);
-  }
+  getActionJustPressed = (keyCode: string): boolean => this._justPressedKeys.has(keyCode);
 
   destroy(): void {
     document.removeEventListener('keydown', this._handleKeyDown);

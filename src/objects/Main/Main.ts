@@ -120,16 +120,17 @@ export class Main extends GameObject {
 
     // Save game handler
     Events.on(PAUSE_SAVE_GAME, this, () => {
-      const hero = getHeroObject(Game.level);
+      const { level } = Game;
+      const hero = getHeroObject(level);
 
-      if (!Game.level || !hero) {
+      if (!level || !hero) {
         return;
       }
 
       const { gridCoords, facingDirection } = hero;
 
       Progress.save({
-        levelId: Game.level.id,
+        levelId: level.id,
         storyFlags: StoryFlags.flags,
         levelsState: LevelStateManager.state,
         hero: {
