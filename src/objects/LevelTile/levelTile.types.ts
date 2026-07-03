@@ -1,4 +1,4 @@
-import type { LevelTileName } from '../../lib/LevelBuilder/tileset.types';
+import type { LevelTileName } from '../../lib/Tileset';
 import type { Vector2 } from '../../lib/Vector2';
 import type { Directions } from '../../types/directions';
 

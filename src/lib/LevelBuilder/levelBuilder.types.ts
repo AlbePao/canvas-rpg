@@ -6,7 +6,7 @@ import type { LevelConfig } from '../../objects/Level';
 import type { NpcConfig } from '../../objects/Npc';
 import type { Coords, Coords2D } from '../../types/coords';
 import type { BgKey } from '../Resources';
-import type { LevelTileName } from './tileset.types';
+import type { LevelTileName } from '../Tileset';
 
 export type LevelBuilderConfig = LevelConfig & {
   id: string;

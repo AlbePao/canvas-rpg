@@ -1,6 +1,6 @@
 import { GameObject } from '../../lib/GameObject';
-import { TILESET_FRAME_MAP } from '../../lib/LevelBuilder/tilesetFrameMap';
 import { Resources } from '../../lib/Resources';
+import { TILESET_FRAME_MAP } from '../../lib/Tileset';
 import { Vector2 } from '../../lib/Vector2';
 import { Sprite } from '../Sprite';
 import type { DecorationConfig } from './decoration.types';

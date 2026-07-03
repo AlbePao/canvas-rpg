@@ -1,5 +1,5 @@
 import type { FrameIndexPattern } from '../FrameIndexPattern';
-import type { LevelWaterTileSet } from '../LevelBuilder/tileset.types';
+import type { LevelWaterTileSet } from '../Tileset';
 
 export type AnimationPattern = Partial<Record<AnimationFrame, FrameIndexPattern>>;
 

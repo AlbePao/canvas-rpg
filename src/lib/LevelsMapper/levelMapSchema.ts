@@ -17,8 +17,8 @@ import type {
   LevelNpc,
   LevelObjects,
 } from '../LevelBuilder';
-import { LEVEL_DECORATION_TILESET, LEVEL_TILES_NAME } from '../LevelBuilder/tileset.types';
 import { NPC_KEYS, WORLD_BACKGROUNDS } from '../Resources';
+import { LEVEL_DECORATION_TILESET, LEVEL_TILES_NAME } from '../Tileset';
 
 /**
  * Zod schema for validating LevelMap JSON data

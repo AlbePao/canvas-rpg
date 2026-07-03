@@ -4,8 +4,8 @@ import type {
   LevelWaterAnimatedTileName,
   LevelWaterTileName,
   LevelWaterTileSet,
-} from '../../lib/LevelBuilder/tileset.types';
-import { TILESET_FRAME_MAP } from '../../lib/LevelBuilder/tilesetFrameMap';
+} from '../../lib/Tileset';
+import { TILESET_FRAME_MAP } from '../../lib/Tileset';
 import { WATER_ANIMATIONS } from './levelTile.animations';
 
 function isWaterTile(tileName: LevelTileName): tileName is LevelWaterTileName {
