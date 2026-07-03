@@ -13,21 +13,13 @@ import type { ListItem } from './inventoryMenu.types';
 
 const VISIBLE_ITEMS = 8;
 
+// TODO: evaluate to move this class to a different screen instead of a sub menu, so selection box can be opened without setting its position and items icon and quantity can be drawn next to the text without recalculating space
 export class InventoryMenu extends GameObject {
-  private readonly _items = Inventory.getAll();
-  protected readonly itemsList: ListItem[] = [
-    ...this._items.map(({ itemKey, name }) => ({
-      value: itemKey,
-      text: name,
-      quantity: Inventory.get(itemKey)?.quantity ?? 0,
-    })),
-    // Fake item to handle inventory menu close
-    { value: 'go_back', text: 'Go back', quantity: 0 },
-  ];
+  protected itemsList: ListItem[] = [];
+  protected itemsListLines: Line[] = [];
   protected currentIndex = 0;
   // Handles the index of the first visible element in the viewport
   private _scrollOffset = 0;
-  protected readonly itemsListLines: Line[];
   private readonly _width: number;
   private readonly _height: number;
 
@@ -56,10 +48,8 @@ export class InventoryMenu extends GameObject {
     // Draw on top layer
     this.drawLayer = 'HUD';
 
-    this.itemsListLines = createSpriteTextLines(
-      this.itemsList.map(({ text }) => text),
-      this.id,
-    );
+    // Generate and sync items list and lines with the current inventory state
+    this._generateItemsList();
 
     // Calculate inventory menu width and add padding for the indicator and some spacing
     this._width = Math.max(...this.itemsList.map(({ text }) => calculateTextWidth(text))) + 76;
@@ -77,11 +67,19 @@ export class InventoryMenu extends GameObject {
     });
 
     Events.on<SelectionOption>(SELECTION_BOX_CLOSE, this, ({ value }) => {
-      this.unlockIndicator();
+      if (value === 'use_item') {
+        console.log('use item...');
+      } else if (value === 'throw_item') {
+        const currentItemValue = this.itemsList[this.currentIndex].value;
+        const itemKey = Inventory.getAll().find(({ itemKey }) => itemKey === currentItemValue)?.itemKey ?? null;
 
-      if (value !== 'cancel') {
-        console.log('do something...');
+        Inventory.remove(itemKey);
+
+        // Regenerate synced items list and lines with the new inventory state
+        this._generateItemsList();
       }
+
+      this.unlockIndicator();
     });
   }
 
@@ -117,6 +115,23 @@ export class InventoryMenu extends GameObject {
     }
   }
 
+  private _generateItemsList(): void {
+    this.itemsList = [
+      ...Inventory.getAll().map(({ itemKey, name, quantity }) => ({
+        value: itemKey,
+        text: name,
+        quantity,
+      })),
+      // Fake item to handle inventory menu close
+      { value: 'go_back', text: 'Go back', quantity: 0 },
+    ];
+
+    this.itemsListLines = createSpriteTextLines(
+      this.itemsList.map(({ text }) => text),
+      this.id,
+    );
+  }
+
   // Update scroll shift
   private _updateScrollOffset(): void {
     const maxScrollOffset = Math.max(0, this.itemsList.length - VISIBLE_ITEMS);
@@ -149,13 +164,14 @@ export class InventoryMenu extends GameObject {
 
   override drawImage(ctx: CanvasRenderingContext2D, drawPosX: number, drawPosY: number): void {
     const { toGridSize } = Game;
+    const Y_OFFSET = 10;
 
     // Draw the backdrop for max 8 elements
     this._backdrop.drawImage(ctx, drawPosX, drawPosY);
 
     // Draw the indicator to the relative index to the visible viewport
     const relativeIndex = this.currentIndex - this._scrollOffset;
-    this.indicator.drawImage(ctx, drawPosX + 4, drawPosY + 10 + toGridSize(relativeIndex));
+    this.indicator.drawImage(ctx, drawPosX + 4, drawPosY + Y_OFFSET + toGridSize(relativeIndex));
 
     // Draw visible options text lines
     const visibleLines = this.itemsListLines.slice(this._scrollOffset, this._scrollOffset + VISIBLE_ITEMS);
@@ -163,7 +179,7 @@ export class InventoryMenu extends GameObject {
     visibleLines.forEach(({ words }, renderIndex) => {
       let cursorX = drawPosX + 18;
       // Use renderIndex instead of absolute index to position correctly inside the box
-      const cursorY = drawPosY + toGridSize(renderIndex) + 10;
+      const cursorY = drawPosY + toGridSize(renderIndex) + Y_OFFSET;
 
       // TODO: draw item icon and quantity next to the text
       words.forEach(({ chars }) => {
@@ -192,20 +208,23 @@ export class InventoryMenu extends GameObject {
       return;
     }
 
+    const itemHandlingBox = new SelectionBox({
+      id: `selection-box-for-${this.id}`,
+      x: this._width / 16,
+      y: 0,
+      options: [
+        { text: 'Use', value: 'use_item' },
+        { text: 'Throw', value: 'throw_item' },
+        { text: 'Cancel', value: 'cancel' },
+      ],
+    });
+
     // Open item handling selection box
-    Events.emit<SelectionBox>(
-      SELECTION_BOX_OPEN,
-      new SelectionBox({
-        id: `selection-box-for-${this.id}`,
-        x: this._width / 16,
-        y: 0,
-        options: [
-          { text: 'Use', value: 'use_item' },
-          { text: 'Throw', value: 'throw_item' },
-          { text: 'Cancel', value: 'cancel' },
-        ],
-      }),
-    );
+    Events.emit<SelectionBox>(SELECTION_BOX_OPEN, itemHandlingBox);
+
+    // Change selection box position to be next to the inventory menu
+    itemHandlingBox.position.x = this.position.x + 16;
+    itemHandlingBox.position.y = this.position.y + Game.toGridSize(this.currentIndex); // Add 10px padding to align with the text
   }
 
   protected lockIndicator(): void {
