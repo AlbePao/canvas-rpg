@@ -5,6 +5,7 @@ import { Inventory } from '../../lib/Inventory';
 import { LevelStateManager } from '../../lib/LevelStateManager';
 import { Progress } from '../../lib/Progress';
 import { StoryFlags } from '../../lib/StoryFlags';
+import { BATTLE_END, BATTLE_START } from '../Battle';
 import { Camera } from '../Camera';
 import { getHeroObject } from '../Hero';
 import { CHANGE_LEVEL, type Level } from '../Level';
@@ -12,10 +13,12 @@ import { PAUSE_OFF, PAUSE_ON, PAUSE_SAVE_GAME, PauseMenu, SAVE_TEXT_BOX_ID } fro
 import { SELECTION_BOX_CLOSE, SELECTION_BOX_OPEN, type SelectionBox } from '../SelectionBox';
 import { TEXT_BOX_CLOSE, TEXT_BOX_OPEN, TextBox } from '../TextBox';
 import { TitleScreen } from '../TitleScreen';
+import { CUTSCENE_END, CUTSCENE_START } from './main.constants';
+import type { MainScreen } from './main.types';
 
 export class Main extends GameObject {
   level: Level | null = null;
-  private _currentScreen: 'GAME' | 'TITLE' | 'BATTLE' = 'TITLE';
+  private _currentScreen: MainScreen = 'TITLE';
   readonly input = new Input();
   readonly camera = new Camera();
 
@@ -23,19 +26,7 @@ export class Main extends GameObject {
   private _isSelectionBoxOpened = false;
   private _isCutscenePlaying = false;
   private _isPaused = false;
-
-  get isTextBoxOpened(): boolean {
-    return this._isTextBoxOpened;
-  }
-  get isSelectionBoxOpened(): boolean {
-    return this._isSelectionBoxOpened;
-  }
-  get isCutscenePlaying(): boolean {
-    return this._isCutscenePlaying;
-  }
-  get isPaused(): boolean {
-    return this._isPaused;
-  }
+  private _isBattlePlaying = false;
 
   private _activePauseMenu: PauseMenu | null = null;
 
@@ -95,12 +86,21 @@ export class Main extends GameObject {
       });
     });
 
-    // TODO: put CUTSCENE_START and CUTSCENE_END in a constant
-    Events.on('CUTSCENE_START', this, () => {
+    Events.on(BATTLE_START, this, () => {
+      this._currentScreen = 'BATTLE';
+      this._isBattlePlaying = true;
+    });
+
+    Events.on(BATTLE_END, this, () => {
+      this._currentScreen = 'LEVEL';
+      this._isBattlePlaying = false;
+    });
+
+    Events.on(CUTSCENE_START, this, () => {
       this._isCutscenePlaying = true;
     });
 
-    Events.on('CUTSCENE_END', this, () => {
+    Events.on(CUTSCENE_END, this, () => {
       this._isCutscenePlaying = false;
     });
 
@@ -160,10 +160,11 @@ export class Main extends GameObject {
 
   private _canTogglePause(): boolean {
     if (
-      this._currentScreen !== 'GAME' ||
+      this._currentScreen !== 'LEVEL' ||
       this._isSelectionBoxOpened ||
       this._isCutscenePlaying ||
       this._isTextBoxOpened ||
+      this._isBattlePlaying ||
       (this._isPaused && this._activePauseMenu && !this._activePauseMenu.canDismiss)
     ) {
       return false;
@@ -177,9 +178,9 @@ export class Main extends GameObject {
   }
 
   private _setLevel(newLevelInstance: Level): void {
-    // If level is set programmatically like from title screen or a cutscene, set current screen as game
-    if (this._currentScreen !== 'GAME') {
-      this._currentScreen = 'GAME';
+    // If level is set programmatically like from title screen or a cutscene, set current screen as level
+    if (this._currentScreen !== 'LEVEL') {
+      this._currentScreen = 'LEVEL';
     }
 
     if (this.level) {
