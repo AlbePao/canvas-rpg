@@ -1,7 +1,6 @@
 import { Events } from '../../lib/Events';
 import type { GameObject } from '../../lib/GameObject';
 import { InventoryMenu } from '../InventoryMenu';
-import type { Main } from '../Main';
 import { SelectionBox } from '../SelectionBox';
 import type { TextBox } from '../TextBox';
 import { TEXT_BOX_CLOSE } from '../TextBox';
@@ -62,7 +61,7 @@ export class PauseMenu extends SelectionBox {
     });
   }
 
-  override step(delta: number, root: Main): void {
+  override step(delta: number): void {
     /**
      * Consume the pending unlock before processing any input this frame, and skip this frame's
      * input entirely so the key press that closed the sub menu/text box can't be reused here.
@@ -73,7 +72,7 @@ export class PauseMenu extends SelectionBox {
       return;
     }
 
-    super.step(delta, root);
+    super.step(delta);
   }
 
   protected override onOptionSelect(): void {

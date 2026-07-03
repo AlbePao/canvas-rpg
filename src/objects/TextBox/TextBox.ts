@@ -6,7 +6,6 @@ import { Resources } from '../../lib/Resources';
 import type { Line } from '../../types/text';
 import { ArrowIndicator } from '../ArrowIndicator';
 import { BoxBackdrop } from '../BoxBackdrop';
-import type { Main } from '../Main';
 import { SELECTION_BOX_CLOSE, SELECTION_BOX_OPEN } from '../SelectionBox';
 import { Sprite } from '../Sprite';
 import {
@@ -98,8 +97,8 @@ export class TextBox extends GameObject {
     }
   }
 
-  override step(delta: number, root: Main): void {
-    const { input } = root;
+  override step(delta: number): void {
+    const { input } = Game;
 
     // Don't interact if options selection box is opened
     if (this._isSelectionBoxOpened) {

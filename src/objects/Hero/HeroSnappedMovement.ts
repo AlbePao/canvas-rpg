@@ -1,5 +1,4 @@
 import { Game } from '../../lib/Game';
-import type { Main } from '../Main';
 import { Hero } from './Hero';
 
 function alignToGrid(val: number, alignTo: number): number {
@@ -17,8 +16,8 @@ function alignToGrid(val: number, alignTo: number): number {
 
 export class HeroSnappedMovement extends Hero {
   // Based on https://dev.to/robotspacefish/game-studies-link-s-movement-in-the-legend-of-zelda-48od
-  override tryMove(root: Main): void {
-    const { input, level } = root;
+  override tryMove(): void {
+    const { input, level } = Game;
 
     if (!input.direction) {
       if (this.facingDirection === 'LEFT') {

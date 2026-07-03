@@ -6,7 +6,6 @@ import { Inventory } from '../../lib/Inventory';
 import type { Line } from '../../types/text';
 import { ArrowIndicator } from '../ArrowIndicator';
 import { BoxBackdrop } from '../BoxBackdrop';
-import type { Main } from '../Main';
 import { PAUSE_SUB_MENU_CLOSE } from '../PauseMenu';
 import { SELECTION_BOX_CLOSE, SELECTION_BOX_OPEN, SelectionBox, type SelectionOption } from '../SelectionBox';
 import type { ListItem } from './inventoryMenu.types';
@@ -83,12 +82,12 @@ export class InventoryMenu extends GameObject {
     });
   }
 
-  override step(_delta: number, root: Main): void {
+  override step(_delta: number): void {
     if (this._isIndicatorLocked) {
       return;
     }
 
-    const { input } = root;
+    const { input } = Game;
     const isLeftArrowPressed = input.getActionJustPressed('ArrowLeft') || input.getActionJustPressed('KeyA');
 
     // Close inventory menu if player presses left arrow keys while it's open

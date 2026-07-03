@@ -1,7 +1,9 @@
+import type { Level } from '../../objects/Level';
 import { Main } from '../../objects/Main';
 import type { Coords, Walls } from '../../types/coords';
 import { GameLoop } from '../GameLoop';
 import type { GameObject } from '../GameObject';
+import { Input } from '../Input';
 import { LevelsMapper } from '../LevelsMapper';
 import { Singleton } from '../Singleton';
 import type { Vector2 } from '../Vector2';
@@ -34,6 +36,10 @@ class GameSingleton extends Singleton<GameSingleton>() {
 
   readonly textBoxBackdropWidth = TEXT_BOX_BACKDROP_WIDTH;
   readonly textBoxBackdropHeight = TEXT_BOX_BACKDROP_HEIGHT;
+
+  // Shared keyboard state, and the currently active level - exposed here so GameObjects can read them directly
+  readonly input = new Input();
+  level: Level | null = null;
 
   /**
    * Initialize the game: load levels, set up the scene, and start the game loop
@@ -84,8 +90,8 @@ class GameSingleton extends Singleton<GameSingleton>() {
 
     // Establish update and draw loops
     const update = (delta: number): void => {
-      mainScene.stepEntry(delta, mainScene);
-      mainScene.input.update();
+      mainScene.stepEntry(delta);
+      this.input.update();
     };
 
     const draw = (): void => {

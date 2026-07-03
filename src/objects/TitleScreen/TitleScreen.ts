@@ -13,7 +13,6 @@ import type { Line } from '../../types/text';
 import { ArrowIndicator } from '../ArrowIndicator';
 import { BoxBackdrop } from '../BoxBackdrop';
 import { CHANGE_LEVEL } from '../Level';
-import type { Main } from '../Main';
 import type { TitleScreenOption } from './titleScreen.types';
 
 export class TitleScreen extends GameObject {
@@ -64,8 +63,8 @@ export class TitleScreen extends GameObject {
     this.position = new Vector2(newX, newY);
   }
 
-  override step(_delta: number, root: Main): void {
-    const { input } = root;
+  override step(_delta: number): void {
+    const { input } = Game;
 
     const isOptionSelected = input.getActionJustPressed('Space') || input.getActionJustPressed('Enter');
     const isArrowUpPressed = input.getActionJustPressed('ArrowUp') || input.getActionJustPressed('KeyW');

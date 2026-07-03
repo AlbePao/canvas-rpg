@@ -10,7 +10,6 @@ import type { Coords2D } from '../../types/coords';
 import type { Directions } from '../../types/directions';
 import type { CollectibleItemData } from '../Item';
 import { createItemSprite } from '../Item';
-import type { Main } from '../Main';
 import { isPositionBlocked, MovableObject } from '../MovableObject';
 import { Sprite } from '../Sprite';
 import {
@@ -98,7 +97,7 @@ export class Hero extends MovableObject {
     });
   }
 
-  override step(delta: number, root: Main): void {
+  override step(delta: number): void {
     // Don't do anything when locked
     if (this.isLocked) {
       return;
@@ -111,7 +110,7 @@ export class Hero extends MovableObject {
     }
 
     // Check for input
-    const { input } = root;
+    const { input } = Game;
 
     if (input.getActionJustPressed('Space')) {
       // Look for an object at the next space (according to where Hero is facing)
@@ -129,7 +128,7 @@ export class Hero extends MovableObject {
 
     // Attempt to move again if the hero is at his position
     if (hasArrived) {
-      this.tryMove(root);
+      this.tryMove();
     }
 
     this._tryEmitPosition();
@@ -146,8 +145,8 @@ export class Hero extends MovableObject {
     Events.emit<Vector2>(HERO_POSITION, this.position);
   }
 
-  protected tryMove(root: Main): void {
-    const { input, level } = root;
+  protected tryMove(): void {
+    const { input, level } = Game;
 
     if (!input.direction) {
       if (this.facingDirection === 'LEFT') {

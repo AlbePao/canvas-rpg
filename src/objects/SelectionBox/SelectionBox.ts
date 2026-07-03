@@ -7,7 +7,6 @@ import { Vector2 } from '../../lib/Vector2';
 import type { Line } from '../../types/text';
 import { ArrowIndicator } from '../ArrowIndicator';
 import { BoxBackdrop } from '../BoxBackdrop';
-import type { Main } from '../Main';
 import { SELECTION_BOX_CLOSE } from './selectionBox.constants';
 import type { SelectionBoxConfig, SelectionOption } from './selectionBox.types';
 
@@ -74,12 +73,12 @@ export class SelectionBox extends GameObject {
     this.position = new Vector2(newX, newY);
   }
 
-  override step(_delta: number, root: Main): void {
+  override step(_delta: number): void {
     if (this._isIndicatorLocked) {
       return;
     }
 
-    const { input } = root;
+    const { input } = Game;
 
     const isOptionSelected = input.getActionJustPressed('Space') || input.getActionJustPressed('Enter');
     const isArrowUpPressed = input.getActionJustPressed('ArrowUp') || input.getActionJustPressed('KeyW');

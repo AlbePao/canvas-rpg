@@ -1,6 +1,6 @@
 import { Events } from '../../lib/Events';
+import { Game } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
-import { Input } from '../../lib/Input';
 import { Inventory } from '../../lib/Inventory';
 import { LevelStateManager } from '../../lib/LevelStateManager';
 import { Progress } from '../../lib/Progress';
@@ -17,9 +17,7 @@ import { TitleScreen } from '../TitleScreen';
 import type { MainScreen } from './main.types';
 
 export class Main extends GameObject {
-  level: Level | null = null;
   private _currentScreen: MainScreen = 'TITLE';
-  readonly input = new Input();
   readonly camera = new Camera();
 
   private _isTextBoxOpened = false;
@@ -122,16 +120,16 @@ export class Main extends GameObject {
 
     // Save game handler
     Events.on(PAUSE_SAVE_GAME, this, () => {
-      const hero = getHeroObject(this.level);
+      const hero = getHeroObject(Game.level);
 
-      if (!this.level || !hero) {
+      if (!Game.level || !hero) {
         return;
       }
 
       const { gridCoords, facingDirection } = hero;
 
       Progress.save({
-        levelId: this.level.id,
+        levelId: Game.level.id,
         storyFlags: StoryFlags.flags,
         levelsState: LevelStateManager.state,
         hero: {
@@ -153,7 +151,7 @@ export class Main extends GameObject {
   }
 
   override step(): void {
-    if (this.input.getActionJustPressed('Escape') && this._canTogglePause()) {
+    if (Game.input.getActionJustPressed('Escape') && this._canTogglePause()) {
       Events.emit(this._isPaused ? PAUSE_OFF : PAUSE_ON);
     }
   }
@@ -183,16 +181,16 @@ export class Main extends GameObject {
       this._currentScreen = 'LEVEL';
     }
 
-    if (this.level) {
-      this.level.destroy();
+    if (Game.level) {
+      Game.level.destroy();
     }
 
-    this.level = newLevelInstance;
-    this.addChild(this.level);
+    Game.level = newLevelInstance;
+    this.addChild(Game.level);
   }
 
   drawBackground(ctx: CanvasRenderingContext2D): void {
-    this.level?.background?.drawImage(ctx, 0, 0);
+    Game.level?.background?.drawImage(ctx, 0, 0);
   }
 
   drawObjects(ctx: CanvasRenderingContext2D): void {

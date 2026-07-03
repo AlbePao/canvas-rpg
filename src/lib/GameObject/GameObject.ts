@@ -1,4 +1,3 @@
-import type { Main } from '../../objects/Main';
 import { Events } from '../Events';
 import { Game } from '../Game';
 import { Vector2 } from '../Vector2';
@@ -28,10 +27,10 @@ export class GameObject {
     this.position = new Vector2(toGridSize(x), toGridSize(y));
   }
 
-  stepEntry(delta: number, root: Main): void {
+  stepEntry(delta: number): void {
     // Call updates on all children first
     this.children.forEach((child) => {
-      child.stepEntry(delta, root);
+      child.stepEntry(delta);
     });
 
     // Call read on the first frame
@@ -41,7 +40,7 @@ export class GameObject {
     }
 
     // Call any implemented step code
-    this.step(delta, root);
+    this.step(delta);
   }
 
   // Called before the first 'step'
@@ -50,7 +49,7 @@ export class GameObject {
   }
 
   // Called once every frame
-  step(_delta: number, _root: Main): void {
+  step(_delta: number): void {
     // ...
   }
 
