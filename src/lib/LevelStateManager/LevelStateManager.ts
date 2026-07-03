@@ -1,7 +1,6 @@
 import { Singleton } from '../Singleton';
 import type { LevelObjectState, LevelsState, LevelState } from './levelStateManager.types';
 
-// TODO: save also hero data in state to restore it when leaving a battle
 class LevelStateManagerSingleton extends Singleton<LevelStateManagerSingleton>() {
   get state(): LevelsState {
     return this._state;
