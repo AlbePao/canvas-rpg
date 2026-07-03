@@ -31,12 +31,6 @@ width.set(' ', 3);
 width.set("'", 1);
 width.set('!', 1);
 
-export const getCharacterWidth = (char: string): number => width.get(char) ?? DEFAULT_WIDTH;
-
-// Shared by any UI that needs to size a box around rendered sprite-text (InventoryMenu, SelectionBox, etc.)
-export const calculateTextWidth = (text: string): number =>
-  text.split('').reduce((lineWidth, char) => lineWidth + getCharacterWidth(char), 0);
-
 // Characters frames
 const frameMap = new Map<string, number>();
 ['abcdefghijklmnopqrstuvwxyz', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', '0123456789 __', ".!-,?'"]
@@ -46,7 +40,12 @@ const frameMap = new Map<string, number>();
     frameMap.set(char, index);
   });
 
-export const getCharacterFrame = (char: string): number => frameMap.get(char) ?? 0;
+const getCharacterWidth = (char: string): number => width.get(char) ?? DEFAULT_WIDTH;
+const getCharacterFrame = (char: string): number => frameMap.get(char) ?? 0;
+
+// Shared by any UI that needs to size a box around rendered sprite-text (InventoryMenu, SelectionBox, etc.)
+export const calculateTextWidth = (text: string): number =>
+  text.split('').reduce((lineWidth, char) => lineWidth + getCharacterWidth(char), 0);
 
 export function createSpriteTextLines(strings: string[], idPrefix: string): Line[] {
   return strings.map((text) => {
