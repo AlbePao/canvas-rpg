@@ -19,6 +19,21 @@ class InventorySingleton extends Singleton<InventorySingleton>() {
     }
   }
 
+  remove(itemKey: ItemKey | null): void {
+    if (!itemKey) {
+      return;
+    }
+
+    const existing = this._itemsMap.get(itemKey);
+
+    if (existing) {
+      existing.quantity -= 1;
+      if (existing.quantity < 1) {
+        this._itemsMap.delete(itemKey);
+      }
+    }
+  }
+
   getAll(): InventoryItem[] {
     return [...this._itemsMap.values()].sort((a, b) => {
       if (a.name < b.name) {
