@@ -1,0 +1,128 @@
+import { calculateTextWidth, createSpriteTextLines } from '../../helpers/spriteText';
+import { Events } from '../../lib/Events';
+import { Game } from '../../lib/Game';
+import { GameObject } from '../../lib/GameObject';
+import type { Line } from '../../types/text';
+import { ArrowIndicator } from '../ArrowIndicator';
+import { BoxBackdrop } from '../BoxBackdrop';
+import { PAUSE_SUB_MENU_CLOSE } from '../PauseMenu';
+import type { OptionItem } from './optionsMenu.types';
+
+export class OptionsMenu extends GameObject {
+  private readonly _optionsList: OptionItem[] = [];
+  private readonly _optionsListLines: Line[] = [];
+  private _currentIndex = 0;
+  private readonly _width: number;
+  private readonly _height: number;
+
+  private readonly _backdrop = new BoxBackdrop({
+    id: `${this.id}-inventory-box-backdrop`,
+    width: 0,
+    height: 0,
+  });
+  private readonly _indicator = new ArrowIndicator({
+    id: `${this.id}-arrow-indicator`,
+    direction: 'RIGHT',
+  });
+
+  constructor() {
+    // The x and y position are related to PauseMenu position
+    super({
+      id: 'inventory-box',
+      x: 6,
+      y: 0,
+    });
+
+    const { toGridSize, gridSize } = Game;
+
+    // Draw on top layer
+    this.drawLayer = 'HUD';
+
+    // Generate and sync options list and lines with the current inventory state
+    this._optionsList = [
+      // Fake item to handle inventory menu close
+      { key: 'go_back', value: '', text: 'Go back', options: [] },
+    ];
+
+    this._optionsListLines = createSpriteTextLines(
+      this._optionsList.map(({ text }) => text),
+      this.id,
+    );
+
+    // Calculate inventory menu width and add padding for the indicator and some spacing
+    this._width = Math.max(...this._optionsList.map(({ text }) => calculateTextWidth(text))) + 76;
+
+    this._height = toGridSize(this._optionsList.length) + gridSize; // Each option is 16px tall + some padding
+
+    // Set backdrop size according to its item text size
+    this._backdrop.updateSize(this._width / gridSize, this._height / gridSize);
+  }
+
+  override step(_delta: number): void {
+    const {
+      input: { getActionJustPressed },
+    } = Game;
+    const isLeftArrowPressed = getActionJustPressed('ArrowLeft') || getActionJustPressed('KeyA');
+
+    // Close inventory menu if player presses left arrow keys while it's open
+    if (isLeftArrowPressed) {
+      Events.emit(PAUSE_SUB_MENU_CLOSE);
+      return;
+    }
+
+    const isEnterPressed = getActionJustPressed('Space') || getActionJustPressed('Enter');
+    const isArrowUpPressed = getActionJustPressed('ArrowUp') || getActionJustPressed('KeyW');
+    const isArrowDownPressed = getActionJustPressed('ArrowDown') || getActionJustPressed('KeyS');
+    const isArrowLeftPressed = getActionJustPressed('ArrowLeft') || getActionJustPressed('KeyA');
+    const isArrowRightPressed = getActionJustPressed('ArrowRight') || getActionJustPressed('KeyD');
+
+    if (isEnterPressed) {
+      Events.emit(PAUSE_SUB_MENU_CLOSE);
+      return;
+    } else if (isArrowUpPressed) {
+      // Move arrow up
+      this._currentIndex = (this._currentIndex - 1 + this._optionsList.length) % this._optionsList.length;
+    } else if (isArrowDownPressed) {
+      // Move arrow down
+      this._currentIndex = (this._currentIndex + 1) % this._optionsList.length;
+    } else if (isArrowLeftPressed) {
+      // Set left option
+      // TODO: add logic
+    } else if (isArrowRightPressed) {
+      // Set right option
+      // TODO: add logic
+    }
+  }
+
+  override drawImage(ctx: CanvasRenderingContext2D, drawPosX: number, drawPosY: number): void {
+    const { toGridSize } = Game;
+    const Y_OFFSET = 10;
+
+    // Draw the backdrop
+    this._backdrop.drawImage(ctx, drawPosX, drawPosY);
+
+    // Draw the indicator
+    this._indicator.drawImage(ctx, drawPosX + 4, drawPosY + Y_OFFSET + toGridSize(this._currentIndex));
+
+    // Draw options text lines
+    this._optionsListLines.forEach(({ words }, index) => {
+      let cursorX = drawPosX + 18;
+      const cursorY = drawPosY + toGridSize(index) + Y_OFFSET;
+
+      words.forEach(({ chars }) => {
+        // Draw this whole segment of text
+        chars.forEach((char) => {
+          const { sprite, width } = char;
+          const widthCharOffset = cursorX - 5;
+          sprite.draw(ctx, widthCharOffset, cursorY);
+
+          // Add width of the character we just printed to cursor pos, plus 1px between character
+          cursorX += width + 1;
+        });
+
+        // Move the cursor over
+        cursorX += 3;
+      });
+    });
+  }
+}
