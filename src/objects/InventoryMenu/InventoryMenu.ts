@@ -8,13 +8,13 @@ import { ArrowIndicator } from '../ArrowIndicator';
 import { BoxBackdrop } from '../BoxBackdrop';
 import { PAUSE_SUB_MENU_CLOSE } from '../PauseMenu';
 import { SELECTION_BOX_CLOSE, SELECTION_BOX_OPEN, SelectionBox, type SelectionOption } from '../SelectionBox';
-import type { ListItem } from './inventoryMenu.types';
+import type { InventoryItem } from './inventoryMenu.types';
 
 const VISIBLE_ITEMS = 8;
 
 // TODO: evaluate to move this class to a different screen instead of a sub menu, so selection box can be opened without setting its position and items icon and quantity can be drawn next to the text without recalculating space
 export class InventoryMenu extends GameObject {
-  private _itemsList: ListItem[] = [];
+  private _itemsList: InventoryItem[] = [];
   private _itemsListLines: Line[] = [];
   private _currentIndex = 0;
   // Handles the index of the first visible element in the viewport

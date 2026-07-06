@@ -1,5 +1,5 @@
 import type { BaseOption } from '../../types/base-option';
 
-export type PauseMenuOption = BaseOption<PauseMenuOptionValue>;
+export type PauseMenuItem = BaseOption<PauseMenuItemValue>;
 
-export type PauseMenuOptionValue = 'inventory' | 'team' | 'save' | 'options' | 'exit';
+export type PauseMenuItemValue = 'inventory' | 'team' | 'save' | 'settings' | 'exit';

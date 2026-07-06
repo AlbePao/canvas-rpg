@@ -6,16 +6,16 @@ import { SelectionBox } from '../SelectionBox';
 import type { TextBox } from '../TextBox';
 import { TEXT_BOX_CLOSE } from '../TextBox';
 import {
-  PAUSE_MENU_OPTIONS,
+  PAUSE_MENU_ITEMS,
   PAUSE_OFF,
   PAUSE_SAVE_GAME,
   PAUSE_SUB_MENU_CLOSE,
   PAUSE_SUB_MENU_OPEN,
   SAVE_TEXT_BOX_ID,
 } from './pauseMenu.constants';
-import type { PauseMenuOption } from './pauseMenu.types';
+import type { PauseMenuItem } from './pauseMenu.types';
 
-export class PauseMenu extends SelectionBox<PauseMenuOption> {
+export class PauseMenu extends SelectionBox<PauseMenuItem> {
   get canDismiss(): boolean {
     return this._canDismiss;
   }
@@ -37,7 +37,7 @@ export class PauseMenu extends SelectionBox<PauseMenuOption> {
       id: 'pause-menu',
       x: 0.5,
       y: 0.5,
-      options: PAUSE_MENU_OPTIONS,
+      options: PAUSE_MENU_ITEMS,
     });
   }
 

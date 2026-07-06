@@ -1,4 +1,4 @@
-import type { PauseMenuOption } from './pauseMenu.types';
+import type { PauseMenuItem } from './pauseMenu.types';
 
 // Pause events
 export const PAUSE_ON = 'PAUSE_ON';
@@ -8,7 +8,7 @@ export const PAUSE_SUB_MENU_CLOSE = 'PAUSE_SUB_MENU_CLOSE';
 export const PAUSE_SAVE_GAME = 'PAUSE_SAVE_GAME';
 
 export const SAVE_TEXT_BOX_ID = 'save-text-box';
-export const PAUSE_MENU_OPTIONS: PauseMenuOption[] = [
+export const PAUSE_MENU_ITEMS: PauseMenuItem[] = [
   { key: 'inventory', text: 'Inventory' },
   { key: 'team', text: 'Team' },
   { key: 'save', text: 'Save' },
