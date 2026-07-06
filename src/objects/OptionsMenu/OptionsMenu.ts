@@ -38,9 +38,8 @@ export class OptionsMenu extends GameObject {
     // Draw on top layer
     this.drawLayer = 'HUD';
 
-    // Generate and sync options list and lines with the current inventory state
     this._optionsList = [
-      // Fake item to handle inventory menu close
+      // Close menu option
       { key: 'go_back', value: '', text: 'Go back', options: [] },
     ];
 
@@ -49,7 +48,7 @@ export class OptionsMenu extends GameObject {
       this.id,
     );
 
-    // Calculate inventory menu width and add padding for the indicator and some spacing
+    // Calculate menu width and add padding for the indicator and some spacing
     this._width = Math.max(...this._optionsList.map(({ text }) => calculateTextWidth(text))) + 76;
 
     this._height = toGridSize(this._optionsList.length) + gridSize; // Each option is 16px tall + some padding
@@ -64,7 +63,7 @@ export class OptionsMenu extends GameObject {
     } = Game;
     const isLeftArrowPressed = getActionJustPressed('ArrowLeft') || getActionJustPressed('KeyA');
 
-    // Close inventory menu if player presses left arrow keys while it's open
+    // Close menu if player presses left arrow keys while it's open
     if (isLeftArrowPressed) {
       Events.emit(PAUSE_SUB_MENU_CLOSE);
       return;

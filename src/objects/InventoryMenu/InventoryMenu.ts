@@ -92,7 +92,7 @@ export class InventoryMenu extends GameObject {
     } = Game;
     const isLeftArrowPressed = getActionJustPressed('ArrowLeft') || getActionJustPressed('KeyA');
 
-    // Close inventory menu if player presses left arrow keys while it's open
+    // Close menu if player presses left arrow keys while it's open
     if (isLeftArrowPressed) {
       Events.emit(PAUSE_SUB_MENU_CLOSE);
       return;
@@ -123,7 +123,7 @@ export class InventoryMenu extends GameObject {
         text: name,
         quantity,
       })),
-      // Fake item to handle inventory menu close
+      // Close menu option
       { value: 'go_back', text: 'Go back', quantity: 0 },
     ];
 
@@ -154,7 +154,7 @@ export class InventoryMenu extends GameObject {
       this._scrollOffset = this._currentIndex - 1;
     }
 
-    // Inventory head-to-tail jump
+    // Head-to-tail jump
     if (this._currentIndex < this._scrollOffset) {
       this._scrollOffset = this._currentIndex;
     }
@@ -223,7 +223,7 @@ export class InventoryMenu extends GameObject {
     // Open item handling selection box
     Events.emit<SelectionBox>(SELECTION_BOX_OPEN, itemHandlingBox);
 
-    // Change selection box position to be next to the inventory menu
+    // Change selection box position to be next to the menu
     itemHandlingBox.position.x = this.position.x + 16;
     itemHandlingBox.position.y = this.position.y + Game.toGridSize(this._currentIndex); // Add 10px padding to align with the text
   }
