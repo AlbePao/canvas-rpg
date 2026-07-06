@@ -127,15 +127,12 @@ export class Main extends GameObject {
         return;
       }
 
-      const { gridCoords, facingDirection } = hero;
-
       Progress.save({
         levelId: level.id,
         storyFlags: StoryFlags.flags,
         levelsState: LevelStateManager.state,
         hero: {
-          position: gridCoords,
-          direction: facingDirection,
+          position: hero.gridCoords,
           inventory: Inventory.getAll(),
         },
       });
