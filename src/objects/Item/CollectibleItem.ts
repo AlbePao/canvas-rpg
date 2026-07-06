@@ -12,7 +12,7 @@ export class CollectibleItem extends Item {
   constructor(config: CollectibleItemConfig) {
     super(config);
 
-    const { id, itemKey, skipCollectAnimation } = config;
+    const { id, itemKey, skipCollectAnimation = false } = config;
 
     const frame = ITEMS_SPRITE_FRAME[itemKey];
 
@@ -21,7 +21,7 @@ export class CollectibleItem extends Item {
       itemKey,
       frame,
       position: this.position,
-      skipCollectAnimation: !!skipCollectAnimation,
+      skipCollectAnimation,
     };
   }
 

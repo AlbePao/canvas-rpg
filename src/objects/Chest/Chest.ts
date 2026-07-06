@@ -26,11 +26,11 @@ export class Chest extends InteractiveObject {
   constructor(config: ChestConfig) {
     super(config);
 
-    const { id, status = 'CLOSED', removeAfterLoot } = config;
+    const { id, status = 'CLOSED', removeAfterLoot = false } = config;
 
     this.isSolid = true;
     this._status = status;
-    this._removeAfterLoot = !!removeAfterLoot;
+    this._removeAfterLoot = removeAfterLoot;
 
     this._body = new Sprite({
       id: `${id}-chest-sprite`,

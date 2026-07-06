@@ -143,7 +143,7 @@ export class Npc extends MovableObject {
             // Update textbox instance with selected option response
             textBox.updateLines({
               id: `text-box-for-${this.id}`,
-              portraitFrame: content?.portraitFrame ?? null,
+              portraitFrame,
               text: response,
             });
           } else if (itemKey) {

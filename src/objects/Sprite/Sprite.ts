@@ -18,28 +18,26 @@ export class Sprite extends GameObject {
   constructor({
     id, // id for the sprite
     resource, // image we want to draw,
-    frameSize, // size of the crop of the image
-    hFrames, // how the sprite arranged horizontally
-    vFrames, // how the sprite arranged vertically
-    frame, // which frame we want to show
-    scale, // how large to draw this image
-    position, // where to draw it (from top left corner)
-    animations,
+    frameSize = new Vector2(Game.gridSize, Game.gridSize), // size of the crop of the image
+    hFrames = 1, // how the sprite arranged horizontally
+    vFrames = 1, // how the sprite arranged vertically
+    frame = 0, // which frame we want to show
+    scale = 1, // how large to draw this image
+    position = new Vector2(0, 0), // where to draw it (from top left corner)
+    animations = null,
   }: SpriteConfig) {
     super({
       id,
     });
 
-    const { gridSize } = Game;
-
     this._resource = resource;
-    this._frameSize = frameSize ?? new Vector2(gridSize, gridSize);
-    this._hFrames = hFrames ?? 1;
-    this.vFrames = vFrames ?? 1;
-    this.frame = frame ?? 0;
-    this._scale = scale ?? 1;
-    this.position = position ?? new Vector2(0, 0);
-    this.animations = animations ?? null;
+    this._frameSize = frameSize;
+    this._hFrames = hFrames;
+    this.vFrames = vFrames;
+    this.frame = frame;
+    this._scale = scale;
+    this.position = position;
+    this.animations = animations;
   }
 
   override step(delta: number): void {

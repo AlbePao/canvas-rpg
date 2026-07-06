@@ -4,13 +4,13 @@ import type { InteractionContent, InteractionContentConfig, InteractiveObjectCon
 
 export class InteractiveObject extends GameObject {
   private readonly _textContent: InteractionContentConfig[];
-  private readonly _textPortraitFrame?: number | null;
+  private readonly _textPortraitFrame: number | null;
 
   constructor(config: InteractiveObjectConfig) {
     super(config);
 
     const {
-      interactionConfig: { content, portraitFrame },
+      interactionConfig: { content, portraitFrame = null },
     } = config;
 
     // Say something when talking
@@ -30,14 +30,14 @@ export class InteractiveObject extends GameObject {
       return null;
     }
 
-    const { text, addsFlag, itemKey, options } = match;
+    const { text, addsFlag = null, itemKey = null, options = [] } = match;
 
     return {
-      portraitFrame: this._textPortraitFrame ?? null,
+      portraitFrame: this._textPortraitFrame,
       text,
-      addsFlag: addsFlag ?? null,
-      itemKey: itemKey ?? null,
-      options: options ?? [],
+      addsFlag,
+      itemKey,
+      options,
     };
   }
 }
