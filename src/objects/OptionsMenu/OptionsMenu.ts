@@ -16,7 +16,7 @@ export class OptionsMenu extends GameObject {
   private readonly _height: number;
 
   private readonly _backdrop = new BoxBackdrop({
-    id: `${this.id}-inventory-box-backdrop`,
+    id: `${this.id}-options-box-backdrop`,
     width: 0,
     height: 0,
   });
@@ -28,7 +28,7 @@ export class OptionsMenu extends GameObject {
   constructor() {
     // The x and y position are related to PauseMenu position
     super({
-      id: 'inventory-box',
+      id: 'options-box',
       x: 6,
       y: 0,
     });
@@ -75,7 +75,8 @@ export class OptionsMenu extends GameObject {
     const isArrowLeftPressed = getActionJustPressed('ArrowLeft') || getActionJustPressed('KeyA');
     const isArrowRightPressed = getActionJustPressed('ArrowRight') || getActionJustPressed('KeyD');
 
-    if (isEnterPressed) {
+    if (isEnterPressed && this._optionsList[this._currentIndex].key === 'go_back') {
+      // Close menu if player selects Go Back option
       Events.emit(PAUSE_SUB_MENU_CLOSE);
       return;
     } else if (isArrowUpPressed) {
