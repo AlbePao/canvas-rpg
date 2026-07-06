@@ -86,7 +86,7 @@ export class GameObject {
     }
   }
 
-  drawImage(_ctx: CanvasRenderingContext2D, _x: number, _y: number): void {
+  drawImage(_ctx: CanvasRenderingContext2D, _drawPosX: number, _drawPosY: number): void {
     // ...
   }
 

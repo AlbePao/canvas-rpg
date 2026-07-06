@@ -61,25 +61,25 @@ export class Sprite extends GameObject {
     };
   }
 
-  override drawImage(ctx: CanvasRenderingContext2D, x: number, y: number): void {
+  override drawImage(ctx: CanvasRenderingContext2D, drawPosX: number, drawPosY: number): void {
     if (!this._resource.isLoaded) {
       return;
     }
 
     // Calculate frame coordinates without allocating Vector2
-    const { x: frameCoordX, y: frameCoordY } = this._getFrameCoordinates(this.frame);
+    const { x, y } = this._getFrameCoordinates(this.frame);
 
     const frameSizeX = this._frameSize.x;
     const frameSizeY = this._frameSize.y;
 
     ctx.drawImage(
       this._resource.image,
-      frameCoordX,
-      frameCoordY, // Top Y corner of frame
+      x, // Top X corner of frame
+      y, // Top Y corner of frame
       frameSizeX, // How much to crop from the sprite sheet (X)
       frameSizeY, // How much to crop from the sprite sheet (Y)
-      x, // Where to place this on canvas tag X (0)
-      y, // Where to place this on canvas tag Y (0)
+      drawPosX, // Where to place this on canvas tag X (0)
+      drawPosY, // Where to place this on canvas tag Y (0)
       frameSizeX * this._scale, // How large to scale it (X)
       frameSizeY * this._scale, // How large to scale it (Y)
     );

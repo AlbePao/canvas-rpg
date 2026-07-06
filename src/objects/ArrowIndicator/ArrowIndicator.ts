@@ -30,7 +30,7 @@ export class ArrowIndicator extends GameObject {
     });
   }
 
-  override drawImage(ctx: CanvasRenderingContext2D, x: number, y: number): void {
-    this._body.draw(ctx, x, y);
+  override drawImage(ctx: CanvasRenderingContext2D, drawPosX: number, drawPosY: number): void {
+    this._body.draw(ctx, drawPosX, drawPosY);
   }
 }
