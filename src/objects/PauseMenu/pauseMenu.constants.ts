@@ -12,6 +12,6 @@ export const PAUSE_MENU_ITEMS: PauseMenuItem[] = [
   { key: 'inventory', text: 'Inventory' },
   { key: 'team', text: 'Team' },
   { key: 'save', text: 'Save' },
-  { key: 'options', text: 'Options' },
+  { key: 'settings', text: 'Settings' },
   { key: 'exit', text: 'Exit' },
 ] as const;

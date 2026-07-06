@@ -6,17 +6,17 @@ import type { Line } from '../../types/text';
 import { ArrowIndicator } from '../ArrowIndicator';
 import { BoxBackdrop } from '../BoxBackdrop';
 import { PAUSE_SUB_MENU_CLOSE } from '../PauseMenu';
-import type { OptionItem } from './optionsMenu.types';
+import { SETTINGS_MENU_ITEMS } from './settingsMenu.constants';
 
-export class OptionsMenu extends GameObject {
-  private readonly _optionsList: OptionItem[] = [];
-  private readonly _optionsListLines: Line[] = [];
+export class SettingsMenu extends GameObject {
+  private readonly _settingsList = SETTINGS_MENU_ITEMS;
+  private readonly _settingsListLines: Line[] = [];
   private _currentIndex = 0;
   private readonly _width: number;
   private readonly _height: number;
 
   private readonly _backdrop = new BoxBackdrop({
-    id: `${this.id}-options-box-backdrop`,
+    id: `${this.id}-settings-box-backdrop`,
     width: 0,
     height: 0,
   });
@@ -28,7 +28,7 @@ export class OptionsMenu extends GameObject {
   constructor() {
     // The x and y position are related to PauseMenu position
     super({
-      id: 'options-box',
+      id: 'settings-box',
       x: 6,
       y: 0,
     });
@@ -38,20 +38,15 @@ export class OptionsMenu extends GameObject {
     // Draw on top layer
     this.drawLayer = 'HUD';
 
-    this._optionsList = [
-      // Close menu option
-      { key: 'go_back', text: 'Go back', selected: '', options: [] },
-    ];
-
-    this._optionsListLines = createSpriteTextLines(
-      this._optionsList.map(({ text }) => text),
+    this._settingsListLines = createSpriteTextLines(
+      this._settingsList.map(({ text }) => text),
       this.id,
     );
 
     // Calculate menu width and add padding for the indicator and some spacing
-    this._width = Math.max(...this._optionsList.map(({ text }) => calculateTextWidth(text))) + 76;
+    this._width = Math.max(...this._settingsList.map(({ text }) => calculateTextWidth(text))) + 76;
 
-    this._height = toGridSize(this._optionsList.length) + gridSize; // Each option is 16px tall + some padding
+    this._height = toGridSize(this._settingsList.length) + gridSize; // Each option is 16px tall + some padding
 
     // Set backdrop size according to its item text size
     this._backdrop.updateSize(this._width / gridSize, this._height / gridSize);
@@ -75,21 +70,21 @@ export class OptionsMenu extends GameObject {
     const isArrowLeftPressed = getActionJustPressed('ArrowLeft') || getActionJustPressed('KeyA');
     const isArrowRightPressed = getActionJustPressed('ArrowRight') || getActionJustPressed('KeyD');
 
-    if (isEnterPressed && this._optionsList[this._currentIndex].key === 'go_back') {
+    if (isEnterPressed && this._settingsList[this._currentIndex].key === 'go_back') {
       // Close menu if player selects Go Back option
       Events.emit(PAUSE_SUB_MENU_CLOSE);
       return;
     } else if (isArrowUpPressed) {
       // Move arrow up
-      this._currentIndex = (this._currentIndex - 1 + this._optionsList.length) % this._optionsList.length;
+      this._currentIndex = (this._currentIndex - 1 + this._settingsList.length) % this._settingsList.length;
     } else if (isArrowDownPressed) {
       // Move arrow down
-      this._currentIndex = (this._currentIndex + 1) % this._optionsList.length;
+      this._currentIndex = (this._currentIndex + 1) % this._settingsList.length;
     } else if (isArrowLeftPressed) {
-      // Set left option
+      // Set left setting option
       // TODO: add logic
     } else if (isArrowRightPressed) {
-      // Set right option
+      // Set right setting option
       // TODO: add logic
     }
   }
@@ -105,7 +100,7 @@ export class OptionsMenu extends GameObject {
     this._indicator.drawImage(ctx, drawPosX + 4, drawPosY + Y_OFFSET + toGridSize(this._currentIndex));
 
     // Draw options text lines
-    this._optionsListLines.forEach(({ words }, index) => {
+    this._settingsListLines.forEach(({ words }, index) => {
       let cursorX = drawPosX + 18;
       const cursorY = drawPosY + toGridSize(index) + Y_OFFSET;
 

@@ -13,6 +13,8 @@ import type { Line } from '../../types/text';
 import { ArrowIndicator } from '../ArrowIndicator';
 import { BoxBackdrop } from '../BoxBackdrop';
 import { CHANGE_LEVEL } from '../Level';
+import { PAUSE_SUB_MENU_OPEN } from '../PauseMenu';
+import { SettingsMenu } from '../SettingsMenu';
 import type { TitleScreenOption } from './titleScreen.types';
 
 export class TitleScreen extends GameObject {
@@ -42,7 +44,7 @@ export class TitleScreen extends GameObject {
     this._options = [
       this._saveFile ? { key: 'load_game', text: 'Load Game' } : null,
       { key: 'new_game', text: 'New Game' },
-      { key: 'options', text: 'Options' },
+      { key: 'settings', text: 'Settings' },
     ].filter((option): option is TitleScreenOption => !!option);
 
     this._optionsLines = createSpriteTextLines(
@@ -118,8 +120,9 @@ export class TitleScreen extends GameObject {
   private _onOptionSelect(): void {
     const { key } = this._options[this._currentOptionIndex];
 
-    if (key === 'options') {
-      // TODO: open options box
+    // Open settings submenu
+    if (key === 'settings') {
+      Events.emit<SettingsMenu>(PAUSE_SUB_MENU_OPEN, new SettingsMenu());
       return;
     }
 

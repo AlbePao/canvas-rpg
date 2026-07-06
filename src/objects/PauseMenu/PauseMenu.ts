@@ -1,8 +1,8 @@
 import { Events } from '../../lib/Events';
 import type { GameObject } from '../../lib/GameObject';
 import { InventoryMenu } from '../InventoryMenu';
-import { OptionsMenu } from '../OptionsMenu';
 import { SelectionBox } from '../SelectionBox';
+import { SettingsMenu } from '../SettingsMenu';
 import type { TextBox } from '../TextBox';
 import { TEXT_BOX_CLOSE } from '../TextBox';
 import {
@@ -107,9 +107,9 @@ export class PauseMenu extends SelectionBox<PauseMenuItem> {
       return;
     }
 
-    // Open options submenu
-    if (key === 'options') {
-      Events.emit<OptionsMenu>(PAUSE_SUB_MENU_OPEN, new OptionsMenu());
+    // Open settings submenu
+    if (key === 'settings') {
+      Events.emit<SettingsMenu>(PAUSE_SUB_MENU_OPEN, new SettingsMenu());
       return;
     }
   }
