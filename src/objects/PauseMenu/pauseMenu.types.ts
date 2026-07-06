@@ -1,3 +1,5 @@
-import type { SelectionOption } from '../SelectionBox';
+import type { BaseOption } from '../../types/base-option';
 
-export type PauseMenuOption = Omit<SelectionOption, 'response' | 'addsFlag' | 'itemKey'>;
+export type PauseMenuOption = BaseOption<PauseMenuOptionValue>;
+
+export type PauseMenuOptionValue = 'inventory' | 'team' | 'save' | 'options' | 'exit';

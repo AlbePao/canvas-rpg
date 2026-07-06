@@ -65,12 +65,12 @@ export class InventoryMenu extends GameObject {
       this.lockIndicator();
     });
 
-    Events.on<SelectionOption>(SELECTION_BOX_CLOSE, this, ({ value }) => {
-      if (value === 'use_item') {
+    Events.on<SelectionOption>(SELECTION_BOX_CLOSE, this, ({ key }) => {
+      if (key === 'use_item') {
         console.log('use item...');
-      } else if (value === 'throw_item') {
-        const currentItemValue = this._itemsList[this._currentIndex].value;
-        const itemKey = Inventory.getAll().find(({ itemKey }) => itemKey === currentItemValue)?.itemKey ?? null;
+      } else if (key === 'throw_item') {
+        const currentItemKey = this._itemsList[this._currentIndex].key;
+        const itemKey = Inventory.getAll().find(({ itemKey }) => itemKey === currentItemKey)?.itemKey ?? null;
 
         Inventory.remove(itemKey);
 
@@ -119,12 +119,12 @@ export class InventoryMenu extends GameObject {
   private _generateItemsList(): void {
     this._itemsList = [
       ...Inventory.getAll().map(({ itemKey, name, quantity }) => ({
-        value: itemKey,
+        key: itemKey,
         text: name,
         quantity,
       })),
       // Close menu option
-      { value: 'go_back', text: 'Go back', quantity: 0 },
+      { key: 'go_back', text: 'Go back', quantity: 0 },
     ];
 
     this._itemsListLines = createSpriteTextLines(
@@ -201,10 +201,10 @@ export class InventoryMenu extends GameObject {
   }
 
   protected onItemSelect(): void {
-    const { value } = this._itemsList[this._currentIndex];
+    const { key } = this._itemsList[this._currentIndex];
 
     // Close menu if player selects Go Back option
-    if (value === 'go_back') {
+    if (key === 'go_back') {
       Events.emit(PAUSE_SUB_MENU_CLOSE);
       return;
     }
@@ -214,9 +214,9 @@ export class InventoryMenu extends GameObject {
       x: this._width / 16,
       y: 0,
       options: [
-        { text: 'Use', value: 'use_item' },
-        { text: 'Throw', value: 'throw_item' },
-        { text: 'Cancel', value: 'cancel' },
+        { key: 'use_item', text: 'Use' },
+        { key: 'throw_item', text: 'Throw' },
+        { key: 'cancel', text: 'Cancel' },
       ],
     });
 

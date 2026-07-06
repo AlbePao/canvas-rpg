@@ -40,10 +40,10 @@ export class TitleScreen extends GameObject {
     this.drawLayer = 'HUD';
 
     this._options = [
-      this._saveFile ? { text: 'Load Game', value: 'load_game' } : null,
-      { text: 'New Game', value: 'new_game' },
-      { text: 'Options', value: 'options' },
-    ].filter((option) => !!option);
+      this._saveFile ? { key: 'load_game', text: 'Load Game' } : null,
+      { key: 'new_game', text: 'New Game' },
+      { key: 'options', text: 'Options' },
+    ].filter((option): option is TitleScreenOption => !!option);
 
     this._optionsLines = createSpriteTextLines(
       this._options.map(({ text }) => text),
@@ -116,14 +116,14 @@ export class TitleScreen extends GameObject {
   }
 
   private _onOptionSelect(): void {
-    const { value } = this._options[this._currentOptionIndex];
+    const { key } = this._options[this._currentOptionIndex];
 
-    if (value === 'options') {
+    if (key === 'options') {
       // TODO: open options box
       return;
     }
 
-    if (value === 'load_game') {
+    if (key === 'load_game') {
       this._loadGame();
       return;
     }

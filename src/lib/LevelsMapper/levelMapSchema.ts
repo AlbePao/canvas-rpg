@@ -40,8 +40,8 @@ const LevelBackgroundSchema = z.object({
 }) satisfies z.ZodType<LevelMap['background']>;
 
 const SelectionOptionSchema = z.object({
+  key: z.string(),
   text: z.string(),
-  value: z.string(),
   response: z.array(z.string()).optional(),
   addsFlag: z.string().optional(),
   exclude: z.array(z.string()).optional(),

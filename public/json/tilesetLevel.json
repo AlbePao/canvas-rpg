@@ -382,15 +382,15 @@
             ],
             "options": [
               {
+                "key": "hi",
                 "text": "I agree",
-                "value": "hi",
                 "response": [
                   "Great!"
                 ]
               },
               {
+                "key": "nice_to_meet_you",
                 "text": "Meh...",
-                "value": "nice_to_meet_you",
                 "response": [
                   "Don't you think?"
                 ]
@@ -429,22 +429,22 @@
             ],
             "options": [
               {
+                "key": "hi",
                 "text": "Hi",
-                "value": "hi",
                 "response": [
                   "Beautiful day, huh?"
                 ]
               },
               {
+                "key": "nice_to_meet_you",
                 "text": "Nice to meet you",
-                "value": "nice_to_meet_you",
                 "response": [
                   "My pleasure"
                 ]
               },
               {
+                "key": "collected_sword",
                 "text": "Gimme that shiny damn thing",
-                "value": "collected_sword",
                 "response": [
                   "Yup, it's yours"
                 ],
@@ -455,8 +455,8 @@
                 "itemKey": "sword"
               },
               {
+                "key": "talked_to_b",
                 "text": "I've talked to B",
-                "value": "talked_to_b",
                 "response": [
                   "Great!"
                 ],

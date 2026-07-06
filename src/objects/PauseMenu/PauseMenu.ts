@@ -13,8 +13,9 @@ import {
   PAUSE_SUB_MENU_OPEN,
   SAVE_TEXT_BOX_ID,
 } from './pauseMenu.constants';
+import type { PauseMenuOption } from './pauseMenu.types';
 
-export class PauseMenu extends SelectionBox {
+export class PauseMenu extends SelectionBox<PauseMenuOption> {
   get canDismiss(): boolean {
     return this._canDismiss;
   }
@@ -77,10 +78,10 @@ export class PauseMenu extends SelectionBox {
   }
 
   protected override onOptionSelect(): void {
-    const { value } = this.options[this.currentOptionIndex];
+    const { key } = this.options[this.currentOptionIndex];
 
     // Emit pause off to close pause menu
-    if (value === 'exit') {
+    if (key === 'exit') {
       Events.emit(PAUSE_OFF);
       return;
     }
@@ -89,25 +90,25 @@ export class PauseMenu extends SelectionBox {
     this.lockIndicator();
 
     // Open inventory screen
-    if (value === 'inventory') {
+    if (key === 'inventory') {
       Events.emit<InventoryMenu>(PAUSE_SUB_MENU_OPEN, new InventoryMenu());
       return;
     }
 
     // Open team management screen
-    if (value === 'team') {
+    if (key === 'team') {
       console.log('team management...');
       return;
     }
 
     // Save game progress and open text box
-    if (value === 'save') {
+    if (key === 'save') {
       Events.emit(PAUSE_SAVE_GAME);
       return;
     }
 
     // Open options submenu
-    if (value === 'options') {
+    if (key === 'options') {
       Events.emit<OptionsMenu>(PAUSE_SUB_MENU_OPEN, new OptionsMenu());
       return;
     }

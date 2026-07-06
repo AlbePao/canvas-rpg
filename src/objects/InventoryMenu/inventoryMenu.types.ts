@@ -1,3 +1,6 @@
-import type { SelectionOption } from '../SelectionBox';
+import type { BaseOption } from '../../types/base-option';
+import type { ItemKey } from '../Item';
 
-export type ListItem = Pick<SelectionOption, 'text' | 'value'> & { quantity: number };
+export type ListItem = BaseOption<ListItemValue> & { quantity: number };
+
+export type ListItemValue = ItemKey | 'go_back';

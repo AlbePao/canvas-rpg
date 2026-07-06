@@ -40,7 +40,7 @@ export class OptionsMenu extends GameObject {
 
     this._optionsList = [
       // Close menu option
-      { key: 'go_back', value: '', text: 'Go back', options: [] },
+      { key: 'go_back', text: 'Go back', selected: '', options: [] },
     ];
 
     this._optionsListLines = createSpriteTextLines(

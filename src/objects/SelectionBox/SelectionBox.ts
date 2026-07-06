@@ -4,14 +4,16 @@ import { Game } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
 import { StoryFlags } from '../../lib/StoryFlags';
 import { Vector2 } from '../../lib/Vector2';
+import type { BaseOption } from '../../types/base-option';
 import type { Line } from '../../types/text';
 import { ArrowIndicator } from '../ArrowIndicator';
 import { BoxBackdrop } from '../BoxBackdrop';
 import { SELECTION_BOX_CLOSE } from './selectionBox.constants';
 import type { SelectionBoxConfig, SelectionOption } from './selectionBox.types';
+import { isSelectionBoxOption } from './selectionBox.utils';
 
-export class SelectionBox extends GameObject {
-  protected readonly options: SelectionOption[];
+export class SelectionBox<T extends BaseOption = SelectionOption> extends GameObject {
+  protected readonly options: T[];
   protected currentOptionIndex = 0;
   private readonly _optionsLines: Line[];
   // Handles the index of the first visible element in the viewport
@@ -29,7 +31,7 @@ export class SelectionBox extends GameObject {
 
   private _isIndicatorLocked = false;
 
-  constructor(config: SelectionBoxConfig) {
+  constructor(config: SelectionBoxConfig<T>) {
     const { id, x, y, options } = config;
 
     super({
@@ -45,11 +47,20 @@ export class SelectionBox extends GameObject {
     // Draw on top layer
     this.drawLayer = 'HUD';
 
-    this.options = options.filter(
-      ({ exclude, include }) =>
+    this.options = options.filter((option) => {
+      // If the option type only extends BaseOption, we don't need to check for include/exclude flags
+      if (!isSelectionBoxOption(option)) {
+        return true;
+      }
+
+      // Filter options based on include/exclude flags
+      const { exclude, include } = option;
+
+      return (
         (exclude?.some((flag) => !StoryFlags.has(flag)) ?? true) &&
-        (include?.some((flag) => StoryFlags.has(flag)) ?? true),
-    );
+        (include?.some((flag) => StoryFlags.has(flag)) ?? true)
+      );
+    });
     this._optionsLines = createSpriteTextLines(
       this.options.map(({ text }) => text),
       this.id,

@@ -9,9 +9,9 @@ export const PAUSE_SAVE_GAME = 'PAUSE_SAVE_GAME';
 
 export const SAVE_TEXT_BOX_ID = 'save-text-box';
 export const PAUSE_MENU_OPTIONS: PauseMenuOption[] = [
-  { text: 'Inventory', value: 'inventory' },
-  { text: 'Team', value: 'team' },
-  { text: 'Save', value: 'save' },
-  { text: 'Options', value: 'options' },
-  { text: 'Exit', value: 'exit' },
+  { key: 'inventory', text: 'Inventory' },
+  { key: 'team', text: 'Team' },
+  { key: 'save', text: 'Save' },
+  { key: 'options', text: 'Options' },
+  { key: 'exit', text: 'Exit' },
 ] as const;
