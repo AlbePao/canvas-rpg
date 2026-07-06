@@ -218,7 +218,7 @@ export class Hero extends MovableObject {
     }
 
     // Make sure we land right on the item
-    this.destinationPosition = position?.duplicate() ?? this.position.duplicate();
+    this.destinationPosition = (position ?? this.position).duplicate();
 
     // Start the pickup animation
     this._itemPickUpTime = 500; // ms
