@@ -90,7 +90,7 @@ export class InventoryMenu extends GameObject {
     const {
       input: { getActionJustPressed },
     } = Game;
-    const isQKeyPressed = getActionJustPressed('ArrowLeft') || getActionJustPressed('KeyQ');
+    const isQKeyPressed = getActionJustPressed('KeyQ');
 
     // Close menu if player presses Q key while it's open
     if (isQKeyPressed) {
