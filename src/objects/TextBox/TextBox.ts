@@ -1,9 +1,9 @@
-import { createSpriteTextLines } from '../../helpers/spriteText';
 import { Events } from '../../lib/Events';
 import { Game } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
-import type { Line } from '../../types/text';
+import type { Line } from '../../lib/Text';
+import { createSpriteTextLines } from '../../lib/Text';
 import { ArrowIndicator } from '../ArrowIndicator';
 import { BoxBackdrop } from '../BoxBackdrop';
 import { SELECTION_BOX_CLOSE, SELECTION_BOX_OPEN } from '../SelectionBox';

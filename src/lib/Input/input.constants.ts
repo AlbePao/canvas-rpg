@@ -1,5 +1,5 @@
-import { objectKeys } from '../../helpers/objectKeys';
 import type { Directions } from '../../types/directions';
+import { objectKeys } from '../Game';
 
 // Input events
 export const DIRECTION_TAP = 'DIRECTION_TAP';

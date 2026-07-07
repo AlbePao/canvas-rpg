@@ -1,4 +1,4 @@
-import { objectKeys } from '../../helpers/objectKeys';
+import { objectKeys } from '../Game';
 import { Singleton } from '../Singleton';
 import { ASSETS_TO_LOAD } from './resources.constants';
 import type { Resource, ResourceKey } from './resources.types';

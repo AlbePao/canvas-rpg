@@ -1,8 +1,8 @@
-import { calculateTextWidth, createSpriteTextLines } from '../../helpers/spriteText';
 import { Events } from '../../lib/Events';
 import { Game, toGridSize } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
-import type { Line } from '../../types/text';
+import type { Line } from '../../lib/Text';
+import { calculateTextWidth, createSpriteTextLines } from '../../lib/Text';
 import { ArrowIndicator } from '../ArrowIndicator';
 import { BoxBackdrop } from '../BoxBackdrop';
 import { PAUSE_SUB_MENU_CLOSE } from '../PauseMenu';

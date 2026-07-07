@@ -1,4 +1,3 @@
-import { objectKeys } from '../../helpers/objectKeys';
 import { Chest } from '../../objects/Chest';
 import { Decoration } from '../../objects/Decoration';
 import type { ExitData } from '../../objects/Exit';
@@ -10,7 +9,7 @@ import { LevelTile } from '../../objects/LevelTile';
 import { Npc } from '../../objects/Npc';
 import { Sprite } from '../../objects/Sprite';
 import { Events } from '../Events';
-import { toGridSize } from '../Game';
+import { objectKeys, toGridSize } from '../Game';
 import type { GameObject } from '../GameObject';
 import { Inventory } from '../Inventory';
 import { LevelsMapper } from '../LevelsMapper';

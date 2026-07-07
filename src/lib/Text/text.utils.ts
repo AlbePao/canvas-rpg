@@ -1,6 +1,6 @@
-import { Resources } from '../lib/Resources';
-import { Sprite } from '../objects/Sprite';
-import type { Line } from '../types/text';
+import { Sprite } from '../../objects/Sprite';
+import { Resources } from '../Resources';
+import type { Line } from './text.types';
 
 // Characters widths
 const DEFAULT_WIDTH = 5;

@@ -1,5 +1,5 @@
-import { objectKeys } from '../../helpers/objectKeys';
 import type { FrameIndexPattern } from '../FrameIndexPattern';
+import { objectKeys } from '../Game';
 import type { AnimationFrame, AnimationPattern } from './animations.types';
 
 export class Animations {

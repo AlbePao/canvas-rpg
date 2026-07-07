@@ -1,11 +1,11 @@
-import { calculateTextWidth, createSpriteTextLines } from '../../helpers/spriteText';
 import { Events } from '../../lib/Events';
 import { Game, toGridSize } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
 import { StoryFlags } from '../../lib/StoryFlags';
+import type { Line } from '../../lib/Text';
+import { calculateTextWidth, createSpriteTextLines } from '../../lib/Text';
 import { Vector2 } from '../../lib/Vector2';
 import type { BaseOption } from '../../types/base-option';
-import type { Line } from '../../types/text';
 import { ArrowIndicator } from '../ArrowIndicator';
 import { BoxBackdrop } from '../BoxBackdrop';
 import { SELECTION_BOX_CLOSE } from './selectionBox.constants';

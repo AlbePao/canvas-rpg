@@ -1,4 +1,3 @@
-import { createSpriteTextLines } from '../../helpers/spriteText';
 import { Events } from '../../lib/Events';
 import { Game, toGridSize } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
@@ -8,8 +7,9 @@ import { LevelStateManager } from '../../lib/LevelStateManager';
 import { Progress } from '../../lib/Progress';
 import { ScreenTransition } from '../../lib/ScreenTransition';
 import { StoryFlags } from '../../lib/StoryFlags';
+import type { Line } from '../../lib/Text';
+import { createSpriteTextLines } from '../../lib/Text';
 import { Vector2 } from '../../lib/Vector2';
-import type { Line } from '../../types/text';
 import { ArrowIndicator } from '../ArrowIndicator';
 import { BoxBackdrop } from '../BoxBackdrop';
 import { CHANGE_LEVEL } from '../Level';
