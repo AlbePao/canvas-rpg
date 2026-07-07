@@ -62,10 +62,8 @@ class GameSingleton extends Singleton<GameSingleton>() {
       throw new Error('Game: game container not found');
     }
 
-    gameContainer.style.position = 'relative';
-    gameContainer.style.margin = '0 auto';
-    // gameContainer.style.width = '640px';
-    // gameContainer.style.height = '360px';
+    gameContainer.style.width = `${canvasWidth * 3.5}px`;
+    gameContainer.style.height = `${canvasHeight * 3.5}px`;
 
     // Creating the canvas to draw to
     const canvas = document.createElement('canvas');
@@ -73,6 +71,7 @@ class GameSingleton extends Singleton<GameSingleton>() {
     canvas.setAttribute('width', `${canvasWidth}`);
     canvas.setAttribute('height', `${canvasHeight}`);
     canvas.style.width = '100%';
+    canvas.style.height = '100%';
     canvas.style.backgroundColor = '#333';
     canvas.style.imageRendering = 'pixelated';
 
