@@ -21,6 +21,5 @@ export const SETTINGS_MENU_ITEMS: SettingItem[] = [
       { text: 'Very fast', value: 160 },
     ],
   },
-  { key: 'restoreDefaults', text: 'Restore defaults', selectedIndex: 0, options: [] },
   { key: 'goBack', text: 'Go back', selectedIndex: 0, options: [] },
 ] as const;
