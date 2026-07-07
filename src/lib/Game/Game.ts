@@ -74,8 +74,8 @@ class GameSingleton extends Singleton<GameSingleton>() {
     canvas.setAttribute('id', 'game-canvas');
     canvas.setAttribute('width', `${canvasWidth}`);
     canvas.setAttribute('height', `${canvasHeight}`);
-    canvas.style.width = '100%';
-    canvas.style.height = '100%';
+    canvas.style.width = `${canvasWidth * 3.5}px`;
+    canvas.style.height = `${canvasHeight * 3.5}px`;
     canvas.style.backgroundColor = '#333';
     canvas.style.imageRendering = 'pixelated';
 
