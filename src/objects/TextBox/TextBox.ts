@@ -135,14 +135,16 @@ export class TextBox extends GameObject {
     this._timeUntilNextShow -= delta;
 
     if (this._timeUntilNextShow <= 0) {
-      // Increase amount of characters that are drawn
-      this._showingCharIndex += 1;
+      if (this._showingCharIndex < finalCharIndex) {
+        // Increase amount of characters that are drawn
+        this._showingCharIndex += 1;
+      }
 
       // Reset time counter for next character
       this._timeUntilNextShow = this._textSpeed;
     }
 
-    if (this._showingCharIndex === finalCharIndex && this._currentLineIndex === this._finalLineIndex) {
+    if (this._showingCharIndex >= finalCharIndex && this._currentLineIndex === this._finalLineIndex) {
       /**
        * Text box has shown all of its text, emit the end event so that it can
        * trigger other events that requires the text box still opened, like a selection box
