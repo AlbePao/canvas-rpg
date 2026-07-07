@@ -1,6 +1,6 @@
 import { calculateTextWidth, createSpriteTextLines } from '../../helpers/spriteText';
 import { Events } from '../../lib/Events';
-import { Game } from '../../lib/Game';
+import { Game, toGridSize } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
 import { Inventory } from '../../lib/Inventory';
 import type { Line } from '../../types/text';
@@ -42,7 +42,7 @@ export class InventoryMenu extends GameObject {
       y: 0,
     });
 
-    const { toGridSize, gridSize } = Game;
+    const { gridSize } = Game;
 
     // Draw on top layer
     this.drawLayer = 'HUD';
@@ -164,7 +164,6 @@ export class InventoryMenu extends GameObject {
   }
 
   override drawImage(ctx: CanvasRenderingContext2D, drawPosX: number, drawPosY: number): void {
-    const { toGridSize } = Game;
     const Y_OFFSET = 10;
 
     // Draw the backdrop for max 8 elements
@@ -225,7 +224,7 @@ export class InventoryMenu extends GameObject {
 
     // Change selection box position to be next to the menu
     itemHandlingBox.position.x = this.position.x + 16;
-    itemHandlingBox.position.y = this.position.y + Game.toGridSize(this._currentIndex); // Add 10px padding to align with the text
+    itemHandlingBox.position.y = this.position.y + toGridSize(this._currentIndex); // Add 10px padding to align with the text
   }
 
   protected lockIndicator(): void {

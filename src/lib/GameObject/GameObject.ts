@@ -1,5 +1,5 @@
 import { Events } from '../Events';
-import { Game } from '../Game';
+import { toGridSize } from '../Game';
 import { Vector2 } from '../Vector2';
 import type { GameObjectConfig, GameObjectDrawLayer } from './gameObject.types';
 
@@ -21,7 +21,6 @@ export class GameObject {
 
   constructor(config: GameObjectConfig) {
     const { id, x = 0, y = 0 } = config;
-    const { toGridSize } = Game;
 
     this.id = id;
     this.position = new Vector2(toGridSize(x), toGridSize(y));

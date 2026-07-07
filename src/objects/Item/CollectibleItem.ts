@@ -1,5 +1,5 @@
 import { Events } from '../../lib/Events';
-import { Game } from '../../lib/Game';
+import { detectOverlap } from '../../lib/Game';
 import type { Vector2 } from '../../lib/Vector2';
 import { HERO_COLLECTS_ITEM, HERO_POSITION } from '../Hero';
 import { Item } from './Item';
@@ -27,7 +27,7 @@ export class CollectibleItem extends Item {
 
   override ready(): void {
     Events.on<Vector2>(HERO_POSITION, this, (position) => {
-      if (Game.detectOverlap(position, this.position)) {
+      if (detectOverlap(position, this.position)) {
         this.onCollideWithHero();
       }
     });

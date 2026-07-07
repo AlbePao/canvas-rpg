@@ -1,7 +1,7 @@
 import { Animations } from '../../lib/Animations';
 import { Events } from '../../lib/Events';
 import { FrameIndexPattern } from '../../lib/FrameIndexPattern';
-import { Game } from '../../lib/Game';
+import { fromGridSize, Game, isSpaceFree, moveTowards } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
 import { DIRECTION_TAP } from '../../lib/Input';
 import { Resources } from '../../lib/Resources';
@@ -35,7 +35,6 @@ export class Hero extends MovableObject {
 
   get gridCoords(): Coords2D {
     const { x, y } = this.position;
-    const { fromGridSize } = Game;
 
     return {
       x: fromGridSize(x),
@@ -113,7 +112,6 @@ export class Hero extends MovableObject {
     // Check for input
     const {
       input: { getActionJustPressed },
-      moveTowards,
     } = Game;
 
     if (getActionJustPressed('Space')) {
@@ -154,7 +152,6 @@ export class Hero extends MovableObject {
       input: { direction },
       level,
       gridSize,
-      isSpaceFree,
     } = Game;
 
     if (!direction) {

@@ -1,5 +1,5 @@
 import { Events } from '../../lib/Events';
-import { Game } from '../../lib/Game';
+import { detectOverlap } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
 import type { Vector2 } from '../../lib/Vector2';
@@ -33,7 +33,7 @@ export class Exit extends GameObject {
 
   override ready(): void {
     Events.on<Vector2>(HERO_POSITION, this, (position) => {
-      if (Game.detectOverlap(position, this.position)) {
+      if (detectOverlap(position, this.position)) {
         Events.emit<ExitData>(HERO_EXITS, this.exitData);
       }
     });

@@ -1,4 +1,4 @@
-import { Game } from '../../lib/Game';
+import { Game, toGridSize } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
 import { Vector2 } from '../../lib/Vector2';
@@ -58,7 +58,6 @@ export class BoxBackdrop extends GameObject {
   }
 
   override drawImage(ctx: CanvasRenderingContext2D, drawPosX: number, drawPosY: number): void {
-    const { toGridSize } = Game;
     const baseX = drawPosX + this.position.x;
     const baseY = drawPosY + this.position.y;
 

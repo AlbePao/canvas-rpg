@@ -1,7 +1,7 @@
 import { Animations } from '../../lib/Animations';
 import { Events } from '../../lib/Events';
 import { FrameIndexPattern } from '../../lib/FrameIndexPattern';
-import { Game } from '../../lib/Game';
+import { Game, moveTowards } from '../../lib/Game';
 import type { GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
 import { StoryFlags } from '../../lib/StoryFlags';
@@ -185,7 +185,7 @@ export class Npc extends MovableObject {
     }
 
     // Move towards the walk target
-    const distance = Game.moveTowards(this, this.destinationPosition, this.walkingSpeed);
+    const distance = moveTowards(this, this.destinationPosition, this.walkingSpeed);
     const hasArrived = distance <= 1;
 
     if (hasArrived) {

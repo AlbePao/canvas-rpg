@@ -1,6 +1,6 @@
 import { calculateTextWidth, createSpriteTextLines } from '../../helpers/spriteText';
 import { Events } from '../../lib/Events';
-import { Game } from '../../lib/Game';
+import { Game, toGridSize } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
 import type { Line } from '../../types/text';
 import { ArrowIndicator } from '../ArrowIndicator';
@@ -33,7 +33,7 @@ export class SettingsMenu extends GameObject {
       y: 0,
     });
 
-    const { toGridSize, gridSize } = Game;
+    const { gridSize } = Game;
 
     // Draw on top layer
     this.drawLayer = 'HUD';
@@ -90,7 +90,6 @@ export class SettingsMenu extends GameObject {
   }
 
   override drawImage(ctx: CanvasRenderingContext2D, drawPosX: number, drawPosY: number): void {
-    const { toGridSize } = Game;
     const Y_OFFSET = 10;
 
     // Draw the backdrop

@@ -1,4 +1,4 @@
-import { Game } from '../../lib/Game';
+import { Game, isSpaceFree } from '../../lib/Game';
 import { Hero } from './Hero';
 
 function alignToGrid(val: number, alignTo: number): number {
@@ -21,7 +21,6 @@ export class HeroSnappedMovement extends Hero {
       input: { direction },
       level,
       gridSize,
-      isSpaceFree,
     } = Game;
 
     if (!direction) {

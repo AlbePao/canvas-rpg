@@ -1,6 +1,6 @@
 import { calculateTextWidth, createSpriteTextLines } from '../../helpers/spriteText';
 import { Events } from '../../lib/Events';
-import { Game } from '../../lib/Game';
+import { Game, toGridSize } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
 import { StoryFlags } from '../../lib/StoryFlags';
 import { Vector2 } from '../../lib/Vector2';
@@ -42,7 +42,7 @@ export class SelectionBox<T extends BaseOption = SelectionOption> extends GameOb
       throw new Error('SelectionBox: options array must have at least one element');
     }
 
-    const { toGridSize, gridSize, containerSizes, textBoxBackdropHeight } = Game;
+    const { gridSize, containerSizes, textBoxBackdropHeight } = Game;
 
     // Draw on top layer
     this.drawLayer = 'HUD';
@@ -122,8 +122,6 @@ export class SelectionBox<T extends BaseOption = SelectionOption> extends GameOb
     }
   }
   override drawImage(ctx: CanvasRenderingContext2D, drawPosX: number, drawPosY: number): void {
-    const { toGridSize } = Game;
-
     // Draw the backdrop
     this._backdrop.drawImage(ctx, drawPosX, drawPosY);
 

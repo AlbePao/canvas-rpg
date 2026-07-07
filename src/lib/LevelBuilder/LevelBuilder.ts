@@ -10,7 +10,7 @@ import { LevelTile } from '../../objects/LevelTile';
 import { Npc } from '../../objects/Npc';
 import { Sprite } from '../../objects/Sprite';
 import { Events } from '../Events';
-import { Game } from '../Game';
+import { toGridSize } from '../Game';
 import type { GameObject } from '../GameObject';
 import { Inventory } from '../Inventory';
 import { LevelsMapper } from '../LevelsMapper';
@@ -33,8 +33,6 @@ export class LevelBuilder extends Level {
     super({
       id,
     });
-
-    const { toGridSize } = Game;
 
     this.background = background
       ? new Sprite({
