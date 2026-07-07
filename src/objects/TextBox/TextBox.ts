@@ -21,7 +21,6 @@ import {
   TEXT_BOX_PORTRAIT_OFFSET_Y,
   TEXT_CONTINUE_INDICATOR_PADDING_LEFT,
   TEXT_CONTINUE_INDICATOR_PADDING_TOP,
-  TYPEWRITER_DEFAULT_SPEED,
 } from './textBox.constants';
 import type { TextBoxConfig } from './textBox.types';
 
@@ -41,7 +40,7 @@ export class TextBox extends GameObject {
   });
 
   // Typewriter state
-  private _textSpeed = TYPEWRITER_DEFAULT_SPEED;
+  private _textSpeed = Game.settings.textSpeed;
   private _showingCharIndex = 0;
   private _timeUntilNextShow = this._textSpeed;
 
@@ -76,7 +75,7 @@ export class TextBox extends GameObject {
   }
 
   updateLines({ id, text, portraitFrame, speed }: TextBoxConfig): void {
-    this._textSpeed = speed ?? TYPEWRITER_DEFAULT_SPEED;
+    this._textSpeed = speed ?? Game.settings.textSpeed;
     this._timeUntilNextShow = this._textSpeed;
 
     // Create an array of words in an an array of lines (because it helps with line wrapping later)

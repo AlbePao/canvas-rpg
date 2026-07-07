@@ -1,22 +1,26 @@
 import type { Level } from '../../objects/Level';
 import { Main } from '../../objects/Main';
-import type { Coords, Walls } from '../../types/coords';
 import { GameLoop } from '../GameLoop';
-import type { GameObject } from '../GameObject';
 import { Input } from '../Input';
 import { LevelsMapper } from '../LevelsMapper';
 import { Singleton } from '../Singleton';
-import type { Vector2 } from '../Vector2';
 import {
   DEFAULT_CANVAS_HEIGHT,
   DEFAULT_CANVAS_WIDTH,
+  DEFAULT_GAME_SETTINGS,
+  GAME_SETTINGS_STORAGE_KEY,
   GRID_SIZE,
   TEXT_BOX_BACKDROP_HEIGHT,
   TEXT_BOX_BACKDROP_WIDTH,
 } from './game.constants';
-import type { GameCanvasSize, GameConfig } from './game.types';
+import type { GameCanvasSize, GameConfig, GameSettings, GameSettingsKey } from './game.types';
 
 class GameSingleton extends Singleton<GameSingleton>() {
+  get settings(): GameSettings {
+    return this._settings;
+  }
+  private _settings = DEFAULT_GAME_SETTINGS;
+
   get containerId(): string {
     return this._containerId;
   }
@@ -83,7 +87,10 @@ class GameSingleton extends Singleton<GameSingleton>() {
       throw new Error('Game: canvas context is not defined');
     }
 
-    // Establish the root scene
+    // Load game settings from localStorage or set defaults
+    this._loadSettings();
+
+    // Load the title screen
     const mainScene = new Main();
     mainScene.startTitleScreen();
 
@@ -123,54 +130,25 @@ class GameSingleton extends Singleton<GameSingleton>() {
     gameLoop.start();
   }
 
-  toGridSize = (value: number): number => value * this._gridSize;
-  fromGridSize = (value: number): number => value / this._gridSize;
+  private _loadSettings(): void {
+    const savedSettings = localStorage.getItem(GAME_SETTINGS_STORAGE_KEY);
 
-  detectOverlap(heroPosition: Vector2, objectPosition: Vector2): boolean {
-    // detect overlap
-    const roundedHeroX = Math.round(heroPosition.x);
-    const roundedHeroY = Math.round(heroPosition.y);
-
-    return roundedHeroX === objectPosition.x && roundedHeroY === objectPosition.y;
+    if (savedSettings) {
+      // If settings exist in localStorage, parse and load them
+      this._settings = JSON.parse(savedSettings) as GameSettings;
+    } else {
+      // If no saved settings, save default settings
+      localStorage.setItem(GAME_SETTINGS_STORAGE_KEY, JSON.stringify(this._settings));
+    }
   }
 
-  isSpaceFree = (walls: Walls, x: number, y: number): boolean => {
-    // Convert to string for easy lookup
-    const str: Coords = `${x},${y}`;
-    // Check if walls has an entry at this spot
-    const isWallPresent = walls.has(str);
-
-    return !isWallPresent;
-  };
-
-  moveTowards = (person: GameObject, destinationPosition: Vector2, speed: number): number => {
-    const distanceTravelX = destinationPosition.x - person.position.x;
-    const distanceTravelY = destinationPosition.y - person.position.y;
-
-    // Compare squared magnitudes first to avoid a sqrt call entirely on the (common) arrival frame
-    const distanceSquared = distanceTravelX * distanceTravelX + distanceTravelY * distanceTravelY;
-
-    if (distanceSquared <= speed * speed) {
-      // If we're close enough, just move directly to the destination
-      person.position.x = destinationPosition.x;
-      person.position.y = destinationPosition.y;
-      return 0;
-    }
-
-    // Only pay for sqrt once we know normalization is actually needed
-    const distance = Math.sqrt(distanceSquared);
-    const normalizedX = distanceTravelX / distance;
-    const normalizedY = distanceTravelY / distance;
-
-    person.position.x += normalizedX * speed;
-    person.position.y += normalizedY * speed;
-
-    /**
-     * Moving by `speed` along the normalized direction reduces the distance by
-     * exactly `speed` (the normalized vector has magnitude 1), so no second sqrt is needed to get the remainder.
-     */
-    return distance - speed;
-  };
+  updateSetting(settingKey: GameSettingsKey, value: string | boolean | number): void {
+    this._settings = {
+      ...this._settings,
+      [settingKey]: value,
+    };
+    localStorage.setItem(GAME_SETTINGS_STORAGE_KEY, JSON.stringify(this._settings));
+  }
 }
 
 // Singleton instance

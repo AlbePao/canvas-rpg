@@ -14,6 +14,3 @@ export const TEXT_BOX_PORTRAIT_OFFSET_Y = 6;
 export const TEXT_BOX_CHARACTER_OFFSET_X = 5;
 export const TEXT_CONTINUE_INDICATOR_PADDING_LEFT = 236;
 export const TEXT_CONTINUE_INDICATOR_PADDING_TOP = 32;
-
-// Typewriter animation constants
-export const TYPEWRITER_DEFAULT_SPEED = 80; // milliseconds per character
