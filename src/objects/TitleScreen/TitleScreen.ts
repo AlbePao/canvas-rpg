@@ -42,8 +42,8 @@ export class TitleScreen extends GameObject {
     this.drawLayer = 'HUD';
 
     this._options = [
-      this._saveFile ? { key: 'load_game', text: 'Load Game' } : null,
-      { key: 'new_game', text: 'New Game' },
+      this._saveFile ? { key: 'loadGame', text: 'Load Game' } : null,
+      { key: 'newGame', text: 'New Game' },
       { key: 'settings', text: 'Settings' },
     ].filter((option): option is TitleScreenOption => !!option);
 
@@ -124,7 +124,7 @@ export class TitleScreen extends GameObject {
       return;
     }
 
-    if (key === 'load_game') {
+    if (key === 'loadGame') {
       this._loadGame();
       return;
     }

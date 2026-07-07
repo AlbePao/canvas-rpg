@@ -8,3 +8,10 @@ export type GameConfig = {
 } & Partial<GameCanvasSize>;
 
 export type GameConfigKey = keyof GameConfig;
+
+export interface GameSettings {
+  battleAnimations: boolean;
+  textSpeed: number;
+}
+
+export type GameSettingsKey = keyof GameSettings;

@@ -1,8 +1,14 @@
+import type { GameSettingsKey } from '../../lib/Game';
 import type { BaseOption } from '../../types/base-option';
 
-export type SettingItem = BaseOption<OptionItemValue> & {
+export type SettingItem = BaseOption<SettingItemValue> & {
   selectedIndex: number; // current value of the option
-  options: SettingItem[]; // options for this option item
+  options: SettingOption[]; // options for this option item
 };
 
-export type OptionItemValue = 'text_speed' | 'go_back';
+export interface SettingOption {
+  text: string;
+  value: unknown;
+}
+
+export type SettingItemValue = GameSettingsKey | 'restoreDefaults' | 'goBack';

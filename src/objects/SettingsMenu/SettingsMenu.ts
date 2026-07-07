@@ -70,7 +70,7 @@ export class SettingsMenu extends GameObject {
     const isArrowLeftPressed = getActionJustPressed('ArrowLeft') || getActionJustPressed('KeyA');
     const isArrowRightPressed = getActionJustPressed('ArrowRight') || getActionJustPressed('KeyD');
 
-    if (isEnterPressed && this._settingsList[this._currentIndex].key === 'go_back') {
+    if (isEnterPressed && this._settingsList[this._currentIndex].key === 'goBack') {
       // Close menu if player selects Go Back option
       Events.emit(PAUSE_SUB_MENU_CLOSE);
       return;

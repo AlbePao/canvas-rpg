@@ -124,7 +124,7 @@ export class InventoryMenu extends GameObject {
         quantity,
       })),
       // Close menu option
-      { key: 'go_back', text: 'Go back', quantity: 0 },
+      { key: 'goBack', text: 'Go back', quantity: 0 },
     ];
 
     this._itemsListLines = createSpriteTextLines(
@@ -203,7 +203,7 @@ export class InventoryMenu extends GameObject {
     const { key } = this._itemsList[this._currentIndex];
 
     // Close menu if player selects Go Back option
-    if (key === 'go_back') {
+    if (key === 'goBack') {
       Events.emit(PAUSE_SUB_MENU_CLOSE);
       return;
     }
@@ -213,8 +213,8 @@ export class InventoryMenu extends GameObject {
       x: this._width / 16,
       y: 0,
       options: [
-        { key: 'use_item', text: 'Use' },
-        { key: 'throw_item', text: 'Throw' },
+        { key: 'useItem', text: 'Use' },
+        { key: 'throwItem', text: 'Throw' },
         { key: 'cancel', text: 'Cancel' },
       ],
     });
