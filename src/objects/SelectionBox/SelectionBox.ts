@@ -2,6 +2,9 @@ import { Events } from '../../lib/Events';
 import {
   Game,
   GRID_SIZE,
+  SELECTION_INDICATOR_OFFSET,
+  SELECTION_INDICATOR_X_OFFSET,
+  SELECTION_INDICATOR_Y_OFFSET,
   TEXT_BOX_BACKDROP_HEIGHT,
   toGridSize,
 } from '../../lib/Game';
@@ -131,12 +134,16 @@ export class SelectionBox<T extends BaseOption = SelectionOption> extends GameOb
     this._backdrop.drawImage(ctx, drawPosX, drawPosY);
 
     // Draw the indicator
-    this._indicator.drawImage(ctx, drawPosX + 4, drawPosY + 10 + toGridSize(this.currentOptionIndex));
+    this._indicator.drawImage(
+      ctx,
+      drawPosX + SELECTION_INDICATOR_OFFSET,
+      drawPosY + SELECTION_INDICATOR_Y_OFFSET + toGridSize(this.currentOptionIndex),
+    );
 
     // Draw options text lines
     this._optionsLines.forEach(({ words }, index) => {
-      let cursorX = drawPosX + 18;
-      const cursorY = drawPosY + toGridSize(index) + 10;
+      let cursorX = drawPosX + SELECTION_INDICATOR_X_OFFSET;
+      const cursorY = drawPosY + toGridSize(index) + SELECTION_INDICATOR_Y_OFFSET;
 
       words.forEach(({ chars }) => {
         // Draw this whole segment of text

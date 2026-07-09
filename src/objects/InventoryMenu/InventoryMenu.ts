@@ -3,6 +3,9 @@ import {
   fromGridSize,
   Game,
   GRID_SIZE,
+  SELECTION_INDICATOR_OFFSET,
+  SELECTION_INDICATOR_X_OFFSET,
+  SELECTION_INDICATOR_Y_OFFSET,
   toGridSize,
 } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
@@ -167,22 +170,24 @@ export class InventoryMenu extends GameObject {
   }
 
   override drawImage(ctx: CanvasRenderingContext2D, drawPosX: number, drawPosY: number): void {
-    const Y_OFFSET = 10;
-
     // Draw the backdrop for max 8 elements
     this._backdrop.drawImage(ctx, drawPosX, drawPosY);
 
     // Draw the indicator to the relative index to the visible viewport
     const relativeIndex = this._currentIndex - this._scrollOffset;
-    this._indicator.drawImage(ctx, drawPosX + 4, drawPosY + Y_OFFSET + toGridSize(relativeIndex));
+    this._indicator.drawImage(
+      ctx,
+      drawPosX + SELECTION_INDICATOR_OFFSET,
+      drawPosY + SELECTION_INDICATOR_Y_OFFSET + toGridSize(relativeIndex),
+    );
 
     // Draw visible options text lines
     const visibleLines = this._itemsListLines.slice(this._scrollOffset, this._scrollOffset + VISIBLE_ITEMS);
 
     visibleLines.forEach(({ words }, renderIndex) => {
-      let cursorX = drawPosX + 18;
+      let cursorX = drawPosX + SELECTION_INDICATOR_X_OFFSET;
       // Use renderIndex instead of absolute index to position correctly inside the box
-      const cursorY = drawPosY + toGridSize(renderIndex) + Y_OFFSET;
+      const cursorY = drawPosY + toGridSize(renderIndex) + SELECTION_INDICATOR_Y_OFFSET;
 
       // TODO: draw item icon and quantity next to the text
       words.forEach(({ chars }) => {
