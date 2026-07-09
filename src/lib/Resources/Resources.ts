@@ -9,7 +9,7 @@ class ResourcesSingleton extends Singleton<ResourcesSingleton>() {
 
   constructor() {
     super();
-    objectKeys(ASSETS_TO_LOAD).forEach((key) => {
+    for (const key of objectKeys(ASSETS_TO_LOAD)) {
       const img = new Image();
       img.src = ASSETS_TO_LOAD[key];
       this.images[key] = {
@@ -19,7 +19,7 @@ class ResourcesSingleton extends Singleton<ResourcesSingleton>() {
       img.onload = (): void => {
         this.images[key].isLoaded = true;
       };
-    });
+    }
   }
 }
 

@@ -42,7 +42,7 @@ export class LevelBuilder extends Level {
       : null;
 
     // Add tiles
-    objectKeys(tiles).forEach((coords) => {
+    for (const coords of objectKeys(tiles)) {
       const [x, y] = coords.split(',').map(Number);
       const tileName = tiles[coords];
 
@@ -58,13 +58,13 @@ export class LevelBuilder extends Level {
 
       worldTileSprite.drawLayer = 'FLOOR';
       this.addChild(worldTileSprite);
-    });
+    }
 
     // Add walls
-    walls.forEach((wallCoords) => {
+    for (const wallCoords of walls) {
       const [x, y] = wallCoords.split(',').map(Number);
       this.walls.add(`${toGridSize(x)},${toGridSize(y)}`);
-    });
+    }
 
     const seenIds = new Set<string>();
     const hasDuplicatedIds = gameObjects.some(({ id: gameObjectId }) => {

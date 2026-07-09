@@ -135,13 +135,13 @@ export class TitleScreen extends GameObject {
 
     LevelStateManager.state = levelsState;
 
-    storyFlags.forEach((flag) => {
+    for (const flag of storyFlags) {
       StoryFlags.add(flag);
-    });
+    }
 
-    inventory.forEach(({ itemKey }) => {
+    for (const { itemKey } of inventory) {
       Inventory.add(itemKey);
-    });
+    }
 
     this._startGame({
       id: levelId,

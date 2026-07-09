@@ -92,16 +92,16 @@ export class GameObject {
   // Remove from the tree
   destroy(): void {
     // Clear all pending timeouts
-    this._pendingTimeouts.forEach((timeoutId) => {
+    for (const timeoutId of this._pendingTimeouts) {
       clearTimeout(timeoutId);
-    });
+    }
     this._pendingTimeouts.clear();
 
     Events.unsubscribe(this);
 
-    this.children.forEach((child) => {
+    for (const child of this.children) {
       child.destroy();
-    });
+    }
     this.parent?.removeChild(this);
   }
 

@@ -60,9 +60,9 @@ export class SettingsMenu extends GameObject {
     let maxOptionWidth = 0;
 
     for (const { key, options } of this._settingsList.filter(({ key }) => key !== 'goBack')) {
-      options.forEach((opt, idx) => {
-        const lines = createSpriteTextLines([opt.text], key);
-        this._optionsTextCache[`${key}_${idx}`] = lines[0];
+      options.forEach(({ text }, index) => {
+        const lines = createSpriteTextLines([text], key);
+        this._optionsTextCache[`${key}_${index}`] = lines[0];
       });
 
       const longestForSetting = options.reduce((max, { text }) => Math.max(max, calculateTextWidth(text)), 0) + 5;

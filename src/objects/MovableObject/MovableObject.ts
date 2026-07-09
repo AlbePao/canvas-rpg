@@ -38,16 +38,16 @@ export abstract class MovableObject extends InteractiveObject {
 
   override ready(): void {
     // Lock movement + freeze animation while paused, a text box is open, or the level is transitioning
-    MOVABLE_OBJECT_LOCK_SOURCES.forEach(([event, reason]) => {
+    for (const [event, reason] of MOVABLE_OBJECT_LOCK_SOURCES) {
       Events.on(event, this, () => {
         this._activeLocks.add(reason);
         this.isLocked = true;
         this.body.animations?.pause();
       });
-    });
+    }
 
     // Unlock movement + resume animation only once every lock source has cleared
-    MOVABLE_OBJECT_UNLOCK_SOURCES.forEach(([event, reason]) => {
+    for (const [event, reason] of MOVABLE_OBJECT_UNLOCK_SOURCES) {
       Events.on(event, this, () => {
         this._activeLocks.delete(reason);
 
@@ -56,7 +56,7 @@ export abstract class MovableObject extends InteractiveObject {
           this.body.animations?.resume();
         }
       });
-    });
+    }
 
     this._setBehaviorLoop();
   }

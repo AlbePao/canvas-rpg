@@ -190,10 +190,10 @@ export class InventoryMenu extends GameObject {
     // Draw visible options text lines
     const visibleLines = this._itemsListLines.slice(this._scrollOffset, this._scrollOffset + VISIBLE_ITEMS);
 
-    visibleLines.forEach(({ words }, renderIndex) => {
+    visibleLines.forEach(({ words }, index) => {
       const cursorX = drawPosX + SELECTION_INDICATOR_X_OFFSET;
       // Use renderIndex instead of absolute index to position correctly inside the box
-      const cursorY = drawPosY + toGridSize(renderIndex) + SELECTION_INDICATOR_Y_OFFSET;
+      const cursorY = drawPosY + toGridSize(index) + SELECTION_INDICATOR_Y_OFFSET;
 
       // TODO: draw item icon and quantity next to the text
       drawTextLine(ctx, words, cursorX, cursorY);

@@ -79,11 +79,11 @@ class LevelsMapperSingleton extends Singleton<LevelsMapperSingleton>() {
 
     if (failureCount > 0) {
       console.warn(`Loaded ${successCount}/${totalCount} levels`);
-      loadResults.forEach((result) => {
+      for (const result of loadResults) {
         if (!result.success) {
           console.warn(`${result.id}: ${result.error}`);
         }
-      });
+      }
     }
 
     if (successCount === 0) {
