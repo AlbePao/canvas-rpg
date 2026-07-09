@@ -86,3 +86,28 @@ export function createSpriteTextLines(strings: string[], idPrefix: string): Line
     };
   });
 }
+
+// Draws a single line of sprite-text and returns the width in pixel of the drawn text
+export function drawTextLine(
+  ctx: CanvasRenderingContext2D,
+  line: Line,
+  drawPositionX: number,
+  drawPositionY: number,
+): number {
+  let currentX = drawPositionX;
+
+  for (const word of line.words) {
+    // Draw this whole segment of text
+    for (const { sprite, width } of word.chars) {
+      sprite.draw(ctx, currentX - 5, drawPositionY);
+
+      // Add width of the character we just printed to cursor pos, plus 1px between character
+      currentX += width + 1;
+    }
+
+    // Move the cursor over
+    currentX += 3;
+  }
+
+  return currentX - drawPositionX;
+}
