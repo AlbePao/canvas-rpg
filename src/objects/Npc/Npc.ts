@@ -1,7 +1,7 @@
 import { Animations } from '../../lib/Animations';
 import { Events } from '../../lib/Events';
 import { FrameIndexPattern } from '../../lib/FrameIndexPattern';
-import { Game, moveTowards } from '../../lib/Game';
+import { GRID_SIZE, moveTowards } from '../../lib/Game';
 import type { GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
 import { StoryFlags } from '../../lib/StoryFlags';
@@ -227,22 +227,20 @@ export class Npc extends MovableObject {
       let nextX = this.destinationPosition.x;
       let nextY = this.destinationPosition.y;
 
-      const { gridSize } = Game;
-
       if (direction === 'DOWN') {
-        nextY += gridSize;
+        nextY += GRID_SIZE;
         this.body.animations?.play('walkDown');
       }
       if (direction === 'UP') {
-        nextY -= gridSize;
+        nextY -= GRID_SIZE;
         this.body.animations?.play('walkUp');
       }
       if (direction === 'LEFT') {
-        nextX -= gridSize;
+        nextX -= GRID_SIZE;
         this.body.animations?.play('walkLeft');
       }
       if (direction === 'RIGHT') {
-        nextX += gridSize;
+        nextX += GRID_SIZE;
         this.body.animations?.play('walkRight');
       }
 

@@ -1,5 +1,10 @@
 import { Events } from '../../lib/Events';
-import { Game, toGridSize } from '../../lib/Game';
+import {
+  fromGridSize,
+  Game,
+  GRID_SIZE,
+  toGridSize,
+} from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
 import { Inventory } from '../../lib/Inventory';
 import type { Line } from '../../lib/Text';
@@ -42,8 +47,6 @@ export class InventoryMenu extends GameObject {
       y: 0,
     });
 
-    const { gridSize } = Game;
-
     // Draw on top layer
     this.drawLayer = 'HUD';
 
@@ -54,10 +57,10 @@ export class InventoryMenu extends GameObject {
     this._width = Math.max(...this._itemsList.map(({ text }) => calculateTextWidth(text))) + 76;
 
     const actualVisibleCount = Math.min(this._itemsList.length, VISIBLE_ITEMS);
-    this._height = toGridSize(actualVisibleCount) + gridSize; // Each option is 16px tall + some padding
+    this._height = toGridSize(actualVisibleCount) + GRID_SIZE; // Each option is 16px tall + some padding
 
     // Set backdrop size according to its item text size
-    this._backdrop.updateSize(this._width / gridSize, this._height / gridSize);
+    this._backdrop.updateSize(this._width / GRID_SIZE, this._height / GRID_SIZE);
   }
 
   override ready(): void {
@@ -210,7 +213,7 @@ export class InventoryMenu extends GameObject {
 
     const itemHandlingBox = new SelectionBox({
       id: `selection-box-for-${this.id}`,
-      x: this._width / 16,
+      x: fromGridSize(this._width),
       y: 0,
       options: [
         { key: 'useItem', text: 'Use' },

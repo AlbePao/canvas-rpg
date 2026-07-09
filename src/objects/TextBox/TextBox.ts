@@ -1,5 +1,5 @@
 import { Events } from '../../lib/Events';
-import { Game } from '../../lib/Game';
+import { Game, TEXT_BOX_BACKDROP_HEIGHT, TEXT_BOX_BACKDROP_WIDTH } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
 import type { Line } from '../../lib/Text';
@@ -28,8 +28,8 @@ export class TextBox extends GameObject {
   portrait?: Sprite;
   private readonly _backdrop = new BoxBackdrop({
     id: `${this.id}-text-box-backdrop`,
-    width: Game.textBoxBackdropWidth,
-    height: Game.textBoxBackdropHeight,
+    width: TEXT_BOX_BACKDROP_WIDTH,
+    height: TEXT_BOX_BACKDROP_HEIGHT,
   });
 
   private _lines: Line[] = [];

@@ -1,18 +1,18 @@
 import type { Coords, Walls } from '../../types/coords';
 import type { GameObject } from '../GameObject';
 import type { Vector2 } from '../Vector2';
-import { Game } from './Game';
+import { GRID_SIZE } from './game.constants';
 
 export function objectKeys<T extends object>(obj: T): (keyof T)[] {
   return Object.keys(obj) as (keyof T)[];
 }
 
 export function toGridSize(value: number): number {
-  return value * Game.gridSize;
+  return value * GRID_SIZE;
 }
 
 export function fromGridSize(value: number): number {
-  return value / Game.gridSize;
+  return value / GRID_SIZE;
 }
 
 export function detectOverlap(heroPosition: Vector2, objectPosition: Vector2): boolean {

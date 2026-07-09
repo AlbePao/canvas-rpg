@@ -1,4 +1,4 @@
-import { Game, isSpaceFree } from '../../lib/Game';
+import { Game, GRID_SIZE, isSpaceFree } from '../../lib/Game';
 import { Hero } from './Hero';
 
 function alignToGrid(val: number, alignTo: number): number {
@@ -20,7 +20,6 @@ export class HeroSnappedMovement extends Hero {
     const {
       input: { direction },
       level,
-      gridSize,
     } = Game;
 
     if (!direction) {
@@ -50,7 +49,7 @@ export class HeroSnappedMovement extends Hero {
     let nextGridY = this.destinationPosition.y;
 
     const characterPace = 1;
-    const halfGridSize = gridSize / 2;
+    const halfGridSize = GRID_SIZE / 2;
 
     if (direction === 'DOWN') {
       nextCharacterY += characterPace;

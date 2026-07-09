@@ -9,9 +9,6 @@ import {
   DEFAULT_CANVAS_WIDTH,
   DEFAULT_GAME_SETTINGS,
   GAME_SETTINGS_STORAGE_KEY,
-  GRID_SIZE,
-  TEXT_BOX_BACKDROP_HEIGHT,
-  TEXT_BOX_BACKDROP_WIDTH,
 } from './game.constants';
 import type { GameCanvasSize, GameConfig, GameSettings, GameSettingsKey } from './game.types';
 
@@ -26,20 +23,11 @@ class GameSingleton extends Singleton<GameSingleton>() {
   }
   private _containerId = '';
 
+  // Canvas size is set once at init and never changes afterwards, so it's cached to avoid unnecessary new allocations
   get containerSizes(): GameCanvasSize {
     return this._containerSizes;
   }
-
-  // Cached object reused across getter calls to avoid a new allocation on every read (canvas size is set once at init and never changes afterwards).
   private readonly _containerSizes: GameCanvasSize = { canvasWidth: 0, canvasHeight: 0 };
-
-  get gridSize(): number {
-    return this._gridSize;
-  }
-  private readonly _gridSize = GRID_SIZE;
-
-  readonly textBoxBackdropWidth = TEXT_BOX_BACKDROP_WIDTH;
-  readonly textBoxBackdropHeight = TEXT_BOX_BACKDROP_HEIGHT;
 
   // Shared keyboard state, and the currently active level - exposed here so GameObjects can read them directly
   readonly input = new Input();

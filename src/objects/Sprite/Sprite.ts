@@ -1,5 +1,5 @@
 import type { Animations } from '../../lib/Animations';
-import { Game } from '../../lib/Game';
+import { GRID_SIZE } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
 import type { Resource } from '../../lib/Resources';
 import { Vector2 } from '../../lib/Vector2';
@@ -18,7 +18,7 @@ export class Sprite extends GameObject {
   constructor({
     id, // id for the sprite
     resource, // image we want to draw,
-    frameSize = new Vector2(Game.gridSize, Game.gridSize), // size of the crop of the image
+    frameSize = new Vector2(GRID_SIZE, GRID_SIZE), // size of the crop of the image
     hFrames = 1, // how the sprite arranged horizontally
     vFrames = 1, // how the sprite arranged vertically
     frame = 0, // which frame we want to show

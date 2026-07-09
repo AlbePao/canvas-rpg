@@ -1,5 +1,8 @@
 import { Events } from '../../lib/Events';
-import { Game, toGridSize } from '../../lib/Game';
+import {
+  Game,
+  GRID_SIZE,
+} from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
 import { Inventory } from '../../lib/Inventory';
 import { LevelBuilder, type LevelBuilderConfig } from '../../lib/LevelBuilder';
@@ -56,10 +59,10 @@ export class TitleScreen extends GameObject {
     this._backdrop.updateSize(width, height);
 
     // Set the position according to options size in relation to canvas width and text box height
-    const { containerSizes, gridSize } = Game;
+    const { containerSizes } = Game;
     const { canvasWidth, canvasHeight } = containerSizes;
-    const newX = (canvasWidth - width * gridSize) / 2;
-    const newY = (canvasHeight - height * gridSize) / 2;
+    const newX = (canvasWidth - width * GRID_SIZE) / 2;
+    const newY = (canvasHeight - height * GRID_SIZE) / 2;
     this.position = new Vector2(newX, newY);
   }
 

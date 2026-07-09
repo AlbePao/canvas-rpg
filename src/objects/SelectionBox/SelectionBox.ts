@@ -1,5 +1,10 @@
 import { Events } from '../../lib/Events';
-import { Game, toGridSize } from '../../lib/Game';
+import {
+  Game,
+  GRID_SIZE,
+  TEXT_BOX_BACKDROP_HEIGHT,
+  toGridSize,
+} from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
 import { StoryFlags } from '../../lib/StoryFlags';
 import type { Line } from '../../lib/Text';
@@ -42,7 +47,7 @@ export class SelectionBox<T extends BaseOption = SelectionOption> extends GameOb
       throw new Error('SelectionBox: options array must have at least one element');
     }
 
-    const { gridSize, containerSizes, textBoxBackdropHeight } = Game;
+    const { containerSizes } = Game;
 
     // Draw on top layer
     this.drawLayer = 'HUD';
@@ -69,10 +74,10 @@ export class SelectionBox<T extends BaseOption = SelectionOption> extends GameOb
     // Calculate selection box width and add padding for the indicator and some spacing
     const width = Math.max(...this.options.map(({ text }) => calculateTextWidth(text))) + 52;
 
-    const height = toGridSize(this.options.length) + gridSize; // Each option is 16px tall + some padding
+    const height = toGridSize(this.options.length) + GRID_SIZE; // Each option is 16px tall + some padding
 
     // Set backdrop size according to its options' size
-    this._backdrop.updateSize(width / gridSize, height / gridSize);
+    this._backdrop.updateSize(width / GRID_SIZE, height / GRID_SIZE);
 
     /**
      * If position x and y are set from config, use that params, otherwise
@@ -80,7 +85,7 @@ export class SelectionBox<T extends BaseOption = SelectionOption> extends GameOb
      */
     const { canvasWidth, canvasHeight } = containerSizes;
     const newX = x ? toGridSize(x) : canvasWidth - width - 32;
-    const newY = y ? toGridSize(y) : canvasHeight - height - toGridSize(textBoxBackdropHeight) - 4;
+    const newY = y ? toGridSize(y) : canvasHeight - height - toGridSize(TEXT_BOX_BACKDROP_HEIGHT) - 4;
     this.position = new Vector2(newX, newY);
   }
 

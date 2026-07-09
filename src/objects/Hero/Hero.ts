@@ -1,7 +1,7 @@
 import { Animations } from '../../lib/Animations';
 import { Events } from '../../lib/Events';
 import { FrameIndexPattern } from '../../lib/FrameIndexPattern';
-import { fromGridSize, Game, isSpaceFree, moveTowards } from '../../lib/Game';
+import { fromGridSize, Game, GRID_SIZE, isSpaceFree, moveTowards } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
 import { DIRECTION_TAP } from '../../lib/Input';
 import { Resources } from '../../lib/Resources';
@@ -151,7 +151,6 @@ export class Hero extends MovableObject {
     const {
       input: { direction },
       level,
-      gridSize,
     } = Game;
 
     if (!direction) {
@@ -178,19 +177,19 @@ export class Hero extends MovableObject {
     let nextY = this.destinationPosition.y;
 
     if (direction === 'DOWN') {
-      nextY += gridSize;
+      nextY += GRID_SIZE;
       this.body.animations?.play('walkDown');
     }
     if (direction === 'UP') {
-      nextY -= gridSize;
+      nextY -= GRID_SIZE;
       this.body.animations?.play('walkUp');
     }
     if (direction === 'LEFT') {
-      nextX -= gridSize;
+      nextX -= GRID_SIZE;
       this.body.animations?.play('walkLeft');
     }
     if (direction === 'RIGHT') {
-      nextX += gridSize;
+      nextX += GRID_SIZE;
       this.body.animations?.play('walkRight');
     }
 
