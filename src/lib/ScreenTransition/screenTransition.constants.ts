@@ -1,4 +1,4 @@
-import type { ScreenTransitionMap } from './screenTransition.types';
+import type { ScreenTransitions } from './screenTransition.types';
 
 // Screen transition events
 export const SCREEN_TRANSITION_START = 'SCREEN_TRANSITION_START';
@@ -32,7 +32,7 @@ export const SCREEN_TRANSITION_FADE_KEYFRAMES = `
   }
 `;
 
-export const SCREEN_TRANSITIONS: ScreenTransitionMap = {
+export const SCREEN_TRANSITIONS: ScreenTransitions = {
   none: `
     .${SCREEN_TRANSITION_CLASSNAME}.fade-in {
       animation: screen-transition-fade-in 0s forwards;

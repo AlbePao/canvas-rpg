@@ -210,7 +210,7 @@ export type LevelWaterTileName = LevelWaterAnimatedTileName | LevelWaterStillTil
 export type LevelTileSet = LevelGroundTileset | LevelWaterTileSet | _LevelDecorationTileset;
 type _LevelTileName = LevelGroundTileset | LevelWaterTileName;
 
-export type TilesetFrameMap = Readonly<Record<LevelTileSet, number>>;
+export type TilesetFrames = Readonly<Record<LevelTileSet, number>>;
 
 export const LEVEL_TILES_NAME: _LevelTileName[] = [
   'grass',

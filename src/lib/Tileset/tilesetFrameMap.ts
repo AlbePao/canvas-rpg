@@ -1,6 +1,6 @@
-import type { TilesetFrameMap } from './tileset.types';
+import type { TilesetFrames } from './tileset.types';
 
-export const TILESET_FRAME_MAP: TilesetFrameMap = {
+export const TILESET_FRAME_MAP: TilesetFrames = {
   // First row (from 0 to 51)
   grass: 0,
   sand: 1,
