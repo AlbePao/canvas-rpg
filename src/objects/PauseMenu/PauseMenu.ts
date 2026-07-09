@@ -13,9 +13,9 @@ import {
   PAUSE_SUB_MENU_OPEN,
   SAVE_TEXT_BOX_ID,
 } from './pauseMenu.constants';
-import type { PauseMenuItem } from './pauseMenu.types';
+import type { PauseMenuItemValue } from './pauseMenu.types';
 
-export class PauseMenu extends SelectionBox<PauseMenuItem> {
+export class PauseMenu extends SelectionBox<PauseMenuItemValue> {
   get canDismiss(): boolean {
     return this._canDismiss;
   }

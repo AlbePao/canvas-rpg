@@ -13,15 +13,14 @@ import { StoryFlags } from '../../lib/StoryFlags';
 import type { Line } from '../../lib/Text';
 import { calculateTextWidth, createSpriteTextLines, drawTextLine } from '../../lib/Text';
 import { Vector2 } from '../../lib/Vector2';
-import type { BaseOption } from '../../types/base-option';
 import { ArrowIndicator } from '../ArrowIndicator';
 import { BoxBackdrop } from '../BoxBackdrop';
 import { SELECTION_BOX_CLOSE } from './selectionBox.constants';
 import type { SelectionBoxConfig, SelectionOption } from './selectionBox.types';
 import { isSelectionBoxOption } from './selectionBox.utils';
 
-export class SelectionBox<T extends BaseOption = SelectionOption> extends GameObject {
-  protected readonly options: T[];
+export class SelectionBox<K extends string = string> extends GameObject {
+  protected readonly options: SelectionOption<K>[];
   protected currentOptionIndex = 0;
   private readonly _optionsLines: Line[];
   // Handles the index of the first visible element in the viewport
@@ -39,7 +38,7 @@ export class SelectionBox<T extends BaseOption = SelectionOption> extends GameOb
 
   private _isIndicatorLocked = false;
 
-  constructor(config: SelectionBoxConfig<T>) {
+  constructor(config: SelectionBoxConfig<SelectionOption<K>>) {
     const { id, x, y, options } = config;
 
     super({
@@ -150,7 +149,7 @@ export class SelectionBox<T extends BaseOption = SelectionOption> extends GameOb
   }
 
   protected onOptionSelect(): void {
-    Events.emit<SelectionOption>(SELECTION_BOX_CLOSE, this.options[this.currentOptionIndex]);
+    Events.emit<SelectionOption<K>>(SELECTION_BOX_CLOSE, this.options[this.currentOptionIndex]);
   }
 
   protected lockIndicator(): void {
