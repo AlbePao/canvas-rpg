@@ -4,3 +4,5 @@ import type { ItemKey } from '../Item';
 export type InventoryItem = BaseOption<InventoryItemValue> & { quantity: number };
 
 export type InventoryItemValue = ItemKey | 'goBack';
+
+export type InventoryItemActionsValue = 'useItem' | 'throwItem' | 'cancel';

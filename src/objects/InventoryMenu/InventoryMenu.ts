@@ -16,7 +16,7 @@ import { ArrowIndicator } from '../ArrowIndicator';
 import { BoxBackdrop } from '../BoxBackdrop';
 import { PAUSE_SUB_MENU_CLOSE } from '../PauseMenu';
 import { SELECTION_BOX_CLOSE, SELECTION_BOX_OPEN, SelectionBox, type SelectionOption } from '../SelectionBox';
-import type { InventoryItem } from './inventoryMenu.types';
+import type { InventoryItem, InventoryItemActionsValue } from './inventoryMenu.types';
 
 const VISIBLE_ITEMS = 8;
 
@@ -28,7 +28,7 @@ export class InventoryMenu extends GameObject {
   // Handles the index of the first visible element in the viewport
   private _scrollOffset = 0;
   private readonly _width: number;
-  private readonly _height: number;
+  private _height = 0;
 
   private readonly _backdrop = new BoxBackdrop({
     id: `${this.id}-inventory-box-backdrop`,
@@ -59,11 +59,7 @@ export class InventoryMenu extends GameObject {
     // Calculate inventory menu width and add padding for the indicator and some spacing
     this._width = Math.max(...this._itemsList.map(({ text }) => calculateTextWidth(text))) + 76;
 
-    const actualVisibleCount = Math.min(this._itemsList.length, VISIBLE_ITEMS);
-    this._height = toGridSize(actualVisibleCount) + GRID_SIZE; // Each option is 16px tall + some padding
-
-    // Set backdrop size according to its item text size
-    this._backdrop.updateSize(this._width / GRID_SIZE, this._height / GRID_SIZE);
+    this._setBackdropSize();
   }
 
   override ready(): void {
@@ -71,10 +67,10 @@ export class InventoryMenu extends GameObject {
       this.lockIndicator();
     });
 
-    Events.on<SelectionOption>(SELECTION_BOX_CLOSE, this, ({ key }) => {
-      if (key === 'use_item') {
+    Events.on<SelectionOption<InventoryItemActionsValue>>(SELECTION_BOX_CLOSE, this, ({ key }) => {
+      if (key === 'useItem') {
         console.log('use item...');
-      } else if (key === 'throw_item') {
+      } else if (key === 'throwItem') {
         const currentItemKey = this._itemsList[this._currentIndex].key;
         const itemKey = Inventory.getAll().find(({ itemKey }) => itemKey === currentItemKey)?.itemKey ?? null;
 
@@ -82,6 +78,7 @@ export class InventoryMenu extends GameObject {
 
         // Regenerate synced items list and lines with the new inventory state
         this._generateItemsList();
+        this._setBackdropSize();
       }
 
       this.unlockIndicator();
@@ -137,6 +134,15 @@ export class InventoryMenu extends GameObject {
       this._itemsList.map(({ text }) => text),
       this.id,
     );
+  }
+
+  // Update the backdrop size according to the number of items in the inventory and the maximum visible items
+  private _setBackdropSize(): void {
+    const actualVisibleCount = Math.min(this._itemsList.length, VISIBLE_ITEMS);
+    this._height = toGridSize(actualVisibleCount) + GRID_SIZE; // Each option is 16px tall + some padding
+
+    // Set backdrop size according to its item text size
+    this._backdrop.updateSize(this._width / GRID_SIZE, this._height / GRID_SIZE);
   }
 
   // Update scroll shift
@@ -203,7 +209,7 @@ export class InventoryMenu extends GameObject {
       return;
     }
 
-    const itemHandlingBox = new SelectionBox({
+    const itemHandlingBox = new SelectionBox<InventoryItemActionsValue>({
       id: `selection-box-for-${this.id}`,
       x: fromGridSize(this._width),
       y: 0,
