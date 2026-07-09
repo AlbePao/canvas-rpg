@@ -1,11 +1,6 @@
 import type { AnimationConfig } from '../../lib/FrameIndexPattern';
 import { FrameIndexPattern } from '../../lib/FrameIndexPattern';
-import {
-  type LevelWaterStillTileName,
-  type LevelWaterTileName,
-  type LevelWaterTileSet,
-  TILESET_FRAME_MAP,
-} from '../../lib/Tileset';
+import { type LevelWaterAnimatedTileName, type LevelWaterTileSet, TILESET_FRAME_MAP } from '../../lib/Tileset';
 
 const makeWaterFrame = (rootFrame: number, base = 156): AnimationConfig => ({
   duration: 2000,
@@ -30,7 +25,7 @@ const makeWaterFrame = (rootFrame: number, base = 156): AnimationConfig => ({
 });
 
 export const WATER_ANIMATIONS: Record<
-  Exclude<LevelWaterTileName, LevelWaterStillTileName>,
+  LevelWaterAnimatedTileName,
   Partial<Record<LevelWaterTileSet, FrameIndexPattern>>
 > = {
   // Water animations
