@@ -141,7 +141,7 @@ export class SettingsMenu extends GameObject {
     this._settingsListLines.forEach((line, index) => {
       const cursorY = drawPosY + toGridSize(index) + SELECTION_INDICATOR_Y_OFFSET;
 
-      drawTextLine(ctx, line, drawPosX + SELECTION_INDICATOR_X_OFFSET, cursorY);
+      drawTextLine(ctx, line.words, drawPosX + SELECTION_INDICATOR_X_OFFSET, cursorY);
 
       const { key, selectedIndex } = this._settingsList[index];
 
@@ -159,8 +159,8 @@ export class SettingsMenu extends GameObject {
 
       // Now draw the current selected option value for this setting item
       optionX += SELECTION_INDICATOR_X_OFFSET;
-      const optionLine = this._optionsTextCache[`${key}_${selectedIndex}`];
-      const optionTextWidth = drawTextLine(ctx, optionLine, optionX, cursorY);
+      const { words } = this._optionsTextCache[`${key}_${selectedIndex}`];
+      const optionTextWidth = drawTextLine(ctx, words, optionX, cursorY);
       optionX += optionTextWidth + SELECTION_INDICATOR_X_OFFSET;
 
       if (index === this._currentIndex) {

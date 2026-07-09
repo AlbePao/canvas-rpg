@@ -11,7 +11,7 @@ import {
 import { GameObject } from '../../lib/GameObject';
 import { StoryFlags } from '../../lib/StoryFlags';
 import type { Line } from '../../lib/Text';
-import { calculateTextWidth, createSpriteTextLines } from '../../lib/Text';
+import { calculateTextWidth, createSpriteTextLines, drawTextLine } from '../../lib/Text';
 import { Vector2 } from '../../lib/Vector2';
 import type { BaseOption } from '../../types/base-option';
 import { ArrowIndicator } from '../ArrowIndicator';
@@ -142,23 +142,10 @@ export class SelectionBox<T extends BaseOption = SelectionOption> extends GameOb
 
     // Draw options text lines
     this._optionsLines.forEach(({ words }, index) => {
-      let cursorX = drawPosX + SELECTION_INDICATOR_X_OFFSET;
+      const cursorX = drawPosX + SELECTION_INDICATOR_X_OFFSET;
       const cursorY = drawPosY + toGridSize(index) + SELECTION_INDICATOR_Y_OFFSET;
 
-      words.forEach(({ chars }) => {
-        // Draw this whole segment of text
-        chars.forEach((char) => {
-          const { sprite, width } = char;
-          const widthCharOffset = cursorX - 5;
-          sprite.draw(ctx, widthCharOffset, cursorY);
-
-          // Add width of the character we just printed to cursor pos, plus 1px between character
-          cursorX += width + 1;
-        });
-
-        // Move the cursor over
-        cursorX += 3;
-      });
+      drawTextLine(ctx, words, cursorX, cursorY);
     });
   }
 

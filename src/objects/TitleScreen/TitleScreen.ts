@@ -15,7 +15,7 @@ import { Progress } from '../../lib/Progress';
 import { ScreenTransition } from '../../lib/ScreenTransition';
 import { StoryFlags } from '../../lib/StoryFlags';
 import type { Line } from '../../lib/Text';
-import { createSpriteTextLines } from '../../lib/Text';
+import { createSpriteTextLines, drawTextLine } from '../../lib/Text';
 import { Vector2 } from '../../lib/Vector2';
 import { ArrowIndicator } from '../ArrowIndicator';
 import { BoxBackdrop } from '../BoxBackdrop';
@@ -103,23 +103,10 @@ export class TitleScreen extends GameObject {
 
     // Draw options text lines
     this._optionsLines.forEach(({ words }, index) => {
-      let cursorX = drawPosX + SELECTION_INDICATOR_X_OFFSET;
+      const cursorX = drawPosX + SELECTION_INDICATOR_X_OFFSET;
       const cursorY = drawPosY + toGridSize(index) + SELECTION_INDICATOR_Y_OFFSET;
 
-      words.forEach(({ chars }) => {
-        // Draw this whole segment of text
-        chars.forEach((char) => {
-          const { sprite, width } = char;
-          const widthCharOffset = cursorX - 5;
-          sprite.draw(ctx, widthCharOffset, cursorY);
-
-          // Add width of the character we just printed to cursor pos, plus 1px between character
-          cursorX += width + 1;
-        });
-
-        // Move the cursor over
-        cursorX += 3;
-      });
+      drawTextLine(ctx, words, cursorX, cursorY);
     });
   }
 

@@ -11,7 +11,7 @@ import {
 import { GameObject } from '../../lib/GameObject';
 import { Inventory } from '../../lib/Inventory';
 import type { Line } from '../../lib/Text';
-import { calculateTextWidth, createSpriteTextLines } from '../../lib/Text';
+import { calculateTextWidth, createSpriteTextLines, drawTextLine } from '../../lib/Text';
 import { ArrowIndicator } from '../ArrowIndicator';
 import { BoxBackdrop } from '../BoxBackdrop';
 import { PAUSE_SUB_MENU_CLOSE } from '../PauseMenu';
@@ -185,25 +185,12 @@ export class InventoryMenu extends GameObject {
     const visibleLines = this._itemsListLines.slice(this._scrollOffset, this._scrollOffset + VISIBLE_ITEMS);
 
     visibleLines.forEach(({ words }, renderIndex) => {
-      let cursorX = drawPosX + SELECTION_INDICATOR_X_OFFSET;
+      const cursorX = drawPosX + SELECTION_INDICATOR_X_OFFSET;
       // Use renderIndex instead of absolute index to position correctly inside the box
       const cursorY = drawPosY + toGridSize(renderIndex) + SELECTION_INDICATOR_Y_OFFSET;
 
       // TODO: draw item icon and quantity next to the text
-      words.forEach(({ chars }) => {
-        // Draw this whole segment of text
-        chars.forEach((char) => {
-          const { sprite, width } = char;
-          const widthCharOffset = cursorX - 5;
-          sprite.draw(ctx, widthCharOffset, cursorY);
-
-          // Add width of the character we just printed to cursor pos, plus 1px between character
-          cursorX += width + 1;
-        });
-
-        // Move the cursor over
-        cursorX += 3;
-      });
+      drawTextLine(ctx, words, cursorX, cursorY);
     });
   }
 
