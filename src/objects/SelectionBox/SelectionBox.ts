@@ -1,5 +1,6 @@
 import { Events } from '../../lib/Events';
 import {
+  fromGridSize,
   Game,
   GRID_SIZE,
   SELECTION_INDICATOR_OFFSET,
@@ -79,7 +80,7 @@ export class SelectionBox<K extends string = string> extends GameObject {
     const height = toGridSize(this.options.length) + GRID_SIZE; // Each option is 16px tall + some padding
 
     // Set backdrop size according to its options' size
-    this._backdrop.updateSize(width / GRID_SIZE, height / GRID_SIZE);
+    this._backdrop.updateSize(fromGridSize(width), fromGridSize(height));
 
     /**
      * If position x and y are set from config, use that params, otherwise

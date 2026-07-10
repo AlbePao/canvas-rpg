@@ -142,7 +142,7 @@ export class InventoryMenu extends GameObject {
     this._height = toGridSize(actualVisibleCount) + GRID_SIZE; // Each option is 16px tall + some padding
 
     // Set backdrop size according to its item text size
-    this._backdrop.updateSize(this._width / GRID_SIZE, this._height / GRID_SIZE);
+    this._backdrop.updateSize(fromGridSize(this._width), fromGridSize(this._height));
   }
 
   // Update scroll shift
