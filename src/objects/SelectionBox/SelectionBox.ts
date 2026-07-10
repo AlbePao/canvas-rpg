@@ -87,8 +87,9 @@ export class SelectionBox<K extends string = string> extends GameObject {
      * set the position according to options size in relation to canvas width and text box height
      */
     const { canvasWidth, canvasHeight } = containerSizes;
-    const newX = x ? toGridSize(x) : canvasWidth - width - 32;
-    const newY = y ? toGridSize(y) : canvasHeight - height - toGridSize(TEXT_BOX_BACKDROP_HEIGHT) - 4;
+    const newX = typeof x === 'number' ? toGridSize(x) : canvasWidth - width - 32;
+    const newY =
+      typeof y === 'number' ? toGridSize(y) : canvasHeight - height - toGridSize(TEXT_BOX_BACKDROP_HEIGHT) - 4;
     this.position = new Vector2(newX, newY);
   }
 
