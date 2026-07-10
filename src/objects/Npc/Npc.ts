@@ -97,7 +97,7 @@ export class Npc extends MovableObject {
         StoryFlags.add(addsFlag);
       }
 
-      // Save locally the item to pick when text box is closed and hero satisfies the story flags
+      // Save locally the item to collect when text box is closed and hero satisfies the story flags
       if (itemKey) {
         this._contentItemKey = itemKey;
       }
@@ -135,7 +135,7 @@ export class Npc extends MovableObject {
           }
 
           if (response && response.length > 0) {
-            // Save locally the item to pick when text box is closed
+            // Save locally the item to collect when text box is closed
             if (itemKey) {
               this._contentItemKey = itemKey;
             }

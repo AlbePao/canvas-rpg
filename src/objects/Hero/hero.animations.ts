@@ -42,7 +42,7 @@ export const HERO_WALK_RIGHT = makeWalkingFrame(3);
 export const HERO_WALK_UP = makeWalkingFrame(6);
 export const HERO_WALK_LEFT = makeWalkingFrame(9);
 
-export const HERO_PICK_UP_DOWN: AnimationConfig = {
+export const HERO_COLLECT_DOWN: AnimationConfig = {
   duration: 400,
   frames: [
     {

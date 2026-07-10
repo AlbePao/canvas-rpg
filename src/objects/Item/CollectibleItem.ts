@@ -37,7 +37,7 @@ export class CollectibleItem extends Item {
     // Remove this instance from the scene
     this.destroy();
 
-    // Alert other things that we picker up a collectible item
+    // Alert other things that we collected an item
     Events.emit<CollectibleItemData>(HERO_COLLECTS_ITEM, this.data);
   }
 }

@@ -13,7 +13,7 @@ import { createItemSprite } from '../Item';
 import { isPositionBlocked, MovableObject } from '../MovableObject';
 import { Sprite } from '../Sprite';
 import {
-  HERO_PICK_UP_DOWN,
+  HERO_COLLECT_DOWN,
   HERO_STAND_DOWN,
   HERO_STAND_LEFT,
   HERO_STAND_RIGHT,
@@ -30,8 +30,8 @@ export class Hero extends MovableObject {
   protected readonly body: Sprite;
   private _lastX?: number;
   private _lastY?: number;
-  private _itemPickUpTime = 0;
-  private _itemPickUpShell: GameObject | null = null;
+  private _itemCollectTime = 0;
+  private _itemCollectShell: GameObject | null = null;
 
   get gridCoords(): Coords2D {
     const { x, y } = this.position;
@@ -73,7 +73,7 @@ export class Hero extends MovableObject {
         standUp: new FrameIndexPattern(HERO_STAND_UP),
         standLeft: new FrameIndexPattern(HERO_STAND_LEFT),
         standRight: new FrameIndexPattern(HERO_STAND_RIGHT),
-        pickUpDown: new FrameIndexPattern(HERO_PICK_UP_DOWN),
+        collectDown: new FrameIndexPattern(HERO_COLLECT_DOWN),
       }),
     });
     this.addChild(this.body);
@@ -82,7 +82,7 @@ export class Hero extends MovableObject {
   override ready(): void {
     super.ready();
 
-    // React to picking up an item
+    // React to collecting an item
     Events.on<CollectibleItemData>(HERO_COLLECTS_ITEM, this, (data) => {
       this._onCollectItem(data);
     });
@@ -103,9 +103,9 @@ export class Hero extends MovableObject {
       return;
     }
 
-    // Lock movement if celebrating an item pickup
-    if (this._itemPickUpTime > 0) {
-      this._workOnItemPickUp(delta);
+    // Lock movement if celebrating an item collect
+    if (this._itemCollectTime > 0) {
+      this._workOnItemCollect(delta);
       return;
     }
 
@@ -208,7 +208,7 @@ export class Hero extends MovableObject {
   private _onCollectItem(data: CollectibleItemData): void {
     const { frame, position, skipCollectAnimation } = data;
 
-    // If the item has requested to skip the pickup animation, just move there without any celebration
+    // If the item has requested to skip the collect animation, just move there without any celebration
     if (skipCollectAnimation) {
       return;
     }
@@ -216,19 +216,19 @@ export class Hero extends MovableObject {
     // Make sure we land right on the item
     this.destinationPosition = (position ?? this.position).duplicate();
 
-    // Start the pickup animation
-    this._itemPickUpTime = 500; // ms
-    this._itemPickUpShell = new GameObject({ id: `${this.id}-item-pickup-shell` });
-    this._itemPickUpShell.addChild(createItemSprite(`${this.id}-item-pickup-sprite`, frame, new Vector2(0, -36)));
-    this.addChild(this._itemPickUpShell);
+    // Start the collect animation
+    this._itemCollectTime = 500; // ms
+    this._itemCollectShell = new GameObject({ id: `${this.id}-item-collect-shell` });
+    this._itemCollectShell.addChild(createItemSprite(`${this.id}-item-collect-sprite`, frame, new Vector2(0, -36)));
+    this.addChild(this._itemCollectShell);
   }
 
-  private _workOnItemPickUp(delta: number): void {
-    this._itemPickUpTime -= delta;
-    this.body.animations?.play('pickUpDown');
+  private _workOnItemCollect(delta: number): void {
+    this._itemCollectTime -= delta;
+    this.body.animations?.play('collectDown');
 
-    if (this._itemPickUpTime <= 0) {
-      this._itemPickUpShell?.destroy();
+    if (this._itemCollectTime <= 0) {
+      this._itemCollectShell?.destroy();
     }
   }
 }

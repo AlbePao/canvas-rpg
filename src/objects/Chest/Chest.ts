@@ -67,7 +67,7 @@ export class Chest extends InteractiveObject {
           StoryFlags.add(addsFlag);
         }
 
-        // Save the item to pick when text box is closed and hero satisfies the story flags
+        // Save the item to collect when text box is closed and hero satisfies the story flags
         if (itemKey) {
           contentItemKey = itemKey;
           this._openChest();
