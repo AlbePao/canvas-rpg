@@ -192,14 +192,14 @@ export class Main extends GameObject {
   }
 
   drawObjects(ctx: CanvasRenderingContext2D): void {
-    this._nonHudChildren.forEach((child) => {
+    for (const child of this._nonHudChildren) {
       child.draw(ctx, 0, 0);
-    });
+    }
   }
 
   drawForeground(ctx: CanvasRenderingContext2D): void {
-    this._hudChildren.forEach((child) => {
+    for (const child of this._hudChildren) {
       child.draw(ctx, 0, 0);
-    });
+    }
   }
 }

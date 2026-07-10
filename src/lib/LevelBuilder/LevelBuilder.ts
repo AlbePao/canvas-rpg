@@ -80,12 +80,12 @@ export class LevelBuilder extends Level {
     }
 
     // Add game objects
-    gameObjects.forEach((gameObject) => {
+    for (const gameObject of gameObjects) {
       const { type, id } = gameObject;
       const objectState = LevelStateManager.getObjectState(this.id, id);
 
       if (objectState?.removed) {
-        return;
+        continue; // Skip this object if it has been removed
       }
 
       let object: GameObject | null = null;
@@ -113,7 +113,7 @@ export class LevelBuilder extends Level {
       if (object) {
         this.addChild(object);
       }
-    });
+    }
 
     // Add hero
     this.heroStartPosition = config?.heroStartPosition ?? { x: heroDefaultPosition.x, y: heroDefaultPosition.y };
