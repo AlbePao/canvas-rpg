@@ -51,7 +51,7 @@ export class Chest extends InteractiveObject {
         return;
       }
 
-      const content = this.getTextContent();
+      const content = this.getContent();
 
       if (!content) {
         return;

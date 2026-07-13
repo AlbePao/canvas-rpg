@@ -18,7 +18,7 @@ export class InteractiveObject extends GameObject {
     this._textPortraitFrame = portraitFrame;
   }
 
-  getTextContent(): InteractionContent | null {
+  getContent(): InteractionContent | null {
     if (this._textContent.length === 0) {
       return null;
     }

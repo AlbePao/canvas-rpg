@@ -71,7 +71,7 @@ export class Npc extends MovableObject {
     super.ready();
 
     Events.on<GameObject>(HERO_REQUESTS_ACTION, this, ({ position }) => {
-      const content = this.getTextContent();
+      const content = this.getContent();
       const { x, y } = position;
 
       if (!this.position.matches([x, y]) || !content) {
