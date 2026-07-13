@@ -30,7 +30,7 @@ export class InteractiveObject extends GameObject {
       return null;
     }
 
-    const { text, addsFlag = null, itemKey = null, options = [] } = match;
+    const { text, addsFlag = null, itemKey = null, options = [], battle = null } = match;
 
     return {
       portraitFrame: this._textPortraitFrame,
@@ -38,6 +38,7 @@ export class InteractiveObject extends GameObject {
       addsFlag,
       itemKey,
       options,
+      battle,
     };
   }
 }

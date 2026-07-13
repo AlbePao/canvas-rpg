@@ -5,7 +5,7 @@ import { Inventory } from '../../lib/Inventory';
 import { LevelStateManager } from '../../lib/LevelStateManager';
 import { Progress } from '../../lib/Progress';
 import { StoryFlags } from '../../lib/StoryFlags';
-import { BATTLE_END, BATTLE_START } from '../Battle';
+import { BATTLE_END, BATTLE_START, type Battle } from '../Battle';
 import { Camera } from '../Camera';
 import { getHeroObject } from '../Hero';
 import { CHANGE_LEVEL, type Level } from '../Level';
@@ -84,9 +84,10 @@ export class Main extends GameObject {
       });
     });
 
-    Events.on(BATTLE_START, this, () => {
+    Events.on<Battle>(BATTLE_START, this, (battle) => {
       this._currentScreen = 'BATTLE';
       this._isBattlePlaying = true;
+      this.addChild(battle);
     });
 
     Events.on(BATTLE_END, this, () => {

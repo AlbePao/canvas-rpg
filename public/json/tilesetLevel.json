@@ -485,6 +485,48 @@
           "duration": 1200
         }
       ]
+    },
+    {
+      "type": "Npc",
+      "id": "npc5",
+      "x": 14,
+      "y": 2,
+      "npc": "ow5",
+      "interactionConfig": {
+        "content": [
+          {
+            "text": [
+              "Let's fight!"
+            ],
+            "battle": {
+              "background": "bgWoods",
+              "addsFlag": "DEFEATED_NPC5",
+              "winData": {
+                "text": [
+                  "You won the battle!"
+                ],
+                "money": 100,
+                "itemKeys": [
+                  "potion1"
+                ],
+                "experience": 50
+              }
+            }
+          }
+        ]
+      },
+      "behaviorConfig": [
+        {
+          "type": "stand",
+          "direction": "UP",
+          "duration": 800
+        },
+        {
+          "type": "stand",
+          "direction": "DOWN",
+          "duration": 1600
+        }
+      ]
     }
   ],
   "walls": [

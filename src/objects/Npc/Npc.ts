@@ -4,8 +4,10 @@ import { FrameIndexPattern } from '../../lib/FrameIndexPattern';
 import { GRID_SIZE, moveTowards } from '../../lib/Game';
 import type { GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
+import { ScreenTransition } from '../../lib/ScreenTransition';
 import { StoryFlags } from '../../lib/StoryFlags';
 import { Vector2 } from '../../lib/Vector2';
+import { Battle, BATTLE_START } from '../Battle';
 import { emitHeroItemCollect, getHeroObject, HERO_REQUESTS_ACTION } from '../Hero';
 import type { ItemKey } from '../Item';
 import { BEHAVIOR_END, isPositionBlocked, MovableObject } from '../MovableObject';
@@ -90,7 +92,7 @@ export class Npc extends MovableObject {
         this.changeFacingDirection('RIGHT');
       }
 
-      const { addsFlag, portraitFrame, text, itemKey, options } = content;
+      const { addsFlag, portraitFrame, text, itemKey, options, battle } = content;
 
       // Potentially add a story flag
       if (addsFlag) {
@@ -111,6 +113,19 @@ export class Npc extends MovableObject {
 
       Events.emit<TextBox>(TEXT_BOX_OPEN, textBox);
       this._isAwaitingTextBoxClose = true;
+
+      // Start battle
+      if (battle) {
+        const textBoxCloseSub = Events.on(TEXT_BOX_CLOSE, this, () => {
+          new ScreenTransition(() => {
+            Events.emit<Battle>(BATTLE_START, new Battle(battle, this));
+          });
+
+          Events.off(textBoxCloseSub);
+        });
+
+        return;
+      }
 
       // After all text is displayed, open possibly selection box if options are available
       if (options.length > 0) {

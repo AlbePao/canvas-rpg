@@ -1,4 +1,5 @@
 import type { GameObjectConfig } from '../../lib/GameObject';
+import type { BattleConfig } from '../Battle';
 import type { ItemKey } from '../Item';
 import type { SelectionOption } from '../SelectionBox';
 
@@ -17,16 +18,28 @@ export type InteractionContentConfig = {
   bypass?: string[];
 } & (
   | {
-      options?: SelectionOption[];
-      addsFlag?: never;
-      itemKey?: never;
-    }
-  | {
       options?: never;
       addsFlag?: string;
       itemKey?: ItemKey;
+      battle?: never;
+    }
+  | {
+      options?: SelectionOption[];
+      addsFlag?: never;
+      itemKey?: never;
+      battle?: never;
+    }
+  | {
+      options?: never;
+      addsFlag?: never;
+      itemKey?: never;
+      battle: InteractionBattleConfig;
     }
 );
+
+export interface InteractionBattleConfig extends BattleConfig {
+  addsFlag: string;
+}
 
 export interface InteractionContent {
   portraitFrame: number | null;
@@ -34,4 +47,5 @@ export interface InteractionContent {
   addsFlag: string | null;
   itemKey: ItemKey | null;
   options: SelectionOption[];
+  battle: InteractionBattleConfig | null;
 }

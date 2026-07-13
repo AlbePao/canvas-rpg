@@ -1,6 +1,10 @@
 import { z } from 'zod';
 import { CHEST_STATUSES } from '../../objects/Chest';
-import type { InteractionConfig, InteractionContentConfig } from '../../objects/InteractiveObject';
+import type {
+  InteractionBattleConfig,
+  InteractionConfig,
+  InteractionContentConfig,
+} from '../../objects/InteractiveObject';
 import { ITEM_KEYS } from '../../objects/Item';
 import type { MovableObjectBehavior } from '../../objects/MovableObject';
 import type { NpcBehavior } from '../../objects/Npc';
@@ -62,12 +66,30 @@ const InteractionContentConfigSchema = z
         options: z.array(SelectionOptionSchema).optional(),
         addsFlag: z.never().optional(),
         itemKey: z.never().optional(),
+        battle: z.never().optional(),
       }),
       // Second branch: does NOT have "options", but can have "addsFlag" and "itemKey"
       z.object({
         options: z.never().optional(),
         addsFlag: z.string().optional(),
         itemKey: z.enum(ITEM_KEYS).optional(),
+        battle: z.never().optional(),
+      }),
+      // Third branch: does NOT have "options", "addsFlag", or "itemKey", but has "battle"
+      z.object({
+        options: z.never().optional(),
+        addsFlag: z.never().optional(),
+        itemKey: z.never().optional(),
+        battle: z.object({
+          background: z.enum(WORLD_BACKGROUNDS),
+          addsFlag: z.string(),
+          winData: z.object({
+            text: z.array(z.string()),
+            money: z.number().int(),
+            itemKeys: z.array(z.enum(ITEM_KEYS)),
+            experience: z.number().int(),
+          }),
+        }) satisfies z.ZodType<InteractionBattleConfig>,
       }),
     ]),
   ) satisfies z.ZodType<InteractionContentConfig>;
