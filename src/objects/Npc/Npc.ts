@@ -13,7 +13,7 @@ import type { ItemKey } from '../Item';
 import { BEHAVIOR_END, isPositionBlocked, MovableObject } from '../MovableObject';
 import { SELECTION_BOX_CLOSE, SELECTION_BOX_OPEN, SelectionBox, type SelectionOption } from '../SelectionBox';
 import { Sprite } from '../Sprite';
-import { TEXT_BOX_CLOSE, TEXT_BOX_END, TEXT_BOX_OPEN, TextBox } from '../TextBox';
+import { TEXT_BOX_CLOSE, TEXT_BOX_CLOSE_REQUESTED, TEXT_BOX_END, TEXT_BOX_OPEN, TextBox } from '../TextBox';
 import {
   NPC_STAND_DOWN,
   NPC_STAND_LEFT,
@@ -109,6 +109,7 @@ export class Npc extends MovableObject {
         id: `text-box-for-${this.id}`,
         portraitFrame,
         text,
+        autoClose: !battle, // If there is a battle, disable auto-close
       });
 
       Events.emit<TextBox>(TEXT_BOX_OPEN, textBox);
@@ -116,12 +117,21 @@ export class Npc extends MovableObject {
 
       // Start battle
       if (battle) {
-        const textBoxCloseSub = Events.on(TEXT_BOX_CLOSE, this, () => {
+        const confirmSub = Events.on<TextBox>(TEXT_BOX_CLOSE_REQUESTED, this, (currentTextBox) => {
+          if (currentTextBox !== textBox) {
+            return;
+          }
+
+          // Lock text box to prevent further interaction until the battle is started
+          textBox.lock();
+
           new ScreenTransition(() => {
+            // Transition is done, now we can close the text box and start the battle
+            Events.emit<TextBox>(TEXT_BOX_CLOSE, textBox);
             Events.emit<Battle>(BATTLE_START, new Battle(battle, this));
           });
 
-          Events.off(textBoxCloseSub);
+          Events.off(confirmSub);
         });
 
         return;
