@@ -1,4 +1,5 @@
 import { Events } from '../../lib/Events';
+import { GRID_SIZE } from '../../lib/Game';
 import type { GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
 import { StoryFlags } from '../../lib/StoryFlags';
@@ -35,7 +36,7 @@ export class Chest extends InteractiveObject {
     this._body = new Sprite({
       id: `${id}-chest-sprite`,
       resource: Resources.images.chest,
-      frameSize: new Vector2(16, 16),
+      frameSize: new Vector2(GRID_SIZE, GRID_SIZE),
       hFrames: 2,
       vFrames: 1,
       frame: status === 'OPEN' ? 1 : 0,

@@ -224,7 +224,7 @@ export class InventoryMenu extends GameObject {
     Events.emit<SelectionBox>(SELECTION_BOX_OPEN, itemHandlingBox);
 
     // Change selection box position to be next to the menu
-    itemHandlingBox.position.x = this.position.x + 16;
+    itemHandlingBox.position.x = this.position.x + GRID_SIZE;
     itemHandlingBox.position.y = this.position.y + toGridSize(this._currentIndex); // Add 10px padding to align with the text
   }
 
