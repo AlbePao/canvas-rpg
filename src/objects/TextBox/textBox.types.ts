@@ -4,4 +4,5 @@ export type TextBoxConfig = Omit<GameObjectConfig, 'behaviorConfig'> & {
   portraitFrame?: number | null;
   text: string[];
   speed?: number;
+  autoClose?: boolean;
 };

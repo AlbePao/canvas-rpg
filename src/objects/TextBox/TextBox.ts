@@ -11,6 +11,7 @@ import { Sprite } from '../Sprite';
 import {
   TEXT_BOX_CHARACTER_OFFSET_X,
   TEXT_BOX_CLOSE,
+  TEXT_BOX_CLOSE_REQUESTED,
   TEXT_BOX_END,
   TEXT_BOX_LINE_VERTICAL_HEIGHT,
   TEXT_BOX_LINE_WIDTH_MAX,
@@ -26,6 +27,10 @@ import type { TextBoxConfig } from './textBox.types';
 
 export class TextBox extends GameObject {
   portrait?: Sprite;
+
+  private readonly _autoClose: boolean;
+  private _isLocked = false;
+
   private readonly _backdrop = new BoxBackdrop({
     id: `${this.id}-text-box-backdrop`,
     width: TEXT_BOX_BACKDROP_WIDTH,
@@ -51,7 +56,7 @@ export class TextBox extends GameObject {
   private _isSelectionBoxOpened = false;
 
   constructor(config: TextBoxConfig) {
-    const { id, x = 2, y = 8, text, portraitFrame, speed } = config;
+    const { id, x = 2, y = 8, text, portraitFrame, speed, autoClose = true } = config;
 
     super({
       id,
@@ -61,7 +66,20 @@ export class TextBox extends GameObject {
 
     // Draw on top layer
     this.drawLayer = 'HUD';
+    this._autoClose = autoClose;
     this.updateLines({ id, text, portraitFrame, speed });
+  }
+
+  /**
+   * Disable receiving input for this TextBox.
+   * Useful during scene transitions where the UI should remain visible but inactive.
+   */
+  lock(): void {
+    this._isLocked = true;
+  }
+
+  unlock(): void {
+    this._isLocked = false;
   }
 
   override ready(): void {
@@ -101,8 +119,8 @@ export class TextBox extends GameObject {
       input: { getActionJustPressed },
     } = Game;
 
-    // Don't interact if options selection box is opened
-    if (this._isSelectionBoxOpened) {
+    // Don't interact if options selection box is opened or text box is locked
+    if (this._isSelectionBoxOpened || this._isLocked) {
       return;
     }
 
@@ -127,8 +145,12 @@ export class TextBox extends GameObject {
         return;
       }
 
-      // Done with the textbox
-      Events.emit<TextBox>(TEXT_BOX_CLOSE, this);
+      // Done with the textbox, notify the outside world that it can be closed
+      if (this._autoClose) {
+        Events.emit<TextBox>(TEXT_BOX_CLOSE, this);
+      } else {
+        Events.emit<TextBox>(TEXT_BOX_CLOSE_REQUESTED, this);
+      }
     }
 
     // Word on typewriter

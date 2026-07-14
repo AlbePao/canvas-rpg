@@ -1,5 +1,6 @@
 // Text box events
 export const TEXT_BOX_OPEN = 'TEXT_BOX_OPEN';
+export const TEXT_BOX_CLOSE_REQUESTED = 'TEXT_BOX_CLOSE_REQUESTED';
 export const TEXT_BOX_CLOSE = 'TEXT_BOX_CLOSE';
 export const TEXT_BOX_END = 'TEXT_BOX_END';
 
