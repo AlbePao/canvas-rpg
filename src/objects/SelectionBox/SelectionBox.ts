@@ -2,7 +2,6 @@ import { Events } from '../../lib/Events';
 import {
   fromGridSize,
   Game,
-  GRID_SIZE,
   SELECTION_INDICATOR_OFFSET,
   SELECTION_INDICATOR_X_OFFSET,
   SELECTION_INDICATOR_Y_OFFSET,
@@ -77,7 +76,7 @@ export class SelectionBox<K extends string = string> extends GameObject {
     // Calculate selection box width and add padding for the indicator and some spacing
     const width = Math.max(...this.options.map(({ text }) => calculateTextWidth(text))) + 52;
 
-    const height = toGridSize(this.options.length) + GRID_SIZE; // Each option is 16px tall + some padding
+    const height = toGridSize(this.options.length + 1); // Each option is 16px tall + some padding
 
     // Set backdrop size according to its options' size
     this._backdrop.updateSize(fromGridSize(width), fromGridSize(height));

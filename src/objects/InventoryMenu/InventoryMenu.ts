@@ -139,7 +139,7 @@ export class InventoryMenu extends GameObject {
   // Update the backdrop size according to the number of items in the inventory and the maximum visible items
   private _setBackdropSize(): void {
     const actualVisibleCount = Math.min(this._itemsList.length, VISIBLE_ITEMS);
-    this._height = toGridSize(actualVisibleCount) + GRID_SIZE; // Each option is 16px tall + some padding
+    this._height = toGridSize(actualVisibleCount + 1); // Each option is 16px tall + some padding
 
     // Set backdrop size according to its item text size
     this._backdrop.updateSize(fromGridSize(this._width), fromGridSize(this._height));

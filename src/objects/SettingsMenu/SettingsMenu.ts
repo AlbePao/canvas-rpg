@@ -2,7 +2,6 @@ import { Events } from '../../lib/Events';
 import {
   fromGridSize,
   Game,
-  GRID_SIZE,
   SELECTION_INDICATOR_OFFSET,
   SELECTION_INDICATOR_X_OFFSET,
   SELECTION_INDICATOR_Y_OFFSET,
@@ -77,7 +76,7 @@ export class SettingsMenu extends GameObject {
     this._width =
       Math.max(...this._settingsList.map(({ text }) => calculateTextWidth(text))) + this._longestOptionTextWidth + 128;
 
-    const height = toGridSize(this._settingsList.length) + GRID_SIZE; // Each option is 16px tall + some padding
+    const height = toGridSize(this._settingsList.length + 1); // Each option is 16px tall + some padding
 
     // Set backdrop size according to its item text size
     this._backdrop.updateSize(fromGridSize(this._width), fromGridSize(height));
