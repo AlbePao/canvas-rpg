@@ -71,11 +71,11 @@ export class GameObject {
   }
 
   private _getDrawChildrenOrdered(): GameObject[] {
-    if (this.children.length < 2) {
-      return this.children;
+    if (this._defaultChildren.length < 2) {
+      return this._defaultChildren;
     }
 
-    return [...this.children].sort((a, b) => {
+    return [...this._defaultChildren].sort((a, b) => {
       // WORLD_TOP layer renders last (above Y-sorted objects)
       if (a.drawLayer === 'WORLD_TOP' && b.drawLayer !== 'WORLD_TOP') {
         return 1;
