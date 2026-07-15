@@ -9,6 +9,7 @@ import type { SpriteConfig } from './sprite.types';
 export class Sprite extends GameObject {
   private readonly _resource: Resource;
   private readonly _frameSize: Vector2;
+  private readonly _frameOriginSize: Vector2;
   private readonly _hFrames: number;
   readonly vFrames: number;
   frame: number;
@@ -19,6 +20,7 @@ export class Sprite extends GameObject {
     id, // id for the sprite
     resource, // image we want to draw,
     frameSize = new Vector2(GRID_SIZE, GRID_SIZE), // size of the crop of the image
+    frameOriginSize = frameSize, // size of the grid cell used to locate `frame`'s top-left corner
     hFrames = 1, // how the sprite arranged horizontally
     vFrames = 1, // how the sprite arranged vertically
     frame = 0, // which frame we want to show
@@ -32,6 +34,7 @@ export class Sprite extends GameObject {
 
     this._resource = resource;
     this._frameSize = frameSize;
+    this._frameOriginSize = frameOriginSize;
     this._hFrames = hFrames;
     this.vFrames = vFrames;
     this.frame = frame;
@@ -54,8 +57,8 @@ export class Sprite extends GameObject {
     const frameX = frameIndex % this._hFrames;
     const frameY = Math.floor(frameIndex / this._hFrames);
     return {
-      x: frameX * this._frameSize.x,
-      y: frameY * this._frameSize.y,
+      x: frameX * this._frameOriginSize.x,
+      y: frameY * this._frameOriginSize.y,
     };
   }
 
