@@ -1,8 +1,9 @@
+import { GRID_SIZE, toGridSize } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
-import { TILESET_FRAME_MAP } from '../../lib/Tileset';
 import { Vector2 } from '../../lib/Vector2';
 import { Sprite } from '../Sprite';
+import { DECORATIONS_FRAME_MAP } from './decoration.constants';
 import type { DecorationConfig } from './decoration.types';
 
 export class Decoration extends GameObject {
@@ -19,15 +20,20 @@ export class Decoration extends GameObject {
 
     this.isSolid = isSolid;
 
-    const frame = TILESET_FRAME_MAP[key];
+    const { baseFrame, size } = DECORATIONS_FRAME_MAP[key];
 
     this.body = new Sprite({
       id,
       resource: Resources.images.tileset,
-      frameSize: new Vector2(16, 16),
-      hFrames: 16,
-      vFrames: 9,
-      frame,
+      frameSize: new Vector2(toGridSize(size?.x ?? 1), toGridSize(size?.y ?? 1)),
+      frameOriginSize: new Vector2(GRID_SIZE, GRID_SIZE),
+      hFrames: 52,
+      vFrames: 25,
+      frame: baseFrame,
+      // Anchor `x`/`y` to the decoration's bottom row (its "feet"), extending the
+      // artwork upward for decorations taller than 1 cell. Keeps Y-sorting and
+      // collision (both based on this GameObject's own position) at ground level.
+      position: new Vector2(0, size ? toGridSize(-(size.y - 1)) : 0),
     });
     this.addChild(this.body);
 

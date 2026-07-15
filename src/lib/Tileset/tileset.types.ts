@@ -207,6 +207,14 @@ export type LevelWaterStillTileName =
 
 export type LevelWaterTileName = LevelWaterAnimatedTileName | LevelWaterStillTileName;
 
+export type LevelDecorationTileName =
+  | 'tallGrass'
+  | `rock${1 | 2}Base${'Grass' | 'Sand' | 'Snow'}`
+  | `spruce${'Snow1' | 'Snow2' | 'Green'}`
+  | `palm${'Lg1' | 'Lg2' | 'Sm'}`
+  | `tree${'Sm' | 'Lg'}${'Snow' | 'Green'}`
+  | `flower${'Sm' | 'Md' | 'Lg'}${'Red' | 'Blue' | 'Yellow'}Base${'Grass' | 'Sand' | 'Snow'}`;
+
 export type LevelTileSet = LevelGroundTileset | LevelWaterTileSet | _LevelDecorationTileset;
 type _LevelTileName = LevelGroundTileset | LevelWaterTileName;
 
@@ -677,6 +685,53 @@ export const LEVEL_DECORATION_TILESET: _LevelDecorationTileset[] = [
   'flowerLgYellowBaseSand',
   'flowerLgYellowBaseSnow',
 ] as const;
+
+export const LEVEL_DECORATION_TILE_NAME: LevelDecorationTileName[] = [
+  'tallGrass',
+  'rock1BaseGrass',
+  'rock1BaseSand',
+  'rock1BaseSnow',
+  'rock2BaseGrass',
+  'rock2BaseSand',
+  'rock2BaseSnow',
+  'spruceGreen',
+  'spruceSnow1',
+  'spruceSnow2',
+  'palmLg1',
+  'palmLg2',
+  'palmSm',
+  'treeLgGreen',
+  'treeLgSnow',
+  'treeSmGreen',
+  'treeSmSnow',
+  'flowerSmRedBaseGrass',
+  'flowerSmRedBaseSand',
+  'flowerSmRedBaseSnow',
+  'flowerSmBlueBaseGrass',
+  'flowerSmBlueBaseSand',
+  'flowerSmBlueBaseSnow',
+  'flowerSmYellowBaseGrass',
+  'flowerSmYellowBaseSand',
+  'flowerSmYellowBaseSnow',
+  'flowerMdRedBaseGrass',
+  'flowerMdRedBaseSand',
+  'flowerMdRedBaseSnow',
+  'flowerMdBlueBaseGrass',
+  'flowerMdBlueBaseSand',
+  'flowerMdBlueBaseSnow',
+  'flowerMdYellowBaseGrass',
+  'flowerMdYellowBaseSand',
+  'flowerMdYellowBaseSnow',
+  'flowerLgRedBaseGrass',
+  'flowerLgRedBaseSand',
+  'flowerLgRedBaseSnow',
+  'flowerLgBlueBaseGrass',
+  'flowerLgBlueBaseSand',
+  'flowerLgBlueBaseSnow',
+  'flowerLgYellowBaseGrass',
+  'flowerLgYellowBaseSand',
+  'flowerLgYellowBaseSnow',
+];
 
 export type LevelTileName = (typeof LEVEL_TILES_NAME)[number];
 export type LevelDecorationTileset = (typeof LEVEL_DECORATION_TILESET)[number];
