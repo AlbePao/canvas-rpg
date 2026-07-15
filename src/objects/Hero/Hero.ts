@@ -43,11 +43,7 @@ export class Hero extends MovableObject {
   }
 
   constructor(config: HeroConfig) {
-    // Hero isn't a dialogue-bearing object, so give MovableObject/InteractiveObject an empty interaction config
-    super({
-      ...config,
-      interactionConfig: { content: [] },
-    });
+    super(config);
 
     const { id } = config;
 

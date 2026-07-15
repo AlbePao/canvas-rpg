@@ -9,9 +9,7 @@ export class InteractiveObject extends GameObject {
   constructor(config: InteractiveObjectConfig) {
     super(config);
 
-    const {
-      interactionConfig: { content, portraitFrame = null },
-    } = config;
+    const { interactionConfig: { content = [], portraitFrame = null } = { content: [] } } = config;
 
     // Say something when talking
     this._textContent = content;

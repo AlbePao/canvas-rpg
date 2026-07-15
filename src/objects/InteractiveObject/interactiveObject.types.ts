@@ -4,7 +4,8 @@ import type { ItemKey } from '../Item';
 import type { SelectionOption } from '../SelectionBox';
 
 export type InteractiveObjectConfig = GameObjectConfig & {
-  interactionConfig: InteractionConfig;
+  // Optional: objects with no dialogue (e.g. Hero) don't need to supply one - InteractiveObject defaults to empty content
+  interactionConfig?: InteractionConfig;
 };
 
 export interface InteractionConfig {
