@@ -16,7 +16,6 @@ export class GameObject {
 
   // Draw-order buckets: populated by addChild/removeChild so draw() never allocates
   private _floorChildren: GameObject[] = [];
-  private _worldTopChildren: GameObject[] = [];
   private _defaultChildren: GameObject[] = [];
 
   constructor(config: GameObjectConfig) {
@@ -65,24 +64,29 @@ export class GameObject {
       child.draw(ctx, drawPosX, drawPosY);
     }
 
-    /**
-     * Default children sorted by Y position in-place (no allocation).
-     * Most frames the relative Y-order hasn't changed since last
-     * frame (idle NPCs, static decorations, etc.), so skip the O(n log n)
-     * sort call whenever a cheap O(n) scan finds the array is already ordered.
-     */
-    if (this._defaultChildren.length >= 2 && !this._isSortedByY(this._defaultChildren)) {
-      this._defaultChildren.sort((a, b) => (a.position.y > b.position.y ? 1 : -1));
-    }
-
-    for (const child of this._defaultChildren) {
+    // Pass on children
+    for (const child of this._getDrawChildrenOrdered()) {
       child.draw(ctx, drawPosX, drawPosY);
     }
+  }
 
-    // WORLD_TOP children last (above Y-sorted objects)
-    for (const child of this._worldTopChildren) {
-      child.draw(ctx, drawPosX, drawPosY);
+  private _getDrawChildrenOrdered(): GameObject[] {
+    if (this.children.length < 2) {
+      return this.children;
     }
+
+    return [...this.children].sort((a, b) => {
+      // WORLD_TOP layer renders last (above Y-sorted objects)
+      if (a.drawLayer === 'WORLD_TOP' && b.drawLayer !== 'WORLD_TOP') {
+        return 1;
+      }
+      if (b.drawLayer === 'WORLD_TOP' && a.drawLayer !== 'WORLD_TOP') {
+        return -1;
+      }
+
+      // Default: sort by Y position (top of sprite)
+      return a.position.y > b.position.y ? 1 : -1;
+    });
   }
 
   drawImage(_ctx: CanvasRenderingContext2D, _drawPosX: number, _drawPosY: number): void {
@@ -121,8 +125,6 @@ export class GameObject {
   private _addToLayerBucket(child: GameObject): void {
     if (child.drawLayer === 'FLOOR') {
       this._floorChildren.push(child);
-    } else if (child.drawLayer === 'WORLD_TOP') {
-      this._worldTopChildren.push(child);
     } else {
       this._defaultChildren.push(child);
     }
@@ -131,20 +133,9 @@ export class GameObject {
   private _removeFromLayerBucket(child: GameObject): void {
     if (child.drawLayer === 'FLOOR') {
       this._floorChildren = this._floorChildren.filter((g) => g !== child);
-    } else if (child.drawLayer === 'WORLD_TOP') {
-      this._worldTopChildren = this._worldTopChildren.filter((g) => g !== child);
     } else {
       this._defaultChildren = this._defaultChildren.filter((g) => g !== child);
     }
-  }
-
-  private _isSortedByY(children: GameObject[]): boolean {
-    for (let i = 1; i < children.length; i += 1) {
-      if (children[i - 1].position.y > children[i].position.y) {
-        return false;
-      }
-    }
-    return true;
   }
 
   protected scheduleTimeout(callback: () => void, delay: number): number {
