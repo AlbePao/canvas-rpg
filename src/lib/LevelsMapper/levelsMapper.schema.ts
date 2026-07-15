@@ -22,7 +22,7 @@ import type {
   LevelObjects,
 } from '../LevelBuilder';
 import { NPC_KEYS, WORLD_BACKGROUNDS } from '../Resources';
-import { LEVEL_DECORATION_TILESET, LEVEL_TILES_NAME } from '../Tileset';
+import { LEVEL_DECORATION_TILE_NAME, LEVEL_TILES_NAME } from '../Tileset';
 
 /**
  * Zod schema for validating LevelMap JSON data
@@ -127,7 +127,7 @@ const LevelCollectibleItemSchema = z.object({
 const LevelDecorationSchema = z.object({
   type: z.literal('Decoration'),
   id: z.string(),
-  key: z.enum(LEVEL_DECORATION_TILESET),
+  key: z.enum(LEVEL_DECORATION_TILE_NAME),
   x: z.number().int(),
   y: z.number().int(),
   isSolid: z.boolean().optional(),

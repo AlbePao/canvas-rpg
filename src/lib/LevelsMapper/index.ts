@@ -1,2 +1,2 @@
-export * from './levelMapSchema';
 export * from './LevelsMapper';
+export * from './levelsMapper.schema';

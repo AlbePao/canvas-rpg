@@ -1,2 +1,2 @@
+export * from './tileset.constants';
 export * from './tileset.types';
-export * from './tilesetFrameMap';

@@ -1,6 +1,6 @@
 import { Singleton } from '../Singleton';
-import type { LevelMapJsonType } from './levelMapSchema';
-import { LevelMapJsonSchema, LevelsIdsScrema } from './levelMapSchema';
+import type { LevelMapJsonType } from './levelsMapper.schema';
+import { LevelMapJsonSchema, LevelsIdsScrema } from './levelsMapper.schema';
 
 interface LoadLevelResult {
   id: string;

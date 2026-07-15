@@ -140,16 +140,16 @@
     },
     {
       "type": "Decoration",
-      "id": "rock2-decoration",
-      "key": "rock1BaseGrass",
+      "id": "tree-sm-green1-decoration",
+      "key": "treeSmGreen",
       "x": 10,
       "y": 1,
       "isSolid": true
     },
     {
       "type": "Decoration",
-      "id": "rock3-decoration",
-      "key": "rock1BaseGrass",
+      "id": "tree-sm-green2-decoration",
+      "key": "treeSmGreen",
       "x": 11,
       "y": 1,
       "isSolid": true
@@ -193,6 +193,20 @@
       "x": 1,
       "y": 3,
       "isSolid": true
+    },
+    {
+      "type": "Decoration",
+      "id": "tree-lg-decoration",
+      "key": "treeLgGreen",
+      "x": 11,
+      "y": 7
+    },
+    {
+      "type": "Decoration",
+      "id": "grass1-decoration",
+      "key": "tallGrass",
+      "x": 12,
+      "y": 4
     },
     {
       "type": "Npc",
@@ -530,6 +544,10 @@
     }
   ],
   "walls": [
+    "11,6",
+    "11,7",
+    "12,6",
+    "12,7",
     "0,-1",
     "1,-1",
     "2,-1",
