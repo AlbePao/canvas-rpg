@@ -4,6 +4,10 @@ export const TEXT_BOX_CLOSE_REQUESTED = 'TEXT_BOX_CLOSE_REQUESTED';
 export const TEXT_BOX_CLOSE = 'TEXT_BOX_CLOSE';
 export const TEXT_BOX_END = 'TEXT_BOX_END';
 
+// Text box sizes
+export const TEXT_BOX_BACKDROP_WIDTH = 16; // 256 pixel
+export const TEXT_BOX_BACKDROP_HEIGHT = 3; // 48 pixel
+
 // Rendering constants for text layout
 export const TEXT_BOX_PADDING_LEFT_WITH_PORTRAIT = 27;
 export const TEXT_BOX_PADDING_LEFT_NO_PORTRAIT = 12;

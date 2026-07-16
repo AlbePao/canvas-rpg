@@ -1,13 +1,5 @@
 import { Events } from '../../lib/Events';
-import {
-  fromGridSize,
-  Game,
-  GRID_SIZE,
-  SELECTION_INDICATOR_OFFSET,
-  SELECTION_INDICATOR_X_OFFSET,
-  SELECTION_INDICATOR_Y_OFFSET,
-  toGridSize,
-} from '../../lib/Game';
+import { fromGridSize, Game, GRID_SIZE, toGridSize } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
 import { Inventory } from '../../lib/Inventory';
 import type { Line } from '../../lib/Text';
@@ -15,7 +7,15 @@ import { calculateTextWidth, createSpriteTextLines, drawTextLine } from '../../l
 import { ArrowIndicator } from '../ArrowIndicator';
 import { BoxBackdrop } from '../BoxBackdrop';
 import { PAUSE_SUB_MENU_CLOSE } from '../PauseMenu';
-import { SELECTION_BOX_CLOSE, SELECTION_BOX_OPEN, SelectionBox, type SelectionOption } from '../SelectionBox';
+import {
+  SELECTION_BOX_CLOSE,
+  SELECTION_BOX_OPEN,
+  SELECTION_INDICATOR_OFFSET,
+  SELECTION_INDICATOR_X_OFFSET,
+  SELECTION_INDICATOR_Y_OFFSET,
+  SelectionBox,
+  type SelectionOption,
+} from '../SelectionBox';
 import type { InventoryItem, InventoryItemActionsValue } from './inventoryMenu.types';
 
 const VISIBLE_ITEMS = 8;

@@ -1,13 +1,5 @@
 import { Events } from '../../lib/Events';
-import {
-  fromGridSize,
-  Game,
-  SELECTION_INDICATOR_OFFSET,
-  SELECTION_INDICATOR_X_OFFSET,
-  SELECTION_INDICATOR_Y_OFFSET,
-  TEXT_BOX_BACKDROP_HEIGHT,
-  toGridSize,
-} from '../../lib/Game';
+import { fromGridSize, Game, toGridSize } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
 import { StoryFlags } from '../../lib/StoryFlags';
 import type { Line } from '../../lib/Text';
@@ -15,7 +7,13 @@ import { calculateTextWidth, createSpriteTextLines, drawTextLine } from '../../l
 import { Vector2 } from '../../lib/Vector2';
 import { ArrowIndicator } from '../ArrowIndicator';
 import { BoxBackdrop } from '../BoxBackdrop';
-import { SELECTION_BOX_CLOSE } from './selectionBox.constants';
+import { TEXT_BOX_BACKDROP_HEIGHT } from '../TextBox';
+import {
+  SELECTION_BOX_CLOSE,
+  SELECTION_INDICATOR_OFFSET,
+  SELECTION_INDICATOR_X_OFFSET,
+  SELECTION_INDICATOR_Y_OFFSET,
+} from './selectionBox.constants';
 import type { SelectionBoxConfig, SelectionOption } from './selectionBox.types';
 import { isSelectionBoxOption } from './selectionBox.utils';
 

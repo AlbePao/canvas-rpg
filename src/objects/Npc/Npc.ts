@@ -1,7 +1,7 @@
 import { Animations } from '../../lib/Animations';
 import { Events } from '../../lib/Events';
 import { FrameIndexPattern } from '../../lib/FrameIndexPattern';
-import { GRID_SIZE, moveTowards } from '../../lib/Game';
+import { GRID_SIZE } from '../../lib/Game';
 import type { GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
 import { ScreenTransition } from '../../lib/ScreenTransition';
@@ -10,7 +10,7 @@ import { Vector2 } from '../../lib/Vector2';
 import { Battle, BATTLE_START } from '../Battle';
 import { emitHeroItemCollect, getHeroObject, HERO_REQUESTS_ACTION } from '../Hero';
 import type { ItemKey } from '../Item';
-import { BEHAVIOR_END, isPositionBlocked, MovableObject } from '../MovableObject';
+import { BEHAVIOR_END, isPositionBlocked, MovableObject, moveTowards } from '../MovableObject';
 import { SELECTION_BOX_CLOSE, SELECTION_BOX_OPEN, SelectionBox, type SelectionOption } from '../SelectionBox';
 import { Sprite } from '../Sprite';
 import { TEXT_BOX_CLOSE, TEXT_BOX_CLOSE_REQUESTED, TEXT_BOX_END, TEXT_BOX_OPEN, TextBox } from '../TextBox';

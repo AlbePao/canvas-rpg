@@ -2,8 +2,7 @@ import type { Animations } from '../../lib/Animations';
 import { GRID_SIZE } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
 import type { Resource } from '../../lib/Resources';
-import { Vector2 } from '../../lib/Vector2';
-import type { Coords2D } from '../../types/coords';
+import { Vector2, type Coords2D } from '../../lib/Vector2';
 import type { SpriteConfig } from './sprite.types';
 
 export class Sprite extends GameObject {

@@ -1,6 +1,6 @@
-import type { Coords2D, TileCoords } from '../types/coords';
-import type { Directions } from '../types/directions';
-import { GRID_SIZE } from './Game';
+import type { Directions } from '../../types/directions';
+import { GRID_SIZE } from '../Game';
+import type { Coords2D, TileCoords } from './vector2.types';
 
 export class Vector2 implements Coords2D {
   x = 0;

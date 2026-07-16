@@ -2,11 +2,11 @@ import type { ChestConfig } from '../../objects/Chest';
 import type { DecorationConfig } from '../../objects/Decoration';
 import type { ExitConfig } from '../../objects/Exit';
 import type { CollectibleItemConfig } from '../../objects/Item';
-import type { LevelConfig } from '../../objects/Level';
+import type { GridCoords, LevelConfig } from '../../objects/Level';
 import type { NpcConfig } from '../../objects/Npc';
-import type { Coords2D, GridCoords } from '../../types/coords';
 import type { BgKey } from '../Resources';
 import type { LevelTileName } from '../Tileset';
+import type { Coords2D } from '../Vector2';
 
 export type LevelBuilderConfig = LevelConfig & {
   id: string;

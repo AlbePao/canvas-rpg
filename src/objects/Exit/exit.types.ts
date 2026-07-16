@@ -1,6 +1,5 @@
 import type { GameObjectConfig } from '../../lib/GameObject';
-import type { Vector2 } from '../../lib/Vector2';
-import type { Coords2D } from '../../types/coords';
+import type { Coords2D, Vector2 } from '../../lib/Vector2';
 
 interface ExitLevelData {
   newLevelId: string;

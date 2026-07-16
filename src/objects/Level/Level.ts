@@ -1,7 +1,7 @@
 import { GameObject } from '../../lib/GameObject';
-import type { Coords2D, GridCoords, Walls } from '../../types/coords';
+import type { Coords2D } from '../../lib/Vector2';
 import type { Sprite } from '../Sprite';
-import type { LevelConfig } from './level.types';
+import type { GridCoords, LevelConfig, Walls } from './level.types';
 
 // This class can be used to create a new level or to instance a new level from a config passed to LevelBuilder
 export class Level extends GameObject {

@@ -1,9 +1,8 @@
 import { Events } from '../../lib/Events';
-import { detectOverlap } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
 import type { Vector2 } from '../../lib/Vector2';
-import { HERO_EXITS, HERO_POSITION } from '../Hero';
+import { HERO_EXITS, HERO_POSITION, isHeroOverlapping } from '../Hero';
 import { Sprite } from '../Sprite';
 import type { ExitConfig, ExitData } from './exit.types';
 
@@ -33,7 +32,7 @@ export class Exit extends GameObject {
 
   override ready(): void {
     Events.on<Vector2>(HERO_POSITION, this, (position) => {
-      if (detectOverlap(position, this.position)) {
+      if (isHeroOverlapping(position, this.position)) {
         Events.emit<ExitData>(HERO_EXITS, this.exitData);
       }
     });

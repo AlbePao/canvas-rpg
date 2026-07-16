@@ -1,18 +1,16 @@
 import { Events } from '../../lib/Events';
-import {
-  fromGridSize,
-  Game,
-  SELECTION_INDICATOR_OFFSET,
-  SELECTION_INDICATOR_X_OFFSET,
-  SELECTION_INDICATOR_Y_OFFSET,
-  toGridSize,
-} from '../../lib/Game';
+import { fromGridSize, Game, toGridSize } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
 import type { Line } from '../../lib/Text';
 import { calculateTextWidth, createSpriteTextLines, drawTextLine } from '../../lib/Text';
 import { ArrowIndicator } from '../ArrowIndicator';
 import { BoxBackdrop } from '../BoxBackdrop';
 import { PAUSE_SUB_MENU_CLOSE } from '../PauseMenu';
+import {
+  SELECTION_INDICATOR_OFFSET,
+  SELECTION_INDICATOR_X_OFFSET,
+  SELECTION_INDICATOR_Y_OFFSET,
+} from '../SelectionBox';
 import { SETTINGS_MENU_ITEMS } from './settingsMenu.constants';
 
 export class SettingsMenu extends GameObject {

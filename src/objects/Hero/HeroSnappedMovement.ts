@@ -1,4 +1,5 @@
-import { Game, GRID_SIZE, isSpaceFree } from '../../lib/Game';
+import { Game, GRID_SIZE } from '../../lib/Game';
+import { isSpaceFree } from '../Level';
 import { Hero } from './Hero';
 
 function alignToGrid(val: number, alignTo: number): number {
@@ -84,7 +85,7 @@ export class HeroSnappedMovement extends Hero {
     this.facingDirection = direction;
 
     // Validation that the next destination is free
-    const spaceIsFree = level && isSpaceFree(level.walls, nextGridX, nextGridY);
+    const spaceIsFree = isSpaceFree(nextGridX, nextGridY, level?.walls);
     const solidBodyAtSpace = this.parent?.children.find(
       (child) => child.isSolid && child.position.x === nextGridX && child.position.y === nextGridY,
     );

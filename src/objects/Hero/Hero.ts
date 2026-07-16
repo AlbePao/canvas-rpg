@@ -1,16 +1,16 @@
 import { Animations } from '../../lib/Animations';
 import { Events } from '../../lib/Events';
 import { FrameIndexPattern } from '../../lib/FrameIndexPattern';
-import { fromGridSize, Game, GRID_SIZE, isSpaceFree, moveTowards } from '../../lib/Game';
+import { fromGridSize, Game, GRID_SIZE } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
 import { DIRECTION_TAP } from '../../lib/Input';
 import { Resources } from '../../lib/Resources';
-import { Vector2 } from '../../lib/Vector2';
-import type { Coords2D } from '../../types/coords';
+import { Vector2, type Coords2D } from '../../lib/Vector2';
 import type { Directions } from '../../types/directions';
 import type { CollectibleItemData } from '../Item';
 import { createItemSprite } from '../Item';
-import { isPositionBlocked, MovableObject } from '../MovableObject';
+import { isSpaceFree } from '../Level';
+import { isPositionBlocked, MovableObject, moveTowards } from '../MovableObject';
 import { Sprite } from '../Sprite';
 import {
   HERO_COLLECT_DOWN,
@@ -189,7 +189,7 @@ export class Hero extends MovableObject {
     this.facingDirection = direction;
 
     // Validation that the next destination is free
-    const spaceIsFree = level && isSpaceFree(level.walls, nextX, nextY);
+    const spaceIsFree = isSpaceFree(nextX, nextY, level?.walls);
     const isBlocked = isPositionBlocked(this.parent?.children ?? [], nextX, nextY);
 
     if (spaceIsFree && !isBlocked) {

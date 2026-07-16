@@ -1,8 +1,7 @@
 import { Events } from '../../lib/Events';
 import { Game } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
-import type { Vector2 } from '../../lib/Vector2';
-import type { Coords2D } from '../../types/coords';
+import type { Coords2D, Vector2 } from '../../lib/Vector2';
 import { HERO_POSITION } from '../Hero';
 import { CHANGE_LEVEL, type Level } from '../Level';
 

@@ -1,4 +1,4 @@
-import type { Coords2D } from '../../types/coords';
+import type { Coords2D } from '../Vector2';
 
 export type GameObjectConfig = {
   id: string;

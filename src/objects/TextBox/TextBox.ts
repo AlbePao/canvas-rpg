@@ -1,5 +1,5 @@
 import { Events } from '../../lib/Events';
-import { Game, TEXT_BOX_BACKDROP_HEIGHT, TEXT_BOX_BACKDROP_WIDTH } from '../../lib/Game';
+import { Game } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
 import type { Line } from '../../lib/Text';
@@ -9,6 +9,8 @@ import { BoxBackdrop } from '../BoxBackdrop';
 import { SELECTION_BOX_CLOSE, SELECTION_BOX_OPEN } from '../SelectionBox';
 import { Sprite } from '../Sprite';
 import {
+  TEXT_BOX_BACKDROP_HEIGHT,
+  TEXT_BOX_BACKDROP_WIDTH,
   TEXT_BOX_CHARACTER_OFFSET_X,
   TEXT_BOX_CLOSE,
   TEXT_BOX_CLOSE_REQUESTED,

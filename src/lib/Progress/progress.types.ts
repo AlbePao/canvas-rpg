@@ -1,6 +1,6 @@
-import type { Coords2D } from '../../types/coords';
 import type { InventoryItems } from '../Inventory';
 import type { LevelsState } from '../LevelStateManager';
+import type { Coords2D } from '../Vector2';
 
 export interface ProgressData {
   levelId: string;
