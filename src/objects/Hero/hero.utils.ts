@@ -4,12 +4,8 @@ import { type CollectibleItemData, type ItemKey, ITEMS_SPRITE_FRAME } from '../I
 import { Hero } from './Hero';
 import { HERO_COLLECTS_ITEM } from './hero.constants';
 
-export function isHeroObject(object: GameObject): object is Hero {
-  return object instanceof Hero;
-}
-
 export function getHeroObject(gameObject: GameObject | null): Hero | null {
-  return gameObject?.children.find((child) => isHeroObject(child)) ?? null;
+  return gameObject?.children.find((child) => child instanceof Hero) ?? null;
 }
 
 export function emitHeroItemCollect(itemKey: ItemKey, skipCollectAnimation = false): void {
