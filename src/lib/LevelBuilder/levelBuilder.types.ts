@@ -4,7 +4,7 @@ import type { ExitConfig } from '../../objects/Exit';
 import type { CollectibleItemConfig } from '../../objects/Item';
 import type { LevelConfig } from '../../objects/Level';
 import type { NpcConfig } from '../../objects/Npc';
-import type { Coords, Coords2D } from '../../types/coords';
+import type { Coords2D, GridCoords } from '../../types/coords';
 import type { BgKey } from '../Resources';
 import type { LevelTileName } from '../Tileset';
 
@@ -44,6 +44,6 @@ export interface LevelMap {
   background?: LevelBackground;
   heroDefaultPosition: Coords2D;
   gameObjects: LevelObjects[];
-  walls: Coords[];
-  tiles: Record<Coords, LevelTileName | null>;
+  walls: GridCoords[];
+  tiles: Record<GridCoords, LevelTileName | null>;
 }

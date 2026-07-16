@@ -1,4 +1,4 @@
-import type { Coords, Walls } from '../../types/coords';
+import type { Walls } from '../../types/coords';
 import type { GameObject } from '../GameObject';
 import type { Vector2 } from '../Vector2';
 import { GRID_SIZE } from './game.constants';
@@ -24,10 +24,8 @@ export function detectOverlap(heroPosition: Vector2, objectPosition: Vector2): b
 }
 
 export function isSpaceFree(walls: Walls, x: number, y: number): boolean {
-  // Convert to string for easy lookup
-  const str: Coords = `${x},${y}`;
   // Check if walls has an entry at this spot
-  const isWallPresent = walls.has(str);
+  const isWallPresent = walls.has(`${x},${y}`);
 
   return !isWallPresent;
 }

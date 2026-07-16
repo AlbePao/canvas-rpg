@@ -9,7 +9,7 @@ import { ITEM_KEYS } from '../../objects/Item';
 import type { MovableObjectBehavior } from '../../objects/MovableObject';
 import type { NpcBehavior } from '../../objects/Npc';
 import type { SelectionOption } from '../../objects/SelectionBox';
-import type { Coords, Coords2D } from '../../types/coords';
+import type { Coords2D, GridCoords } from '../../types/coords';
 import { DIRECTIONS } from '../../types/directions';
 import { GAME_OBJECT_DRAW_LAYERS } from '../GameObject';
 import type {
@@ -181,7 +181,7 @@ const WallCoordSchema = z.templateLiteral([
   z.number().int(),
   z.literal(','),
   z.number().int(),
-]) satisfies z.ZodType<Coords>;
+]) satisfies z.ZodType<GridCoords>;
 
 /**
  * Main LevelMap schema for JSON validation
