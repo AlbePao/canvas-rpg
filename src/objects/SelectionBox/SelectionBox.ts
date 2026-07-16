@@ -101,18 +101,14 @@ export class SelectionBox<K extends string = string> extends GameObject {
       input: { getActionJustPressed },
     } = Game;
 
-    const isOptionSelected = getActionJustPressed('Space') || getActionJustPressed('Enter');
-    const isArrowUpPressed = getActionJustPressed('ArrowUp') || getActionJustPressed('KeyW');
-    const isArrowDownPressed = getActionJustPressed('ArrowDown') || getActionJustPressed('KeyS');
-
-    if (isOptionSelected) {
+    if (getActionJustPressed('Space') || getActionJustPressed('Enter')) {
       // Emit selected option
       this.onOptionSelect();
-    } else if (isArrowUpPressed) {
+    } else if (getActionJustPressed('ArrowUp') || getActionJustPressed('KeyW')) {
       // Move arrow up
       this.currentOptionIndex = (this.currentOptionIndex - 1 + this.options.length) % this.options.length;
       this._updateScrollOffset();
-    } else if (isArrowDownPressed) {
+    } else if (getActionJustPressed('ArrowDown') || getActionJustPressed('KeyS')) {
       // Move arrow down
       this.currentOptionIndex = (this.currentOptionIndex + 1) % this.options.length;
       this._updateScrollOffset();

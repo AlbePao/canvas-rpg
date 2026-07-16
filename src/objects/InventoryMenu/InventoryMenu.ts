@@ -93,26 +93,21 @@ export class InventoryMenu extends GameObject {
     const {
       input: { getActionJustPressed },
     } = Game;
-    const isQKeyPressed = getActionJustPressed('KeyQ');
 
     // Close menu if player presses Q key while it's open
-    if (isQKeyPressed) {
+    if (getActionJustPressed('KeyQ')) {
       Events.emit(PAUSE_SUB_MENU_CLOSE);
       return;
     }
 
-    const isSelected = getActionJustPressed('Space') || getActionJustPressed('Enter');
-    const isArrowUpPressed = getActionJustPressed('ArrowUp') || getActionJustPressed('KeyW');
-    const isArrowDownPressed = getActionJustPressed('ArrowDown') || getActionJustPressed('KeyS');
-
-    if (isSelected) {
+    if (getActionJustPressed('Space') || getActionJustPressed('Enter')) {
       // Open selected item handler
       this.onItemSelect();
-    } else if (isArrowUpPressed) {
+    } else if (getActionJustPressed('ArrowUp') || getActionJustPressed('KeyW')) {
       // Move arrow up
       this._currentIndex = (this._currentIndex - 1 + this._itemsList.length) % this._itemsList.length;
       this._updateScrollOffset();
-    } else if (isArrowDownPressed) {
+    } else if (getActionJustPressed('ArrowDown') || getActionJustPressed('KeyS')) {
       // Move arrow down
       this._currentIndex = (this._currentIndex + 1) % this._itemsList.length;
       this._updateScrollOffset();
