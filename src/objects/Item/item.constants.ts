@@ -1,6 +1,6 @@
 import type { ItemKey } from './item.types';
 
-export const ITEMS_SPRITE_FRAME: Readonly<Record<ItemKey, number>> = {
+export const ITEMS_FRAME_MAP: Readonly<Record<ItemKey, number>> = {
   hammer1: 0,
   hammer2: 1,
   slingshot1: 2,

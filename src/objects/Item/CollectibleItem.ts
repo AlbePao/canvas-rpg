@@ -3,7 +3,7 @@ import { detectOverlap } from '../../lib/Game';
 import type { Vector2 } from '../../lib/Vector2';
 import { HERO_COLLECTS_ITEM, HERO_POSITION } from '../Hero';
 import { Item } from './Item';
-import { ITEMS_SPRITE_FRAME } from './item.constants';
+import { ITEMS_FRAME_MAP } from './item.constants';
 import type { CollectibleItemConfig, CollectibleItemData } from './item.types';
 
 export class CollectibleItem extends Item {
@@ -14,7 +14,7 @@ export class CollectibleItem extends Item {
 
     const { id, itemKey, skipCollectAnimation = false } = config;
 
-    const frame = ITEMS_SPRITE_FRAME[itemKey];
+    const frame = ITEMS_FRAME_MAP[itemKey];
 
     this.data = {
       id,
