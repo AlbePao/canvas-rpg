@@ -196,5 +196,3 @@ export const LevelMapJsonSchema = z.object({
   walls: z.array(WallCoordSchema),
   tiles: z.record(WallCoordSchema, z.enum(LEVEL_TILES_NAME).nullable()),
 }) satisfies z.ZodType<LevelMap>;
-
-export type LevelMapJsonType = z.infer<typeof LevelMapJsonSchema>;

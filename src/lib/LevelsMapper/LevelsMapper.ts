@@ -1,5 +1,5 @@
+import type { LevelMap } from '../LevelBuilder';
 import { Singleton } from '../Singleton';
-import type { LevelMapJsonType } from './levelsMapper.schema';
 import { LevelMapJsonSchema, LevelsIdsScrema } from './levelsMapper.schema';
 
 interface LoadLevelResult {
@@ -14,7 +14,7 @@ interface LoadLevelResult {
  * Provides type-safe access to all available levels
  */
 class LevelsMapperSingleton extends Singleton<LevelsMapperSingleton>() {
-  private readonly _levels = new Map<string, LevelMapJsonType>();
+  private readonly _levels = new Map<string, LevelMap>();
   private _isLoaded = false;
 
   /**
@@ -97,7 +97,7 @@ class LevelsMapperSingleton extends Singleton<LevelsMapperSingleton>() {
    * Get a specific level by ID
    * Returns null if the level doesn't exist
    */
-  getLevel(id: string): LevelMapJsonType | null {
+  getLevel(id: string): LevelMap | null {
     if (!this._isLoaded) {
       throw new Error('LevelsMapper: levels not loaded yet. Call loadLevels() during app initialization.');
     }
