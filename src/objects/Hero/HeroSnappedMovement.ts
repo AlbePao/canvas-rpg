@@ -58,24 +58,21 @@ export class HeroSnappedMovement extends Hero {
       nextGridX += alignToGrid(nextGridX, halfGridSize);
 
       this.body.animations?.play('walkDown');
-    }
-    if (direction === 'UP') {
+    } else if (direction === 'UP') {
       nextCharacterY -= characterPace;
       nextCharacterX += alignToGrid(nextCharacterX, halfGridSize);
       nextGridY -= halfGridSize;
       nextGridX += alignToGrid(nextGridX, halfGridSize);
 
       this.body.animations?.play('walkUp');
-    }
-    if (direction === 'LEFT') {
+    } else if (direction === 'LEFT') {
       nextCharacterX -= characterPace;
       nextCharacterY += alignToGrid(nextCharacterY, halfGridSize);
       nextGridX -= halfGridSize;
       nextGridY += alignToGrid(nextGridY, halfGridSize);
 
       this.body.animations?.play('walkLeft');
-    }
-    if (direction === 'RIGHT') {
+    } else if (direction === 'RIGHT') {
       nextCharacterX += characterPace;
       nextCharacterY += alignToGrid(nextCharacterY, halfGridSize);
       nextGridX += halfGridSize;

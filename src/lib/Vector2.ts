@@ -24,14 +24,11 @@ export class Vector2 implements Coords2D {
 
     if (direction === 'LEFT') {
       x -= GRID_SIZE;
-    }
-    if (direction === 'RIGHT') {
+    } else if (direction === 'RIGHT') {
       x += GRID_SIZE;
-    }
-    if (direction === 'UP') {
+    } else if (direction === 'UP') {
       y -= GRID_SIZE;
-    }
-    if (direction === 'DOWN') {
+    } else if (direction === 'DOWN') {
       y += GRID_SIZE;
     }
 

@@ -33,11 +33,9 @@ export function isPositionBlocked(children: GameObject[], x: number, y: number):
 export function getStandingFrame(direction: Directions): StandingFrame {
   if (direction === 'UP') {
     return 'standUp';
-  }
-  if (direction === 'LEFT') {
+  } else if (direction === 'LEFT') {
     return 'standLeft';
-  }
-  if (direction === 'RIGHT') {
+  } else if (direction === 'RIGHT') {
     return 'standRight';
   }
 

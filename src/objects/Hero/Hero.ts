@@ -175,16 +175,13 @@ export class Hero extends MovableObject {
     if (direction === 'DOWN') {
       nextY += GRID_SIZE;
       this.body.animations?.play('walkDown');
-    }
-    if (direction === 'UP') {
+    } else if (direction === 'UP') {
       nextY -= GRID_SIZE;
       this.body.animations?.play('walkUp');
-    }
-    if (direction === 'LEFT') {
+    } else if (direction === 'LEFT') {
       nextX -= GRID_SIZE;
       this.body.animations?.play('walkLeft');
-    }
-    if (direction === 'RIGHT') {
+    } else if (direction === 'RIGHT') {
       nextX += GRID_SIZE;
       this.body.animations?.play('walkRight');
     }

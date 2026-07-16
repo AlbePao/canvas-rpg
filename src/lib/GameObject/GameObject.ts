@@ -79,8 +79,7 @@ export class GameObject {
       // WORLD_TOP layer renders last (above Y-sorted objects)
       if (a.drawLayer === 'WORLD_TOP' && b.drawLayer !== 'WORLD_TOP') {
         return 1;
-      }
-      if (b.drawLayer === 'WORLD_TOP' && a.drawLayer !== 'WORLD_TOP') {
+      } else if (b.drawLayer === 'WORLD_TOP' && a.drawLayer !== 'WORLD_TOP') {
         return -1;
       }
 
