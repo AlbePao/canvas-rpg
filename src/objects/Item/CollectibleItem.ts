@@ -1,8 +1,8 @@
 import { Events } from '../../lib/Events';
+import { GameRegistry } from '../../lib/GameRegistry';
 import type { Vector2 } from '../../lib/Vector2';
 import { HERO_COLLECTS_ITEM, HERO_POSITION, isHeroOverlapping } from '../Hero';
 import { Item } from './Item';
-import { ITEMS_FRAME_MAP } from './item.constants';
 import type { CollectibleItemConfig, CollectibleItemData } from './item.types';
 
 export class CollectibleItem extends Item {
@@ -13,7 +13,7 @@ export class CollectibleItem extends Item {
 
     const { id, itemKey, skipCollectAnimation = false } = config;
 
-    const frame = ITEMS_FRAME_MAP[itemKey];
+    const { frame } = GameRegistry.getItem(itemKey);
 
     this.data = {
       id,

@@ -1,6 +1,6 @@
 import { GameObject } from '../../lib/GameObject';
+import { GameRegistry } from '../../lib/GameRegistry';
 import { Vector2 } from '../../lib/Vector2';
-import { ITEMS_FRAME_MAP } from './item.constants';
 import type { ItemConfig, ItemData } from './item.types';
 import { createItemSprite } from './item.utils';
 
@@ -11,7 +11,7 @@ export class Item extends GameObject {
     super(config);
 
     const { id, itemKey } = config;
-    const frame = ITEMS_FRAME_MAP[itemKey];
+    const { frame } = GameRegistry.getItem(itemKey);
 
     this.data = {
       itemKey,

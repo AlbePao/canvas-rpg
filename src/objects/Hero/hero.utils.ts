@@ -1,7 +1,8 @@
 import { Events } from '../../lib/Events';
 import type { GameObject } from '../../lib/GameObject';
+import { GameRegistry } from '../../lib/GameRegistry';
 import type { Vector2 } from '../../lib/Vector2';
-import { type CollectibleItemData, type ItemKey, ITEMS_FRAME_MAP } from '../Item';
+import { type CollectibleItemData, type ItemKey } from '../Item';
 import { Hero } from './Hero';
 import { HERO_COLLECTS_ITEM } from './hero.constants';
 
@@ -23,7 +24,7 @@ export function emitHeroItemCollect(itemKey: ItemKey, skipCollectAnimation = fal
     // Placeholder id since this function is used only to trigger animation
     id: `collected-${itemKey}`,
     itemKey,
-    frame: ITEMS_FRAME_MAP[itemKey],
+    frame: GameRegistry.getItem(itemKey).frame,
     skipCollectAnimation,
   });
 }
