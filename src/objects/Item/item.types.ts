@@ -13,6 +13,7 @@ export const ITEM_KEYS = [
   'heart',
   'sword',
 ] as const;
+// TODO: remove ItemKey type and use generic string type. The items keys are validated a startup time by zod
 export type ItemKey = (typeof ITEM_KEYS)[number];
 
 export type ItemConfig = GameObjectConfig & {

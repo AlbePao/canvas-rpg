@@ -1,5 +1,9 @@
 import type { AssetsToLoad } from './resources.types';
 
+/**
+ * TODO: remove this file and put all of its data inside json files in json directory. The data will be loaded at startup time by zod and validated.
+ */
+
 // Every image we want to download
 export const ASSETS_TO_LOAD: AssetsToLoad = {
   bgBeach: '/sprites/backgrounds/beach.png',

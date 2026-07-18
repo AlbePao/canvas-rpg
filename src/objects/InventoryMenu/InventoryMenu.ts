@@ -20,7 +20,7 @@ import type { InventoryItem, InventoryItemActionsValue } from './inventoryMenu.t
 
 const VISIBLE_ITEMS = 8;
 
-// TODO: evaluate to move this class to a different screen instead of a sub menu, so selection box can be opened without setting its position and items icon and quantity can be drawn next to the text without recalculating space
+// TODO: move this class to a different screen instead of a sub menu, so selection box can be opened without setting its position and items icon and quantity can be drawn next to the text without recalculating space
 export class InventoryMenu extends GameObject {
   private _itemsList: InventoryItem[] = [];
   private _itemsListLines: Line[] = [];
