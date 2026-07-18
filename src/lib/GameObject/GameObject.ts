@@ -1,5 +1,8 @@
+import { Animations } from '../Animations';
 import { Events } from '../Events';
+import { FrameIndexPattern } from '../FrameIndexPattern';
 import { toGridSize } from '../Game';
+import { GameRegistry, type AnimationObjectKey, type AnimationObjectType } from '../GameRegistry';
 import { Vector2 } from '../Vector2';
 import type { GameObjectConfig, GameObjectDrawLayer } from './gameObject.types';
 
@@ -144,5 +147,22 @@ export class GameObject {
     }, delay);
     this._pendingTimeouts.add(timeoutId);
     return timeoutId;
+  }
+
+  protected createAnimations(objectType: AnimationObjectType, key: AnimationObjectKey = 'base'): Animations | null {
+    const animationConfig = GameRegistry.getAnimationConfig(objectType, key);
+    let animations: Animations | null = null;
+
+    if (animationConfig && Object.keys(animationConfig).length > 0) {
+      const patterns: Record<string, FrameIndexPattern> = {};
+
+      for (const [key, value] of Object.entries(animationConfig ?? {})) {
+        patterns[key] = new FrameIndexPattern(value);
+      }
+
+      animations = new Animations(patterns);
+    }
+
+    return animations;
   }
 }

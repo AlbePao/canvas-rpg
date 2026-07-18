@@ -1,6 +1,4 @@
-import { Animations } from '../../lib/Animations';
 import { Events } from '../../lib/Events';
-import { FrameIndexPattern } from '../../lib/FrameIndexPattern';
 import { fromGridSize, Game, GRID_SIZE } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
 import { DIRECTION_TAP } from '../../lib/Input';
@@ -12,17 +10,6 @@ import { createItemSprite } from '../Item';
 import { isSpaceFree } from '../Level';
 import { isPositionBlocked, MovableObject, moveTowards } from '../MovableObject';
 import { Sprite } from '../Sprite';
-import {
-  HERO_COLLECT_DOWN,
-  HERO_STAND_DOWN,
-  HERO_STAND_LEFT,
-  HERO_STAND_RIGHT,
-  HERO_STAND_UP,
-  HERO_WALK_DOWN,
-  HERO_WALK_LEFT,
-  HERO_WALK_RIGHT,
-  HERO_WALK_UP,
-} from './hero.animations';
 import { HERO_COLLECTS_ITEM, HERO_POSITION, HERO_REQUESTS_ACTION } from './hero.constants';
 import type { HeroConfig } from './hero.types';
 
@@ -60,17 +47,7 @@ export class Hero extends MovableObject {
       vFrames: 8,
       frame: 1,
       position: new Vector2(-8, -20),
-      animations: new Animations({
-        walkDown: new FrameIndexPattern(HERO_WALK_DOWN),
-        walkUp: new FrameIndexPattern(HERO_WALK_UP),
-        walkLeft: new FrameIndexPattern(HERO_WALK_LEFT),
-        walkRight: new FrameIndexPattern(HERO_WALK_RIGHT),
-        standDown: new FrameIndexPattern(HERO_STAND_DOWN),
-        standUp: new FrameIndexPattern(HERO_STAND_UP),
-        standLeft: new FrameIndexPattern(HERO_STAND_LEFT),
-        standRight: new FrameIndexPattern(HERO_STAND_RIGHT),
-        collectDown: new FrameIndexPattern(HERO_COLLECT_DOWN),
-      }),
+      animations: this.createAnimations('hero'),
     });
     this.addChild(this.body);
   }

@@ -1,6 +1,4 @@
-import { Animations } from '../../lib/Animations';
 import { Events } from '../../lib/Events';
-import { FrameIndexPattern } from '../../lib/FrameIndexPattern';
 import { GRID_SIZE } from '../../lib/Game';
 import type { GameObject } from '../../lib/GameObject';
 import { Resources } from '../../lib/Resources';
@@ -14,16 +12,6 @@ import { BEHAVIOR_END, isPositionBlocked, MovableObject, moveTowards } from '../
 import { SELECTION_BOX_CLOSE, SELECTION_BOX_OPEN, SelectionBox, type SelectionOption } from '../SelectionBox';
 import { Sprite } from '../Sprite';
 import { TEXT_BOX_CLOSE, TEXT_BOX_CLOSE_REQUESTED, TEXT_BOX_END, TEXT_BOX_OPEN, TextBox } from '../TextBox';
-import {
-  NPC_STAND_DOWN,
-  NPC_STAND_LEFT,
-  NPC_STAND_RIGHT,
-  NPC_STAND_UP,
-  NPC_WALK_DOWN,
-  NPC_WALK_LEFT,
-  NPC_WALK_RIGHT,
-  NPC_WALK_UP,
-} from './npc.animations';
 import type { NpcBehavior, NpcConfig } from './npc.types';
 
 export class Npc extends MovableObject {
@@ -55,16 +43,7 @@ export class Npc extends MovableObject {
       hFrames: 4,
       vFrames: 4,
       position: new Vector2(-8, -20),
-      animations: new Animations({
-        standDown: new FrameIndexPattern(NPC_STAND_DOWN),
-        standLeft: new FrameIndexPattern(NPC_STAND_LEFT),
-        standRight: new FrameIndexPattern(NPC_STAND_RIGHT),
-        standUp: new FrameIndexPattern(NPC_STAND_UP),
-        walkDown: new FrameIndexPattern(NPC_WALK_DOWN),
-        walkLeft: new FrameIndexPattern(NPC_WALK_LEFT),
-        walkRight: new FrameIndexPattern(NPC_WALK_RIGHT),
-        walkUp: new FrameIndexPattern(NPC_WALK_UP),
-      }),
+      animations: this.createAnimations('npc'),
     });
     this.addChild(this.body);
   }

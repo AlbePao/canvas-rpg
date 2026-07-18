@@ -1,8 +1,8 @@
 import { GameObject } from '../../lib/GameObject';
+import { GameRegistry } from '../../lib/GameRegistry';
 import { Resources } from '../../lib/Resources';
 import { Sprite } from '../Sprite';
 import type { LevelTileConfig, LevelTileHeroBehavior } from './levelTile.types';
-import { getLevelTileFrame, getWaterAnimations } from './levelTile.utils';
 
 export class LevelTile extends GameObject {
   readonly body: Sprite;
@@ -20,9 +20,9 @@ export class LevelTile extends GameObject {
       resource: Resources.images.tileset,
       hFrames: 52,
       vFrames: 25,
-      frame: getLevelTileFrame(tileName),
+      frame: GameRegistry.getTileFrame(tileName),
       position,
-      animations: getWaterAnimations(tileName),
+      animations: this.createAnimations('tiles', tileName),
     });
     this.addChild(this.body);
 
