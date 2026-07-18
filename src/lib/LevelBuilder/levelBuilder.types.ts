@@ -5,7 +5,6 @@ import type { CollectibleItemConfig } from '../../objects/Item';
 import type { GridCoords, LevelConfig } from '../../objects/Level';
 import type { NpcConfig } from '../../objects/Npc';
 import type { BgKey } from '../Resources';
-import type { LevelTileName } from '../Tileset';
 import type { Coords2D } from '../Vector2';
 
 export type LevelBuilderConfig = LevelConfig & {
@@ -45,5 +44,5 @@ export interface LevelMap {
   heroDefaultPosition: Coords2D;
   gameObjects: LevelObjects[];
   walls: GridCoords[];
-  tiles: Record<GridCoords, LevelTileName | null>;
+  tiles: Record<GridCoords, string | null>;
 }
