@@ -1,9 +1,8 @@
 import type { GameObjectConfig, GameObjectDrawLayer } from '../../lib/GameObject';
-import type { LevelDecorationTileName } from '../../lib/Tileset';
 import type { Coords2D } from '../../lib/Vector2';
 
 export type DecorationConfig = GameObjectConfig & {
-  key: LevelDecorationTileName;
+  key: string;
   isSolid?: boolean;
   drawLayer?: GameObjectDrawLayer;
 };

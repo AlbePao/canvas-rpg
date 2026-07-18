@@ -1,9 +1,9 @@
 import { GRID_SIZE, toGridSize } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
+import { GameRegistry } from '../../lib/GameRegistry';
 import { Resources } from '../../lib/Resources';
 import { Vector2 } from '../../lib/Vector2';
 import { Sprite } from '../Sprite';
-import { DECORATIONS_FRAME_MAP } from './decoration.constants';
 import type { DecorationConfig } from './decoration.types';
 
 export class Decoration extends GameObject {
@@ -20,7 +20,7 @@ export class Decoration extends GameObject {
 
     this.isSolid = isSolid;
 
-    const { baseFrame, size } = DECORATIONS_FRAME_MAP[key];
+    const { baseFrame, size } = GameRegistry.getDecorationFrame(key);
 
     this.body = new Sprite({
       id,
