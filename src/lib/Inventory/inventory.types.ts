@@ -1,8 +1,8 @@
-import type { ItemStat } from '../Item';
+import type { ItemData } from '../GameRegistry';
 
 export type InventoryCategory = '';
 
-export type InventoryItem = ItemStat & {
+export type InventoryItem = ItemData & {
   quantity: number;
 };
 

@@ -1,5 +1,5 @@
 import type { ItemKey } from '../../objects/Item';
-import { ITEMS_REGISTRY } from '../Item';
+import { GameRegistry } from '../GameRegistry';
 import { Singleton } from '../Singleton';
 import type { InventoryItem } from './inventory.types';
 
@@ -13,7 +13,7 @@ class InventorySingleton extends Singleton<InventorySingleton>() {
       existing.quantity += 1;
     } else {
       this._itemsMap.set(itemKey, {
-        ...ITEMS_REGISTRY[itemKey],
+        ...GameRegistry.getItem(itemKey),
         quantity: 1,
       });
     }
