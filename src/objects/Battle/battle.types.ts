@@ -1,7 +1,5 @@
-import type { BgKey } from '../../lib/Resources';
-
 export interface BattleConfig {
-  background: BgKey;
+  background: string;
   addsFlag?: string; // Adds a flag to the story flags when the battle is won
   // team: BattleTeamMemberConfig;
   winData: {

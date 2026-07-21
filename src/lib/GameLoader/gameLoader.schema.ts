@@ -26,7 +26,7 @@ import type {
   ItemsRegistry,
   TilesFrameMapRegistry,
 } from '../GameRegistry';
-import { ITEM_TYPES } from '../GameRegistry/gameRegistry.types';
+import { ITEM_TYPES, NPC_KEYS, WORLD_BACKGROUNDS } from '../GameRegistry';
 import type {
   LevelBackground,
   LevelChestItem,
@@ -37,13 +37,12 @@ import type {
   LevelNpc,
   LevelObjects,
 } from '../LevelBuilder';
-import { NPC_KEYS, WORLD_BACKGROUNDS } from '../Resources';
 import type { Coords2D } from '../Vector2';
-import type { LevelSchemas } from './levelsMapper.types';
+import type { LevelSchemas } from './gameLoader.types';
 
 /**
- * Zod schema for validating LevelMap JSON data
- * Inferred from the LevelMap TypeScript interface to ensure consistency
+ * Zod schema for validating JSON data
+ * Inferred from the TypeScript interface to ensure consistency
  */
 
 export const LevelsIdsSchema = z.array(z.string()) satisfies z.ZodType<string[]>;

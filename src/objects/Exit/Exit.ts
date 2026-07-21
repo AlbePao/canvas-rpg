@@ -1,6 +1,6 @@
 import { Events } from '../../lib/Events';
 import { GameObject } from '../../lib/GameObject';
-import { Resources } from '../../lib/Resources';
+import { GameRegistry } from '../../lib/GameRegistry';
 import type { Vector2 } from '../../lib/Vector2';
 import { HERO_EXITS, HERO_POSITION, isHeroOverlapping } from '../Hero';
 import { Sprite } from '../Sprite';
@@ -14,9 +14,15 @@ export class Exit extends GameObject {
 
     const { id, newHeroPosition, newLevelId } = config;
 
+    const { hFrames, vFrames, frameSize, position, resource } = GameRegistry.getAssetData('exit');
+
     const exit = new Sprite({
       id: `${id}-exit-sprite`,
-      resource: Resources.images.exit,
+      resource,
+      frameSize,
+      hFrames,
+      vFrames,
+      position,
     });
     this.addChild(exit);
 

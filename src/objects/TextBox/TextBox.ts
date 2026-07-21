@@ -1,7 +1,7 @@
 import { Events } from '../../lib/Events';
 import { Game } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
-import { Resources } from '../../lib/Resources';
+import { GameRegistry } from '../../lib/GameRegistry';
 import type { Line } from '../../lib/Text';
 import { createSpriteTextLines } from '../../lib/Text';
 import { ArrowIndicator } from '../ArrowIndicator';
@@ -107,10 +107,15 @@ export class TextBox extends GameObject {
 
     // Create a portrait
     if (portraitFrame) {
+      const { hFrames, vFrames, frameSize, position, resource } = GameRegistry.getAssetData('arrows');
+
       this.portrait = new Sprite({
         id: `${id}-portrait`,
-        resource: Resources.images.portraits,
-        hFrames: 4,
+        resource,
+        hFrames,
+        vFrames,
+        frameSize,
+        position,
         frame: portraitFrame,
       });
     }

@@ -1,9 +1,7 @@
 import { Events } from '../../lib/Events';
-import { GRID_SIZE } from '../../lib/Game';
 import type { GameObject } from '../../lib/GameObject';
-import { Resources } from '../../lib/Resources';
+import { GameRegistry } from '../../lib/GameRegistry';
 import { StoryFlags } from '../../lib/StoryFlags';
-import { Vector2 } from '../../lib/Vector2';
 import { emitHeroItemCollect, HERO_OPENS_CHEST, HERO_REQUESTS_ACTION } from '../Hero';
 import { InteractiveObject } from '../InteractiveObject';
 import { Sprite } from '../Sprite';
@@ -32,12 +30,15 @@ export class Chest extends InteractiveObject {
     this._status = status;
     this._removeAfterLoot = removeAfterLoot;
 
+    const { hFrames, vFrames, frameSize, position, resource } = GameRegistry.getAssetData('chest');
+
     this._body = new Sprite({
       id: `${id}-chest-sprite`,
-      resource: Resources.images.chest,
-      frameSize: new Vector2(GRID_SIZE, GRID_SIZE),
-      hFrames: 2,
-      vFrames: 1,
+      resource,
+      hFrames,
+      vFrames,
+      frameSize,
+      position,
       frame: status === 'OPEN' ? 1 : 0,
     });
     this.addChild(this._body);

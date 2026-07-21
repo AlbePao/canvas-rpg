@@ -1,6 +1,5 @@
 import { GameObject } from '../../lib/GameObject';
-import { Resources } from '../../lib/Resources';
-import { Vector2 } from '../../lib/Vector2';
+import { GameRegistry } from '../../lib/GameRegistry';
 import type { Directions } from '../../types/directions';
 import { Sprite } from '../Sprite';
 import type { ArrowIndicatorConfig } from './arrowIndicator.types';
@@ -20,13 +19,16 @@ export class ArrowIndicator extends GameObject {
 
     const { direction } = config;
 
+    const { hFrames, vFrames, frameSize, position, resource } = GameRegistry.getAssetData('arrows');
+
     this._body = new Sprite({
       id: `${this.id}-arrow-indicator`,
-      resource: Resources.images.arrows,
-      frameSize: new Vector2(11, 11),
-      hFrames: 4,
-      vFrames: 1,
+      resource,
+      frameSize,
+      hFrames,
+      vFrames,
       frame: ARROW_DIRECTION_TO_FRAME[direction],
+      position,
     });
   }
 

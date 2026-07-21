@@ -1,10 +1,10 @@
 import type { Animations } from '../../lib/Animations';
-import type { Resource } from '../../lib/Resources';
+import type { AssetResource } from '../../lib/GameRegistry';
 import type { Vector2 } from '../../lib/Vector2';
 
 export type SpriteConfig = {
   id: string;
-  resource: Resource;
+  resource: AssetResource;
 } & Partial<{
   frameSize: Vector2;
   /**

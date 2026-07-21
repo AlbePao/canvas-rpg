@@ -1,12 +1,12 @@
 import type { Animations } from '../../lib/Animations';
 import { GRID_SIZE } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
-import type { Resource } from '../../lib/Resources';
+import type { AssetResource } from '../../lib/GameRegistry';
 import { Vector2, type Coords2D } from '../../lib/Vector2';
 import type { SpriteConfig } from './sprite.types';
 
 export class Sprite extends GameObject {
-  private readonly _resource: Resource;
+  private readonly _resource: AssetResource;
   private readonly _frameSize: Vector2;
   private readonly _frameOriginSize: Vector2;
   private readonly _hFrames: number;

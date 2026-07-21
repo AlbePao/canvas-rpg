@@ -1,8 +1,7 @@
-import type { NpcKey } from '../../lib/Resources';
 import type { MovableObjectBehavior, MovableObjectConfig } from '../MovableObject';
 
 export type NpcConfig = MovableObjectConfig & {
-  npc: NpcKey;
+  npc: string;
   behaviorConfig?: NpcBehavior[];
 };
 

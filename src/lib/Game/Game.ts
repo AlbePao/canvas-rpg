@@ -1,8 +1,8 @@
 import type { Level } from '../../objects/Level';
 import { Main } from '../../objects/Main';
+import { GameLoader } from '../GameLoader';
 import { GameLoop } from '../GameLoop';
 import { Input } from '../Input';
-import { LevelsMapper } from '../LevelsMapper';
 import { Singleton } from '../Singleton';
 import {
   DEFAULT_CANVAS_HEIGHT,
@@ -44,8 +44,8 @@ class GameSingleton extends Singleton<GameSingleton>() {
     this._containerSizes.canvasWidth = canvasWidth;
     this._containerSizes.canvasHeight = canvasHeight;
 
-    // Load all levels from JSON before starting the game
-    await LevelsMapper.loadLevels();
+    // Load all game data JSON before starting the game
+    await GameLoader.loadData();
 
     // Grabbing the container to create canvas inside
     const gameContainer = document.querySelector<HTMLDivElement>(this._containerId);

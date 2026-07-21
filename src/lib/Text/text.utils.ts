@@ -1,5 +1,5 @@
 import { Sprite } from '../../objects/Sprite';
-import { Resources } from '../Resources';
+import { GameRegistry } from '../GameRegistry';
 import type { Line, Word } from './text.types';
 
 // Characters widths
@@ -59,15 +59,19 @@ export function createSpriteTextLines(strings: string[], idPrefix: string): Line
         const charWidth = getCharacterWidth(char);
         wordWidth += charWidth;
 
+        const { hFrames, vFrames, frameSize, position, resource } = GameRegistry.getAssetData('font');
+
         // Also create a Sprite for each character in the word
         return {
           width: charWidth,
           sprite: new Sprite({
             id: `${idPrefix}-char-${char}`,
-            resource: Resources.images.font,
-            hFrames: 13,
-            vFrames: 6,
+            resource,
+            hFrames,
+            vFrames,
+            frameSize,
             frame: getCharacterFrame(char),
+            position,
           }),
         };
       });

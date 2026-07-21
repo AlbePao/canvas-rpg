@@ -4,7 +4,6 @@ import type { ExitConfig } from '../../objects/Exit';
 import type { CollectibleItemConfig } from '../../objects/Item';
 import type { GridCoords, LevelConfig } from '../../objects/Level';
 import type { NpcConfig } from '../../objects/Npc';
-import type { BgKey } from '../Resources';
 import type { Coords2D } from '../Vector2';
 
 export type LevelBuilderConfig = LevelConfig & {
@@ -34,7 +33,7 @@ export type LevelExit = ExitConfig & {
 export type LevelObjects = LevelCollectibleItem | LevelChestItem | LevelNpc | LevelDecoration | LevelExit;
 
 export interface LevelBackground {
-  resource: BgKey;
+  resource: string;
   frameSize: Coords2D;
 }
 

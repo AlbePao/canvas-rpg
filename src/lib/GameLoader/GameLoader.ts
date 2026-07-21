@@ -1,5 +1,4 @@
-import { GameRegistry } from '../GameRegistry';
-import type { LevelMap } from '../LevelBuilder';
+import { ASSETS, GameRegistry } from '../GameRegistry';
 import { Singleton } from '../Singleton';
 import {
   createAnimationsSchema,
@@ -8,23 +7,20 @@ import {
   createLevelMapSchema,
   createTilesFrameMapSchema,
   LevelsIdsSchema,
-} from './levelsMapper.schema';
-import type { LevelLoadResult } from './levelsMapper.types';
+} from './gameLoader.schema';
+import type { LevelLoadResult } from './gameLoader.types';
 
 /**
- * LevelsMapper: Dynamically loads and validates level definitions from individual JSON files
- * Each level has its own JSON file in public/json/{levelId}.json
- * Provides type-safe access to all available levels
+ * GameLoader: Dynamically loads and validates game data definitions from individual JSON files
+ * Each definition has its own JSON file in public/json/
+ * Provides type-safe access to all available data definitions through GameRegistry
  */
-class LevelsMapperSingleton extends Singleton<LevelsMapperSingleton>() {
-  private readonly _levels = new Map<string, LevelMap>();
-  private _isLoaded = false;
-
+class GameLoaderSingleton extends Singleton<GameLoaderSingleton>() {
   /**
-   * Load and validate all levels from individual JSON files
+   * Load and validate game data from individual JSON files
    * This should be called during app initialization (before starting the game)
    */
-  async loadLevels(): Promise<void> {
+  async loadData(): Promise<void> {
     try {
       const results = await Promise.all([
         fetch('/json/config/animations.json'),
@@ -35,7 +31,7 @@ class LevelsMapperSingleton extends Singleton<LevelsMapperSingleton>() {
       ]);
 
       if (results.some((res) => !res.ok)) {
-        throw new Error('LevelsMapper: failed to load dynamic game data for schema validation.');
+        throw new Error('GameLoader: failed to load dynamic game data for schema validation.');
       }
 
       const [animationsResponse, decorationsResponse, itemsResponse, levelsIdsResponse, tilesResponse] = results;
@@ -52,9 +48,15 @@ class LevelsMapperSingleton extends Singleton<LevelsMapperSingleton>() {
       const levelsIds = LevelsIdsSchema.parse(levelsIdsData);
       const { schema: TilesSchema, tileKeys } = createTilesFrameMapSchema(tilesData);
 
-      const { loadItemsRegistry, loadTilesFrameMapRegistry, loadDecorationsFrameMapRegistry, loadAnimationsRegistry } =
-        GameRegistry;
+      const {
+        loadAssetsRegistry,
+        loadItemsRegistry,
+        loadTilesFrameMapRegistry,
+        loadDecorationsFrameMapRegistry,
+        loadAnimationsRegistry,
+      } = GameRegistry;
 
+      loadAssetsRegistry(ASSETS);
       loadAnimationsRegistry(AnimationsSchema.parse(animationsData));
       loadDecorationsFrameMapRegistry(DecorationsSchema.parse(decorationsData));
       loadItemsRegistry(ItemsSchema.parse(itemsData));
@@ -97,7 +99,7 @@ class LevelsMapperSingleton extends Singleton<LevelsMapperSingleton>() {
             continue;
           }
 
-          this._levels.set(levelId, validatedLevel);
+          GameRegistry.loadLevel(levelId, validatedLevel);
           levelLoadResults.push({ id: levelId, success: true });
         } catch (error) {
           levelLoadResults.push({
@@ -123,59 +125,14 @@ class LevelsMapperSingleton extends Singleton<LevelsMapperSingleton>() {
       }
 
       if (successCount === 0) {
-        throw new Error('LevelsMapper: failed to load any levels');
+        throw new Error('GameLoader: failed to load any levels');
       }
-
-      this._isLoaded = true;
     } catch (criticalError) {
-      console.error('Critical initialization error in LevelsMapper:', criticalError);
+      console.error('Critical initialization error in GameLoader:', criticalError);
       throw criticalError;
     }
-  }
-
-  /**
-   * Get a specific level by ID
-   * Returns null if the level doesn't exist
-   */
-  getLevel(id: string): LevelMap | null {
-    if (!this._isLoaded) {
-      throw new Error('LevelsMapper: levels not loaded yet. Call loadLevels() during app initialization.');
-    }
-
-    const level = this._levels.get(id);
-    if (!level) {
-      console.warn(`Level "${id}" not found in LevelsMapper`);
-      return null;
-    }
-
-    return level;
-  }
-
-  /**
-   * Get all loaded level IDs
-   */
-  getAllLevelIds(): string[] {
-    if (!this._isLoaded) {
-      throw new Error('LevelsMapper: levels not loaded yet. Call loadLevels() during app initialization.');
-    }
-
-    return Array.from(this._levels.keys());
-  }
-
-  /**
-   * Check if a level exists
-   */
-  hasLevel(id: string): boolean {
-    return this._levels.has(id);
-  }
-
-  /**
-   * Check if levels are loaded
-   */
-  getIsLoaded(): boolean {
-    return this._isLoaded;
   }
 }
 
 // Singleton instance
-export const LevelsMapper = new LevelsMapperSingleton();
+export const GameLoader = new GameLoaderSingleton();

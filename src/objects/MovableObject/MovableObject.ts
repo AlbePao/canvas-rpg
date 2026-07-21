@@ -1,6 +1,6 @@
 import { Events } from '../../lib/Events';
-import { Resources } from '../../lib/Resources';
-import { Vector2 } from '../../lib/Vector2';
+import { GameRegistry } from '../../lib/GameRegistry';
+import type { Vector2 } from '../../lib/Vector2';
 import type { Directions } from '../../types/directions';
 import { InteractiveObject } from '../InteractiveObject';
 import { Sprite } from '../Sprite';
@@ -120,11 +120,15 @@ export abstract class MovableObject extends InteractiveObject {
   }
 
   protected createShadowSprite(id: string): Sprite {
+    const { hFrames, vFrames, frameSize, position, resource } = GameRegistry.getAssetData('shadow');
+
     return new Sprite({
       id,
-      resource: Resources.images.shadow,
-      frameSize: new Vector2(32, 32),
-      position: new Vector2(-8, -19),
+      resource,
+      frameSize,
+      position,
+      hFrames,
+      vFrames,
     });
   }
 }

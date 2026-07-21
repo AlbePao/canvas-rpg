@@ -1,7 +1,7 @@
 import { Events } from '../../lib/Events';
 import { Game } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
-import { Resources } from '../../lib/Resources';
+import { GameRegistry } from '../../lib/GameRegistry';
 import { Vector2 } from '../../lib/Vector2';
 import type { InteractiveObject } from '../InteractiveObject';
 import { Sprite } from '../Sprite';
@@ -19,13 +19,17 @@ export class Battle extends GameObject {
 
     const { background } = config;
     const { canvasWidth, canvasHeight } = Game.containerSizes;
+    const { hFrames, vFrames, frameSize, position, resource } = GameRegistry.getAssetData(background);
 
     this.drawLayer = 'HUD';
 
     this.background = new Sprite({
       id: 'battle-background',
-      resource: Resources.images[background],
-      frameSize: new Vector2(canvasWidth, canvasHeight),
+      resource,
+      frameSize: frameSize ?? new Vector2(canvasWidth, canvasHeight),
+      hFrames,
+      vFrames,
+      position,
     });
 
     this.starter = starter;

@@ -1,10 +1,9 @@
 import { Events } from '../../lib/Events';
 import { GRID_SIZE } from '../../lib/Game';
 import type { GameObject } from '../../lib/GameObject';
-import { Resources } from '../../lib/Resources';
+import { GameRegistry } from '../../lib/GameRegistry';
 import { ScreenTransition } from '../../lib/ScreenTransition';
 import { StoryFlags } from '../../lib/StoryFlags';
-import { Vector2 } from '../../lib/Vector2';
 import { Battle, BATTLE_START } from '../Battle';
 import { emitHeroItemCollect, getHeroObject, HERO_REQUESTS_ACTION } from '../Hero';
 import { BEHAVIOR_END, isPositionBlocked, MovableObject, moveTowards } from '../MovableObject';
@@ -34,14 +33,16 @@ export class Npc extends MovableObject {
     // Shadow under feet is separated from body to stay in place when npc is doing some actions, like walking or jumping
     this.addChild(this.createShadowSprite(`${id}-npc-shadow-sprite`));
 
+    const { hFrames, vFrames, frameSize, position, resource } = GameRegistry.getAssetData(npc);
+
     // Body sprite
     this.body = new Sprite({
       id: `${id}-npc-body-sprite`,
-      resource: Resources.images[npc],
-      frameSize: new Vector2(32, 32),
-      hFrames: 4,
-      vFrames: 4,
-      position: new Vector2(-8, -20),
+      resource,
+      frameSize,
+      hFrames,
+      vFrames,
+      position,
       animations: this.createAnimations('npc'),
     });
     this.addChild(this.body);

@@ -1,6 +1,5 @@
 import { GameObject } from '../../lib/GameObject';
 import { GameRegistry } from '../../lib/GameRegistry';
-import { Resources } from '../../lib/Resources';
 import { Sprite } from '../Sprite';
 import type { LevelTileConfig, LevelTileHeroBehavior } from './levelTile.types';
 
@@ -15,11 +14,14 @@ export class LevelTile extends GameObject {
       id,
     });
 
+    const { hFrames, vFrames, frameSize, resource } = GameRegistry.getAssetData('tileset');
+
     this.body = new Sprite({
       id,
-      resource: Resources.images.tileset,
-      hFrames: 52,
-      vFrames: 25,
+      resource,
+      frameSize,
+      hFrames,
+      vFrames,
       frame: GameRegistry.getTileFrame(tileName),
       position,
       animations: this.createAnimations('tiles', tileName),

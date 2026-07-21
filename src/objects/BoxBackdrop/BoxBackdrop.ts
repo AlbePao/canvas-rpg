@@ -1,21 +1,23 @@
-import { GRID_SIZE, toGridSize } from '../../lib/Game';
+import { toGridSize } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
-import { Resources } from '../../lib/Resources';
-import { Vector2 } from '../../lib/Vector2';
+import { GameRegistry } from '../../lib/GameRegistry';
 import { Sprite } from '../Sprite';
 import type { BoxBackdropConfig } from './boxBackdrop.types';
 
 function createBackdropFrames(): Sprite[] {
-  // Create the 9 frames from the textBox sheet (3x3 grid, each frame is GRID_SIZE x GRID_SIZE)
+  // Create the 9 frames from the backdrop sheet (3x3 grid, each frame is GRID_SIZE x GRID_SIZE)
   const frameArray: Sprite[] = [];
+
+  const { hFrames, vFrames, frameSize, position, resource } = GameRegistry.getAssetData('backdrop');
 
   for (let i = 0; i < 9; i++) {
     frameArray[i] = new Sprite({
       id: `backdrop-frame-${i}`,
-      resource: Resources.images.textBox,
-      frameSize: new Vector2(GRID_SIZE, GRID_SIZE),
-      hFrames: 3,
-      vFrames: 3,
+      resource,
+      hFrames,
+      vFrames,
+      frameSize,
+      position,
       frame: i,
     });
   }

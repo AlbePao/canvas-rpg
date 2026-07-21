@@ -9,22 +9,21 @@ import { LevelTile } from '../../objects/LevelTile';
 import { Npc } from '../../objects/Npc';
 import { Sprite } from '../../objects/Sprite';
 import { Events } from '../Events';
-import { objectKeys, toGridSize } from '../Game';
+import { Game, objectKeys, toGridSize } from '../Game';
 import type { GameObject } from '../GameObject';
+import { GameRegistry } from '../GameRegistry';
 import { Inventory } from '../Inventory';
-import { LevelsMapper } from '../LevelsMapper';
 import { LevelStateManager } from '../LevelStateManager';
-import { Resources } from '../Resources';
 import { ScreenTransition } from '../ScreenTransition';
 import { Vector2 } from '../Vector2';
 import type { LevelBuilderConfig } from './levelBuilder.types';
 
 export class LevelBuilder extends Level {
   constructor(config: LevelBuilderConfig) {
-    const level = LevelsMapper.getLevel(config.id);
+    const level = GameRegistry.getLevel(config.id);
 
     if (!level) {
-      throw new Error(`LevelBuilder: level "${config.id}" not found in LevelsMapper`);
+      throw new Error(`LevelBuilder: level "${config.id}" not found in GameRegistry`);
     }
 
     const { id, background, heroDefaultPosition, tiles, walls, gameObjects } = level;
@@ -33,13 +32,21 @@ export class LevelBuilder extends Level {
       id,
     });
 
-    this.background = background
-      ? new Sprite({
-          id: `${id}-background-sprite`,
-          resource: Resources.images[background.resource],
-          frameSize: new Vector2(background.frameSize.x, background.frameSize.y),
-        })
-      : null;
+    if (background) {
+      const { hFrames, vFrames, frameSize, position, resource } = GameRegistry.getAssetData(background.resource);
+      const { containerSizes } = Game;
+
+      this.background = new Sprite({
+        id: `${id}-background-sprite`,
+        resource,
+        frameSize: frameSize
+          ? new Vector2(frameSize.x, frameSize.y)
+          : new Vector2(containerSizes.canvasWidth, containerSizes.canvasHeight),
+        hFrames,
+        vFrames,
+        position,
+      });
+    }
 
     // Add tiles
     for (const coords of objectKeys(tiles)) {
@@ -142,8 +149,8 @@ export class LevelBuilder extends Level {
     });
 
     Events.on<ExitData>(HERO_EXITS, this, ({ newLevelId, newHeroPosition }) => {
-      if (!LevelsMapper.hasLevel(newLevelId)) {
-        throw new Error(`LevelBuilder: level "${newLevelId}" not found in LevelsMapper`);
+      if (!GameRegistry.hasLevel(newLevelId)) {
+        throw new Error(`LevelBuilder: level "${newLevelId}" not found in GameRegistry`);
       }
 
       new ScreenTransition(() => {

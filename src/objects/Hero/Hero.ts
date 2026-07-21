@@ -1,8 +1,8 @@
 import { Events } from '../../lib/Events';
 import { fromGridSize, Game, GRID_SIZE } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
+import { GameRegistry } from '../../lib/GameRegistry';
 import { DIRECTION_TAP } from '../../lib/Input';
-import { Resources } from '../../lib/Resources';
 import { Vector2, type Coords2D } from '../../lib/Vector2';
 import type { Directions } from '../../types/directions';
 import type { CollectibleItemData } from '../Item';
@@ -40,14 +40,16 @@ export class Hero extends MovableObject {
     // Shadow under feet is separated from body to stay in place when hero is doing some actions, like walking or jumping
     this.addChild(this.createShadowSprite(`${id}-hero-shadow-sprite`));
 
+    const { hFrames, vFrames, frameSize, position, resource } = GameRegistry.getAssetData('hero');
+
     this.body = new Sprite({
       id: `${id}-hero-body-sprite`,
-      resource: Resources.images.hero,
-      frameSize: new Vector2(32, 32),
-      hFrames: 3,
-      vFrames: 8,
+      resource,
+      frameSize,
+      hFrames,
+      vFrames,
       frame: 1,
-      position: new Vector2(-8, -20),
+      position,
       animations: this.createAnimations('hero'),
     });
     this.addChild(this.body);
