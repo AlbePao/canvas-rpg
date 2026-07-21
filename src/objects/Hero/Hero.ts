@@ -37,6 +37,7 @@ export class Hero extends MovableObject {
     // Opt into being solid
     this.isSolid = true;
 
+    // Shadow under feet is separated from body to stay in place when hero is doing some actions, like walking or jumping
     this.addChild(this.createShadowSprite(`${id}-hero-shadow-sprite`));
 
     this.body = new Sprite({

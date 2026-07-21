@@ -19,6 +19,7 @@ import {
 import type { InventoryItem, InventoryItemActionsValue } from './inventoryMenu.types';
 
 const VISIBLE_ITEMS = 8;
+const GO_BACK_KEY = 'goBack';
 
 // TODO: move this class to a different screen instead of a sub menu, so selection box can be opened without setting its position and items icon and quantity can be drawn next to the text without recalculating space
 export class InventoryMenu extends GameObject {
@@ -122,7 +123,7 @@ export class InventoryMenu extends GameObject {
         quantity,
       })),
       // Close menu option
-      { key: 'goBack', text: 'Go back', quantity: 0 },
+      { key: GO_BACK_KEY, text: 'Go back', quantity: 0 },
     ];
 
     this._itemsListLines = createSpriteTextLines(
@@ -199,7 +200,7 @@ export class InventoryMenu extends GameObject {
     const { key } = this._itemsList[this._currentIndex];
 
     // Close menu if player selects Go Back option
-    if (key === 'goBack') {
+    if (key === GO_BACK_KEY) {
       Events.emit(PAUSE_SUB_MENU_CLOSE);
       return;
     }
