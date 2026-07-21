@@ -1,7 +1,8 @@
-import { ASSETS, GameRegistry } from '../GameRegistry';
+import { GameRegistry } from '../GameRegistry';
 import { Singleton } from '../Singleton';
 import {
   createAnimationsSchema,
+  createAssetsSchema,
   createDecorationsFrameMapSchema,
   createItemsRegistrySchema,
   createLevelMapSchema,
@@ -24,6 +25,7 @@ class GameLoaderSingleton extends Singleton<GameLoaderSingleton>() {
     try {
       const results = await Promise.all([
         fetch('/json/config/animations.json'),
+        fetch('/json/config/assets.json'),
         fetch('/json/config/decorationsFrameMap.json'),
         fetch('/json/config/items.json'),
         fetch('/json/config/levelsIds.json'),
@@ -34,15 +36,18 @@ class GameLoaderSingleton extends Singleton<GameLoaderSingleton>() {
         throw new Error('GameLoader: failed to load dynamic game data for schema validation.');
       }
 
-      const [animationsResponse, decorationsResponse, itemsResponse, levelsIdsResponse, tilesResponse] = results;
+      const [animationsResponse, assetsResponse, decorationsResponse, itemsResponse, levelsIdsResponse, tilesResponse] =
+        results;
 
       const animationsData = await animationsResponse.json();
+      const assetsData = await assetsResponse.json();
       const decorationsData = await decorationsResponse.json();
       const itemsData = await itemsResponse.json();
       const levelsIdsData = await levelsIdsResponse.json();
       const tilesData = await tilesResponse.json();
 
       const { schema: AnimationsSchema } = createAnimationsSchema(animationsData);
+      const { schema: AssetsSchema } = createAssetsSchema(assetsData);
       const { schema: DecorationsSchema, decorationKeys } = createDecorationsFrameMapSchema(decorationsData);
       const { schema: ItemsSchema, itemKeys } = createItemsRegistrySchema(itemsData);
       const levelsIds = LevelsIdsSchema.parse(levelsIdsData);
@@ -56,7 +61,7 @@ class GameLoaderSingleton extends Singleton<GameLoaderSingleton>() {
         loadAnimationsRegistry,
       } = GameRegistry;
 
-      loadAssetsRegistry(ASSETS);
+      loadAssetsRegistry(AssetsSchema.parse(assetsData));
       loadAnimationsRegistry(AnimationsSchema.parse(animationsData));
       loadDecorationsFrameMapRegistry(DecorationsSchema.parse(decorationsData));
       loadItemsRegistry(ItemsSchema.parse(itemsData));

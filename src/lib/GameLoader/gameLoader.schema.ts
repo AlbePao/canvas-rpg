@@ -21,12 +21,14 @@ import type { AnimationConfig, FrameData } from '../FrameIndexPattern';
 import { GAME_OBJECT_DRAW_LAYERS } from '../GameObject';
 import type {
   AnimationRegistry,
+  AssetData,
+  AssetsToLoad,
   DecorationFramesMapRegistry,
   ItemData,
   ItemsRegistry,
   TilesFrameMapRegistry,
 } from '../GameRegistry';
-import { ITEM_TYPES, NPC_KEYS, WORLD_BACKGROUNDS } from '../GameRegistry';
+import { BASE_RESOURCE_KEYS, ITEM_TYPES } from '../GameRegistry';
 import type {
   LevelBackground,
   LevelChestItem,
@@ -100,6 +102,27 @@ export const createAnimationsSchema = (
   return { schema: AnimationRegistrySchema, animationKeys };
 };
 
+export const createAssetsSchema = (data: unknown): { schema: z.ZodType<AssetsToLoad>; assetsKeys: string[] } => {
+  const AssetDataSchema = z
+    .object({
+      src: z.string(),
+      frameSize: Coords2DSchema.optional(),
+      position: Coords2DSchema.optional(),
+      hFrames: z.number().int().optional(),
+      vFrames: z.number().int().optional(),
+    })
+    .strict() satisfies z.ZodType<AssetData>;
+
+  const AssetsToLoadSchema = z
+    .object(Object.fromEntries([...BASE_RESOURCE_KEYS].map((key) => [key, AssetDataSchema])))
+    .catchall(AssetDataSchema);
+
+  const parsedData = AssetsToLoadSchema.parse(data);
+  const assetsKeys = z.array(z.string()).nonempty().parse(Object.keys(parsedData));
+
+  return { schema: AssetsToLoadSchema, assetsKeys };
+};
+
 export const createDecorationsFrameMapSchema = (
   data: unknown,
 ): {
@@ -127,7 +150,6 @@ export const createDecorationsFrameMapSchema = (
 export const createItemDataSchema = (itemKeysSchema: z.ZodType<string>): z.ZodType<ItemData> =>
   z
     .object({
-      // itemKey: z.enum(assets.itemKeys),
       itemKey: itemKeysSchema,
       name: z.string(),
       type: z.enum(ITEM_TYPES),
@@ -143,7 +165,6 @@ export const createItemsRegistrySchema = (
 } => {
   const parsedData = z.record(z.string(), z.unknown()).parse(data);
   // We use .nonempty() because z.enum needs at least one element
-  // validateKeys is automatically typed by TypeScript as a tuple: [string, ...string[]]
   const itemKeys = z.array(z.string()).nonempty().parse(Object.keys(parsedData));
 
   const ItemKeysSchema = z.enum(itemKeys) satisfies z.ZodType<string>;
@@ -170,15 +191,16 @@ export const createTilesFrameMapSchema = (
  * Generate a Zod schema for validating LevelMap JSON data dynamically based on the provided schemas.
  */
 export const createLevelMapSchema = (schemas: LevelSchemas): z.ZodType<LevelMap> => {
-  const { itemKeys, levelsIds, tileKeys } = schemas;
+  const { decorationKeys, itemKeys, levelsIds, tileKeys } = schemas;
 
+  const decorationKeysSchema = z.enum(decorationKeys);
   const itemKeysSchema = z.enum(itemKeys);
   const levelsIdsSchema = z.enum(levelsIds);
   const tileKeysSchema = z.enum(tileKeys);
 
   const LevelBackgroundSchema = z
     .object({
-      resource: z.enum(WORLD_BACKGROUNDS),
+      resource: z.string(),
       frameSize: Coords2DSchema,
     })
     .strict() satisfies z.ZodType<LevelBackground>;
@@ -225,7 +247,7 @@ export const createLevelMapSchema = (schemas: LevelSchemas): z.ZodType<LevelMap>
           itemKey: z.never().optional(),
           battle: z
             .object({
-              background: z.enum(WORLD_BACKGROUNDS),
+              background: z.string(),
               addsFlag: z.string(),
               winData: z
                 .object({
@@ -283,9 +305,7 @@ export const createLevelMapSchema = (schemas: LevelSchemas): z.ZodType<LevelMap>
     .object({
       type: z.literal('Decoration'),
       id: z.string(),
-      key: z.string(),
-      // key: z.enum(LEVEL_DECORATION_TILE_NAME),
-      // key: z.enum(assets.decorationTileNames),
+      key: decorationKeysSchema,
       x: z.number().int(),
       y: z.number().int(),
       isSolid: z.boolean().optional(),
@@ -331,8 +351,7 @@ export const createLevelMapSchema = (schemas: LevelSchemas): z.ZodType<LevelMap>
       x: z.number().int(),
       y: z.number().int(),
       behaviorConfig: z.array(NpcBehaviorSchema).optional(),
-      npc: z.enum(NPC_KEYS),
-      // npc: z.enum(assets.npcKeys),
+      npc: z.string(),
       interactionConfig: InteractionConfigSchema,
     })
     .strict() satisfies z.ZodType<LevelNpc>;
