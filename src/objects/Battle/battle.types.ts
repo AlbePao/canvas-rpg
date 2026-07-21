@@ -1,5 +1,4 @@
 import type { BgKey } from '../../lib/Resources';
-import type { ItemKey } from '../Item';
 
 export interface BattleConfig {
   background: BgKey;
@@ -8,7 +7,7 @@ export interface BattleConfig {
   winData: {
     text: string[];
     money: number;
-    itemKeys: ItemKey[];
+    itemKeys: string[];
     experience: number;
   };
 }

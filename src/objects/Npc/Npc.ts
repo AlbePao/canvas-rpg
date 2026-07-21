@@ -7,7 +7,6 @@ import { StoryFlags } from '../../lib/StoryFlags';
 import { Vector2 } from '../../lib/Vector2';
 import { Battle, BATTLE_START } from '../Battle';
 import { emitHeroItemCollect, getHeroObject, HERO_REQUESTS_ACTION } from '../Hero';
-import type { ItemKey } from '../Item';
 import { BEHAVIOR_END, isPositionBlocked, MovableObject, moveTowards } from '../MovableObject';
 import { SELECTION_BOX_CLOSE, SELECTION_BOX_OPEN, SelectionBox, type SelectionOption } from '../SelectionBox';
 import { Sprite } from '../Sprite';
@@ -16,7 +15,7 @@ import type { NpcBehavior, NpcConfig } from './npc.types';
 
 export class Npc extends MovableObject {
   protected readonly body: Sprite;
-  private _contentItemKey: ItemKey | null = null;
+  private _contentItemKey: string | null = null;
   /**
    * Tracks whether THIS Npc is the one currently awaiting its own text box to
    * close, since TEXT_BOX_CLOSE is a global event fired for any text box in the game.

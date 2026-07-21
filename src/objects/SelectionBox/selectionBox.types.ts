@@ -1,14 +1,13 @@
 import type { GameObjectConfig } from '../../lib/GameObject';
 import type { BaseOption } from '../../types/base-option';
 import type { BattleConfig } from '../Battle';
-import type { ItemKey } from '../Item';
 
 export type SelectionOption<T extends string = string> = BaseOption<T> &
   (
     | {
         response?: string[]; // response from the object when this option is selected
         addsFlag?: string; // optional flag to be added when this option is selected
-        itemKey?: ItemKey; // optional item to be given to the player when this option is selected
+        itemKey?: string; // optional item to be given to the player when this option is selected
       }
     // Start a battle when this option is selected
     | {

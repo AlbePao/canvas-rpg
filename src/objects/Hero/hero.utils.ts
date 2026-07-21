@@ -2,7 +2,7 @@ import { Events } from '../../lib/Events';
 import type { GameObject } from '../../lib/GameObject';
 import { GameRegistry } from '../../lib/GameRegistry';
 import type { Vector2 } from '../../lib/Vector2';
-import { type CollectibleItemData, type ItemKey } from '../Item';
+import { type CollectibleItemData } from '../Item';
 import { Hero } from './Hero';
 import { HERO_COLLECTS_ITEM } from './hero.constants';
 
@@ -18,7 +18,7 @@ export function getHeroObject(gameObject: GameObject | null): Hero | null {
   return gameObject?.children.find((child) => child instanceof Hero) ?? null;
 }
 
-export function emitHeroItemCollect(itemKey: ItemKey, skipCollectAnimation = false): void {
+export function emitHeroItemCollect(itemKey: string, skipCollectAnimation = false): void {
   // This function is used to trigger collect animation if hero collects item from a chest or an npc
   Events.emit<CollectibleItemData>(HERO_COLLECTS_ITEM, {
     // Placeholder id since this function is used only to trigger animation

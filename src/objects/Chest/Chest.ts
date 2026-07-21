@@ -6,7 +6,6 @@ import { StoryFlags } from '../../lib/StoryFlags';
 import { Vector2 } from '../../lib/Vector2';
 import { emitHeroItemCollect, HERO_OPENS_CHEST, HERO_REQUESTS_ACTION } from '../Hero';
 import { InteractiveObject } from '../InteractiveObject';
-import type { ItemKey } from '../Item';
 import { Sprite } from '../Sprite';
 import { TEXT_BOX_CLOSE, TEXT_BOX_OPEN, TextBox } from '../TextBox';
 import type { ChestConfig, ChestStatus } from './chest.types';
@@ -61,7 +60,7 @@ export class Chest extends InteractiveObject {
       const { addsFlag, portraitFrame, text, itemKey } = content;
 
       if (text.length > 0) {
-        let contentItemKey: ItemKey | null = null;
+        let contentItemKey: string | null = null;
 
         // Potentially add a story flag
         if (addsFlag) {
@@ -105,7 +104,7 @@ export class Chest extends InteractiveObject {
     this._body.frame = 1;
   }
 
-  private _collectItem(itemKey: ItemKey | null): void {
+  private _collectItem(itemKey: string | null): void {
     if (!itemKey) {
       return;
     }

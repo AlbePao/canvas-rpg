@@ -1,8 +1,5 @@
 import type { BaseOption } from '../../types/base-option';
-import type { ItemKey } from '../Item';
 
-export type InventoryItem = BaseOption<InventoryItemValue> & { quantity: number };
-
-export type InventoryItemValue = ItemKey | 'goBack';
+export type InventoryItem = BaseOption & { quantity: number };
 
 export type InventoryItemActionsValue = 'useItem' | 'throwItem' | 'cancel';

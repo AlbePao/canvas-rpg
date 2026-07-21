@@ -1,12 +1,11 @@
-import type { ItemKey } from '../../objects/Item';
 import { GameRegistry } from '../GameRegistry';
 import { Singleton } from '../Singleton';
 import type { InventoryItem } from './inventory.types';
 
 class InventorySingleton extends Singleton<InventorySingleton>() {
-  private readonly _itemsMap = new Map<ItemKey, InventoryItem>();
+  private readonly _itemsMap = new Map<string, InventoryItem>();
 
-  add(itemKey: ItemKey): void {
+  add(itemKey: string): void {
     const existing = this._itemsMap.get(itemKey);
 
     if (existing) {
@@ -19,7 +18,7 @@ class InventorySingleton extends Singleton<InventorySingleton>() {
     }
   }
 
-  remove(itemKey: ItemKey | null): void {
+  remove(itemKey: string | null): void {
     if (!itemKey) {
       return;
     }
@@ -47,7 +46,7 @@ class InventorySingleton extends Singleton<InventorySingleton>() {
     });
   }
 
-  get(itemKey: ItemKey): InventoryItem | null {
+  get(itemKey: string): InventoryItem | null {
     return this._itemsMap.get(itemKey) ?? null;
   }
 }

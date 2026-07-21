@@ -1,6 +1,5 @@
 import type { GameObjectConfig } from '../../lib/GameObject';
 import type { BattleConfig } from '../Battle';
-import type { ItemKey } from '../Item';
 import type { SelectionOption } from '../SelectionBox';
 
 export type InteractiveObjectConfig = GameObjectConfig & {
@@ -21,7 +20,7 @@ export type InteractionContentConfig = {
   | {
       options?: never;
       addsFlag?: string;
-      itemKey?: ItemKey;
+      itemKey?: string;
       battle?: never;
     }
   | {
@@ -46,7 +45,7 @@ export interface InteractionContent {
   portraitFrame: number | null;
   text: string[];
   addsFlag: string | null;
-  itemKey: ItemKey | null;
+  itemKey: string | null;
   options: SelectionOption[];
   battle: InteractionBattleConfig | null;
 }
