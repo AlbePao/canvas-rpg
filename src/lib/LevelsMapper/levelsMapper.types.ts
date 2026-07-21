@@ -1,10 +1,12 @@
-export interface LevelSchemaAssets {
-  levelIds: NonEmptyTuple;
-  itemKeys: NonEmptyTuple;
-  npcKeys: NonEmptyTuple;
-  decorationTileNames: NonEmptyTuple;
-  levelTilesNames: NonEmptyTuple;
+export interface LevelSchemas {
+  decorationKeys: string[];
+  itemKeys: string[];
+  levelsIds: string[];
+  tileKeys: string[];
 }
 
-// Zod requires that z.enum receives a non-empty tuple: [string, ...string[]]
-type NonEmptyTuple = [string, ...string[]];
+export interface LevelLoadResult {
+  id: string;
+  success: boolean;
+  error?: string;
+}

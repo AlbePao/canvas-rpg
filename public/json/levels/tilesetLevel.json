@@ -117,7 +117,7 @@
     },
     {
       "type": "CollectibleItem",
-      "id": "rod",
+      "id": "rod2",
       "itemKey": "rod2",
       "x": 7,
       "y": 7

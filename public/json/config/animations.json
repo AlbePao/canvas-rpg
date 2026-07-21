@@ -1,0 +1,1790 @@
+{
+  "npc": {
+    "standDown": {
+      "duration": 400,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 0
+        }
+      ]
+    },
+    "standLeft": {
+      "duration": 400,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 4
+        }
+      ]
+    },
+    "standRight": {
+      "duration": 400,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 8
+        }
+      ]
+    },
+    "standUp": {
+      "duration": 400,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 12
+        }
+      ]
+    },
+    "walkDown": {
+      "duration": 400,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 0
+        },
+        {
+          "time": 100,
+          "frame": 1
+        },
+        {
+          "time": 200,
+          "frame": 2
+        },
+        {
+          "time": 300,
+          "frame": 3
+        }
+      ]
+    },
+    "walkLeft": {
+      "duration": 400,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 4
+        },
+        {
+          "time": 100,
+          "frame": 5
+        },
+        {
+          "time": 200,
+          "frame": 6
+        },
+        {
+          "time": 300,
+          "frame": 7
+        }
+      ]
+    },
+    "walkRight": {
+      "duration": 400,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 8
+        },
+        {
+          "time": 100,
+          "frame": 9
+        },
+        {
+          "time": 200,
+          "frame": 10
+        },
+        {
+          "time": 300,
+          "frame": 11
+        }
+      ]
+    },
+    "walkUp": {
+      "duration": 400,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 12
+        },
+        {
+          "time": 100,
+          "frame": 13
+        },
+        {
+          "time": 200,
+          "frame": 14
+        },
+        {
+          "time": 300,
+          "frame": 15
+        }
+      ]
+    }
+  },
+  "hero": {
+    "standDown": {
+      "duration": 400,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 1
+        }
+      ]
+    },
+    "standUp": {
+      "duration": 400,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 7
+        }
+      ]
+    },
+    "standLeft": {
+      "duration": 400,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 10
+        }
+      ]
+    },
+    "standRight": {
+      "duration": 400,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 4
+        }
+      ]
+    },
+    "collectDown": {
+      "duration": 400,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 12
+        }
+      ]
+    },
+    "walkDown": {
+      "duration": 400,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 1
+        },
+        {
+          "time": 100,
+          "frame": 0
+        },
+        {
+          "time": 200,
+          "frame": 1
+        },
+        {
+          "time": 300,
+          "frame": 2
+        }
+      ]
+    },
+    "walkUp": {
+      "duration": 400,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 7
+        },
+        {
+          "time": 100,
+          "frame": 6
+        },
+        {
+          "time": 200,
+          "frame": 7
+        },
+        {
+          "time": 300,
+          "frame": 8
+        }
+      ]
+    },
+    "walkLeft": {
+      "duration": 400,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 10
+        },
+        {
+          "time": 100,
+          "frame": 9
+        },
+        {
+          "time": 200,
+          "frame": 10
+        },
+        {
+          "time": 300,
+          "frame": 11
+        }
+      ]
+    },
+    "walkRight": {
+      "duration": 400,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 4
+        },
+        {
+          "time": 100,
+          "frame": 3
+        },
+        {
+          "time": 200,
+          "frame": 4
+        },
+        {
+          "time": 300,
+          "frame": 5
+        }
+      ]
+    }
+  },
+  "tiles": {
+    "waterAnimated": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 7
+        },
+        {
+          "time": 500,
+          "frame": 8
+        },
+        {
+          "time": 1000,
+          "frame": 9
+        },
+        {
+          "time": 1500,
+          "frame": 10
+        }
+      ]
+    },
+    "waterAnimatedGrassLedgeBorderUpperLeft": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 364
+        },
+        {
+          "time": 500,
+          "frame": 520
+        },
+        {
+          "time": 1000,
+          "frame": 676
+        },
+        {
+          "time": 1500,
+          "frame": 832
+        }
+      ]
+    },
+    "waterAnimatedGrassLedgeBorderUpper": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 365
+        },
+        {
+          "time": 500,
+          "frame": 521
+        },
+        {
+          "time": 1000,
+          "frame": 677
+        },
+        {
+          "time": 1500,
+          "frame": 833
+        }
+      ]
+    },
+    "waterAnimatedGrassLedgeBorderUpperRight": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 366
+        },
+        {
+          "time": 500,
+          "frame": 522
+        },
+        {
+          "time": 1000,
+          "frame": 678
+        },
+        {
+          "time": 1500,
+          "frame": 834
+        }
+      ]
+    },
+    "waterAnimatedGrassLedgeBorderLeft": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 416
+        },
+        {
+          "time": 500,
+          "frame": 572
+        },
+        {
+          "time": 1000,
+          "frame": 728
+        },
+        {
+          "time": 1500,
+          "frame": 884
+        }
+      ]
+    },
+    "waterAnimatedGrassLedgeBorder": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 417
+        },
+        {
+          "time": 500,
+          "frame": 573
+        },
+        {
+          "time": 1000,
+          "frame": 729
+        },
+        {
+          "time": 1500,
+          "frame": 885
+        }
+      ]
+    },
+    "waterAnimatedGrassLedgeBorderRight": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 418
+        },
+        {
+          "time": 500,
+          "frame": 574
+        },
+        {
+          "time": 1000,
+          "frame": 730
+        },
+        {
+          "time": 1500,
+          "frame": 886
+        }
+      ]
+    },
+    "waterAnimatedGrassLedgeBorderLowerLeft": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 468
+        },
+        {
+          "time": 500,
+          "frame": 624
+        },
+        {
+          "time": 1000,
+          "frame": 780
+        },
+        {
+          "time": 1500,
+          "frame": 936
+        }
+      ]
+    },
+    "waterAnimatedGrassLedgeBorderLower": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 469
+        },
+        {
+          "time": 500,
+          "frame": 625
+        },
+        {
+          "time": 1000,
+          "frame": 781
+        },
+        {
+          "time": 1500,
+          "frame": 937
+        }
+      ]
+    },
+    "waterAnimatedGrassLedgeBorderLowerRight": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 470
+        },
+        {
+          "time": 500,
+          "frame": 626
+        },
+        {
+          "time": 1000,
+          "frame": 782
+        },
+        {
+          "time": 1500,
+          "frame": 938
+        }
+      ]
+    },
+    "grassLedgeWaterAnimatedBorderUpperLeft": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 367
+        },
+        {
+          "time": 500,
+          "frame": 523
+        },
+        {
+          "time": 1000,
+          "frame": 679
+        },
+        {
+          "time": 1500,
+          "frame": 835
+        }
+      ]
+    },
+    "grassLedgeWaterAnimatedBorderUpper": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 368
+        },
+        {
+          "time": 500,
+          "frame": 524
+        },
+        {
+          "time": 1000,
+          "frame": 680
+        },
+        {
+          "time": 1500,
+          "frame": 836
+        }
+      ]
+    },
+    "grassLedgeWaterAnimatedBorderUpperRight": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 369
+        },
+        {
+          "time": 500,
+          "frame": 525
+        },
+        {
+          "time": 1000,
+          "frame": 681
+        },
+        {
+          "time": 1500,
+          "frame": 837
+        }
+      ]
+    },
+    "grassLedgeWaterAnimatedBorderLeft": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 419
+        },
+        {
+          "time": 500,
+          "frame": 575
+        },
+        {
+          "time": 1000,
+          "frame": 731
+        },
+        {
+          "time": 1500,
+          "frame": 887
+        }
+      ]
+    },
+    "grassLedgeWaterAnimatedBorder": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 420
+        },
+        {
+          "time": 500,
+          "frame": 576
+        },
+        {
+          "time": 1000,
+          "frame": 732
+        },
+        {
+          "time": 1500,
+          "frame": 888
+        }
+      ]
+    },
+    "grassLedgeWaterAnimatedBorderRight": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 421
+        },
+        {
+          "time": 500,
+          "frame": 577
+        },
+        {
+          "time": 1000,
+          "frame": 733
+        },
+        {
+          "time": 1500,
+          "frame": 889
+        }
+      ]
+    },
+    "grassLedgeWaterAnimatedBorderLowerLeft": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 471
+        },
+        {
+          "time": 500,
+          "frame": 627
+        },
+        {
+          "time": 1000,
+          "frame": 783
+        },
+        {
+          "time": 1500,
+          "frame": 939
+        }
+      ]
+    },
+    "grassLedgeWaterAnimatedBorderLower": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 472
+        },
+        {
+          "time": 500,
+          "frame": 628
+        },
+        {
+          "time": 1000,
+          "frame": 784
+        },
+        {
+          "time": 1500,
+          "frame": 940
+        }
+      ]
+    },
+    "grassLedgeWaterAnimatedBorderLowerRight": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 473
+        },
+        {
+          "time": 500,
+          "frame": 629
+        },
+        {
+          "time": 1000,
+          "frame": 785
+        },
+        {
+          "time": 1500,
+          "frame": 941
+        }
+      ]
+    },
+    "waterAnimatedSandLedgeBorderUpperLeft": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 379
+        },
+        {
+          "time": 500,
+          "frame": 535
+        },
+        {
+          "time": 1000,
+          "frame": 691
+        },
+        {
+          "time": 1500,
+          "frame": 847
+        }
+      ]
+    },
+    "waterAnimatedSandLedgeBorderUpper": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 380
+        },
+        {
+          "time": 500,
+          "frame": 536
+        },
+        {
+          "time": 1000,
+          "frame": 692
+        },
+        {
+          "time": 1500,
+          "frame": 848
+        }
+      ]
+    },
+    "waterAnimatedSandLedgeBorderUpperRight": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 381
+        },
+        {
+          "time": 500,
+          "frame": 537
+        },
+        {
+          "time": 1000,
+          "frame": 693
+        },
+        {
+          "time": 1500,
+          "frame": 849
+        }
+      ]
+    },
+    "waterAnimatedSandLedgeBorderLeft": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 428
+        },
+        {
+          "time": 500,
+          "frame": 584
+        },
+        {
+          "time": 1000,
+          "frame": 740
+        },
+        {
+          "time": 1500,
+          "frame": 896
+        }
+      ]
+    },
+    "waterAnimatedSandLedgeBorder": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 429
+        },
+        {
+          "time": 500,
+          "frame": 585
+        },
+        {
+          "time": 1000,
+          "frame": 741
+        },
+        {
+          "time": 1500,
+          "frame": 897
+        }
+      ]
+    },
+    "waterAnimatedSandLedgeBorderRight": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 430
+        },
+        {
+          "time": 500,
+          "frame": 586
+        },
+        {
+          "time": 1000,
+          "frame": 742
+        },
+        {
+          "time": 1500,
+          "frame": 898
+        }
+      ]
+    },
+    "waterAnimatedSandLedgeBorderLowerLeft": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 480
+        },
+        {
+          "time": 500,
+          "frame": 636
+        },
+        {
+          "time": 1000,
+          "frame": 792
+        },
+        {
+          "time": 1500,
+          "frame": 948
+        }
+      ]
+    },
+    "waterAnimatedSandLedgeBorderLower": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 481
+        },
+        {
+          "time": 500,
+          "frame": 637
+        },
+        {
+          "time": 1000,
+          "frame": 793
+        },
+        {
+          "time": 1500,
+          "frame": 949
+        }
+      ]
+    },
+    "waterAnimatedSandLedgeBorderLowerRight": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 482
+        },
+        {
+          "time": 500,
+          "frame": 638
+        },
+        {
+          "time": 1000,
+          "frame": 794
+        },
+        {
+          "time": 1500,
+          "frame": 950
+        }
+      ]
+    },
+    "sandLedgeWaterAnimatedBorderUpperLeft": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 376
+        },
+        {
+          "time": 500,
+          "frame": 532
+        },
+        {
+          "time": 1000,
+          "frame": 688
+        },
+        {
+          "time": 1500,
+          "frame": 844
+        }
+      ]
+    },
+    "sandLedgeWaterAnimatedBorderUpper": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 377
+        },
+        {
+          "time": 500,
+          "frame": 533
+        },
+        {
+          "time": 1000,
+          "frame": 689
+        },
+        {
+          "time": 1500,
+          "frame": 845
+        }
+      ]
+    },
+    "sandLedgeWaterAnimatedBorderUpperRight": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 378
+        },
+        {
+          "time": 500,
+          "frame": 534
+        },
+        {
+          "time": 1000,
+          "frame": 690
+        },
+        {
+          "time": 1500,
+          "frame": 846
+        }
+      ]
+    },
+    "sandLedgeWaterAnimatedBorderLeft": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 431
+        },
+        {
+          "time": 500,
+          "frame": 587
+        },
+        {
+          "time": 1000,
+          "frame": 743
+        },
+        {
+          "time": 1500,
+          "frame": 899
+        }
+      ]
+    },
+    "sandLedgeWaterAnimatedBorder": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 432
+        },
+        {
+          "time": 500,
+          "frame": 588
+        },
+        {
+          "time": 1000,
+          "frame": 744
+        },
+        {
+          "time": 1500,
+          "frame": 900
+        }
+      ]
+    },
+    "sandLedgeWaterAnimatedBorderRight": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 433
+        },
+        {
+          "time": 500,
+          "frame": 589
+        },
+        {
+          "time": 1000,
+          "frame": 745
+        },
+        {
+          "time": 1500,
+          "frame": 901
+        }
+      ]
+    },
+    "sandLedgeWaterAnimatedBorderLowerLeft": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 483
+        },
+        {
+          "time": 500,
+          "frame": 639
+        },
+        {
+          "time": 1000,
+          "frame": 795
+        },
+        {
+          "time": 1500,
+          "frame": 951
+        }
+      ]
+    },
+    "sandLedgeWaterAnimatedBorderLower": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 484
+        },
+        {
+          "time": 500,
+          "frame": 640
+        },
+        {
+          "time": 1000,
+          "frame": 796
+        },
+        {
+          "time": 1500,
+          "frame": 952
+        }
+      ]
+    },
+    "sandLedgeWaterAnimatedBorderLowerRight": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 485
+        },
+        {
+          "time": 500,
+          "frame": 641
+        },
+        {
+          "time": 1000,
+          "frame": 797
+        },
+        {
+          "time": 1500,
+          "frame": 953
+        }
+      ]
+    },
+    "waterAnimatedSnowLedgeBorderUpperLeft": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 382
+        },
+        {
+          "time": 500,
+          "frame": 538
+        },
+        {
+          "time": 1000,
+          "frame": 694
+        },
+        {
+          "time": 1500,
+          "frame": 850
+        }
+      ]
+    },
+    "waterAnimatedSnowLedgeBorderUpper": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 383
+        },
+        {
+          "time": 500,
+          "frame": 539
+        },
+        {
+          "time": 1000,
+          "frame": 695
+        },
+        {
+          "time": 1500,
+          "frame": 851
+        }
+      ]
+    },
+    "waterAnimatedSnowLedgeBorderUpperRight": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 384
+        },
+        {
+          "time": 500,
+          "frame": 540
+        },
+        {
+          "time": 1000,
+          "frame": 696
+        },
+        {
+          "time": 1500,
+          "frame": 852
+        }
+      ]
+    },
+    "waterAnimatedSnowLedgeBorderLeft": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 434
+        },
+        {
+          "time": 500,
+          "frame": 590
+        },
+        {
+          "time": 1000,
+          "frame": 746
+        },
+        {
+          "time": 1500,
+          "frame": 902
+        }
+      ]
+    },
+    "waterAnimatedSnowLedgeBorder": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 435
+        },
+        {
+          "time": 500,
+          "frame": 591
+        },
+        {
+          "time": 1000,
+          "frame": 747
+        },
+        {
+          "time": 1500,
+          "frame": 903
+        }
+      ]
+    },
+    "waterAnimatedSnowLedgeBorderRight": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 436
+        },
+        {
+          "time": 500,
+          "frame": 592
+        },
+        {
+          "time": 1000,
+          "frame": 748
+        },
+        {
+          "time": 1500,
+          "frame": 904
+        }
+      ]
+    },
+    "waterAnimatedSnowLedgeBorderLowerLeft": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 486
+        },
+        {
+          "time": 500,
+          "frame": 642
+        },
+        {
+          "time": 1000,
+          "frame": 798
+        },
+        {
+          "time": 1500,
+          "frame": 954
+        }
+      ]
+    },
+    "waterAnimatedSnowLedgeBorderLower": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 487
+        },
+        {
+          "time": 500,
+          "frame": 643
+        },
+        {
+          "time": 1000,
+          "frame": 799
+        },
+        {
+          "time": 1500,
+          "frame": 955
+        }
+      ]
+    },
+    "waterAnimatedSnowLedgeBorderLowerRight": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 488
+        },
+        {
+          "time": 500,
+          "frame": 644
+        },
+        {
+          "time": 1000,
+          "frame": 800
+        },
+        {
+          "time": 1500,
+          "frame": 956
+        }
+      ]
+    },
+    "snowLedgeWaterAnimatedBorderUpperLeft": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 385
+        },
+        {
+          "time": 500,
+          "frame": 541
+        },
+        {
+          "time": 1000,
+          "frame": 697
+        },
+        {
+          "time": 1500,
+          "frame": 853
+        }
+      ]
+    },
+    "snowLedgeWaterAnimatedBorderUpper": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 386
+        },
+        {
+          "time": 500,
+          "frame": 542
+        },
+        {
+          "time": 1000,
+          "frame": 698
+        },
+        {
+          "time": 1500,
+          "frame": 854
+        }
+      ]
+    },
+    "snowLedgeWaterAnimatedBorderUpperRight": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 387
+        },
+        {
+          "time": 500,
+          "frame": 543
+        },
+        {
+          "time": 1000,
+          "frame": 699
+        },
+        {
+          "time": 1500,
+          "frame": 855
+        }
+      ]
+    },
+    "snowLedgeWaterAnimatedBorderLeft": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 437
+        },
+        {
+          "time": 500,
+          "frame": 593
+        },
+        {
+          "time": 1000,
+          "frame": 749
+        },
+        {
+          "time": 1500,
+          "frame": 905
+        }
+      ]
+    },
+    "snowLedgeWaterAnimatedBorder": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 438
+        },
+        {
+          "time": 500,
+          "frame": 594
+        },
+        {
+          "time": 1000,
+          "frame": 750
+        },
+        {
+          "time": 1500,
+          "frame": 906
+        }
+      ]
+    },
+    "snowLedgeWaterAnimatedBorderRight": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 439
+        },
+        {
+          "time": 500,
+          "frame": 595
+        },
+        {
+          "time": 1000,
+          "frame": 751
+        },
+        {
+          "time": 1500,
+          "frame": 907
+        }
+      ]
+    },
+    "snowLedgeWaterAnimatedBorderLowerLeft": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 489
+        },
+        {
+          "time": 500,
+          "frame": 645
+        },
+        {
+          "time": 1000,
+          "frame": 801
+        },
+        {
+          "time": 1500,
+          "frame": 957
+        }
+      ]
+    },
+    "snowLedgeWaterAnimatedBorderLower": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 490
+        },
+        {
+          "time": 500,
+          "frame": 646
+        },
+        {
+          "time": 1000,
+          "frame": 802
+        },
+        {
+          "time": 1500,
+          "frame": 958
+        }
+      ]
+    },
+    "snowLedgeWaterAnimatedBorderLowerRight": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 491
+        },
+        {
+          "time": 500,
+          "frame": 647
+        },
+        {
+          "time": 1000,
+          "frame": 803
+        },
+        {
+          "time": 1500,
+          "frame": 959
+        }
+      ]
+    },
+    "sandShoreWaterAnimatedBorderUpperLeft": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 370
+        },
+        {
+          "time": 500,
+          "frame": 526
+        },
+        {
+          "time": 1000,
+          "frame": 682
+        },
+        {
+          "time": 1500,
+          "frame": 838
+        }
+      ]
+    },
+    "sandShoreWaterAnimatedBorderUpper": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 371
+        },
+        {
+          "time": 500,
+          "frame": 527
+        },
+        {
+          "time": 1000,
+          "frame": 683
+        },
+        {
+          "time": 1500,
+          "frame": 839
+        }
+      ]
+    },
+    "sandShoreWaterAnimatedBorderUpperRight": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 372
+        },
+        {
+          "time": 500,
+          "frame": 528
+        },
+        {
+          "time": 1000,
+          "frame": 684
+        },
+        {
+          "time": 1500,
+          "frame": 840
+        }
+      ]
+    },
+    "sandShoreWaterAnimatedBorderLeft": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 422
+        },
+        {
+          "time": 500,
+          "frame": 578
+        },
+        {
+          "time": 1000,
+          "frame": 734
+        },
+        {
+          "time": 1500,
+          "frame": 890
+        }
+      ]
+    },
+    "sandShoreWaterAnimatedBorder": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 423
+        },
+        {
+          "time": 500,
+          "frame": 579
+        },
+        {
+          "time": 1000,
+          "frame": 735
+        },
+        {
+          "time": 1500,
+          "frame": 891
+        }
+      ]
+    },
+    "sandShoreWaterAnimatedBorderRight": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 424
+        },
+        {
+          "time": 500,
+          "frame": 580
+        },
+        {
+          "time": 1000,
+          "frame": 736
+        },
+        {
+          "time": 1500,
+          "frame": 892
+        }
+      ]
+    },
+    "sandShoreWaterAnimatedBorderLowerLeft": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 474
+        },
+        {
+          "time": 500,
+          "frame": 630
+        },
+        {
+          "time": 1000,
+          "frame": 786
+        },
+        {
+          "time": 1500,
+          "frame": 942
+        }
+      ]
+    },
+    "sandShoreWaterAnimatedBorderLower": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 475
+        },
+        {
+          "time": 500,
+          "frame": 631
+        },
+        {
+          "time": 1000,
+          "frame": 787
+        },
+        {
+          "time": 1500,
+          "frame": 943
+        }
+      ]
+    },
+    "sandShoreWaterAnimatedBorderLowerRight": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 476
+        },
+        {
+          "time": 500,
+          "frame": 632
+        },
+        {
+          "time": 1000,
+          "frame": 788
+        },
+        {
+          "time": 1500,
+          "frame": 944
+        }
+      ]
+    },
+    "waterAnimatedSandShoreBorderUpperLeft": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 373
+        },
+        {
+          "time": 500,
+          "frame": 529
+        },
+        {
+          "time": 1000,
+          "frame": 685
+        },
+        {
+          "time": 1500,
+          "frame": 841
+        }
+      ]
+    },
+    "waterAnimatedSandShoreBorderUpper": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 374
+        },
+        {
+          "time": 500,
+          "frame": 530
+        },
+        {
+          "time": 1000,
+          "frame": 686
+        },
+        {
+          "time": 1500,
+          "frame": 842
+        }
+      ]
+    },
+    "waterAnimatedSandShoreBorderUpperRight": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 375
+        },
+        {
+          "time": 500,
+          "frame": 531
+        },
+        {
+          "time": 1000,
+          "frame": 687
+        },
+        {
+          "time": 1500,
+          "frame": 843
+        }
+      ]
+    },
+    "waterAnimatedSandShoreBorderLeft": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 425
+        },
+        {
+          "time": 500,
+          "frame": 581
+        },
+        {
+          "time": 1000,
+          "frame": 737
+        },
+        {
+          "time": 1500,
+          "frame": 893
+        }
+      ]
+    },
+    "waterAnimatedSandShoreBorder": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 426
+        },
+        {
+          "time": 500,
+          "frame": 582
+        },
+        {
+          "time": 1000,
+          "frame": 738
+        },
+        {
+          "time": 1500,
+          "frame": 894
+        }
+      ]
+    },
+    "waterAnimatedSandShoreBorderRight": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 427
+        },
+        {
+          "time": 500,
+          "frame": 583
+        },
+        {
+          "time": 1000,
+          "frame": 739
+        },
+        {
+          "time": 1500,
+          "frame": 895
+        }
+      ]
+    },
+    "waterAnimatedSandShoreBorderLowerLeft": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 477
+        },
+        {
+          "time": 500,
+          "frame": 633
+        },
+        {
+          "time": 1000,
+          "frame": 789
+        },
+        {
+          "time": 1500,
+          "frame": 945
+        }
+      ]
+    },
+    "waterAnimatedSandShoreBorderLower": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 478
+        },
+        {
+          "time": 500,
+          "frame": 634
+        },
+        {
+          "time": 1000,
+          "frame": 790
+        },
+        {
+          "time": 1500,
+          "frame": 946
+        }
+      ]
+    },
+    "waterAnimatedSandShoreBorderLowerRight": {
+      "duration": 2000,
+      "frames": [
+        {
+          "time": 0,
+          "frame": 479
+        },
+        {
+          "time": 500,
+          "frame": 635
+        },
+        {
+          "time": 1000,
+          "frame": 791
+        },
+        {
+          "time": 1500,
+          "frame": 947
+        }
+      ]
+    }
+  }
+}

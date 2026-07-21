@@ -1,0 +1,62 @@
+{
+  "hammer1": {
+    "itemKey": "hammer1",
+    "name": "Hammer 1",
+    "type": "equipable",
+    "frame": 0
+  },
+  "hammer2": {
+    "itemKey": "hammer2",
+    "name": "Hammer 2",
+    "type": "equipable",
+    "frame": 1
+  },
+  "slingshot1": {
+    "itemKey": "slingshot1",
+    "name": "Slingshot 1",
+    "type": "equipable",
+    "frame": 2
+  },
+  "slingshot2": {
+    "itemKey": "slingshot2",
+    "name": "Slingshot 2",
+    "type": "equipable",
+    "frame": 3
+  },
+  "rod1": {
+    "itemKey": "rod1",
+    "name": "Rod 1",
+    "type": "equipable",
+    "frame": 4
+  },
+  "rod2": {
+    "itemKey": "rod2",
+    "name": "Rod 2",
+    "type": "equipable",
+    "frame": 5
+  },
+  "potion1": {
+    "itemKey": "potion1",
+    "name": "Potion 1",
+    "type": "consumable",
+    "frame": 6
+  },
+  "potion2": {
+    "itemKey": "potion2",
+    "name": "Potion 2",
+    "type": "consumable",
+    "frame": 7
+  },
+  "heart": {
+    "itemKey": "heart",
+    "name": "Heart",
+    "type": "consumable",
+    "frame": 8
+  },
+  "sword": {
+    "itemKey": "sword",
+    "name": "Sword",
+    "type": "equipable",
+    "frame": 9
+  }
+}

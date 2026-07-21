@@ -1,23 +1,15 @@
+import { GameRegistry } from '../GameRegistry';
 import type { LevelMap } from '../LevelBuilder';
 import { Singleton } from '../Singleton';
-import { createLevelMapSchema, LevelsIdsSchema } from './levelsMapper.schema';
-
-interface LoadLevelResult {
-  id: string;
-  success: boolean;
-  error?: string;
-}
-
-/**
- * Helper per assicurarsi che l'array di stringhe non sia vuoto
- * Zod richiede che gli enum dinamici siano tupla: [string, ...string[]]
- */
-function toZodEnumTuple(array: string[]): [string, ...string[]] {
-  // if (!array || array.length === 0) {
-  //   throw new Error('Impossibile inizializzare lo schema: un array di chiavi è vuoto o non valido.');
-  // }
-  return array as [string, ...string[]];
-}
+import {
+  createAnimationsSchema,
+  createDecorationsFrameMapSchema,
+  createItemsRegistrySchema,
+  createLevelMapSchema,
+  createTilesFrameMapSchema,
+  LevelsIdsSchema,
+} from './levelsMapper.schema';
+import type { LevelLoadResult } from './levelsMapper.types';
 
 /**
  * LevelsMapper: Dynamically loads and validates level definitions from individual JSON files
@@ -33,52 +25,56 @@ class LevelsMapperSingleton extends Singleton<LevelsMapperSingleton>() {
    * This should be called during app initialization (before starting the game)
    */
   async loadLevels(): Promise<void> {
-    const loadResults: LoadLevelResult[] = [];
-
     try {
-      // const [itemsRes, npcsRes, decosRes, tilesRes] = await Promise.all([
-      //   fetch('/json/itemKeys.json'),
-      //   fetch('/json/npcKeys.json'),
-      //   fetch('/json/decorationKeys.json'),
-      //   fetch('/json/tileKeys.json'),
-      // ]);
+      const results = await Promise.all([
+        fetch('/json/config/animations.json'),
+        fetch('/json/config/decorationsFrameMap.json'),
+        fetch('/json/config/items.json'),
+        fetch('/json/config/levelsIds.json'),
+        fetch('/json/config/tilesFrameMap.json'),
+      ]);
 
-      // if (!itemsRes.ok || !npcsRes.ok || !decosRes.ok || !tilesRes.ok) {
-      //   throw new Error('LevelsMapper: failed to load dynamic keys for schema validation.');
-      // }
-
-      // const itemsJson = await itemsRes.json();
-      // const npcsJson = await npcsRes.json();
-      // const decosJson = await decosRes.json();
-      // const tilesJson = await tilesRes.json();
-
-      const validationSchema = createLevelMapSchema({
-        levelIds: toZodEnumTuple([]), // Level IDs will be validated separately
-        itemKeys: toZodEnumTuple([]),
-        npcKeys: toZodEnumTuple([]),
-        decorationTileNames: toZodEnumTuple([]),
-        levelTilesNames: toZodEnumTuple([]),
-        // itemKeys: toZodEnumTuple(itemsJson as string[]),
-        // npcKeys: toZodEnumTuple(npcsJson as string[]),
-        // decorationTileNames: toZodEnumTuple(decosJson as string[]),
-        // levelTilesNames: toZodEnumTuple(tilesJson as string[]),
-      });
-
-      const levelsIdsResponse = await fetch(`/json/levelsIds.json`);
-
-      if (!levelsIdsResponse.ok) {
-        throw new Error('LevelsMapper: unable to find levels ids list');
+      if (results.some((res) => !res.ok)) {
+        throw new Error('LevelsMapper: failed to load dynamic game data for schema validation.');
       }
 
+      const [animationsResponse, decorationsResponse, itemsResponse, levelsIdsResponse, tilesResponse] = results;
+
+      const animationsData = await animationsResponse.json();
+      const decorationsData = await decorationsResponse.json();
+      const itemsData = await itemsResponse.json();
       const levelsIdsData = await levelsIdsResponse.json();
+      const tilesData = await tilesResponse.json();
+
+      const { schema: AnimationsSchema } = createAnimationsSchema(animationsData);
+      const { schema: DecorationsSchema, decorationKeys } = createDecorationsFrameMapSchema(decorationsData);
+      const { schema: ItemsSchema, itemKeys } = createItemsRegistrySchema(itemsData);
       const levelsIds = LevelsIdsSchema.parse(levelsIdsData);
+      const { schema: TilesSchema, tileKeys } = createTilesFrameMapSchema(tilesData);
+
+      const { loadItemsRegistry, loadTilesFrameMapRegistry, loadDecorationsFrameMapRegistry, loadAnimationsRegistry } =
+        GameRegistry;
+
+      loadAnimationsRegistry(AnimationsSchema.parse(animationsData));
+      loadDecorationsFrameMapRegistry(DecorationsSchema.parse(decorationsData));
+      loadItemsRegistry(ItemsSchema.parse(itemsData));
+      loadTilesFrameMapRegistry(TilesSchema.parse(tilesData));
+
+      const LevelValidationSchema = createLevelMapSchema({
+        decorationKeys,
+        itemKeys,
+        levelsIds,
+        tileKeys,
+      });
+
+      const levelLoadResults: LevelLoadResult[] = [];
 
       for (const levelId of levelsIds) {
         try {
-          const response = await fetch(`/json/${levelId}.json`);
+          const response = await fetch(`/json/levels/${levelId}.json`);
 
           if (!response.ok) {
-            loadResults.push({
+            levelLoadResults.push({
               id: levelId,
               success: false,
               error: `Failed to fetch ${levelId}: ${response.statusText}`,
@@ -89,11 +85,11 @@ class LevelsMapperSingleton extends Singleton<LevelsMapperSingleton>() {
           const levelData = await response.json();
 
           // Validate the JSON structure against schema
-          const validatedLevel = validationSchema.parse(levelData);
+          const validatedLevel = LevelValidationSchema.parse(levelData);
 
           // Verify the ID matches what we expect
           if (validatedLevel.id !== levelId) {
-            loadResults.push({
+            levelLoadResults.push({
               id: levelId,
               success: false,
               error: `Level ID mismatch: JSON has "${validatedLevel.id}" but expected "${levelId}"`,
@@ -102,9 +98,9 @@ class LevelsMapperSingleton extends Singleton<LevelsMapperSingleton>() {
           }
 
           this._levels.set(levelId, validatedLevel);
-          loadResults.push({ id: levelId, success: true });
+          levelLoadResults.push({ id: levelId, success: true });
         } catch (error) {
-          loadResults.push({
+          levelLoadResults.push({
             id: levelId,
             success: false,
             error: error instanceof Error ? error.message : String(error),
@@ -113,13 +109,13 @@ class LevelsMapperSingleton extends Singleton<LevelsMapperSingleton>() {
       }
 
       // Report results
-      const successCount = loadResults.filter((r) => r.success).length;
-      const failureCount = loadResults.filter((r) => !r.success).length;
+      const successCount = levelLoadResults.filter((r) => r.success).length;
+      const failureCount = levelLoadResults.filter((r) => !r.success).length;
       const totalCount = levelsIds.length;
 
       if (failureCount > 0) {
         console.warn(`Loaded ${successCount}/${totalCount} levels`);
-        for (const result of loadResults) {
+        for (const result of levelLoadResults) {
           if (!result.success) {
             console.warn(`${result.id}: ${result.error}`);
           }
