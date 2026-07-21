@@ -1,58 +1,48 @@
 import type { DecorationFrames } from '../../objects/Decoration';
 import type { AnimationConfig } from '../FrameIndexPattern';
 import { Singleton } from '../Singleton';
-import { ANIMATIONS, DECORATIONS_FRAME_MAP, ITEMS_REGISTRY, LEVEL_TILES_KEYS } from './gameRegistry.constants';
 import type {
-  AnimationObjectKey,
   AnimationObjectType,
   AnimationRegistry,
   DecorationFramesMapRegistry,
   ItemData,
   ItemsRegistry,
-  NumberRegistry,
+  TilesFrameMapRegistry,
 } from './gameRegistry.types';
 
 class GameRegistrySingleton extends Singleton<GameRegistrySingleton>() {
-  private _itemsRegistry: ItemsRegistry = ITEMS_REGISTRY;
-  private _npcsKeysRegistry: string[] = [];
-  private _tilesFrameMapRegistry: NumberRegistry = LEVEL_TILES_KEYS;
-  private _decorationsFrameMapRegistry: DecorationFramesMapRegistry = DECORATIONS_FRAME_MAP;
-  private _animationsRegistry: AnimationRegistry = ANIMATIONS;
+  private _itemsRegistry: ItemsRegistry = {};
+  private _tilesFrameMapRegistry: TilesFrameMapRegistry = {};
+  private _decorationsFrameMapRegistry: DecorationFramesMapRegistry = {};
+  private _animationsRegistry: AnimationRegistry | null = null;
 
-  loadItemsRegistry(data: ItemsRegistry): void {
+  loadItemsRegistry = (data: ItemsRegistry): void => {
     if (Object.keys(this._itemsRegistry).length > 0) {
       throw new Error('Items registry has already been loaded.');
     }
     this._itemsRegistry = data;
-  }
+  };
 
-  loadNpcsKeysRegistry(data: string[]): void {
-    if (this._npcsKeysRegistry.length > 0) {
-      throw new Error('NPCs keys registry has already been loaded.');
-    }
-    this._npcsKeysRegistry = data;
-  }
-
-  loadTilesFrameMapRegistry(data: NumberRegistry): void {
+  loadTilesFrameMapRegistry = (data: TilesFrameMapRegistry): void => {
     if (Object.keys(this._tilesFrameMapRegistry).length > 0) {
       throw new Error('Tiles frame map registry has already been loaded.');
     }
     this._tilesFrameMapRegistry = data;
-  }
+  };
 
-  loadDecorationsFrameMapRegistry(data: DecorationFramesMapRegistry): void {
+  loadDecorationsFrameMapRegistry = (data: DecorationFramesMapRegistry): void => {
     if (Object.keys(this._decorationsFrameMapRegistry).length > 0) {
       throw new Error('Decorations frame map registry has already been loaded.');
     }
     this._decorationsFrameMapRegistry = data;
-  }
+  };
 
-  loadAnimationsRegistry(data: AnimationRegistry): void {
-    if (Object.keys(this._animationsRegistry).length > 0) {
+  loadAnimationsRegistry = (data: AnimationRegistry): void => {
+    if (this._animationsRegistry !== null) {
       throw new Error('Animations registry has already been loaded.');
     }
     this._animationsRegistry = data;
-  }
+  };
 
   // Factory method to get an item data based on its key
   getItem = (itemKey: string): ItemData => {
@@ -87,14 +77,26 @@ class GameRegistrySingleton extends Singleton<GameRegistrySingleton>() {
     return frame;
   };
 
-  // Factory method to get animation config based on its key
-  getAnimationConfig = (
-    objectType: AnimationObjectType,
-    key: AnimationObjectKey,
-  ): Record<string, AnimationConfig> | null => {
-    const animationConfig = this._animationsRegistry[objectType][key];
+  // Factory method to get animation configuration for a specific object type. If a key is provided, it returns the configuration for that specific animation; otherwise, it returns all animations for the object type.
+  getAnimationConfig = (objectType: AnimationObjectType, key?: string): Record<string, AnimationConfig> | null => {
+    if (!this._animationsRegistry) {
+      return null;
+    }
 
-    return animationConfig ?? null;
+    if (objectType === 'tiles') {
+      const tilesAnimations = this._animationsRegistry.tiles;
+
+      if (objectType === 'tiles' && key) {
+        const animationConfig = tilesAnimations?.[key];
+        return animationConfig ? { [key]: animationConfig } : null;
+      }
+
+      return tilesAnimations ?? null;
+    }
+
+    const charAnimations = this._animationsRegistry?.[objectType];
+
+    return charAnimations ?? null;
   };
 }
 

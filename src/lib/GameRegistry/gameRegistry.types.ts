@@ -1,22 +1,26 @@
 import type { DecorationFrames } from '../../objects/Decoration';
-import type { ItemKey } from '../../objects/Item';
+import type { AnimationFrame } from '../Animations';
 import type { AnimationConfig } from '../FrameIndexPattern';
 
+export const ITEM_TYPES = ['equipable', 'consumable'] as const;
+export type ItemType = (typeof ITEM_TYPES)[number];
+
 export interface ItemData {
-  itemKey: ItemKey;
+  itemKey: string;
   name: string;
-  type: 'equipable' | 'consumable';
+  type: ItemType;
   frame: number;
 }
 
 export type ItemsRegistry = Readonly<Record<string, ItemData>>;
 export type DecorationFramesMapRegistry = Readonly<Record<string, DecorationFrames>>;
+export type TilesFrameMapRegistry = Readonly<Record<string, number>>;
 
-export type BooleanRegistry = Readonly<Record<string, true>>;
-export type NumberRegistry = Readonly<Record<string, number>>;
-export type StringRegistry = Readonly<Record<string, string>>;
+export interface AnimationRegistry {
+  hero: Partial<Record<AnimationFrame, AnimationConfig>>;
+  npc: Partial<Record<AnimationFrame, AnimationConfig>>;
+  tiles: Record<string, AnimationConfig>;
+}
 
-export type AnimationRegistry = Record<'npc' | 'hero' | 'tiles', Record<string, Record<string, AnimationConfig>>>;
-
-export type AnimationObjectType = 'npc' | 'hero' | 'tiles';
-export type AnimationObjectKey = 'base' | string;
+export const ANIMATION_OBJECT_TYPES = ['npc', 'hero', 'tiles'] satisfies readonly (keyof AnimationRegistry)[];
+export type AnimationObjectType = (typeof ANIMATION_OBJECT_TYPES)[number];
