@@ -87,10 +87,11 @@ export class TextBox extends GameObject {
   override ready(): void {
     Events.on(SELECTION_BOX_OPEN, this, () => {
       this._isSelectionBoxOpened = true;
-    });
 
-    Events.on(SELECTION_BOX_CLOSE, this, () => {
-      this._isSelectionBoxOpened = false;
+      const endingSub = Events.on(SELECTION_BOX_CLOSE, this, () => {
+        this._isSelectionBoxOpened = false;
+        Events.off(endingSub);
+      });
     });
   }
 

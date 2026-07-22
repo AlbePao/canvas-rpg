@@ -66,23 +66,24 @@ export class InventoryMenu extends GameObject {
   override ready(): void {
     Events.on(SELECTION_BOX_OPEN, this, () => {
       this.lockIndicator();
-    });
 
-    Events.on<SelectionOption<InventoryItemActionsValue>>(SELECTION_BOX_CLOSE, this, ({ key }) => {
-      if (key === 'useItem') {
-        console.log('use item...');
-      } else if (key === 'throwItem') {
-        const currentItemKey = this._itemsList[this._currentIndex].key;
-        const itemKey = Inventory.getAll().find(({ itemKey }) => itemKey === currentItemKey)?.itemKey ?? null;
+      const endingSub = Events.on<SelectionOption<InventoryItemActionsValue>>(SELECTION_BOX_CLOSE, this, ({ key }) => {
+        if (key === 'useItem') {
+          console.log('use item...');
+        } else if (key === 'throwItem') {
+          const currentItemKey = this._itemsList[this._currentIndex].key;
+          const itemKey = Inventory.getAll().find(({ itemKey }) => itemKey === currentItemKey)?.itemKey ?? null;
 
-        Inventory.remove(itemKey);
+          Inventory.remove(itemKey);
 
-        // Regenerate synced items list and lines with the new inventory state
-        this._generateItemsList();
-        this._setBackdropSize();
-      }
+          // Regenerate synced items list and lines with the new inventory state
+          this._generateItemsList();
+          this._setBackdropSize();
+        }
 
-      this.unlockIndicator();
+        this.unlockIndicator();
+        Events.off(endingSub);
+      });
     });
   }
 

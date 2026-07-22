@@ -97,10 +97,11 @@ export class Main extends GameObject {
 
     Events.on(CUTSCENE_START, this, () => {
       this._isCutscenePlaying = true;
-    });
 
-    Events.on(CUTSCENE_END, this, () => {
-      this._isCutscenePlaying = false;
+      const endingSub = Events.on(CUTSCENE_END, this, () => {
+        this._isCutscenePlaying = false;
+        Events.off(endingSub);
+      });
     });
 
     // Launch pause menu handler
