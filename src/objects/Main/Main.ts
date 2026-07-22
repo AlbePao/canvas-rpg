@@ -1,18 +1,16 @@
 import { Events } from '../../lib/Events';
 import { Game } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
-import { Inventory } from '../../lib/Inventory';
-import { LevelStateManager } from '../../lib/LevelStateManager';
-import { Progress } from '../../lib/Progress';
-import { StoryFlags } from '../../lib/StoryFlags';
+import { LevelBuilder, type LevelBuilderConfig } from '../../lib/LevelBuilder';
 import { BATTLE_END, BATTLE_START, type Battle } from '../Battle';
 import { Camera } from '../Camera';
 import { getHeroObject } from '../Hero';
 import { CHANGE_LEVEL, type Level } from '../Level';
 import { CUTSCENE_END, CUTSCENE_START } from '../MovableObject';
-import { PAUSE_OFF, PAUSE_ON, PAUSE_SAVE_GAME, PauseMenu, SAVE_TEXT_BOX_ID } from '../PauseMenu';
+import { PAUSE_OFF, PAUSE_ON, PauseMenu } from '../PauseMenu';
 import { SELECTION_BOX_CLOSE, SELECTION_BOX_OPEN, type SelectionBox } from '../SelectionBox';
-import { TEXT_BOX_CLOSE, TEXT_BOX_OPEN, TextBox } from '../TextBox';
+import type { TextBox } from '../TextBox';
+import { TEXT_BOX_CLOSE, TEXT_BOX_OPEN } from '../TextBox';
 import { TitleScreen } from '../TitleScreen';
 import type { MainScreen } from './main.types';
 
@@ -88,11 +86,32 @@ export class Main extends GameObject {
       this._currentScreen = 'BATTLE';
       this._isBattlePlaying = true;
       this.addChild(battle);
-    });
 
-    Events.on(BATTLE_END, this, () => {
-      this._currentScreen = 'LEVEL';
-      this._isBattlePlaying = false;
+      const { level } = Game;
+
+      if (!level) {
+        throw new Error('No level is currently loaded when starting a battle');
+      }
+
+      // Save level id and hero position before battle starts so we can restore it after battle ends
+      const levelConfig: LevelBuilderConfig = {
+        id: level.id,
+        heroStartPosition: getHeroObject(level)?.gridCoords,
+      };
+
+      // Destroy the current level instance to free up memory
+      Game.level?.destroy();
+
+      // unsubscribe from this battle after its end
+      const endingSub = Events.on(BATTLE_END, this, () => {
+        this._currentScreen = 'LEVEL';
+        this._isBattlePlaying = false;
+
+        // Restore level state after battle ending and destroy battle instance to free up memory
+        this._setLevel(new LevelBuilder(levelConfig));
+        battle.destroy();
+        Events.off(endingSub);
+      });
     });
 
     Events.on(CUTSCENE_START, this, () => {
@@ -147,7 +166,7 @@ export class Main extends GameObject {
   }
 
   private _setLevel(newLevelInstance: Level): void {
-    // If level is set programmatically like from title screen or a cutscene, set current screen as level
+    // If level is set programmatically from CHANGE_LEVEL event (e.g., from title screen or a cutscene), set automatically current screen as level
     if (this._currentScreen !== 'LEVEL') {
       this._currentScreen = 'LEVEL';
     }

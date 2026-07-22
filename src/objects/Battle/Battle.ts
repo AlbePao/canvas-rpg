@@ -41,7 +41,6 @@ export class Battle extends GameObject {
     } = Game;
 
     if (getActionJustPressed('KeyQ')) {
-      this.destroy();
       Events.emit(BATTLE_END);
     }
   }
