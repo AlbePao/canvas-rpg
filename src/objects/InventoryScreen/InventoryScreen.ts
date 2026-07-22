@@ -1,9 +1,9 @@
 import { Events } from '../../lib/Events';
-import { fromGridSize, Game, GRID_SIZE, toGridSize } from '../../lib/Game';
+import { Game, GRID_SIZE, toGridSize } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
 import { Inventory } from '../../lib/Inventory';
 import type { Line } from '../../lib/Text';
-import { calculateTextWidth, createSpriteTextLines, drawTextLine } from '../../lib/Text';
+import { createSpriteTextLines, drawTextLine } from '../../lib/Text';
 import { ArrowIndicator } from '../ArrowIndicator';
 import { BoxBackdrop } from '../BoxBackdrop';
 import { PAUSE_SUB_MENU_CLOSE } from '../PauseMenu';
@@ -16,25 +16,22 @@ import {
   SelectionBox,
   type SelectionOption,
 } from '../SelectionBox';
-import type { InventoryItem, InventoryItemActionsValue } from './inventoryMenu.types';
+import type { InventoryItem, InventoryItemActionsValue } from './inventoryScreen.types';
 
 const VISIBLE_ITEMS = 8;
 const GO_BACK_KEY = 'goBack';
 
-// TODO: move this class to a different screen instead of a sub menu, so selection box can be opened without setting its position and items icon and quantity can be drawn next to the text without recalculating space
-export class InventoryMenu extends GameObject {
+export class InventoryScreen extends GameObject {
   private _itemsList: InventoryItem[] = [];
   private _itemsListLines: Line[] = [];
   private _currentIndex = 0;
   // Handles the index of the first visible element in the viewport
   private _scrollOffset = 0;
-  private readonly _width: number;
-  private _height = 0;
 
   private readonly _backdrop = new BoxBackdrop({
-    id: `${this.id}-inventory-box-backdrop`,
-    width: 0,
-    height: 0,
+    id: `${this.id}-inventory-screen-backdrop`,
+    width: Game.containerSizes.canvasWidth,
+    height: Game.containerSizes.canvasHeight,
   });
   private readonly _indicator = new ArrowIndicator({
     id: `${this.id}-arrow-indicator`,
@@ -44,11 +41,8 @@ export class InventoryMenu extends GameObject {
   private _isIndicatorLocked = false;
 
   constructor() {
-    // The x and y position are related to PauseMenu position
     super({
-      id: 'inventory-box',
-      x: 6,
-      y: 0,
+      id: 'inventory-screen',
     });
 
     // Draw on top layer
@@ -56,11 +50,6 @@ export class InventoryMenu extends GameObject {
 
     // Generate and sync items list and lines with the current inventory state
     this._generateItemsList();
-
-    // Calculate inventory menu width and add padding for the indicator and some spacing
-    this._width = Math.max(...this._itemsList.map(({ text }) => calculateTextWidth(text))) + 76;
-
-    this._setBackdropSize();
   }
 
   override ready(): void {
@@ -78,7 +67,6 @@ export class InventoryMenu extends GameObject {
 
           // Regenerate synced items list and lines with the new inventory state
           this._generateItemsList();
-          this._setBackdropSize();
         }
 
         this.unlockIndicator();
@@ -96,7 +84,7 @@ export class InventoryMenu extends GameObject {
       input: { getActionJustPressed },
     } = Game;
 
-    // Close menu if player presses Q key while it's open
+    // Close screen if player presses Q key while it's open
     if (getActionJustPressed('KeyQ')) {
       Events.emit(PAUSE_SUB_MENU_CLOSE);
       return;
@@ -123,7 +111,7 @@ export class InventoryMenu extends GameObject {
         text: name,
         quantity,
       })),
-      // Close menu option
+      // Close screen option
       { key: GO_BACK_KEY, text: 'Go back', quantity: 0 },
     ];
 
@@ -131,15 +119,6 @@ export class InventoryMenu extends GameObject {
       this._itemsList.map(({ text }) => text),
       this.id,
     );
-  }
-
-  // Update the backdrop size according to the number of items in the inventory and the maximum visible items
-  private _setBackdropSize(): void {
-    const actualVisibleCount = Math.min(this._itemsList.length, VISIBLE_ITEMS);
-    this._height = toGridSize(actualVisibleCount + 1); // Each option is 16px tall + some padding
-
-    // Set backdrop size according to its item text size
-    this._backdrop.updateSize(fromGridSize(this._width), fromGridSize(this._height));
   }
 
   // Update scroll shift
@@ -200,7 +179,7 @@ export class InventoryMenu extends GameObject {
   protected onItemSelect(): void {
     const { key } = this._itemsList[this._currentIndex];
 
-    // Close menu if player selects Go Back option
+    // Close screen if player selects Go Back option
     if (key === GO_BACK_KEY) {
       Events.emit(PAUSE_SUB_MENU_CLOSE);
       return;
@@ -208,7 +187,7 @@ export class InventoryMenu extends GameObject {
 
     const itemHandlingBox = new SelectionBox<InventoryItemActionsValue>({
       id: `selection-box-for-${this.id}`,
-      x: fromGridSize(this._width),
+      x: 0,
       y: 0,
       options: [
         { key: 'useItem', text: 'Use' },
@@ -220,7 +199,7 @@ export class InventoryMenu extends GameObject {
     // Open item handling selection box
     Events.emit<SelectionBox>(SELECTION_BOX_OPEN, itemHandlingBox);
 
-    // Change selection box position to be next to the menu
+    // Change selection box position to be next to the screen
     itemHandlingBox.position.x = this.position.x + GRID_SIZE;
     itemHandlingBox.position.y = this.position.y + toGridSize(this._currentIndex); // Add 10px padding to align with the text
   }

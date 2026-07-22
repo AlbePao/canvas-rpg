@@ -45,7 +45,7 @@ const frameMap = new Map<string, number>();
 const getCharacterWidth = (char: string): number => width.get(char) ?? DEFAULT_WIDTH;
 const getCharacterFrame = (char: string): number => frameMap.get(char) ?? 0;
 
-// Shared by any UI that needs to size a box around rendered sprite-text (InventoryMenu, SelectionBox, etc.)
+// Shared by any UI that needs to size a box around rendered sprite-text
 export const calculateTextWidth = (text: string): number =>
   text.split('').reduce((lineWidth, char) => lineWidth + getCharacterWidth(char), 0);
 

@@ -4,9 +4,10 @@ import type { GameObject } from '../../lib/GameObject';
 import { Inventory } from '../../lib/Inventory';
 import { LevelStateManager } from '../../lib/LevelStateManager';
 import { Progress } from '../../lib/Progress';
+import { ScreenTransition } from '../../lib/ScreenTransition';
 import { StoryFlags } from '../../lib/StoryFlags';
 import { getHeroObject } from '../Hero';
-import { InventoryMenu } from '../InventoryMenu';
+import { InventoryScreen } from '../InventoryScreen';
 import { SelectionBox } from '../SelectionBox';
 import { SettingsMenu } from '../SettingsMenu';
 import { TEXT_BOX_CLOSE, TEXT_BOX_OPEN, TextBox } from '../TextBox';
@@ -29,7 +30,7 @@ export class PauseMenu extends SelectionBox<PauseMenuItemValue> {
   /**
    * `GameObject.stepEntry()` steps children *before* their parent, and the shared `Input`
    * "just pressed" state isn't cleared until the whole tree has stepped for this frame (see
-   * `Game.ts`). That means if a child sub-menu (e.g. `InventoryMenu`) reacts to Enter/Space by
+   * `Game.ts`). That means if a child sub-menu (e.g. `InventoryScreen`) reacts to Enter/Space by
    * closing itself, this class's own `step()` (inherited from `SelectionBox`) would still run
    * *afterwards in that same frame* and see the exact same still-"just pressed" key, immediately
    * re-selecting the current option (e.g. re-opening "Inventory"). To avoid this, unlocking the
@@ -125,7 +126,13 @@ export class PauseMenu extends SelectionBox<PauseMenuItemValue> {
 
     // Open inventory screen
     if (key === 'inventory') {
-      Events.emit<InventoryMenu>(PAUSE_SUB_MENU_OPEN, new InventoryMenu());
+      // Open inventory screen with a fade transition, then emit an event to open the inventory screen
+      new ScreenTransition(
+        () => {
+          Events.emit<InventoryScreen>(PAUSE_SUB_MENU_OPEN, new InventoryScreen());
+        },
+        { transition: 'fadeBlack' },
+      );
       return;
     }
 
