@@ -5,6 +5,7 @@ export type LevelObjectState = Partial<{
   removed?: boolean;
 }>;
 
-export type LevelState = Record<string, LevelObjectState>;
+export type LevelsState = Record<string, Record<string, LevelObjectState>>;
 
-export type LevelsState = Record<string, LevelState>;
+export type LevelStateMap = Map<string, LevelObjectState>;
+export type LevelsStateMap = Map<string, LevelStateMap>;
