@@ -118,35 +118,6 @@ export class Main extends GameObject {
         Events.off(endingSub);
       });
     });
-
-    // Save game handler
-    Events.on(PAUSE_SAVE_GAME, this, () => {
-      const { level } = Game;
-      const hero = getHeroObject(level);
-
-      if (!level || !hero) {
-        return;
-      }
-
-      Progress.save({
-        levelId: level.id,
-        storyFlags: StoryFlags.flags,
-        levelsState: LevelStateManager.state,
-        hero: {
-          position: hero.gridCoords,
-          inventory: Inventory.getAll(),
-        },
-      });
-
-      Events.emit<TextBox>(
-        TEXT_BOX_OPEN,
-        new TextBox({
-          id: SAVE_TEXT_BOX_ID,
-          text: ['Progress saved!'],
-          speed: 2,
-        }),
-      );
-    });
   }
 
   override step(): void {

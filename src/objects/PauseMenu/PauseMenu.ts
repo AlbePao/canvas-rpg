@@ -1,10 +1,15 @@
 import { Events } from '../../lib/Events';
+import { Game } from '../../lib/Game';
 import type { GameObject } from '../../lib/GameObject';
+import { Inventory } from '../../lib/Inventory';
+import { LevelStateManager } from '../../lib/LevelStateManager';
+import { Progress } from '../../lib/Progress';
+import { StoryFlags } from '../../lib/StoryFlags';
+import { getHeroObject } from '../Hero';
 import { InventoryMenu } from '../InventoryMenu';
 import { SelectionBox } from '../SelectionBox';
 import { SettingsMenu } from '../SettingsMenu';
-import type { TextBox } from '../TextBox';
-import { TEXT_BOX_CLOSE } from '../TextBox';
+import { TEXT_BOX_CLOSE, TEXT_BOX_OPEN, TextBox } from '../TextBox';
 import {
   PAUSE_MENU_ITEMS,
   PAUSE_OFF,
@@ -60,6 +65,35 @@ export class PauseMenu extends SelectionBox<PauseMenuItemValue> {
         this._canDismiss = true;
         this._pendingIndicatorUnlock = true;
       }
+    });
+
+    // Save game handler
+    Events.on(PAUSE_SAVE_GAME, this, () => {
+      const { level } = Game;
+      const hero = getHeroObject(level);
+
+      if (!level || !hero) {
+        return;
+      }
+
+      Progress.save({
+        levelId: level.id,
+        storyFlags: StoryFlags.flags,
+        levelsState: LevelStateManager.state,
+        hero: {
+          position: hero.gridCoords,
+          inventory: Inventory.getAll(),
+        },
+      });
+
+      Events.emit<TextBox>(
+        TEXT_BOX_OPEN,
+        new TextBox({
+          id: SAVE_TEXT_BOX_ID,
+          text: ['Progress saved!'],
+          speed: 2,
+        }),
+      );
     });
   }
 
