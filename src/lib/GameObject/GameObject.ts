@@ -156,7 +156,7 @@ export class GameObject {
     if (animationConfig && Object.keys(animationConfig).length > 0) {
       const patterns: Record<string, FrameIndexPattern> = {};
 
-      for (const [key, value] of Object.entries(animationConfig ?? {})) {
+      for (const [key, value] of Object.entries(animationConfig)) {
         patterns[key] = new FrameIndexPattern(value);
       }
 

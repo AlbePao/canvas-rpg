@@ -2,6 +2,8 @@ import { Sprite } from '../../objects/Sprite';
 import { GameRegistry } from '../GameRegistry';
 import type { Line, Word } from './text.types';
 
+// TODO: pass width map and frame map from json file, so that we can change the font without changing the code. Validate its schema with GameLoader schema validation
+
 // Characters widths
 const DEFAULT_WIDTH = 5;
 const width = new Map<string, number>();
