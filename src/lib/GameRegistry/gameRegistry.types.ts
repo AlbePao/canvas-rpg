@@ -1,4 +1,5 @@
 import type { DecorationFrames } from '../../objects/Decoration';
+import type { Registry } from '../../types/registry';
 import type { AnimationFrame } from '../Animations';
 import type { AnimationConfig } from '../FrameIndexPattern';
 import type { LevelMap } from '../LevelBuilder';
@@ -52,9 +53,9 @@ export const BASE_RESOURCE_KEYS = [
 export type BaseResourceKey = (typeof BASE_RESOURCE_KEYS)[number];
 
 export type LevelsRegistry = Record<string, LevelMap>;
-export type ItemsRegistry = Readonly<Record<string, ItemData>>;
-export type DecorationFramesMapRegistry = Readonly<Record<string, DecorationFrames>>;
-export type TilesFrameMapRegistry = Readonly<Record<string, number>>;
+export type ItemsRegistry = Registry<string, ItemData>;
+export type DecorationFramesMapRegistry = Registry<string, DecorationFrames>;
+export type TilesFrameMapRegistry = Registry<string>;
 
 export interface AnimationRegistry {
   hero: Partial<Record<AnimationFrame, AnimationConfig>>;

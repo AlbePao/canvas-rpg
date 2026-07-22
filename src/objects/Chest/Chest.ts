@@ -6,6 +6,7 @@ import { emitHeroItemCollect, HERO_OPENS_CHEST, HERO_REQUESTS_ACTION } from '../
 import { InteractiveObject } from '../InteractiveObject';
 import { Sprite } from '../Sprite';
 import { TEXT_BOX_CLOSE, TEXT_BOX_OPEN, TextBox } from '../TextBox';
+import { CHEST_STATUS_FRAME_MAP } from './chest.constants';
 import type { ChestConfig, ChestStatus } from './chest.types';
 
 export class Chest extends InteractiveObject {
@@ -39,7 +40,7 @@ export class Chest extends InteractiveObject {
       vFrames,
       frameSize,
       position,
-      frame: status === 'OPEN' ? 1 : 0,
+      frame: CHEST_STATUS_FRAME_MAP[status],
     });
     this.addChild(this._body);
   }
@@ -102,7 +103,7 @@ export class Chest extends InteractiveObject {
   private _openChest(): void {
     // Update chest state and sprite frame to open
     this._status = 'OPEN';
-    this._body.frame = 1;
+    this._body.frame = CHEST_STATUS_FRAME_MAP.OPEN;
   }
 
   private _collectItem(itemKey: string | null): void {

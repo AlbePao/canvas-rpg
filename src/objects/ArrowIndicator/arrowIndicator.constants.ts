@@ -1,15 +1,8 @@
 import type { Directions } from '../../types/directions';
 import type { Registry } from '../../types/registry';
 
-// Hero events
-export const HERO_POSITION = 'HERO_POSITION';
-export const HERO_EXITS = 'HERO_EXITS';
-export const HERO_REQUESTS_ACTION = 'HERO_REQUESTS_ACTION';
-export const HERO_COLLECTS_ITEM = 'HERO_COLLECTS_ITEM';
-export const HERO_OPENS_CHEST = 'HERO_OPENS_CHEST';
-
 // TODO: move this registry to assets json file and load it dynamically, so that we can change the arrow indicator sprite without changing the code. Validate its schema with GameLoader schema validation
-export const HERO_DIRECTION_FRAME_MAP: Registry<Directions> = {
+export const ARROW_DIRECTION_FRAME_MAP: Registry<Directions> = {
   RIGHT: 0,
   LEFT: 1,
   DOWN: 2,

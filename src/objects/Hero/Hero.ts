@@ -10,7 +10,7 @@ import { createItemSprite } from '../Item';
 import { isSpaceFree } from '../Level';
 import { isPositionBlocked, MovableObject, moveTowards } from '../MovableObject';
 import { Sprite } from '../Sprite';
-import { HERO_COLLECTS_ITEM, HERO_POSITION, HERO_REQUESTS_ACTION } from './hero.constants';
+import { HERO_COLLECTS_ITEM, HERO_DIRECTION_FRAME_MAP, HERO_POSITION, HERO_REQUESTS_ACTION } from './hero.constants';
 import type { HeroConfig } from './hero.types';
 
 export class Hero extends MovableObject {
@@ -32,7 +32,7 @@ export class Hero extends MovableObject {
   constructor(config: HeroConfig) {
     super(config);
 
-    const { id } = config;
+    const { id, facingDirection = 'DOWN' } = config;
 
     // Opt into being solid
     this.isSolid = true;
@@ -48,7 +48,7 @@ export class Hero extends MovableObject {
       frameSize,
       hFrames,
       vFrames,
-      frame: 1,
+      frame: HERO_DIRECTION_FRAME_MAP[facingDirection],
       position,
       animations: this.createAnimations('hero'),
     });
