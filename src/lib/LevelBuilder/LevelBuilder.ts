@@ -123,11 +123,13 @@ export class LevelBuilder extends Level {
     }
 
     // Add hero
-    this.heroStartPosition = config?.heroStartPosition ?? { x: heroDefaultPosition.x, y: heroDefaultPosition.y };
+    const { heroStartPosition = heroDefaultPosition, heroFacingDirection } = config;
+    this.heroStartPosition = heroStartPosition;
     const hero = new Hero({
       id: `${id}-hero`,
       x: this.heroStartPosition.x,
       y: this.heroStartPosition.y,
+      facingDirection: heroFacingDirection,
     });
     this.addChild(hero);
   }

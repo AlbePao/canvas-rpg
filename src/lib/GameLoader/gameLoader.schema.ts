@@ -380,6 +380,8 @@ export const createLevelMapSchema = (schemas: LevelSchemas): z.ZodType<LevelMap>
       id: levelsIdsSchema,
       background: LevelBackgroundSchema.optional(),
       heroDefaultPosition: Coords2DSchema,
+      heroStartPosition: Coords2DSchema.optional(),
+      heroFacingDirection: z.enum(DIRECTIONS).optional(),
       gameObjects: z.array(LevelObjectsSchema),
       walls: z.array(WallCoordSchema),
       tiles: z.record(WallCoordSchema, tileKeysSchema.nullable()),
