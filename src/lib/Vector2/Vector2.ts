@@ -22,13 +22,13 @@ export class Vector2 implements Coords2D {
   toNeighborCoords(direction: Directions): TileCoords {
     let { x, y } = this;
 
-    if (direction === 'LEFT') {
+    if (direction === 'left') {
       x -= GRID_SIZE;
-    } else if (direction === 'RIGHT') {
+    } else if (direction === 'right') {
       x += GRID_SIZE;
-    } else if (direction === 'UP') {
+    } else if (direction === 'up') {
       y -= GRID_SIZE;
-    } else if (direction === 'DOWN') {
+    } else if (direction === 'down') {
       y += GRID_SIZE;
     }
 

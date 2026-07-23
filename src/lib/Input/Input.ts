@@ -8,10 +8,10 @@ export class Input {
   private readonly _justPressedKeys = new Set<string>();
 
   private readonly _directionPressTime: Record<Directions, number> = {
-    UP: 0,
-    DOWN: 0,
-    LEFT: 0,
-    RIGHT: 0,
+    up: 0,
+    down: 0,
+    left: 0,
+    right: 0,
   };
 
   private readonly _heldDirections: Directions[] = [];
@@ -136,9 +136,9 @@ export class Input {
     this._heldDirections.length = 0;
     this._heldDirectionSet.clear();
 
-    this._directionPressTime.UP = 0;
-    this._directionPressTime.DOWN = 0;
-    this._directionPressTime.LEFT = 0;
-    this._directionPressTime.RIGHT = 0;
+    this._directionPressTime.up = 0;
+    this._directionPressTime.down = 0;
+    this._directionPressTime.left = 0;
+    this._directionPressTime.right = 0;
   };
 }

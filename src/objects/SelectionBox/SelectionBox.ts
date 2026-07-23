@@ -31,7 +31,7 @@ export class SelectionBox<K extends string = string> extends GameObject {
   });
   private readonly _indicator = new ArrowIndicator({
     id: `${this.id}-arrow-indicator`,
-    direction: 'RIGHT',
+    direction: 'right',
   });
 
   private _isIndicatorLocked = false;

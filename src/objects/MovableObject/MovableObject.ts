@@ -15,7 +15,8 @@ import { getStandingFrame } from './movableObject.utils';
  * optional sequenced `behaviorConfig` loop (walk/stand steps used by Npc patrols).
  */
 export abstract class MovableObject extends InteractiveObject {
-  facingDirection: Directions = 'DOWN';
+  defaultFacingDirection: Directions = 'down';
+  facingDirection = this.defaultFacingDirection;
   // Not readonly: Hero swaps the whole Vector2 reference when snapping to a collected item's position
   destinationPosition: Vector2;
   protected abstract readonly body: Sprite;

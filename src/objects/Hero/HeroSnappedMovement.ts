@@ -24,19 +24,19 @@ export class HeroSnappedMovement extends Hero {
     } = Game;
 
     if (!direction) {
-      if (this.facingDirection === 'LEFT') {
+      if (this.facingDirection === 'left') {
         this.body.animations?.play('standLeft');
       }
 
-      if (this.facingDirection === 'RIGHT') {
+      if (this.facingDirection === 'right') {
         this.body.animations?.play('standRight');
       }
 
-      if (this.facingDirection === 'UP') {
+      if (this.facingDirection === 'up') {
         this.body.animations?.play('standUp');
       }
 
-      if (this.facingDirection === 'DOWN') {
+      if (this.facingDirection === 'down') {
         this.body.animations?.play('standDown');
       }
 
@@ -52,28 +52,28 @@ export class HeroSnappedMovement extends Hero {
     const characterPace = 1;
     const halfGridSize = GRID_SIZE / 2;
 
-    if (direction === 'DOWN') {
+    if (direction === 'down') {
       nextCharacterY += characterPace;
       nextCharacterX += alignToGrid(nextCharacterX, halfGridSize);
       nextGridY += halfGridSize;
       nextGridX += alignToGrid(nextGridX, halfGridSize);
 
       this.body.animations?.play('walkDown');
-    } else if (direction === 'UP') {
+    } else if (direction === 'up') {
       nextCharacterY -= characterPace;
       nextCharacterX += alignToGrid(nextCharacterX, halfGridSize);
       nextGridY -= halfGridSize;
       nextGridX += alignToGrid(nextGridX, halfGridSize);
 
       this.body.animations?.play('walkUp');
-    } else if (direction === 'LEFT') {
+    } else if (direction === 'left') {
       nextCharacterX -= characterPace;
       nextCharacterY += alignToGrid(nextCharacterY, halfGridSize);
       nextGridX -= halfGridSize;
       nextGridY += alignToGrid(nextGridY, halfGridSize);
 
       this.body.animations?.play('walkLeft');
-    } else if (direction === 'RIGHT') {
+    } else if (direction === 'right') {
       nextCharacterX += characterPace;
       nextCharacterY += alignToGrid(nextCharacterY, halfGridSize);
       nextGridX += halfGridSize;

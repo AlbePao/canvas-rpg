@@ -65,14 +65,14 @@ export class Npc extends MovableObject {
 
       const heroDirection = getHeroObject(this.parent)?.facingDirection;
 
-      if (heroDirection === 'DOWN') {
-        this.changeFacingDirection('UP');
-      } else if (heroDirection === 'UP') {
-        this.changeFacingDirection('DOWN');
-      } else if (heroDirection === 'RIGHT') {
-        this.changeFacingDirection('LEFT');
-      } else if (heroDirection === 'LEFT') {
-        this.changeFacingDirection('RIGHT');
+      if (heroDirection === 'down') {
+        this.changeFacingDirection('up');
+      } else if (heroDirection === 'up') {
+        this.changeFacingDirection('down');
+      } else if (heroDirection === 'right') {
+        this.changeFacingDirection('left');
+      } else if (heroDirection === 'left') {
+        this.changeFacingDirection('right');
       }
 
       const { addsFlag, portraitFrame, text, itemKey, options, battle } = content;
@@ -235,16 +235,16 @@ export class Npc extends MovableObject {
       let nextX = this.destinationPosition.x;
       let nextY = this.destinationPosition.y;
 
-      if (direction === 'DOWN') {
+      if (direction === 'down') {
         nextY += GRID_SIZE;
         this.body.animations?.play('walkDown');
-      } else if (direction === 'UP') {
+      } else if (direction === 'up') {
         nextY -= GRID_SIZE;
         this.body.animations?.play('walkUp');
-      } else if (direction === 'LEFT') {
+      } else if (direction === 'left') {
         nextX -= GRID_SIZE;
         this.body.animations?.play('walkLeft');
-      } else if (direction === 'RIGHT') {
+      } else if (direction === 'right') {
         nextX += GRID_SIZE;
         this.body.animations?.play('walkRight');
       }

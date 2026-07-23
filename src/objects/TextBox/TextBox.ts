@@ -43,7 +43,7 @@ export class TextBox extends GameObject {
 
   private readonly _continueIndicator = new ArrowIndicator({
     id: `${this.id}-arrow-indicator`,
-    direction: 'DOWN',
+    direction: 'down',
   });
 
   // Typewriter state

@@ -12,7 +12,7 @@ export class MenuScreen extends GameObject {
   });
   protected readonly indicator = new ArrowIndicator({
     id: `${this.id}-arrow-indicator`,
-    direction: 'RIGHT',
+    direction: 'right',
   });
 
   constructor(config: MenuScreenConfig) {

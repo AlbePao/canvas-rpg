@@ -28,15 +28,15 @@ export class SettingsMenu extends GameObject {
   });
   private readonly _indicator = new ArrowIndicator({
     id: `${this.id}-arrow-indicator`,
-    direction: 'RIGHT',
+    direction: 'right',
   });
   private readonly _leftArrow = new ArrowIndicator({
     id: 'settings-left-arrow',
-    direction: 'LEFT',
+    direction: 'left',
   });
   private readonly _rightArrow = new ArrowIndicator({
     id: 'settings-right-arrow',
-    direction: 'RIGHT',
+    direction: 'right',
   });
 
   constructor() {

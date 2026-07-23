@@ -133,19 +133,19 @@ export class Hero extends MovableObject {
     } = Game;
 
     if (!direction) {
-      if (this.facingDirection === 'LEFT') {
+      if (this.facingDirection === 'left') {
         this.body.animations?.play('standLeft');
       }
 
-      if (this.facingDirection === 'RIGHT') {
+      if (this.facingDirection === 'right') {
         this.body.animations?.play('standRight');
       }
 
-      if (this.facingDirection === 'UP') {
+      if (this.facingDirection === 'up') {
         this.body.animations?.play('standUp');
       }
 
-      if (this.facingDirection === 'DOWN') {
+      if (this.facingDirection === 'down') {
         this.body.animations?.play('standDown');
       }
 
@@ -155,16 +155,16 @@ export class Hero extends MovableObject {
     let nextX = this.destinationPosition.x;
     let nextY = this.destinationPosition.y;
 
-    if (direction === 'DOWN') {
+    if (direction === 'down') {
       nextY += GRID_SIZE;
       this.body.animations?.play('walkDown');
-    } else if (direction === 'UP') {
+    } else if (direction === 'up') {
       nextY -= GRID_SIZE;
       this.body.animations?.play('walkUp');
-    } else if (direction === 'LEFT') {
+    } else if (direction === 'left') {
       nextX -= GRID_SIZE;
       this.body.animations?.play('walkLeft');
-    } else if (direction === 'RIGHT') {
+    } else if (direction === 'right') {
       nextX += GRID_SIZE;
       this.body.animations?.play('walkRight');
     }
