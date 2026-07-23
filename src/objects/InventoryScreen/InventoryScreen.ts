@@ -4,7 +4,7 @@ import { userPressDirectionKeys, userPressEnterKeys, userPressExitKeys } from '.
 import { Inventory } from '../../lib/Inventory';
 import type { Line } from '../../lib/Text';
 import { createSpriteTextLines, drawTextLine } from '../../lib/Text';
-import { MENU_SCREEN_CLOSE, MenuScreen } from '../MenuScreen';
+import { MenuScreen } from '../MenuScreen';
 import {
   SELECTION_BOX_CLOSE,
   SELECTION_BOX_OPEN,
@@ -31,6 +31,7 @@ export class InventoryScreen extends MenuScreen {
   constructor() {
     super({
       id: 'inventory',
+      closeTransition: 'fadeBlack',
     });
 
     // Generate and sync items list and lines with the current inventory state
@@ -67,7 +68,7 @@ export class InventoryScreen extends MenuScreen {
 
     // Close screen if player presses Q key while it's open
     if (userPressExitKeys()) {
-      Events.emit(MENU_SCREEN_CLOSE);
+      this.close();
       return;
     }
 
@@ -162,7 +163,7 @@ export class InventoryScreen extends MenuScreen {
 
     // Close screen if player selects Go Back option
     if (key === GO_BACK_KEY) {
-      Events.emit(MENU_SCREEN_CLOSE);
+      this.close();
       return;
     }
 
