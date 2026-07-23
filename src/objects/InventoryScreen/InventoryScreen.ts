@@ -1,5 +1,6 @@
 import { Events } from '../../lib/Events';
-import { Game, GRID_SIZE, toGridSize } from '../../lib/Game';
+import { GRID_SIZE, toGridSize } from '../../lib/Game';
+import { userPressDirectionKeys, userPressEnterKeys, userPressExitKeys } from '../../lib/Input';
 import { Inventory } from '../../lib/Inventory';
 import { MENU_SCREEN_CLOSE, MenuScreen } from '../../lib/MenuScreen';
 import type { Line } from '../../lib/Text';
@@ -64,24 +65,20 @@ export class InventoryScreen extends MenuScreen {
       return;
     }
 
-    const {
-      input: { getActionJustPressed },
-    } = Game;
-
     // Close screen if player presses Q key while it's open
-    if (getActionJustPressed('KeyQ')) {
+    if (userPressExitKeys()) {
       Events.emit(MENU_SCREEN_CLOSE);
       return;
     }
 
-    if (getActionJustPressed('Space') || getActionJustPressed('Enter')) {
+    if (userPressEnterKeys()) {
       // Open selected item handler
       this.onItemSelect();
-    } else if (getActionJustPressed('ArrowUp') || getActionJustPressed('KeyW')) {
+    } else if (userPressDirectionKeys('up')) {
       // Move arrow up
       this._currentIndex = (this._currentIndex - 1 + this._itemsList.length) % this._itemsList.length;
       this._updateScrollOffset();
-    } else if (getActionJustPressed('ArrowDown') || getActionJustPressed('KeyS')) {
+    } else if (userPressDirectionKeys('down')) {
       // Move arrow down
       this._currentIndex = (this._currentIndex + 1) % this._itemsList.length;
       this._updateScrollOffset();

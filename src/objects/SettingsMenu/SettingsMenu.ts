@@ -1,6 +1,7 @@
 import { Events } from '../../lib/Events';
 import { fromGridSize, Game, toGridSize } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
+import { userPressDirectionKeys, userPressEnterKeys, userPressExitKeys } from '../../lib/Input';
 import type { Line } from '../../lib/Text';
 import { calculateTextWidth, createSpriteTextLines, drawTextLine } from '../../lib/Text';
 import { ArrowIndicator } from '../ArrowIndicator';
@@ -81,14 +82,9 @@ export class SettingsMenu extends GameObject {
   }
 
   override step(_delta: number): void {
-    const {
-      input: { getActionJustPressed },
-    } = Game;
     const { key } = this._settingsList[this._currentIndex];
 
-    const isCloseAction =
-      getActionJustPressed('KeyQ') ||
-      ((getActionJustPressed('Space') || getActionJustPressed('Enter')) && key === 'goBack');
+    const isCloseAction = userPressExitKeys() || (userPressEnterKeys() && key === 'goBack');
 
     // Close menu if player presses Q key or selects "go back" while it's open
     if (isCloseAction) {
@@ -96,16 +92,16 @@ export class SettingsMenu extends GameObject {
       return;
     }
 
-    if (getActionJustPressed('ArrowUp') || getActionJustPressed('KeyW')) {
+    if (userPressDirectionKeys('up')) {
       // Move arrow up
       this._currentIndex = (this._currentIndex - 1 + this._settingsList.length) % this._settingsList.length;
-    } else if (getActionJustPressed('ArrowDown') || getActionJustPressed('KeyS')) {
+    } else if (userPressDirectionKeys('down')) {
       // Move arrow down
       this._currentIndex = (this._currentIndex + 1) % this._settingsList.length;
-    } else if (getActionJustPressed('ArrowLeft') || getActionJustPressed('KeyA')) {
+    } else if (userPressDirectionKeys('left')) {
       // Set left setting option
       this._changeOption(-1);
-    } else if (getActionJustPressed('ArrowRight') || getActionJustPressed('KeyD')) {
+    } else if (userPressDirectionKeys('right')) {
       // Set right setting option
       this._changeOption(1);
     }

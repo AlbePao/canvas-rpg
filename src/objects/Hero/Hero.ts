@@ -2,7 +2,7 @@ import { Events } from '../../lib/Events';
 import { fromGridSize, Game, GRID_SIZE } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
 import { GameRegistry } from '../../lib/GameRegistry';
-import { DIRECTION_TAP } from '../../lib/Input';
+import { DIRECTION_TAP, userPressEnterKeys } from '../../lib/Input';
 import { Vector2, type Coords2D } from '../../lib/Vector2';
 import type { Directions } from '../../types/directions';
 import type { CollectibleItemData } from '../Item';
@@ -85,11 +85,7 @@ export class Hero extends MovableObject {
     }
 
     // Check for input
-    const {
-      input: { getActionJustPressed },
-    } = Game;
-
-    if (getActionJustPressed('Space')) {
+    if (userPressEnterKeys()) {
       // Look for an object at the next space (according to where Hero is facing)
       const objectAtPosition = this.parent?.children.find((child) =>
         child.position.matches(this.position.toNeighborCoords(this.facingDirection)),

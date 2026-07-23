@@ -2,6 +2,7 @@ import { Events } from '../../lib/Events';
 import { Game } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
 import { GameRegistry } from '../../lib/GameRegistry';
+import { userPressExitKeys } from '../../lib/Input';
 import { Vector2 } from '../../lib/Vector2';
 import type { InteractiveObject } from '../InteractiveObject';
 import { Sprite } from '../Sprite';
@@ -36,11 +37,7 @@ export class Battle extends GameObject {
   }
 
   override step(): void {
-    const {
-      input: { getActionJustPressed },
-    } = Game;
-
-    if (getActionJustPressed('KeyQ')) {
+    if (userPressExitKeys()) {
       Events.emit(BATTLE_END);
     }
   }

@@ -1,6 +1,7 @@
 import { Events } from '../../lib/Events';
 import { Game } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
+import { userPressEscapeKey } from '../../lib/Input';
 import { LevelBuilder, type LevelBuilderConfig } from '../../lib/LevelBuilder';
 import type { MenuScreen } from '../../lib/MenuScreen';
 import { MENU_SCREEN_CLOSE, MENU_SCREEN_OPEN } from '../../lib/MenuScreen';
@@ -159,7 +160,7 @@ export class Main extends GameObject {
   }
 
   override step(): void {
-    if (Game.input.getActionJustPressed('Escape') && this._canTogglePause()) {
+    if (userPressEscapeKey() && this._canTogglePause()) {
       Events.emit(this._isPaused ? PAUSE_OFF : PAUSE_ON);
     }
   }

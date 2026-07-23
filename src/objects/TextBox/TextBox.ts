@@ -2,6 +2,7 @@ import { Events } from '../../lib/Events';
 import { Game } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
 import { GameRegistry } from '../../lib/GameRegistry';
+import { userPressEnterKeys } from '../../lib/Input';
 import type { Line } from '../../lib/Text';
 import { createSpriteTextLines } from '../../lib/Text';
 import { ArrowIndicator } from '../ArrowIndicator';
@@ -108,7 +109,7 @@ export class TextBox extends GameObject {
 
     // Create a portrait
     if (portraitFrame) {
-      const { hFrames, vFrames, frameSize, position, resource } = GameRegistry.getAssetData('arrows');
+      const { hFrames, vFrames, frameSize, position, resource } = GameRegistry.getAssetData('portraits');
 
       this.portrait = new Sprite({
         id: `${id}-portrait`,
@@ -123,10 +124,6 @@ export class TextBox extends GameObject {
   }
 
   override step(delta: number): void {
-    const {
-      input: { getActionJustPressed },
-    } = Game;
-
     // Don't interact if options selection box is opened or text box is locked
     if (this._isSelectionBoxOpened || this._isLocked) {
       return;
@@ -135,7 +132,7 @@ export class TextBox extends GameObject {
     const { finalCharIndex } = this._lines[this._currentLineIndex];
 
     // Listen for input
-    if (getActionJustPressed('Space') || getActionJustPressed('Enter')) {
+    if (userPressEnterKeys()) {
       if (this._showingCharIndex < finalCharIndex) {
         // Skip
         this._showingCharIndex = finalCharIndex;

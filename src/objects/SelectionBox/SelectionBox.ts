@@ -1,6 +1,7 @@
 import { Events } from '../../lib/Events';
 import { fromGridSize, Game, toGridSize } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
+import { userPressDirectionKeys, userPressEnterKeys } from '../../lib/Input';
 import { StoryFlags } from '../../lib/StoryFlags';
 import type { Line } from '../../lib/Text';
 import { calculateTextWidth, createSpriteTextLines, drawTextLine } from '../../lib/Text';
@@ -95,18 +96,14 @@ export class SelectionBox<K extends string = string> extends GameObject {
       return;
     }
 
-    const {
-      input: { getActionJustPressed },
-    } = Game;
-
-    if (getActionJustPressed('Space') || getActionJustPressed('Enter')) {
+    if (userPressEnterKeys()) {
       // Emit selected option
       this.onOptionSelect();
-    } else if (getActionJustPressed('ArrowUp') || getActionJustPressed('KeyW')) {
+    } else if (userPressDirectionKeys('up')) {
       // Move arrow up
       this.currentOptionIndex = (this.currentOptionIndex - 1 + this.options.length) % this.options.length;
       this._updateScrollOffset();
-    } else if (getActionJustPressed('ArrowDown') || getActionJustPressed('KeyS')) {
+    } else if (userPressDirectionKeys('down')) {
       // Move arrow down
       this.currentOptionIndex = (this.currentOptionIndex + 1) % this.options.length;
       this._updateScrollOffset();
