@@ -1,6 +1,3 @@
-import type { GameObjectConfig } from '../../lib/GameObject';
-import type { Directions } from '../../types/directions';
+import type { MovableObjectConfig } from '../MovableObject';
 
-export type HeroConfig = GameObjectConfig & {
-  facingDirection?: Directions;
-};
+export type HeroConfig = Omit<MovableObjectConfig, 'behaviorConfig'>;

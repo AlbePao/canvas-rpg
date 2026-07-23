@@ -32,7 +32,7 @@ export class Hero extends MovableObject {
   constructor(config: HeroConfig) {
     super(config);
 
-    const { id, facingDirection } = config;
+    const { id } = config;
 
     // Opt into being solid
     this.isSolid = true;
@@ -52,10 +52,6 @@ export class Hero extends MovableObject {
       animations: this.createAnimations('hero'),
     });
     this.addChild(this.body);
-
-    if (facingDirection) {
-      this.changeFacingDirection(facingDirection);
-    }
   }
 
   override ready(): void {

@@ -25,7 +25,7 @@ export class Npc extends MovableObject {
   constructor(config: NpcConfig) {
     super(config);
 
-    const { id, npc, facingDirection } = config;
+    const { id, npc } = config;
 
     // Opt into being solid
     this.isSolid = true;
@@ -46,10 +46,6 @@ export class Npc extends MovableObject {
       animations: this.createAnimations('npc'),
     });
     this.addChild(this.body);
-
-    if (facingDirection) {
-      this.changeFacingDirection(facingDirection);
-    }
   }
 
   override ready(): void {
@@ -175,7 +171,7 @@ export class Npc extends MovableObject {
       }
       this._isAwaitingTextBoxClose = false;
 
-      const resetDirection = this.behaviorConfig[this.behaviorIndex]?.direction ?? 'DOWN';
+      const resetDirection = this.behaviorConfig[this.behaviorIndex]?.direction ?? this.defaultFacingDirection;
       this.changeFacingDirection(resetDirection);
 
       if (this._contentItemKey) {

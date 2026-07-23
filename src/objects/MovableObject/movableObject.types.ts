@@ -2,6 +2,7 @@ import type { Directions } from '../../types/directions';
 import type { InteractiveObjectConfig } from '../InteractiveObject';
 
 export type MovableObjectConfig = InteractiveObjectConfig & {
+  facingDirection?: Directions;
   behaviorConfig?: MovableObjectBehavior[];
 };
 

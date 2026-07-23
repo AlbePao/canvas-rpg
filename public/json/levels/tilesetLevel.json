@@ -247,68 +247,68 @@
       "behaviorConfig": [
         {
           "type": "walk",
-          "direction": "DOWN",
+          "direction": "down",
           "speed": 1.2
         },
         {
           "type": "walk",
-          "direction": "DOWN",
+          "direction": "down",
           "speed": 1.2
         },
         {
           "type": "walk",
-          "direction": "DOWN",
+          "direction": "down",
           "speed": 1.2
         },
         {
           "type": "stand",
-          "direction": "LEFT",
+          "direction": "left",
           "duration": 1200
         },
         {
           "type": "walk",
-          "direction": "RIGHT"
+          "direction": "right"
         },
         {
           "type": "walk",
-          "direction": "RIGHT"
+          "direction": "right"
         },
         {
           "type": "stand",
-          "direction": "DOWN",
+          "direction": "down",
           "duration": 1200
         },
         {
           "type": "walk",
-          "direction": "UP",
+          "direction": "up",
           "speed": 1.2
         },
         {
           "type": "walk",
-          "direction": "UP",
+          "direction": "up",
           "speed": 1.2
         },
         {
           "type": "walk",
-          "direction": "UP",
+          "direction": "up",
           "speed": 1.2
         },
         {
           "type": "stand",
-          "direction": "RIGHT",
+          "direction": "right",
           "duration": 1200
         },
         {
           "type": "walk",
-          "direction": "LEFT"
+          "direction": "left"
         },
         {
           "type": "walk",
-          "direction": "LEFT"
+          "direction": "left"
         },
         {
           "type": "stand",
-          "direction": "UP",
+          "direction": "up",
           "duration": 1200
         }
       ]
@@ -357,22 +357,22 @@
       "behaviorConfig": [
         {
           "type": "stand",
-          "direction": "DOWN",
+          "direction": "down",
           "duration": 1000
         },
         {
           "type": "stand",
-          "direction": "LEFT",
+          "direction": "left",
           "duration": 1000
         },
         {
           "type": "stand",
-          "direction": "UP",
+          "direction": "up",
           "duration": 1000
         },
         {
           "type": "stand",
-          "direction": "RIGHT",
+          "direction": "right",
           "duration": 1000
         }
       ]
@@ -383,7 +383,7 @@
       "x": 9,
       "y": 7,
       "npc": "ow3",
-      "facingDirection": "LEFT",
+      "facingDirection": "left",
       "interactionConfig": {
         "content": [
           {
@@ -480,17 +480,17 @@
       "behaviorConfig": [
         {
           "type": "stand",
-          "direction": "UP",
+          "direction": "up",
           "duration": 800
         },
         {
           "type": "stand",
-          "direction": "RIGHT",
+          "direction": "right",
           "duration": 800
         },
         {
           "type": "stand",
-          "direction": "DOWN",
+          "direction": "down",
           "duration": 1200
         }
       ]
@@ -527,12 +527,12 @@
       "behaviorConfig": [
         {
           "type": "stand",
-          "direction": "UP",
+          "direction": "up",
           "duration": 800
         },
         {
           "type": "stand",
-          "direction": "DOWN",
+          "direction": "down",
           "duration": 1600
         }
       ]

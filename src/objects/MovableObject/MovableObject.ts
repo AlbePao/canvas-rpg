@@ -15,7 +15,7 @@ import { getStandingFrame } from './movableObject.utils';
  * optional sequenced `behaviorConfig` loop (walk/stand steps used by Npc patrols).
  */
 export abstract class MovableObject extends InteractiveObject {
-  defaultFacingDirection: Directions = 'down';
+  readonly defaultFacingDirection: Directions = 'down';
   facingDirection = this.defaultFacingDirection;
   // Not readonly: Hero swaps the whole Vector2 reference when snapping to a collected item's position
   destinationPosition: Vector2;
@@ -32,9 +32,13 @@ export abstract class MovableObject extends InteractiveObject {
 
   constructor(config: MovableObjectConfig) {
     super(config);
-    const { behaviorConfig = [] } = config;
+    const { behaviorConfig = [], facingDirection } = config;
     this.behaviorConfig = behaviorConfig;
     this.destinationPosition = this.position.duplicate();
+
+    if (facingDirection) {
+      this.defaultFacingDirection = facingDirection;
+    }
   }
 
   override ready(): void {
@@ -57,6 +61,10 @@ export abstract class MovableObject extends InteractiveObject {
           this.body.animations?.resume();
         }
       });
+    }
+
+    if (this.defaultFacingDirection) {
+      this.changeFacingDirection(this.defaultFacingDirection);
     }
 
     this._setBehaviorLoop();
