@@ -56,7 +56,7 @@ export class TitleScreen extends SelectionBox<TitleScreenOptionValue> {
       levelId,
       storyFlags,
       levelsState,
-      hero: { position, inventory },
+      hero: { position, facingDirection, inventory },
     } = this._saveFile;
 
     LevelStateManager.state = levelsState;
@@ -72,6 +72,7 @@ export class TitleScreen extends SelectionBox<TitleScreenOptionValue> {
     this._startGame({
       id: levelId,
       heroStartPosition: position,
+      heroFacingDirection: facingDirection,
     });
   }
 

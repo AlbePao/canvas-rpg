@@ -25,7 +25,7 @@ export class Npc extends MovableObject {
   constructor(config: NpcConfig) {
     super(config);
 
-    const { id, npc } = config;
+    const { id, npc, facingDirection } = config;
 
     // Opt into being solid
     this.isSolid = true;
@@ -46,6 +46,10 @@ export class Npc extends MovableObject {
       animations: this.createAnimations('npc'),
     });
     this.addChild(this.body);
+
+    if (facingDirection) {
+      this.changeFacingDirection(facingDirection);
+    }
   }
 
   override ready(): void {

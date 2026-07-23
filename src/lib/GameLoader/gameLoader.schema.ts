@@ -352,6 +352,7 @@ export const createLevelMapSchema = (schemas: LevelSchemas): z.ZodType<LevelMap>
       y: z.number().int(),
       behaviorConfig: z.array(NpcBehaviorSchema).optional(),
       npc: z.string(),
+      facingDirection: z.enum(DIRECTIONS).optional(),
       interactionConfig: InteractionConfigSchema,
     })
     .strict() satisfies z.ZodType<LevelNpc>;

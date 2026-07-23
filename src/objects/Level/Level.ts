@@ -9,10 +9,8 @@ export class Level extends GameObject {
   background: Sprite | null = null;
   readonly walls: Walls = new Set<GridCoords>();
 
-  constructor({ id }: LevelConfig) {
-    if (!id) {
-      throw new Error('Level: id is missing');
-    }
+  constructor(config: LevelConfig) {
+    const { id } = config;
 
     super({
       id,

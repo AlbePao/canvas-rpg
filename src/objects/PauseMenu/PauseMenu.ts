@@ -83,6 +83,7 @@ export class PauseMenu extends SelectionBox<PauseMenuItemValue> {
         levelsState: LevelStateManager.state,
         hero: {
           position: hero.gridCoords,
+          facingDirection: hero.facingDirection,
           inventory: Inventory.getAll(),
         },
       });

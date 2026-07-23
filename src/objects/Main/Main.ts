@@ -88,15 +88,17 @@ export class Main extends GameObject {
       this.addChild(battle);
 
       const { level } = Game;
+      const hero = getHeroObject(level);
 
-      if (!level) {
+      if (!level || !hero) {
         throw new Error('No level is currently loaded when starting a battle');
       }
 
       // Save level id and hero position before battle starts so we can restore it after battle ends
       const levelConfig: LevelBuilderConfig = {
         id: level.id,
-        heroStartPosition: getHeroObject(level)?.gridCoords,
+        heroStartPosition: hero.gridCoords,
+        heroFacingDirection: hero.facingDirection,
       };
 
       // Destroy the current level instance to free up memory

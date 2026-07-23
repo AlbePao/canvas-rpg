@@ -4,10 +4,11 @@ import type { ExitConfig } from '../../objects/Exit';
 import type { CollectibleItemConfig } from '../../objects/Item';
 import type { GridCoords, LevelConfig } from '../../objects/Level';
 import type { NpcConfig } from '../../objects/Npc';
+import type { Directions } from '../../types/directions';
 import type { Coords2D } from '../Vector2';
 
 export type LevelBuilderConfig = LevelConfig & {
-  id: string;
+  heroFacingDirection?: Directions;
 };
 
 export type LevelCollectibleItem = CollectibleItemConfig & {

@@ -383,6 +383,7 @@
       "x": 9,
       "y": 7,
       "npc": "ow3",
+      "facingDirection": "LEFT",
       "interactionConfig": {
         "content": [
           {
@@ -421,13 +422,7 @@
           }
         ],
         "portraitFrame": 0
-      },
-      "behaviorConfig": [
-        {
-          "type": "stand",
-          "direction": "LEFT"
-        }
-      ]
+      }
     },
     {
       "type": "Npc",

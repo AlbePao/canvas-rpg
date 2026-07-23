@@ -1,7 +1,9 @@
+import type { Directions } from '../../types/directions';
 import type { MovableObjectBehavior, MovableObjectConfig } from '../MovableObject';
 
 export type NpcConfig = MovableObjectConfig & {
   npc: string;
+  facingDirection?: Directions;
   behaviorConfig?: NpcBehavior[];
 };
 
