@@ -2,6 +2,8 @@ import { Events } from '../../lib/Events';
 import { Game } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
 import { LevelBuilder, type LevelBuilderConfig } from '../../lib/LevelBuilder';
+import type { MenuScreen } from '../../lib/MenuScreen';
+import { MENU_SCREEN_CLOSE, MENU_SCREEN_OPEN } from '../../lib/MenuScreen';
 import { BATTLE_END, BATTLE_START, type Battle } from '../Battle';
 import { Camera } from '../Camera';
 import { getHeroObject } from '../Hero';
@@ -137,6 +139,20 @@ export class Main extends GameObject {
         pauseMenu.destroy();
         this._activePauseMenu = null;
         this._isPaused = false;
+        Events.off(endingSub);
+      });
+    });
+
+    // Launch menu screen handler. A menu screen can be opened from everywhere in the game (e.g., from title screen, pause menu, etc.) and it will be handled by Main class
+    Events.on<MenuScreen>(MENU_SCREEN_OPEN, this, (menuScreen) => {
+      const currentScreen = this._currentScreen;
+      this._currentScreen = 'MENU_SCREEN';
+      this.addChild(menuScreen);
+
+      // unsubscribe from this menu screen after it's destroyed
+      const endingSub = Events.on(MENU_SCREEN_CLOSE, this, () => {
+        menuScreen.destroy();
+        this._currentScreen = currentScreen;
         Events.off(endingSub);
       });
     });

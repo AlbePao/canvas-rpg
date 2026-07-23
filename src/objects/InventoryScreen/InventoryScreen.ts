@@ -1,12 +1,9 @@
 import { Events } from '../../lib/Events';
 import { Game, GRID_SIZE, toGridSize } from '../../lib/Game';
-import { GameObject } from '../../lib/GameObject';
 import { Inventory } from '../../lib/Inventory';
+import { MENU_SCREEN_CLOSE, MenuScreen } from '../../lib/MenuScreen';
 import type { Line } from '../../lib/Text';
 import { createSpriteTextLines, drawTextLine } from '../../lib/Text';
-import { ArrowIndicator } from '../ArrowIndicator';
-import { BoxBackdrop } from '../BoxBackdrop';
-import { PAUSE_SUB_MENU_CLOSE } from '../PauseMenu';
 import {
   SELECTION_BOX_CLOSE,
   SELECTION_BOX_OPEN,
@@ -21,32 +18,19 @@ import type { InventoryItem, InventoryItemActionsValue } from './inventoryScreen
 const VISIBLE_ITEMS = 8;
 const GO_BACK_KEY = 'goBack';
 
-export class InventoryScreen extends GameObject {
+export class InventoryScreen extends MenuScreen {
   private _itemsList: InventoryItem[] = [];
   private _itemsListLines: Line[] = [];
   private _currentIndex = 0;
   // Handles the index of the first visible element in the viewport
   private _scrollOffset = 0;
 
-  private readonly _backdrop = new BoxBackdrop({
-    id: `${this.id}-inventory-screen-backdrop`,
-    width: Game.containerSizes.canvasWidth,
-    height: Game.containerSizes.canvasHeight,
-  });
-  private readonly _indicator = new ArrowIndicator({
-    id: `${this.id}-arrow-indicator`,
-    direction: 'RIGHT',
-  });
-
   private _isIndicatorLocked = false;
 
   constructor() {
     super({
-      id: 'inventory-screen',
+      id: 'inventory',
     });
-
-    // Draw on top layer
-    this.drawLayer = 'HUD';
 
     // Generate and sync items list and lines with the current inventory state
     this._generateItemsList();
@@ -86,7 +70,7 @@ export class InventoryScreen extends GameObject {
 
     // Close screen if player presses Q key while it's open
     if (getActionJustPressed('KeyQ')) {
-      Events.emit(PAUSE_SUB_MENU_CLOSE);
+      Events.emit(MENU_SCREEN_CLOSE);
       return;
     }
 
@@ -153,11 +137,11 @@ export class InventoryScreen extends GameObject {
 
   override drawImage(ctx: CanvasRenderingContext2D, drawPosX: number, drawPosY: number): void {
     // Draw the backdrop for max 8 elements
-    this._backdrop.drawImage(ctx, drawPosX, drawPosY);
+    this.backdrop.drawImage(ctx, drawPosX, drawPosY);
 
     // Draw the indicator to the relative index to the visible viewport
     const relativeIndex = this._currentIndex - this._scrollOffset;
-    this._indicator.drawImage(
+    this.indicator.drawImage(
       ctx,
       drawPosX + SELECTION_INDICATOR_OFFSET,
       drawPosY + SELECTION_INDICATOR_Y_OFFSET + toGridSize(relativeIndex),
@@ -181,7 +165,7 @@ export class InventoryScreen extends GameObject {
 
     // Close screen if player selects Go Back option
     if (key === GO_BACK_KEY) {
-      Events.emit(PAUSE_SUB_MENU_CLOSE);
+      Events.emit(MENU_SCREEN_CLOSE);
       return;
     }
 

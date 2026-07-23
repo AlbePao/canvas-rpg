@@ -3,6 +3,7 @@ import { Game } from '../../lib/Game';
 import type { GameObject } from '../../lib/GameObject';
 import { Inventory } from '../../lib/Inventory';
 import { LevelStateManager } from '../../lib/LevelStateManager';
+import { MENU_SCREEN_CLOSE, MENU_SCREEN_OPEN } from '../../lib/MenuScreen';
 import { Progress } from '../../lib/Progress';
 import { ScreenTransition } from '../../lib/ScreenTransition';
 import { StoryFlags } from '../../lib/StoryFlags';
@@ -68,6 +69,10 @@ export class PauseMenu extends SelectionBox<PauseMenuItemValue> {
       }
     });
 
+    Events.on(MENU_SCREEN_CLOSE, this, () => {
+      this.unlockIndicator();
+    });
+
     // Save game handler
     Events.on(PAUSE_SAVE_GAME, this, () => {
       const { level } = Game;
@@ -130,7 +135,7 @@ export class PauseMenu extends SelectionBox<PauseMenuItemValue> {
       // Open inventory screen with a fade transition, then emit an event to open the inventory screen
       new ScreenTransition(
         () => {
-          Events.emit<InventoryScreen>(PAUSE_SUB_MENU_OPEN, new InventoryScreen());
+          Events.emit<InventoryScreen>(MENU_SCREEN_OPEN, new InventoryScreen());
         },
         { transition: 'fadeBlack' },
       );
