@@ -15,7 +15,7 @@ export class Chest extends InteractiveObject {
   public get status(): ChestStatus {
     return this._status;
   }
-  private _status: ChestStatus = 'CLOSED';
+  private _status: ChestStatus = 'closed';
 
   get removeAfterLoot(): boolean {
     return this._removeAfterLoot;
@@ -25,7 +25,7 @@ export class Chest extends InteractiveObject {
   constructor(config: ChestConfig) {
     super(config);
 
-    const { id, status = 'CLOSED', removeAfterLoot = false } = config;
+    const { id, status = 'closed', removeAfterLoot = false } = config;
 
     this.isSolid = true;
     this._status = status;
@@ -49,7 +49,7 @@ export class Chest extends InteractiveObject {
     Events.on<GameObject>(HERO_REQUESTS_ACTION, this, ({ position }) => {
       const { x, y } = position;
 
-      if (!this.position.matches([x, y]) || this._status === 'OPEN') {
+      if (!this.position.matches([x, y]) || this._status === 'open') {
         return;
       }
 
@@ -102,8 +102,8 @@ export class Chest extends InteractiveObject {
 
   private _openChest(): void {
     // Update chest state and sprite frame to open
-    this._status = 'OPEN';
-    this._body.frame = CHEST_STATUS_FRAME_MAP.OPEN;
+    this._status = 'open';
+    this._body.frame = CHEST_STATUS_FRAME_MAP.open;
   }
 
   private _collectItem(itemKey: string | null): void {
