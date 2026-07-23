@@ -10,6 +10,8 @@ import type {
   AssetLoaded,
   AssetsRegistry,
   AssetsToLoad,
+  CharFrameData,
+  CharsFrameMapRegistry,
   DecorationFramesMapRegistry,
   ItemData,
   ItemsRegistry,
@@ -21,6 +23,7 @@ class GameRegistrySingleton extends Singleton<GameRegistrySingleton>() {
   private _levelsIdsRegistry = new Set<string>();
   private _levelsRegistry: LevelsRegistry = {};
   private _assetsRegistry: AssetsRegistry = {};
+  private _charsFrameMapRegistry: CharsFrameMapRegistry = {};
   private _itemsRegistry: ItemsRegistry = {};
   private _tilesFrameMapRegistry: TilesFrameMapRegistry = {};
   private _decorationsFrameMapRegistry: DecorationFramesMapRegistry = {};
@@ -70,6 +73,13 @@ class GameRegistrySingleton extends Singleton<GameRegistrySingleton>() {
         this._assetsRegistry[key].resource.isLoaded = true;
       };
     }
+  };
+
+  loadCharsFrameMapRegistry = (data: CharsFrameMapRegistry): void => {
+    if (Object.keys(this._charsFrameMapRegistry).length > 0) {
+      throw new Error('Chars frame map registry has already been loaded.');
+    }
+    this._charsFrameMapRegistry = data;
   };
 
   loadItemsRegistry = (data: ItemsRegistry): void => {
@@ -147,6 +157,17 @@ class GameRegistrySingleton extends Singleton<GameRegistrySingleton>() {
     }
 
     return asset;
+  };
+
+  // Factory method to get char frame data based on its key
+  getCharFrameData = (char: string): CharFrameData => {
+    const charData = this._charsFrameMapRegistry[char];
+
+    if (!charData) {
+      throw new Error(`Char "${char}" does not exist in the chars frame map registry.`);
+    }
+
+    return charData;
   };
 
   // Factory method to get an item data based on its key

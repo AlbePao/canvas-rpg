@@ -23,6 +23,8 @@ import type {
   AnimationRegistry,
   AssetData,
   AssetsToLoad,
+  CharFrameData,
+  CharsFrameMapRegistry,
   DecorationFramesMapRegistry,
   ItemData,
   ItemsRegistry,
@@ -40,7 +42,7 @@ import type {
   LevelObjects,
 } from '../LevelBuilder';
 import type { Coords2D } from '../Vector2';
-import type { LevelSchemas } from './gameLoader.types';
+import type { LevelSchemas, SchemaWithKeys } from './gameLoader.types';
 
 /**
  * Zod schema for validating JSON data
@@ -56,12 +58,7 @@ export const Coords2DSchema = z
   })
   .strict() satisfies z.ZodType<Coords2D>;
 
-export const createAnimationsSchema = (
-  data: unknown,
-): {
-  schema: z.ZodType<AnimationRegistry>;
-  animationKeys: string[];
-} => {
+export const createAnimationsSchema = (data: unknown): SchemaWithKeys<AnimationRegistry> => {
   const AnimationFrameSchema = z
     .object({
       time: z.number().int(),
@@ -99,10 +96,10 @@ export const createAnimationsSchema = (
   const parsedData = AnimationRegistrySchema.parse(data);
   const animationKeys = z.array(z.string()).nonempty().parse(Object.keys(parsedData));
 
-  return { schema: AnimationRegistrySchema, animationKeys };
+  return { schema: AnimationRegistrySchema, keys: animationKeys };
 };
 
-export const createAssetsSchema = (data: unknown): { schema: z.ZodType<AssetsToLoad>; assetsKeys: string[] } => {
+export const createAssetsSchema = (data: unknown): SchemaWithKeys<AssetsToLoad> => {
   const AssetDataSchema = z
     .object({
       src: z.string(),
@@ -120,15 +117,21 @@ export const createAssetsSchema = (data: unknown): { schema: z.ZodType<AssetsToL
   const parsedData = AssetsToLoadSchema.parse(data);
   const assetsKeys = z.array(z.string()).nonempty().parse(Object.keys(parsedData));
 
-  return { schema: AssetsToLoadSchema, assetsKeys };
+  return { schema: AssetsToLoadSchema, keys: assetsKeys };
 };
 
-export const createDecorationsFrameMapSchema = (
-  data: unknown,
-): {
-  schema: z.ZodType<DecorationFramesMapRegistry>;
-  decorationKeys: string[];
-} => {
+export const createCharsFrameMapSchema = (data: unknown): SchemaWithKeys<CharsFrameMapRegistry> => {
+  const CharsFrameMapSchema = z.record(
+    z.string(),
+    z.object({ frame: z.number().int(), width: z.number().int() }).strict() satisfies z.ZodType<CharFrameData>,
+  ) satisfies z.ZodType<CharsFrameMapRegistry>;
+  const parsedData = CharsFrameMapSchema.parse(data);
+  const charsKeys = z.array(z.string()).nonempty().parse(Object.keys(parsedData));
+
+  return { schema: CharsFrameMapSchema, keys: charsKeys };
+};
+
+export const createDecorationsFrameMapSchema = (data: unknown): SchemaWithKeys<DecorationFramesMapRegistry> => {
   const DecorationSchema = z
     .object({
       baseFrame: z.number().int(),
@@ -144,7 +147,7 @@ export const createDecorationsFrameMapSchema = (
   const parsedData = DecorationFramesMapSchema.parse(data);
   const decorationKeys = z.array(z.string()).nonempty().parse(Object.keys(parsedData));
 
-  return { schema: DecorationFramesMapSchema, decorationKeys };
+  return { schema: DecorationFramesMapSchema, keys: decorationKeys };
 };
 
 export const createItemDataSchema = (itemKeysSchema: z.ZodType<string>): z.ZodType<ItemData> =>
@@ -157,12 +160,7 @@ export const createItemDataSchema = (itemKeysSchema: z.ZodType<string>): z.ZodTy
     })
     .strict() satisfies z.ZodType<ItemData>;
 
-export const createItemsRegistrySchema = (
-  data: unknown,
-): {
-  schema: z.ZodType<ItemsRegistry>;
-  itemKeys: string[];
-} => {
+export const createItemsRegistrySchema = (data: unknown): SchemaWithKeys<ItemsRegistry> => {
   const parsedData = z.record(z.string(), z.unknown()).parse(data);
   // We use .nonempty() because z.enum needs at least one element
   const itemKeys = z.array(z.string()).nonempty().parse(Object.keys(parsedData));
@@ -171,20 +169,15 @@ export const createItemsRegistrySchema = (
   const ItemDataSchema = createItemDataSchema(ItemKeysSchema) satisfies z.ZodType<ItemData>;
   const schema = z.record(ItemKeysSchema, ItemDataSchema) satisfies z.ZodType<ItemsRegistry>;
 
-  return { schema, itemKeys };
+  return { schema, keys: itemKeys };
 };
 
-export const createTilesFrameMapSchema = (
-  data: unknown,
-): {
-  schema: z.ZodType<TilesFrameMapRegistry>;
-  tileKeys: string[];
-} => {
+export const createTilesFrameMapSchema = (data: unknown): SchemaWithKeys<TilesFrameMapRegistry> => {
   const TilesFrameMapSchema = z.record(z.string(), z.number().int()) satisfies z.ZodType<TilesFrameMapRegistry>;
   const parsedData = TilesFrameMapSchema.parse(data);
   const tileKeys = z.array(z.string()).nonempty().parse(Object.keys(parsedData));
 
-  return { schema: TilesFrameMapSchema, tileKeys };
+  return { schema: TilesFrameMapSchema, keys: tileKeys };
 };
 
 /**

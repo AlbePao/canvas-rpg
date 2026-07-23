@@ -2,52 +2,9 @@ import { Sprite } from '../../objects/Sprite';
 import { GameRegistry } from '../GameRegistry';
 import type { Line, Word } from './text.types';
 
-// TODO: pass width map and frame map from json file, so that we can change the font without changing the code. Validate its schema with GameLoader schema validation
-
-// Characters widths
-const DEFAULT_WIDTH = 5;
-const width = new Map<string, number>();
-
-// Add overrides as needed
-width.set('c', 4);
-width.set('f', 4);
-width.set('i', 2);
-width.set('j', 4);
-width.set('l', 3);
-width.set('n', 4);
-
-width.set('r', 4);
-width.set('t', 4);
-width.set('u', 4);
-width.set('v', 4);
-width.set('x', 4);
-width.set('y', 4);
-width.set('z', 4);
-
-width.set('E', 4);
-width.set('F', 4);
-width.set('M', 7);
-width.set('W', 7);
-
-width.set(' ', 3);
-width.set("'", 1);
-width.set('!', 1);
-
-// Characters frames
-const frameMap = new Map<string, number>();
-['abcdefghijklmnopqrstuvwxyz', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', '0123456789 __', ".!-,?'"]
-  .join('')
-  .split('')
-  .forEach((char, index) => {
-    frameMap.set(char, index);
-  });
-
-const getCharacterWidth = (char: string): number => width.get(char) ?? DEFAULT_WIDTH;
-const getCharacterFrame = (char: string): number => frameMap.get(char) ?? 0;
-
 // Shared by any UI that needs to size a box around rendered sprite-text
 export const calculateTextWidth = (text: string): number =>
-  text.split('').reduce((lineWidth, char) => lineWidth + getCharacterWidth(char), 0);
+  text.split('').reduce((lineWidth, char) => lineWidth + GameRegistry.getCharFrameData(char).width, 0);
 
 export function createSpriteTextLines(strings: string[], idPrefix: string): Line[] {
   return strings.map((text) => {
@@ -58,7 +15,7 @@ export function createSpriteTextLines(strings: string[], idPrefix: string): Line
       // Break each word into single characters
       const chars = word.split('').map((char) => {
         // Measure each one
-        const charWidth = getCharacterWidth(char);
+        const { frame, width: charWidth } = GameRegistry.getCharFrameData(char);
         wordWidth += charWidth;
 
         const { hFrames, vFrames, frameSize, position, resource } = GameRegistry.getAssetData('font');
@@ -72,7 +29,7 @@ export function createSpriteTextLines(strings: string[], idPrefix: string): Line
             hFrames,
             vFrames,
             frameSize,
-            frame: getCharacterFrame(char),
+            frame,
             position,
           }),
         };

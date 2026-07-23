@@ -3,6 +3,7 @@ import { Singleton } from '../Singleton';
 import {
   createAnimationsSchema,
   createAssetsSchema,
+  createCharsFrameMapSchema,
   createDecorationsFrameMapSchema,
   createItemsRegistrySchema,
   createLevelMapSchema,
@@ -26,6 +27,7 @@ class GameLoaderSingleton extends Singleton<GameLoaderSingleton>() {
       const results = await Promise.all([
         fetch('/json/config/animations.json'),
         fetch('/json/config/assets.json'),
+        fetch('/json/config/charsFrameMap.json'),
         fetch('/json/config/decorationsFrameMap.json'),
         fetch('/json/config/items.json'),
         fetch('/json/config/levelsIds.json'),
@@ -36,11 +38,19 @@ class GameLoaderSingleton extends Singleton<GameLoaderSingleton>() {
         throw new Error('GameLoader: failed to load dynamic game data for schema validation.');
       }
 
-      const [animationsResponse, assetsResponse, decorationsResponse, itemsResponse, levelsIdsResponse, tilesResponse] =
-        results;
+      const [
+        animationsResponse,
+        assetsResponse,
+        charsFrameMapResponse,
+        decorationsResponse,
+        itemsResponse,
+        levelsIdsResponse,
+        tilesResponse,
+      ] = results;
 
       const animationsData = await animationsResponse.json();
       const assetsData = await assetsResponse.json();
+      const charsFrameMapData = await charsFrameMapResponse.json();
       const decorationsData = await decorationsResponse.json();
       const itemsData = await itemsResponse.json();
       const levelsIdsData = await levelsIdsResponse.json();
@@ -48,14 +58,16 @@ class GameLoaderSingleton extends Singleton<GameLoaderSingleton>() {
 
       const { schema: AnimationsSchema } = createAnimationsSchema(animationsData);
       const { schema: AssetsSchema } = createAssetsSchema(assetsData);
-      const { schema: DecorationsSchema, decorationKeys } = createDecorationsFrameMapSchema(decorationsData);
-      const { schema: ItemsSchema, itemKeys } = createItemsRegistrySchema(itemsData);
+      const { schema: CharsFrameMapSchema } = createCharsFrameMapSchema(charsFrameMapData);
+      const { schema: DecorationsSchema, keys: decorationKeys } = createDecorationsFrameMapSchema(decorationsData);
+      const { schema: ItemsSchema, keys: itemKeys } = createItemsRegistrySchema(itemsData);
       const levelsIds = LevelsIdsSchema.parse(levelsIdsData);
-      const { schema: TilesSchema, tileKeys } = createTilesFrameMapSchema(tilesData);
+      const { schema: TilesSchema, keys: tileKeys } = createTilesFrameMapSchema(tilesData);
 
       const {
         loadAnimationsRegistry,
         loadAssetsRegistry,
+        loadCharsFrameMapRegistry,
         loadDecorationsFrameMapRegistry,
         loadItemsRegistry,
         loadLevelsIdsRegistry,
@@ -64,6 +76,7 @@ class GameLoaderSingleton extends Singleton<GameLoaderSingleton>() {
 
       loadAnimationsRegistry(AnimationsSchema.parse(animationsData));
       loadAssetsRegistry(AssetsSchema.parse(assetsData));
+      loadCharsFrameMapRegistry(CharsFrameMapSchema.parse(charsFrameMapData));
       loadDecorationsFrameMapRegistry(DecorationsSchema.parse(decorationsData));
       loadItemsRegistry(ItemsSchema.parse(itemsData));
       loadLevelsIdsRegistry(levelsIds);

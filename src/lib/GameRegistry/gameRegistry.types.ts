@@ -38,6 +38,12 @@ export interface AssetResource {
 export type AssetsToLoad = Record<string, AssetData>;
 export type AssetsRegistry = Record<string, AssetLoaded>;
 
+export type CharsFrameMapRegistry = Registry<string, CharFrameData>;
+export interface CharFrameData {
+  frame: number;
+  width: number;
+}
+
 export const BASE_RESOURCE_KEYS = [
   'chest',
   'exit',
