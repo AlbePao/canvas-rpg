@@ -1,7 +1,7 @@
-import { ArrowIndicator } from '../../objects/ArrowIndicator';
-import { BoxBackdrop } from '../../objects/BoxBackdrop';
-import { fromGridSize, Game } from '../Game';
-import { GameObject } from '../GameObject';
+import { fromGridSize, Game } from '../../lib/Game';
+import { GameObject } from '../../lib/GameObject';
+import { ArrowIndicator } from '../ArrowIndicator';
+import { BoxBackdrop } from '../BoxBackdrop';
 import type { MenuScreenConfig } from './menuScreen.types';
 
 export class MenuScreen extends GameObject {

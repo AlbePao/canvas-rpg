@@ -1,8 +1,8 @@
 import type { DecorationFrames } from '../../objects/Decoration';
+import type { LevelMap } from '../../objects/LevelBuilder';
 import type { Registry } from '../../types/registry';
 import type { AnimationFrame } from '../Animations';
 import type { AnimationConfig } from '../FrameIndexPattern';
-import type { LevelMap } from '../LevelBuilder';
 import type { Coords2D, Vector2 } from '../Vector2';
 
 export const ITEM_TYPES = ['equipable', 'consumable'] as const;

@@ -7,6 +7,16 @@ import type {
   InteractionContentConfig,
 } from '../../objects/InteractiveObject';
 import type { GridCoords } from '../../objects/Level';
+import type {
+  LevelBackground,
+  LevelChestItem,
+  LevelCollectibleItem,
+  LevelDecoration,
+  LevelExit,
+  LevelMap,
+  LevelNpc,
+  LevelObjects,
+} from '../../objects/LevelBuilder';
 import type { MovableObjectBehavior } from '../../objects/MovableObject';
 import type { NpcBehavior } from '../../objects/Npc';
 import type { SelectionOption } from '../../objects/SelectionBox';
@@ -31,16 +41,6 @@ import type {
   TilesFrameMapRegistry,
 } from '../GameRegistry';
 import { BASE_RESOURCE_KEYS, ITEM_TYPES } from '../GameRegistry';
-import type {
-  LevelBackground,
-  LevelChestItem,
-  LevelCollectibleItem,
-  LevelDecoration,
-  LevelExit,
-  LevelMap,
-  LevelNpc,
-  LevelObjects,
-} from '../LevelBuilder';
 import type { Coords2D } from '../Vector2';
 import type { LevelSchemas, SchemaWithKeys } from './gameLoader.types';
 

@@ -1,11 +1,11 @@
-import type { ChestConfig } from '../../objects/Chest';
-import type { DecorationConfig } from '../../objects/Decoration';
-import type { ExitConfig } from '../../objects/Exit';
-import type { CollectibleItemConfig } from '../../objects/Item';
-import type { GridCoords, LevelConfig } from '../../objects/Level';
-import type { NpcConfig } from '../../objects/Npc';
+import type { Coords2D } from '../../lib/Vector2';
 import type { Directions } from '../../types/directions';
-import type { Coords2D } from '../Vector2';
+import type { ChestConfig } from '../Chest';
+import type { DecorationConfig } from '../Decoration';
+import type { ExitConfig } from '../Exit';
+import type { CollectibleItemConfig } from '../Item';
+import type { GridCoords, LevelConfig } from '../Level';
+import type { NpcConfig } from '../Npc';
 
 export type LevelBuilderConfig = LevelConfig & {
   heroFacingDirection?: Directions;

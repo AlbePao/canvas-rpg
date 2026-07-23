@@ -2,13 +2,13 @@ import { Events } from '../../lib/Events';
 import { fromGridSize, Game, GRID_SIZE } from '../../lib/Game';
 import { GameRegistry } from '../../lib/GameRegistry';
 import { Inventory } from '../../lib/Inventory';
-import { LevelBuilder, type LevelBuilderConfig } from '../../lib/LevelBuilder';
 import { LevelStateManager } from '../../lib/LevelStateManager';
 import { Progress, type ProgressData } from '../../lib/Progress';
 import { ScreenTransition } from '../../lib/ScreenTransition';
 import { StoryFlags } from '../../lib/StoryFlags';
 import { calculateTextWidth } from '../../lib/Text';
 import { CHANGE_LEVEL } from '../Level';
+import { LevelBuilder, type LevelBuilderConfig } from '../LevelBuilder';
 import { SelectionBox } from '../SelectionBox';
 import type { TitleScreenOption, TitleScreenOptionValue } from './titleScreen.types';
 

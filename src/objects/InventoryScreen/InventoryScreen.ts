@@ -2,9 +2,9 @@ import { Events } from '../../lib/Events';
 import { GRID_SIZE, toGridSize } from '../../lib/Game';
 import { userPressDirectionKeys, userPressEnterKeys, userPressExitKeys } from '../../lib/Input';
 import { Inventory } from '../../lib/Inventory';
-import { MENU_SCREEN_CLOSE, MenuScreen } from '../../lib/MenuScreen';
 import type { Line } from '../../lib/Text';
 import { createSpriteTextLines, drawTextLine } from '../../lib/Text';
+import { MENU_SCREEN_CLOSE, MenuScreen } from '../MenuScreen';
 import {
   SELECTION_BOX_CLOSE,
   SELECTION_BOX_OPEN,

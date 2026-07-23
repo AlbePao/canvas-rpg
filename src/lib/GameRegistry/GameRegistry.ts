@@ -1,7 +1,7 @@
 import type { DecorationFrames } from '../../objects/Decoration';
+import type { LevelMap } from '../../objects/LevelBuilder';
 import type { AnimationConfig } from '../FrameIndexPattern';
 import { objectKeys } from '../Game';
-import type { LevelMap } from '../LevelBuilder';
 import { Singleton } from '../Singleton';
 import { Vector2 } from '../Vector2';
 import type {
