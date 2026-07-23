@@ -1,5 +1,5 @@
 import type { GameSettingsKey } from '../../lib/Game';
-import type { BaseOption } from '../../types/base-option';
+import type { BaseOption } from '../../types/baseOption';
 
 export type SettingItem = BaseOption<SettingItemValue> & {
   selectedIndex: number; // current selected value index for this option

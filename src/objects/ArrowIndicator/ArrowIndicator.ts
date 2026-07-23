@@ -1,7 +1,6 @@
 import { GameObject } from '../../lib/GameObject';
 import { GameRegistry } from '../../lib/GameRegistry';
 import { Sprite } from '../Sprite';
-import { ARROW_DIRECTION_FRAME_MAP } from './arrowIndicator.constants';
 import type { ArrowIndicatorConfig } from './arrowIndicator.types';
 
 export class ArrowIndicator extends GameObject {
@@ -20,7 +19,7 @@ export class ArrowIndicator extends GameObject {
       frameSize,
       hFrames,
       vFrames,
-      frame: ARROW_DIRECTION_FRAME_MAP[direction],
+      frame: GameRegistry.getArrowDirectionFrame(direction),
       position,
     });
   }

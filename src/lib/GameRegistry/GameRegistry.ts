@@ -1,5 +1,6 @@
 import type { DecorationFrames } from '../../objects/Decoration';
 import type { LevelMap } from '../../objects/LevelBuilder';
+import type { ReadonlyRegistry } from '../../types/readonlyRegistry';
 import type { AnimationConfig } from '../FrameIndexPattern';
 import { objectKeys } from '../Game';
 import { Singleton } from '../Singleton';
@@ -16,16 +17,18 @@ import type {
   ItemData,
   ItemsRegistry,
   LevelsRegistry,
-  TilesFrameMapRegistry,
 } from './gameRegistry.types';
 
+// TODO: reduce class size by abstracting repetitive code into helper functions or separate classes. The GameRegistry class is currently quite large and could benefit from refactoring to improve maintainability and readability.
 class GameRegistrySingleton extends Singleton<GameRegistrySingleton>() {
   private _levelsIdsRegistry = new Set<string>();
   private _levelsRegistry: LevelsRegistry = {};
   private _assetsRegistry: AssetsRegistry = {};
+  private _arrowDirectionFrameMapRegistry: ReadonlyRegistry = {};
   private _charsFrameMapRegistry: CharsFrameMapRegistry = {};
+  private _chestStatusFrameMapRegistry: ReadonlyRegistry = {};
   private _itemsRegistry: ItemsRegistry = {};
-  private _tilesFrameMapRegistry: TilesFrameMapRegistry = {};
+  private _tilesFrameMapRegistry: ReadonlyRegistry = {};
   private _decorationsFrameMapRegistry: DecorationFramesMapRegistry = {};
   private _animationsRegistry: AnimationRegistry | null = null;
 
@@ -75,6 +78,13 @@ class GameRegistrySingleton extends Singleton<GameRegistrySingleton>() {
     }
   };
 
+  loadArrowDirectionFrameMapRegistry = (data: ReadonlyRegistry): void => {
+    if (Object.keys(this._arrowDirectionFrameMapRegistry).length > 0) {
+      throw new Error('Arrow direction frame map registry has already been loaded.');
+    }
+    this._arrowDirectionFrameMapRegistry = data;
+  };
+
   loadCharsFrameMapRegistry = (data: CharsFrameMapRegistry): void => {
     if (Object.keys(this._charsFrameMapRegistry).length > 0) {
       throw new Error('Chars frame map registry has already been loaded.');
@@ -89,11 +99,18 @@ class GameRegistrySingleton extends Singleton<GameRegistrySingleton>() {
     this._itemsRegistry = data;
   };
 
-  loadTilesFrameMapRegistry = (data: TilesFrameMapRegistry): void => {
+  loadTilesFrameMapRegistry = (data: ReadonlyRegistry): void => {
     if (Object.keys(this._tilesFrameMapRegistry).length > 0) {
       throw new Error('Tiles frame map registry has already been loaded.');
     }
     this._tilesFrameMapRegistry = data;
+  };
+
+  loadChestStatusFrameMapRegistry = (data: ReadonlyRegistry): void => {
+    if (Object.keys(this._chestStatusFrameMapRegistry).length > 0) {
+      throw new Error('Chest status frame map registry has already been loaded.');
+    }
+    this._chestStatusFrameMapRegistry = data;
   };
 
   loadDecorationsFrameMapRegistry = (data: DecorationFramesMapRegistry): void => {
@@ -159,6 +176,17 @@ class GameRegistrySingleton extends Singleton<GameRegistrySingleton>() {
     return asset;
   };
 
+  // Factory method to get arrow direction frame based on its key
+  getArrowDirectionFrame = (direction: string): number => {
+    const frame = this._arrowDirectionFrameMapRegistry[direction];
+
+    if (!frame && frame !== 0) {
+      throw new Error(`Arrow direction "${direction}" does not exist in the arrow direction frame map registry.`);
+    }
+
+    return frame;
+  };
+
   // Factory method to get char frame data based on its key
   getCharFrameData = (char: string): CharFrameData => {
     const charData = this._charsFrameMapRegistry[char];
@@ -192,6 +220,17 @@ class GameRegistrySingleton extends Singleton<GameRegistrySingleton>() {
     return frame;
   };
 
+  // Factory method to get frame number for a chest status based on its key
+  getChestStatusFrame = (statusKey: string): number => {
+    const frame = this._chestStatusFrameMapRegistry[statusKey];
+
+    if (!frame && frame !== 0) {
+      throw new Error(`Chest status with key "${statusKey}" does not exist.`);
+    }
+
+    return frame;
+  };
+
   // Factory method to get frame number for a decoration based on its key
   getDecorationFrame = (decorationKey: string): DecorationFrames => {
     const frame = this._decorationsFrameMapRegistry[decorationKey];
@@ -204,7 +243,10 @@ class GameRegistrySingleton extends Singleton<GameRegistrySingleton>() {
   };
 
   // Factory method to get animation configuration for a specific object type. If a key is provided, it returns the configuration for that specific animation; otherwise, it returns all animations for the object type.
-  getAnimationConfig = (objectType: AnimationObjectType, key?: string): Record<string, AnimationConfig> | null => {
+  getAnimationConfig = (
+    objectType: AnimationObjectType,
+    key?: string,
+  ): ReadonlyRegistry<string, AnimationConfig> | null => {
     if (!this._animationsRegistry) {
       return null;
     }

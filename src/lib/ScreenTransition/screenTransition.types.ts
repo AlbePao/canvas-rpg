@@ -1,8 +1,8 @@
-import type { Registry } from '../../types/registry';
+import type { ReadonlyRegistry } from '../../types/readonlyRegistry';
 
 export type TransitionName = 'fadeWhite' | 'fadeBlack' | 'none';
 
-export type ScreenTransitions = Registry<TransitionName, string>;
+export type ScreenTransitions = ReadonlyRegistry<TransitionName, string>;
 
 export interface ScreenTransitionConfig {
   transition: TransitionName;

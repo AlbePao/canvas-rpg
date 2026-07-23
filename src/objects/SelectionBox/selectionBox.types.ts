@@ -1,5 +1,5 @@
 import type { GameObjectConfig } from '../../lib/GameObject';
-import type { BaseOption } from '../../types/base-option';
+import type { BaseOption } from '../../types/baseOption';
 import type { BattleConfig } from '../Battle';
 
 export type SelectionOption<T extends string = string> = BaseOption<T> &

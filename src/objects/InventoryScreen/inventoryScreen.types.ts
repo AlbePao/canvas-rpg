@@ -1,4 +1,4 @@
-import type { BaseOption } from '../../types/base-option';
+import type { BaseOption } from '../../types/baseOption';
 
 export type InventoryItem = BaseOption & { quantity: number };
 

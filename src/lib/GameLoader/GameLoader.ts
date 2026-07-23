@@ -2,8 +2,10 @@ import { GameRegistry } from '../GameRegistry';
 import { Singleton } from '../Singleton';
 import {
   createAnimationsSchema,
+  createArrowDirectionFrameMapSchema,
   createAssetsSchema,
   createCharsFrameMapSchema,
+  createChestStatusFrameMapSchema,
   createDecorationsFrameMapSchema,
   createItemsRegistrySchema,
   createLevelMapSchema,
@@ -23,11 +25,14 @@ class GameLoaderSingleton extends Singleton<GameLoaderSingleton>() {
    * This should be called during app initialization (before starting the game)
    */
   async loadData(): Promise<void> {
+    // TODO: reduce method size by abstracting repetitive code into helper functions or separate classes. The loadData method is currently quite large and could benefit from refactoring to improve maintainability and readability.
     try {
       const results = await Promise.all([
         fetch('/json/config/animations.json'),
+        fetch('/json/config/arrowDirectionFrameMap.json'),
         fetch('/json/config/assets.json'),
         fetch('/json/config/charsFrameMap.json'),
+        fetch('/json/config/chestStatusFrameMap.json'),
         fetch('/json/config/decorationsFrameMap.json'),
         fetch('/json/config/items.json'),
         fetch('/json/config/levelsIds.json'),
@@ -40,8 +45,10 @@ class GameLoaderSingleton extends Singleton<GameLoaderSingleton>() {
 
       const [
         animationsResponse,
+        arrowDirectionFrameMapResponse,
         assetsResponse,
         charsFrameMapResponse,
+        chestStatusFrameMapResponse,
         decorationsResponse,
         itemsResponse,
         levelsIdsResponse,
@@ -49,16 +56,20 @@ class GameLoaderSingleton extends Singleton<GameLoaderSingleton>() {
       ] = results;
 
       const animationsData = await animationsResponse.json();
+      const arrowDirectionFrameMapData = await arrowDirectionFrameMapResponse.json();
       const assetsData = await assetsResponse.json();
       const charsFrameMapData = await charsFrameMapResponse.json();
+      const chestStatusFrameMapData = await chestStatusFrameMapResponse.json();
       const decorationsData = await decorationsResponse.json();
       const itemsData = await itemsResponse.json();
       const levelsIdsData = await levelsIdsResponse.json();
       const tilesData = await tilesResponse.json();
 
       const { schema: AnimationsSchema } = createAnimationsSchema(animationsData);
+      const { schema: ArrowDirectionFrameMapSchema } = createArrowDirectionFrameMapSchema(arrowDirectionFrameMapData);
       const { schema: AssetsSchema } = createAssetsSchema(assetsData);
       const { schema: CharsFrameMapSchema } = createCharsFrameMapSchema(charsFrameMapData);
+      const { schema: ChestStatusFrameMapSchema } = createChestStatusFrameMapSchema(chestStatusFrameMapData);
       const { schema: DecorationsSchema, keys: decorationKeys } = createDecorationsFrameMapSchema(decorationsData);
       const { schema: ItemsSchema, keys: itemKeys } = createItemsRegistrySchema(itemsData);
       const levelsIds = LevelsIdsSchema.parse(levelsIdsData);
@@ -66,8 +77,10 @@ class GameLoaderSingleton extends Singleton<GameLoaderSingleton>() {
 
       const {
         loadAnimationsRegistry,
+        loadArrowDirectionFrameMapRegistry,
         loadAssetsRegistry,
         loadCharsFrameMapRegistry,
+        loadChestStatusFrameMapRegistry,
         loadDecorationsFrameMapRegistry,
         loadItemsRegistry,
         loadLevelsIdsRegistry,
@@ -75,8 +88,10 @@ class GameLoaderSingleton extends Singleton<GameLoaderSingleton>() {
       } = GameRegistry;
 
       loadAnimationsRegistry(AnimationsSchema.parse(animationsData));
+      loadArrowDirectionFrameMapRegistry(ArrowDirectionFrameMapSchema.parse(arrowDirectionFrameMapData));
       loadAssetsRegistry(AssetsSchema.parse(assetsData));
       loadCharsFrameMapRegistry(CharsFrameMapSchema.parse(charsFrameMapData));
+      loadChestStatusFrameMapRegistry(ChestStatusFrameMapSchema.parse(chestStatusFrameMapData));
       loadDecorationsFrameMapRegistry(DecorationsSchema.parse(decorationsData));
       loadItemsRegistry(ItemsSchema.parse(itemsData));
       loadLevelsIdsRegistry(levelsIds);

@@ -21,6 +21,7 @@ import type { MovableObjectBehavior } from '../../objects/MovableObject';
 import type { NpcBehavior } from '../../objects/Npc';
 import type { SelectionOption } from '../../objects/SelectionBox';
 import { DIRECTIONS } from '../../types/directions';
+import type { ReadonlyRegistry } from '../../types/readonlyRegistry';
 import {
   ANIMATION_COLLECT_FRAMES,
   ANIMATION_STANDING_FRAMES,
@@ -38,7 +39,6 @@ import type {
   DecorationFramesMapRegistry,
   ItemData,
   ItemsRegistry,
-  TilesFrameMapRegistry,
 } from '../GameRegistry';
 import { BASE_RESOURCE_KEYS, ITEM_TYPES } from '../GameRegistry';
 import type { Coords2D } from '../Vector2';
@@ -83,13 +83,13 @@ export const createAnimationsSchema = (data: unknown): SchemaWithKeys<AnimationR
       ),
     )
     .partial()
-    .strict() satisfies z.ZodType<Partial<Record<AnimationFrame, AnimationConfig>>>;
+    .strict() satisfies z.ZodType<Partial<ReadonlyRegistry<AnimationFrame, AnimationConfig>>>;
 
   const AnimationRegistrySchema = z
     .object({
       npc: CharacterAnimationSchema,
       hero: CharacterAnimationSchema,
-      tiles: z.record(z.string(), AnimationConfigSchema) satisfies z.ZodType<Record<string, AnimationConfig>>,
+      tiles: z.record(z.string(), AnimationConfigSchema) satisfies z.ZodType<ReadonlyRegistry<string, AnimationConfig>>,
     })
     .strict() satisfies z.ZodType<AnimationRegistry>;
 
@@ -97,6 +97,17 @@ export const createAnimationsSchema = (data: unknown): SchemaWithKeys<AnimationR
   const animationKeys = z.array(z.string()).nonempty().parse(Object.keys(parsedData));
 
   return { schema: AnimationRegistrySchema, keys: animationKeys };
+};
+
+export const createArrowDirectionFrameMapSchema = (data: unknown): SchemaWithKeys<ReadonlyRegistry> => {
+  const ArrowDirectionFrameMapSchema = z.record(
+    z.enum(DIRECTIONS),
+    z.number().int(),
+  ) satisfies z.ZodType<ReadonlyRegistry>;
+  const parsedData = ArrowDirectionFrameMapSchema.parse(data);
+  const arrowDirectionKeys = z.array(z.string()).nonempty().parse(Object.keys(parsedData));
+
+  return { schema: ArrowDirectionFrameMapSchema, keys: arrowDirectionKeys };
 };
 
 export const createAssetsSchema = (data: unknown): SchemaWithKeys<AssetsToLoad> => {
@@ -129,6 +140,17 @@ export const createCharsFrameMapSchema = (data: unknown): SchemaWithKeys<CharsFr
   const charsKeys = z.array(z.string()).nonempty().parse(Object.keys(parsedData));
 
   return { schema: CharsFrameMapSchema, keys: charsKeys };
+};
+
+export const createChestStatusFrameMapSchema = (data: unknown): SchemaWithKeys<ReadonlyRegistry> => {
+  const ChestStatusFrameMapSchema = z.record(
+    z.enum(CHEST_STATUSES),
+    z.number().int(),
+  ) satisfies z.ZodType<ReadonlyRegistry>;
+  const parsedData = ChestStatusFrameMapSchema.parse(data);
+  const chestStatusKeys = z.array(z.string()).nonempty().parse(Object.keys(parsedData));
+
+  return { schema: ChestStatusFrameMapSchema, keys: chestStatusKeys };
 };
 
 export const createDecorationsFrameMapSchema = (data: unknown): SchemaWithKeys<DecorationFramesMapRegistry> => {
@@ -172,8 +194,8 @@ export const createItemsRegistrySchema = (data: unknown): SchemaWithKeys<ItemsRe
   return { schema, keys: itemKeys };
 };
 
-export const createTilesFrameMapSchema = (data: unknown): SchemaWithKeys<TilesFrameMapRegistry> => {
-  const TilesFrameMapSchema = z.record(z.string(), z.number().int()) satisfies z.ZodType<TilesFrameMapRegistry>;
+export const createTilesFrameMapSchema = (data: unknown): SchemaWithKeys<ReadonlyRegistry> => {
+  const TilesFrameMapSchema = z.record(z.string(), z.number().int()) satisfies z.ZodType<ReadonlyRegistry>;
   const parsedData = TilesFrameMapSchema.parse(data);
   const tileKeys = z.array(z.string()).nonempty().parse(Object.keys(parsedData));
 

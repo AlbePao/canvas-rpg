@@ -1,6 +1,7 @@
+import type { ReadonlyRegistry } from '../../types/readonlyRegistry';
 import type { FrameIndexPattern } from '../FrameIndexPattern';
 
-export type AnimationPattern = Partial<Record<AnimationFrame, FrameIndexPattern>>;
+export type AnimationPattern = Partial<ReadonlyRegistry<AnimationFrame, FrameIndexPattern>>;
 
 export const ANIMATION_STANDING_FRAMES = ['standDown', 'standLeft', 'standRight', 'standUp'] as const;
 export type StandingFrame = (typeof ANIMATION_STANDING_FRAMES)[number];
