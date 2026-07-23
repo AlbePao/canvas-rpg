@@ -18,12 +18,20 @@ import type {
 } from './gameRegistry.types';
 
 class GameRegistrySingleton extends Singleton<GameRegistrySingleton>() {
+  private _levelsIdsRegistry = new Set<string>();
   private _levelsRegistry: LevelsRegistry = {};
   private _assetsRegistry: AssetsRegistry = {};
   private _itemsRegistry: ItemsRegistry = {};
   private _tilesFrameMapRegistry: TilesFrameMapRegistry = {};
   private _decorationsFrameMapRegistry: DecorationFramesMapRegistry = {};
   private _animationsRegistry: AnimationRegistry | null = null;
+
+  loadLevelsIdsRegistry = (levelIds: string[]): void => {
+    if (this._levelsIdsRegistry.size > 0) {
+      throw new Error('Levels IDs registry has already been loaded.');
+    }
+    this._levelsIdsRegistry = new Set(levelIds);
+  };
 
   loadLevel = (levelId: string, levelData: LevelMap): void => {
     if (this._levelsRegistry[levelId]) {
@@ -92,12 +100,29 @@ class GameRegistrySingleton extends Singleton<GameRegistrySingleton>() {
     this._animationsRegistry = data;
   };
 
+  getFirstLevelId(): string {
+    if (this._levelsIdsRegistry.size === 0) {
+      throw new Error('No levels have been loaded into the registry.');
+    }
+
+    return Array.from(this._levelsIdsRegistry)[0];
+  }
+
+  getLevelIds(): string[] {
+    return [...this._levelsIdsRegistry];
+  }
+
   /**
    * Get a specific level by ID
    * Returns null if the level doesn't exist
    */
   getLevel(id: string): LevelMap | null {
+    if (this._levelsIdsRegistry.size === 0 || !this._levelsIdsRegistry.has(id)) {
+      throw new Error(`Level "${id}" is not registered in LevelsMapper`);
+    }
+
     const level = this._levelsRegistry[id];
+
     if (!level) {
       console.warn(`Level "${id}" not found in LevelsMapper`);
       return null;
@@ -110,7 +135,7 @@ class GameRegistrySingleton extends Singleton<GameRegistrySingleton>() {
    * Check if a level exists
    */
   hasLevel(id: string): boolean {
-    return Object.prototype.hasOwnProperty.call(this._levelsRegistry, id);
+    return this._levelsIdsRegistry.has(id);
   }
 
   // Factory method to get asset data based on its key

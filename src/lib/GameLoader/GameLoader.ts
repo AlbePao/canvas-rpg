@@ -54,17 +54,19 @@ class GameLoaderSingleton extends Singleton<GameLoaderSingleton>() {
       const { schema: TilesSchema, tileKeys } = createTilesFrameMapSchema(tilesData);
 
       const {
-        loadAssetsRegistry,
-        loadItemsRegistry,
-        loadTilesFrameMapRegistry,
-        loadDecorationsFrameMapRegistry,
         loadAnimationsRegistry,
+        loadAssetsRegistry,
+        loadDecorationsFrameMapRegistry,
+        loadItemsRegistry,
+        loadLevelsIdsRegistry,
+        loadTilesFrameMapRegistry,
       } = GameRegistry;
 
-      loadAssetsRegistry(AssetsSchema.parse(assetsData));
       loadAnimationsRegistry(AnimationsSchema.parse(animationsData));
+      loadAssetsRegistry(AssetsSchema.parse(assetsData));
       loadDecorationsFrameMapRegistry(DecorationsSchema.parse(decorationsData));
       loadItemsRegistry(ItemsSchema.parse(itemsData));
+      loadLevelsIdsRegistry(levelsIds);
       loadTilesFrameMapRegistry(TilesSchema.parse(tilesData));
 
       const LevelValidationSchema = createLevelMapSchema({

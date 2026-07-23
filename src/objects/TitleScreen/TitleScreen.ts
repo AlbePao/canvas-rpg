@@ -1,5 +1,6 @@
 import { Events } from '../../lib/Events';
 import { fromGridSize, Game, GRID_SIZE } from '../../lib/Game';
+import { GameRegistry } from '../../lib/GameRegistry';
 import { Inventory } from '../../lib/Inventory';
 import { LevelBuilder, type LevelBuilderConfig } from '../../lib/LevelBuilder';
 import { LevelStateManager } from '../../lib/LevelStateManager';
@@ -44,7 +45,7 @@ export class TitleScreen extends SelectionBox<TitleScreenOptionValue> {
       return;
     }
 
-    this._startGame({ id: 'tilesetLevel' });
+    this._startGame({ id: GameRegistry.getFirstLevelId() });
   }
 
   private _loadGame(): void {
