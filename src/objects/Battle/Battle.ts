@@ -3,6 +3,7 @@ import { Game } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
 import { GameRegistry } from '../../lib/GameRegistry';
 import { userPressExitKeys } from '../../lib/Input';
+import { ScreenTransition } from '../../lib/ScreenTransition';
 import { Vector2 } from '../../lib/Vector2';
 import type { InteractiveObject } from '../InteractiveObject';
 import { Sprite } from '../Sprite';
@@ -38,7 +39,9 @@ export class Battle extends GameObject {
 
   override step(): void {
     if (userPressExitKeys()) {
-      Events.emit(BATTLE_END);
+      new ScreenTransition(() => {
+        Events.emit(BATTLE_END);
+      });
     }
   }
 
