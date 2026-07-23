@@ -1,5 +1,4 @@
-type UpdateCallback = (deltaTime: number) => void;
-type RenderCallback = () => void;
+import type { RenderCallback, UpdateCallback } from './gameLoop.types';
 
 export class GameLoop {
   readonly update: UpdateCallback;

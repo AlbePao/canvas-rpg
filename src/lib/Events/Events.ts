@@ -1,18 +1,6 @@
-import type { GameObject } from './GameObject';
-import { Singleton } from './Singleton';
-
-type EventCallback<T> = (value: T) => void;
-
-interface Listener<T = unknown> {
-  id: number;
-  caller: GameObject;
-  callback: EventCallback<T>;
-}
-
-interface ListenerIndex {
-  eventName: string;
-  caller: GameObject;
-}
+import type { GameObject } from '../GameObject';
+import { Singleton } from '../Singleton';
+import type { EventCallback, Listener, ListenerIndex } from './events.types';
 
 class EventsSingleton extends Singleton<EventsSingleton>() {
   private readonly _listenersByEvent = new Map<string, Map<number, Listener>>();
