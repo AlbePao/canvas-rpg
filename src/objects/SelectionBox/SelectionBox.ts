@@ -50,7 +50,7 @@ export class SelectionBox<K extends string = string> extends GameObject {
     const { containerSizes } = Game;
 
     // Draw on top layer
-    this.drawLayer = 'HUD';
+    this.drawLayer = 'hud';
 
     this.options = options.filter((option) => {
       // If the option type only extends BaseOption, we don't need to check for include/exclude flags

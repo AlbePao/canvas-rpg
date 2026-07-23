@@ -63,7 +63,7 @@ export class LevelBuilder extends Level {
         position: new Vector2(toGridSize(x), toGridSize(y)),
       });
 
-      worldTileSprite.drawLayer = 'FLOOR';
+      worldTileSprite.drawLayer = 'floor';
       this.addChild(worldTileSprite);
     }
 

@@ -62,7 +62,7 @@ export class GameObject {
     // Do the actual rendering for Images
     this.drawImage(ctx, drawPosX, drawPosY);
 
-    // FLOOR children first (insertion order — static tiles)
+    // floor children first (insertion order — static tiles)
     for (const child of this._floorChildren) {
       child.draw(ctx, drawPosX, drawPosY);
     }
@@ -79,10 +79,10 @@ export class GameObject {
     }
 
     return [...this._defaultChildren].sort((a, b) => {
-      // WORLD_TOP layer renders last (above Y-sorted objects)
-      if (a.drawLayer === 'WORLD_TOP' && b.drawLayer !== 'WORLD_TOP') {
+      // worldTop layer renders last (above Y-sorted objects)
+      if (a.drawLayer === 'worldTop' && b.drawLayer !== 'worldTop') {
         return 1;
-      } else if (b.drawLayer === 'WORLD_TOP' && a.drawLayer !== 'WORLD_TOP') {
+      } else if (b.drawLayer === 'worldTop' && a.drawLayer !== 'worldTop') {
         return -1;
       }
 
@@ -125,7 +125,7 @@ export class GameObject {
   }
 
   private _addToLayerBucket(child: GameObject): void {
-    if (child.drawLayer === 'FLOOR') {
+    if (child.drawLayer === 'floor') {
       this._floorChildren.push(child);
     } else {
       this._defaultChildren.push(child);
@@ -133,7 +133,7 @@ export class GameObject {
   }
 
   private _removeFromLayerBucket(child: GameObject): void {
-    if (child.drawLayer === 'FLOOR') {
+    if (child.drawLayer === 'floor') {
       this._floorChildren = this._floorChildren.filter((g) => g !== child);
     } else {
       this._defaultChildren = this._defaultChildren.filter((g) => g !== child);

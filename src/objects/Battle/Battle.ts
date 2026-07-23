@@ -21,7 +21,7 @@ export class Battle extends GameObject {
     const { canvasWidth, canvasHeight } = Game.containerSizes;
     const { hFrames, vFrames, frameSize, position, resource } = GameRegistry.getAssetData(background);
 
-    this.drawLayer = 'HUD';
+    this.drawLayer = 'hud';
 
     this.background = new Sprite({
       id: 'battle-background',

@@ -67,7 +67,7 @@ export class TextBox extends GameObject {
     });
 
     // Draw on top layer
-    this.drawLayer = 'HUD';
+    this.drawLayer = 'hud';
     this._autoClose = autoClose;
     this.updateLines({ id, text, portraitFrame, speed });
   }

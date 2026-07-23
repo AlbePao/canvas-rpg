@@ -40,7 +40,7 @@ export class Main extends GameObject {
 
   override addChild(gameObject: GameObject): void {
     super.addChild(gameObject);
-    if (gameObject.drawLayer === 'HUD') {
+    if (gameObject.drawLayer === 'hud') {
       this._hudChildren.push(gameObject);
     } else {
       this._nonHudChildren.push(gameObject);

@@ -22,6 +22,6 @@ export class MenuScreen extends GameObject {
       id: `${id}-menu-screen`,
     });
 
-    this.drawLayer = 'HUD';
+    this.drawLayer = 'hud';
   }
 }

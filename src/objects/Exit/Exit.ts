@@ -26,7 +26,7 @@ export class Exit extends GameObject {
     });
     this.addChild(exit);
 
-    this.drawLayer = 'FLOOR';
+    this.drawLayer = 'floor';
 
     this.exitData = {
       id,

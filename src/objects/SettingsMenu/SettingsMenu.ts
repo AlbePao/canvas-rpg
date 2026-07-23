@@ -48,7 +48,7 @@ export class SettingsMenu extends GameObject {
     });
 
     // Draw on top layer
-    this.drawLayer = 'HUD';
+    this.drawLayer = 'hud';
 
     this._settingsListLines = createSpriteTextLines(
       this._settingsList.map(({ text }) => text),
