@@ -1,18 +1,16 @@
 import type { RenderCallback, UpdateCallback } from './gameLoop.types';
 
 export class GameLoop {
-  readonly update: UpdateCallback;
-  readonly render: RenderCallback;
   private _lastFrameTime = 0;
   private _accumulatedTime = 0;
   private readonly _timeStep = 1000 / 60; // 60 frame per second
   private _rafId: number | null = null;
   private _isRunning = false;
 
-  constructor(update: UpdateCallback, render: RenderCallback) {
-    this.update = update;
-    this.render = render;
-  }
+  constructor(
+    readonly update: UpdateCallback,
+    readonly render: RenderCallback,
+  ) {}
 
   mainLoop = (timestamp: number): void => {
     if (!this._isRunning) {

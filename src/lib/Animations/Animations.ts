@@ -3,12 +3,10 @@ import { objectKeys } from '../Game';
 import type { AnimationFrame, AnimationPattern } from './animations.types';
 
 export class Animations {
-  private readonly _patterns: AnimationPattern;
   private _activeKey: AnimationFrame;
   private _isPaused = false;
 
-  constructor(patterns: AnimationPattern) {
-    this._patterns = patterns;
+  constructor(private readonly _patterns: AnimationPattern) {
     this._activeKey = objectKeys(this._patterns)[0];
   }
 

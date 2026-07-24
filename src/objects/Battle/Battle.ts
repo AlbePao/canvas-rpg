@@ -12,9 +12,11 @@ import type { BattleConfig } from './battle.types';
 
 export class Battle extends GameObject {
   background: Sprite;
-  starter?: InteractiveObject;
 
-  constructor(config: BattleConfig, starter?: InteractiveObject) {
+  constructor(
+    config: BattleConfig,
+    readonly starter?: InteractiveObject,
+  ) {
     super({
       id: 'battle',
     });
@@ -33,8 +35,12 @@ export class Battle extends GameObject {
       vFrames,
       position,
     });
+  }
 
-    this.starter = starter;
+  override ready(): void {
+    if (this.starter) {
+      console.log('Battle started by:', this.starter.id);
+    }
   }
 
   override step(): void {
