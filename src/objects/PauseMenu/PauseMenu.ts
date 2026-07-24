@@ -6,7 +6,6 @@ import { LevelStateManager } from '../../lib/LevelStateManager';
 import { Progress } from '../../lib/Progress';
 import { ScreenTransition } from '../../lib/ScreenTransition';
 import { StoryFlags } from '../../lib/StoryFlags';
-import { getHeroObject } from '../Hero';
 import { InventoryScreen } from '../InventoryScreen';
 import { MENU_SCREEN_CLOSE, MENU_SCREEN_OPEN } from '../MenuScreen';
 import { SelectionBox } from '../SelectionBox';
@@ -76,14 +75,15 @@ export class PauseMenu extends SelectionBox<PauseMenuItemValue> {
     // Save game handler
     Events.on(PAUSE_SAVE_GAME, this, () => {
       const { level } = Game;
-      const hero = getHeroObject(level);
 
-      if (!level || !hero) {
+      if (!level?.hero) {
         return;
       }
 
+      const { id, hero } = level;
+
       Progress.save({
-        levelId: level.id,
+        levelId: id,
         storyFlags: StoryFlags.flags,
         levelsState: LevelStateManager.state,
         hero: {

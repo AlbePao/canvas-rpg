@@ -5,6 +5,7 @@ import type { GridCoords, LevelConfig, Walls } from './level.types';
 
 // This class can be used to create a new level or to instance a new level from a config passed to LevelBuilder
 export class Level extends GameObject {
+  hero: Hero | null = null;
   heroStartPosition?: Coords2D;
   background: Sprite | null = null;
   readonly walls: Walls = new Set<GridCoords>();
@@ -15,5 +16,13 @@ export class Level extends GameObject {
     super({
       id,
     });
+  }
+
+  override addChild(gameObject: GameObject): void {
+    super.addChild(gameObject);
+
+    if (gameObject instanceof Hero) {
+      this.hero = gameObject;
+    }
   }
 }

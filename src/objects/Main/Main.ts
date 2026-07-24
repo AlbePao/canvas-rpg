@@ -4,7 +4,6 @@ import { GameObject } from '../../lib/GameObject';
 import { userPressEscapeKey } from '../../lib/Input';
 import { BATTLE_END, BATTLE_START, type Battle } from '../Battle';
 import { Camera } from '../Camera';
-import { getHeroObject } from '../Hero';
 import { CHANGE_LEVEL, type Level } from '../Level';
 import { LevelBuilder, type LevelBuilderConfig } from '../LevelBuilder';
 import type { MenuScreen } from '../MenuScreen';
@@ -90,16 +89,15 @@ export class Main extends GameObject {
       this._isBattlePlaying = true;
       this.addChild(battle);
 
-      const { level } = Game;
-      const hero = getHeroObject(level);
+      const { id, hero } = Game.level ?? {};
 
-      if (!level || !hero) {
+      if (!id || !hero) {
         throw new Error('No level is currently loaded when starting a battle');
       }
 
       // Save level id and hero position before battle starts so we can restore it after battle ends
       const levelConfig: LevelBuilderConfig = {
-        id: level.id,
+        id,
         heroStartPosition: hero.gridCoords,
         heroFacingDirection: hero.facingDirection,
       };
