@@ -1,15 +1,15 @@
 import type { Directions } from '../../types/directions';
 import type { InteractiveObjectConfig } from '../InteractiveObject';
 
-export type MovableObjectConfig = InteractiveObjectConfig & {
+export type MovableObjectConfig<B = MovableObjectBehavior> = InteractiveObjectConfig & {
   facingDirection?: Directions;
-  behaviorConfig?: MovableObjectBehavior[];
+  behaviorConfig?: B[];
 };
 
-export interface MovableObjectBehavior {
-  type: unknown;
+export type MovableObjectBehavior<T = unknown, E = Record<string, unknown>> = {
+  type: T;
   direction: Directions;
-}
+} & E;
 
 export type MovableObjectLockReason = 'battle' | 'cutscene' | 'pause' | 'textBox' | 'transition';
 
