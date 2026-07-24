@@ -46,10 +46,7 @@ export class InventoryScreen extends MenuScreen {
         if (key === 'useItem') {
           console.log('use item...');
         } else if (key === 'throwItem') {
-          const currentItemKey = this._itemsList[this._currentIndex].key;
-          const itemKey = Inventory.getAll().find(({ itemKey }) => itemKey === currentItemKey)?.itemKey ?? null;
-
-          Inventory.remove(itemKey);
+          Inventory.remove(this._itemsList[this._currentIndex].key);
 
           // Regenerate synced items list and lines with the new inventory state
           this._generateItemsList();
