@@ -1,5 +1,5 @@
 import type { Directions } from '../../types/directions';
-import type { ReadonlyRegistry } from '../../types/readonlyRegistry';
+import type { ReadonlyRecord } from '../../types/readonlyRecord';
 import { objectKeys } from '../Game';
 
 // Input events
@@ -7,7 +7,7 @@ export const DIRECTION_TAP = 'DIRECTION_TAP';
 
 export const HOLD_THRESHOLD = 120; // milliseconds
 
-export const KEY_TO_DIRECTION: ReadonlyRegistry<string, Directions> = {
+export const KEY_TO_DIRECTION: ReadonlyRecord<string, Directions> = {
   ArrowUp: 'up',
   KeyW: 'up',
   ArrowDown: 'down',

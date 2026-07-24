@@ -1,6 +1,6 @@
 import type { DecorationFrames } from '../../objects/Decoration';
 import type { LevelMap } from '../../objects/LevelBuilder';
-import type { ReadonlyRegistry } from '../../types/readonlyRegistry';
+import type { ReadonlyRecord } from '../../types/readonlyRecord';
 import type { AnimationConfig } from '../FrameIndexPattern';
 import { objectKeys } from '../Game';
 import { Singleton } from '../Singleton';
@@ -243,10 +243,7 @@ class GameRegistrySingleton extends Singleton<GameRegistrySingleton>() {
   };
 
   // Factory method to get animation configuration for a specific object type. If a key is provided, it returns the configuration for that specific animation; otherwise, it returns all animations for the object type.
-  getAnimationConfig = (
-    objectType: AnimationObjectType,
-    key?: string,
-  ): ReadonlyRegistry<string, AnimationConfig> | null => {
+  getAnimationConfig(objectType: AnimationObjectType, key?: string): ReadonlyRecord<string, AnimationConfig> | null {
     if (!this._animationsRegistry) {
       return null;
     }
@@ -262,10 +259,8 @@ class GameRegistrySingleton extends Singleton<GameRegistrySingleton>() {
       return tilesAnimations ?? null;
     }
 
-    const charAnimations = this._animationsRegistry?.[objectType];
-
-    return charAnimations ?? null;
-  };
+    return this._animationsRegistry[objectType] ?? null;
+  }
 }
 
 export const GameRegistry = new GameRegistrySingleton();

@@ -1,6 +1,6 @@
 import type { DecorationFrames } from '../../objects/Decoration';
 import type { LevelMap } from '../../objects/LevelBuilder';
-import type { ReadonlyRegistry } from '../../types/readonlyRegistry';
+import type { ReadonlyRecord } from '../../types/readonlyRecord';
 import type { AnimationFrame } from '../Animations';
 import type { AnimationConfig } from '../FrameIndexPattern';
 import type { Coords2D, Vector2 } from '../Vector2';
@@ -35,10 +35,10 @@ export interface AssetResource {
   isLoaded: boolean;
 }
 
-export type AssetsToLoad = ReadonlyRegistry<string, AssetData>;
+export type AssetsToLoad = ReadonlyRecord<string, AssetData>;
 export type AssetsRegistry = Record<string, AssetLoaded>;
 
-export type CharsFrameMapRegistry = ReadonlyRegistry<string, CharFrameData>;
+export type CharsFrameMapRegistry = ReadonlyRecord<string, CharFrameData>;
 export interface CharFrameData {
   frame: number;
   width: number;
@@ -59,13 +59,13 @@ export const BASE_RESOURCE_KEYS = [
 export type BaseResourceKey = (typeof BASE_RESOURCE_KEYS)[number];
 
 export type LevelsRegistry = Record<string, LevelMap>;
-export type ItemsRegistry = ReadonlyRegistry<string, ItemData>;
-export type DecorationFramesMapRegistry = ReadonlyRegistry<string, DecorationFrames>;
+export type ItemsRegistry = ReadonlyRecord<string, ItemData>;
+export type DecorationFramesMapRegistry = ReadonlyRecord<string, DecorationFrames>;
 
 export interface AnimationRegistry {
-  hero: Partial<ReadonlyRegistry<AnimationFrame, AnimationConfig>>;
-  npc: Partial<ReadonlyRegistry<AnimationFrame, AnimationConfig>>;
-  tiles: ReadonlyRegistry<string, AnimationConfig>;
+  hero: Partial<ReadonlyRecord<AnimationFrame, AnimationConfig>>;
+  npc: Partial<ReadonlyRecord<AnimationFrame, AnimationConfig>>;
+  tiles: ReadonlyRecord<string, AnimationConfig>;
 }
 
 export const ANIMATION_OBJECT_TYPES = ['npc', 'hero', 'tiles'] satisfies readonly (keyof AnimationRegistry)[];
