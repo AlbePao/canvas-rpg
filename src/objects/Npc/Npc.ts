@@ -1,12 +1,12 @@
 import { Events } from '../../lib/Events';
-import { GRID_SIZE } from '../../lib/Game';
+import { Game, GRID_SIZE } from '../../lib/Game';
 import type { GameObject } from '../../lib/GameObject';
 import { GameRegistry } from '../../lib/GameRegistry';
 import { ScreenTransition } from '../../lib/ScreenTransition';
 import { StoryFlags } from '../../lib/StoryFlags';
 import { Battle, BATTLE_START } from '../Battle';
-import { emitHeroItemCollect, getHeroObject, HERO_REQUESTS_ACTION } from '../Hero';
-import { BEHAVIOR_END, isPositionBlocked, MovableObject, moveTowards } from '../MovableObject';
+import { emitHeroItemCollect, HERO_REQUESTS_ACTION } from '../Hero';
+import { BEHAVIOR_END, MovableObject, moveTowards } from '../MovableObject';
 import { SELECTION_BOX_CLOSE, SELECTION_BOX_OPEN, SelectionBox, type SelectionOption } from '../SelectionBox';
 import { Sprite } from '../Sprite';
 import { TEXT_BOX_CLOSE, TEXT_BOX_CLOSE_REQUESTED, TEXT_BOX_END, TEXT_BOX_OPEN, TextBox } from '../TextBox';
@@ -59,7 +59,7 @@ export class Npc extends MovableObject {
         return;
       }
 
-      const heroDirection = getHeroObject(this.parent)?.facingDirection;
+      const heroDirection = Game.level?.hero?.facingDirection;
 
       if (heroDirection === 'down') {
         this.changeFacingDirection('up');
@@ -249,7 +249,8 @@ export class Npc extends MovableObject {
       this.facingDirection = direction;
 
       // Validate the walk target is free
-      const isBlocked = isPositionBlocked(this.parent?.children ?? [], nextX, nextY);
+      const objectsAtNextStep = Game.level?.getObjectsAt(nextX, nextY) ?? [];
+      const isBlocked = objectsAtNextStep.some((obj) => obj.isSolid);
 
       if (isBlocked) {
         this.changeFacingDirection(direction);
@@ -260,8 +261,7 @@ export class Npc extends MovableObject {
       }
 
       this._isWalking = true;
-      this.destinationPosition.x = nextX;
-      this.destinationPosition.y = nextY;
+      this.setNewDestination(nextX, nextY); // O(1) automatic grid update
     }
   }
 }

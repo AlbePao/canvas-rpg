@@ -8,7 +8,7 @@ import type { Directions } from '../../types/directions';
 import type { CollectibleItemData } from '../Item';
 import { createItemSprite } from '../Item';
 import { isSpaceFree } from '../Level';
-import { isPositionBlocked, MovableObject, moveTowards } from '../MovableObject';
+import { MovableObject, moveTowards } from '../MovableObject';
 import { Sprite } from '../Sprite';
 import { HERO_COLLECTS_ITEM, HERO_POSITION, HERO_REQUESTS_ACTION } from './hero.constants';
 import type { HeroConfig } from './hero.types';
@@ -86,10 +86,11 @@ export class Hero extends MovableObject {
 
     // Check for input
     if (userPressEnterKeys()) {
+      const [x, y] = this.position.toNeighborCoords(this.facingDirection);
+
       // Look for an object at the next space (according to where Hero is facing)
-      const objectAtPosition = this.parent?.children.find((child) =>
-        child.position.matches(this.position.toNeighborCoords(this.facingDirection)),
-      );
+      const objectsAtPosition = Game.level?.getObjectsAt(x, y) ?? [];
+      const objectAtPosition = objectsAtPosition[0];
 
       if (objectAtPosition) {
         Events.emit<GameObject>(HERO_REQUESTS_ACTION, objectAtPosition);
@@ -165,11 +166,13 @@ export class Hero extends MovableObject {
 
     // Validation that the next destination is free
     const spaceIsFree = isSpaceFree(nextX, nextY, level?.walls);
-    const isBlocked = isPositionBlocked(this.parent?.children ?? [], nextX, nextY);
+    // If there's an object in the cell where I want to go (that isn't the floor), it's blocked
+    const objectsAtNextStep = level?.getObjectsAt(nextX, nextY) ?? [];
+    // Filter to exclude any walkable objects (e.g., tall grass) if necessary
+    const isBlocked = objectsAtNextStep.some((obj) => obj.isSolid);
 
     if (spaceIsFree && !isBlocked) {
-      this.destinationPosition.x = nextX;
-      this.destinationPosition.y = nextY;
+      this.setNewDestination(nextX, nextY); // O(1) automatic grid update
     }
   }
 
@@ -182,7 +185,8 @@ export class Hero extends MovableObject {
     }
 
     // Make sure we land right on the item
-    this.destinationPosition = (position ?? this.position).duplicate();
+    const targetPosition = position ?? this.position;
+    this.setNewDestination(targetPosition.x, targetPosition.y);
 
     // Start the collect animation
     this._itemCollectTime = 500; // ms

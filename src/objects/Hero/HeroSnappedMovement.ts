@@ -86,13 +86,11 @@ export class HeroSnappedMovement extends Hero {
 
     // Validation that the next destination is free
     const spaceIsFree = isSpaceFree(nextGridX, nextGridY, level?.walls);
-    const solidBodyAtSpace = this.parent?.children.find(
-      (child) => child.isSolid && child.position.x === nextGridX && child.position.y === nextGridY,
-    );
+    const objectsAtNextStep = level?.getObjectsAt(nextGridX, nextGridY) ?? [];
+    const isBlocked = objectsAtNextStep.some((obj) => obj.isSolid);
 
-    if (spaceIsFree && !solidBodyAtSpace) {
-      this.destinationPosition.x = nextCharacterX;
-      this.destinationPosition.y = nextCharacterY;
+    if (spaceIsFree && !isBlocked) {
+      this.setNewDestination(nextCharacterX, nextCharacterY); // O(1) automatic grid update
     }
   }
 }

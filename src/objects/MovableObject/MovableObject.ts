@@ -1,4 +1,5 @@
 import { Events } from '../../lib/Events';
+import { Game } from '../../lib/Game/Game';
 import { GameRegistry } from '../../lib/GameRegistry';
 import type { Vector2 } from '../../lib/Vector2';
 import type { Directions } from '../../types/directions';
@@ -17,8 +18,6 @@ import { getStandingFrame } from './movableObject.utils';
 export abstract class MovableObject extends InteractiveObject {
   readonly defaultFacingDirection: Directions = 'down';
   facingDirection = this.defaultFacingDirection;
-  // Not readonly: Hero swaps the whole Vector2 reference when snapping to a collected item's position
-  destinationPosition: Vector2;
   protected abstract readonly body: Sprite;
   protected isLocked = false;
   protected walkingSpeed = 1;
@@ -30,11 +29,16 @@ export abstract class MovableObject extends InteractiveObject {
   protected behaviorIndex = 0;
   private _retryTimeout: number | null = null;
 
+  get destinationPosition(): Vector2 {
+    return this._destinationPosition;
+  }
+  private readonly _destinationPosition: Vector2;
+
   constructor(config: MovableObjectConfig) {
     super(config);
     const { behaviorConfig = [], facingDirection } = config;
     this.behaviorConfig = behaviorConfig;
-    this.destinationPosition = this.position.duplicate();
+    this._destinationPosition = this.position.duplicate();
 
     if (facingDirection) {
       this.defaultFacingDirection = facingDirection;
@@ -68,6 +72,23 @@ export abstract class MovableObject extends InteractiveObject {
     }
 
     this._setBehaviorLoop();
+
+    // Register this object in the level's spatial grid at its initial position
+    Game.level?.registerPosition(this.destinationPosition.x, this.destinationPosition.y, this);
+  }
+
+  override destroy(): void {
+    Game.level?.unregisterPosition(this.destinationPosition.x, this.destinationPosition.y, this);
+    super.destroy();
+  }
+
+  // Centralized method for changing destination.
+  // Subclasses MUST use this instead of modifying this.destinationPosition.x manually.
+  setNewDestination(newX: number, newY: number): void {
+    Game.level?.updateObjectPosition(this.destinationPosition.x, this.destinationPosition.y, newX, newY, this);
+
+    this._destinationPosition.x = newX;
+    this._destinationPosition.y = newY;
   }
 
   protected startBehavior(_behavior: MovableObjectBehavior): void {
