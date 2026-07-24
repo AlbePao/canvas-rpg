@@ -109,7 +109,7 @@ export class TextBox extends GameObject {
 
     // Create a portrait
     if (portraitFrame) {
-      const { hFrames, vFrames, frameSize, position, resource } = GameRegistry.getAssetData('portraits');
+      const { hFrames, vFrames, frameSize, position, resource } = GameRegistry.assets.get('portraits');
 
       this.portrait = new Sprite({
         id: `${id}-portrait`,

@@ -10,8 +10,8 @@ export class ArrowIndicator extends GameObject {
     super(config);
 
     const { direction } = config;
-
-    const { hFrames, vFrames, frameSize, position, resource } = GameRegistry.getAssetData('arrows');
+    const { assets, arrowDirections } = GameRegistry;
+    const { hFrames, vFrames, frameSize, position, resource } = assets.get('arrows');
 
     this._body = new Sprite({
       id: `${this.id}-arrow-indicator`,
@@ -19,7 +19,7 @@ export class ArrowIndicator extends GameObject {
       frameSize,
       hFrames,
       vFrames,
-      frame: GameRegistry.getArrowDirectionFrame(direction),
+      frame: arrowDirections.get(direction),
       position,
     });
   }

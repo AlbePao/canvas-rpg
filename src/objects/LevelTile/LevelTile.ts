@@ -14,7 +14,8 @@ export class LevelTile extends GameObject {
       id,
     });
 
-    const { hFrames, vFrames, frameSize, resource } = GameRegistry.getAssetData('tileset');
+    const { assets, tiles } = GameRegistry;
+    const { hFrames, vFrames, frameSize, resource } = assets.get('tileset');
 
     this.body = new Sprite({
       id,
@@ -22,7 +23,7 @@ export class LevelTile extends GameObject {
       frameSize,
       hFrames,
       vFrames,
-      frame: GameRegistry.getTileFrame(tileName),
+      frame: tiles.get(tileName),
       position,
       animations: this.createAnimations('tiles', tileName),
     });

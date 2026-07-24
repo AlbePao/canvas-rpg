@@ -40,7 +40,7 @@ export class Hero extends MovableObject {
     // Shadow under feet is separated from body to stay in place when hero is doing some actions, like walking or jumping
     this.addChild(this.createShadowSprite(`${id}-hero-shadow-sprite`));
 
-    const { hFrames, vFrames, frameSize, position, resource } = GameRegistry.getAssetData('hero');
+    const { hFrames, vFrames, frameSize, position, resource } = GameRegistry.assets.get('hero');
 
     this.body = new Sprite({
       id: `${id}-hero-body-sprite`,

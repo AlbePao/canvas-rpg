@@ -23,7 +23,7 @@ export class Battle extends GameObject {
 
     const { background } = config;
     const { canvasWidth, canvasHeight } = Game.containerSizes;
-    const { hFrames, vFrames, frameSize, position, resource } = GameRegistry.getAssetData(background);
+    const { hFrames, vFrames, frameSize, position, resource } = GameRegistry.assets.get(background);
 
     this.drawLayer = 'hud';
 

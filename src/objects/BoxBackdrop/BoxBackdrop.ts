@@ -8,7 +8,7 @@ function createBackdropFrames(): Sprite[] {
   // Create the 9 frames from the backdrop sheet (3x3 grid, each frame is GRID_SIZE x GRID_SIZE)
   const frameArray: Sprite[] = [];
 
-  const { hFrames, vFrames, frameSize, position, resource } = GameRegistry.getAssetData('backdrop');
+  const { hFrames, vFrames, frameSize, position, resource } = GameRegistry.assets.get('backdrop');
 
   for (let i = 0; i < 9; i++) {
     frameArray[i] = new Sprite({

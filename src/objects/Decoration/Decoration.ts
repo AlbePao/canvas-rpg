@@ -19,9 +19,9 @@ export class Decoration extends GameObject {
 
     this.isSolid = isSolid;
 
-    const { baseFrame, size } = GameRegistry.getDecorationFrame(key);
-
-    const { hFrames, vFrames, frameSize, position, resource } = GameRegistry.getAssetData('tileset');
+    const { decorations, assets } = GameRegistry;
+    const { baseFrame, size } = decorations.get(key);
+    const { hFrames, vFrames, frameSize, position, resource } = assets.get('tileset');
 
     this.body = new Sprite({
       id,

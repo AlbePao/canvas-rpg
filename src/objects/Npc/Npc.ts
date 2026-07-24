@@ -33,7 +33,7 @@ export class Npc extends MovableObject {
     // Shadow under feet is separated from body to stay in place when npc is doing some actions, like walking or jumping
     this.addChild(this.createShadowSprite(`${id}-npc-shadow-sprite`));
 
-    const { hFrames, vFrames, frameSize, position, resource } = GameRegistry.getAssetData(npc);
+    const { hFrames, vFrames, frameSize, position, resource } = GameRegistry.assets.get(npc);
 
     // Body sprite
     this.body = new Sprite({

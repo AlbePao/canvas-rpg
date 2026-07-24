@@ -4,21 +4,23 @@ import type { Line, Word } from './text.types';
 
 // Shared by any UI that needs to size a box around rendered sprite-text
 export const calculateTextWidth = (text: string): number =>
-  text.split('').reduce((lineWidth, char) => lineWidth + GameRegistry.getCharFrameData(char).width, 0);
+  text.split('').reduce((lineWidth, char) => lineWidth + GameRegistry.chars.get(char).width, 0);
 
 export function createSpriteTextLines(strings: string[], idPrefix: string): Line[] {
+  const { chars, assets } = GameRegistry;
+
   return strings.map((text) => {
     const words = text.split(' ').map((word) => {
       // We need to know how wide this word is
       let wordWidth = 0;
 
       // Break each word into single characters
-      const chars = word.split('').map((char) => {
+      const wordChars = word.split('').map((char) => {
         // Measure each one
-        const { frame, width: charWidth } = GameRegistry.getCharFrameData(char);
+        const { frame, width: charWidth } = chars.get(char);
         wordWidth += charWidth;
 
-        const { hFrames, vFrames, frameSize, position, resource } = GameRegistry.getAssetData('font');
+        const { hFrames, vFrames, frameSize, position, resource } = assets.get('font');
 
         // Also create a Sprite for each character in the word
         return {
@@ -38,7 +40,7 @@ export function createSpriteTextLines(strings: string[], idPrefix: string): Line
       // Return a length and a list of characters per word
       return {
         wordWidth,
-        chars,
+        chars: wordChars,
       };
     });
 

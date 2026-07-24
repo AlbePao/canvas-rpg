@@ -12,7 +12,7 @@ class InventorySingleton extends Singleton<InventorySingleton>() {
       existing.quantity += 1;
     } else {
       this._itemsMap.set(itemKey, {
-        ...GameRegistry.getItem(itemKey),
+        ...GameRegistry.items.get(itemKey),
         quantity: 1,
       });
     }

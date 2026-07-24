@@ -12,8 +12,7 @@ export class CollectibleItem extends Item {
     super(config);
 
     const { id, itemKey, skipCollectAnimation = false } = config;
-
-    const { frame } = GameRegistry.getItem(itemKey);
+    const { frame } = GameRegistry.items.get(itemKey);
 
     this.data = {
       id,

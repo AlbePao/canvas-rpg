@@ -11,7 +11,7 @@ export class Item extends GameObject {
     super(config);
 
     const { id, itemKey } = config;
-    const { frame } = GameRegistry.getItem(itemKey);
+    const { frame } = GameRegistry.items.get(itemKey);
 
     this.data = {
       itemKey,

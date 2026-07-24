@@ -20,7 +20,8 @@ import type { LevelBuilderConfig } from './levelBuilder.types';
 
 export class LevelBuilder extends Level {
   constructor(config: LevelBuilderConfig) {
-    const level = GameRegistry.getLevel(config.id);
+    const { levels, assets } = GameRegistry;
+    const level = levels.get(config.id);
 
     if (!level) {
       throw new Error(`LevelBuilder: level "${config.id}" not found in GameRegistry`);
@@ -33,7 +34,7 @@ export class LevelBuilder extends Level {
     });
 
     if (background) {
-      const { hFrames, vFrames, frameSize, position, resource } = GameRegistry.getAssetData(background.resource);
+      const { hFrames, vFrames, frameSize, position, resource } = assets.get(background.resource);
       const { containerSizes } = Game;
 
       this.background = new Sprite({
@@ -151,10 +152,6 @@ export class LevelBuilder extends Level {
     });
 
     Events.on<ExitData>(HERO_EXITS, this, ({ newLevelId, newHeroPosition }) => {
-      if (!GameRegistry.hasLevel(newLevelId)) {
-        throw new Error(`LevelBuilder: level "${newLevelId}" not found in GameRegistry`);
-      }
-
       new ScreenTransition(() => {
         Events.emit<LevelBuilder>(
           CHANGE_LEVEL,

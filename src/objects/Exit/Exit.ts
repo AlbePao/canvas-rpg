@@ -13,8 +13,7 @@ export class Exit extends GameObject {
     super(config);
 
     const { id, newHeroPosition, newLevelId } = config;
-
-    const { hFrames, vFrames, frameSize, position, resource } = GameRegistry.getAssetData('exit');
+    const { hFrames, vFrames, frameSize, position, resource } = GameRegistry.assets.get('exit');
 
     const exit = new Sprite({
       id: `${id}-exit-sprite`,

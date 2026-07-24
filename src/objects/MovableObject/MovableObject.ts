@@ -129,7 +129,7 @@ export abstract class MovableObject extends InteractiveObject {
   }
 
   protected createShadowSprite(id: string): Sprite {
-    const { hFrames, vFrames, frameSize, position, resource } = GameRegistry.getAssetData('shadow');
+    const { hFrames, vFrames, frameSize, position, resource } = GameRegistry.assets.get('shadow');
 
     return new Sprite({
       id,

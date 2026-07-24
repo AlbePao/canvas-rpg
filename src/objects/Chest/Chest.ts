@@ -11,7 +11,7 @@ import type { ChestConfig, ChestStatus } from './chest.types';
 export class Chest extends InteractiveObject {
   private readonly _body: Sprite;
 
-  public get status(): ChestStatus {
+  get status(): ChestStatus {
     return this._status;
   }
   private _status: ChestStatus = 'closed';
@@ -24,13 +24,14 @@ export class Chest extends InteractiveObject {
   constructor(config: ChestConfig) {
     super(config);
 
+    const { assets, chestStatuses } = GameRegistry;
     const { id, status = 'closed', removeAfterLoot = false } = config;
 
     this.isSolid = true;
     this._status = status;
     this._removeAfterLoot = removeAfterLoot;
 
-    const { hFrames, vFrames, frameSize, position, resource } = GameRegistry.getAssetData('chest');
+    const { hFrames, vFrames, frameSize, position, resource } = assets.get('chest');
 
     this._body = new Sprite({
       id: `${id}-chest-sprite`,
@@ -39,7 +40,7 @@ export class Chest extends InteractiveObject {
       vFrames,
       frameSize,
       position,
-      frame: GameRegistry.getChestStatusFrame(status),
+      frame: chestStatuses.get(status),
     });
     this.addChild(this._body);
   }
@@ -102,7 +103,7 @@ export class Chest extends InteractiveObject {
   private _openChest(): void {
     // Update chest state and sprite frame to open
     this._status = 'open';
-    this._body.frame = GameRegistry.getChestStatusFrame('open');
+    this._body.frame = GameRegistry.chestStatuses.get('open');
   }
 
   private _collectItem(itemKey: string | null): void {
