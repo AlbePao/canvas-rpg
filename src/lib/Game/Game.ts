@@ -1,6 +1,5 @@
 import type { Level } from '../../objects/Level';
 import { Main } from '../../objects/Main';
-import { GameLoader } from '../GameLoader';
 import { GameLoop } from '../GameLoop';
 import { Input } from '../Input';
 import { Singleton } from '../Singleton';
@@ -44,8 +43,14 @@ class GameSingleton extends Singleton<GameSingleton>() {
     this._containerSizes.canvasWidth = canvasWidth;
     this._containerSizes.canvasHeight = canvasHeight;
 
-    // Load all game data JSON before starting the game
-    await GameLoader.loadData();
+    try {
+      // Load all game data JSON before starting the game
+      const { GameLoader } = await import('../Loaders');
+      await GameLoader.loadData();
+    } catch (error) {
+      console.error('Game initialization failed:', error);
+      throw error;
+    }
 
     // Grabbing the container to create canvas inside
     const gameContainer = document.querySelector<HTMLDivElement>(this._containerId);
