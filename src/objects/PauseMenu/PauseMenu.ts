@@ -4,12 +4,12 @@ import type { GameObject } from '../../lib/GameObject';
 import { Inventory } from '../../lib/Inventory';
 import { LevelStateManager } from '../../lib/LevelStateManager';
 import { Progress } from '../../lib/Progress';
-import { ScreenTransition } from '../../lib/ScreenTransition';
 import { StoryFlags } from '../../lib/StoryFlags';
 import { InventoryScreen } from '../InventoryScreen';
 import { MENU_SCREEN_CLOSE, MENU_SCREEN_OPEN } from '../MenuScreen';
 import { SelectionBox } from '../SelectionBox';
 import { SettingsMenu } from '../SettingsMenu';
+import { TeamScreen } from '../TeamScreen';
 import { TEXT_BOX_CLOSE, TEXT_BOX_OPEN, TextBox } from '../TextBox';
 import {
   PAUSE_MENU_ITEMS,
@@ -20,6 +20,7 @@ import {
   SAVE_TEXT_BOX_ID,
 } from './pauseMenu.constants';
 import type { PauseMenuItemValue } from './pauseMenu.types';
+import { openMenuScreen } from './pauseMenu.utils';
 
 export class PauseMenu extends SelectionBox<PauseMenuItemValue> {
   get canDismiss(): boolean {
@@ -132,19 +133,13 @@ export class PauseMenu extends SelectionBox<PauseMenuItemValue> {
 
     // Open inventory screen
     if (key === 'inventory') {
-      // Open inventory screen with a fade transition, then emit an event to open the inventory screen
-      new ScreenTransition(
-        () => {
-          Events.emit<InventoryScreen>(MENU_SCREEN_OPEN, new InventoryScreen());
-        },
-        { transition: 'fadeBlack' },
-      );
+      openMenuScreen(MENU_SCREEN_OPEN, new InventoryScreen());
       return;
     }
 
     // Open team management screen
     if (key === 'team') {
-      console.log('team management...');
+      openMenuScreen(MENU_SCREEN_OPEN, new TeamScreen());
       return;
     }
 
