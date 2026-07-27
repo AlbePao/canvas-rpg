@@ -9,7 +9,7 @@ import { BoxBackdrop } from '../BoxBackdrop';
 import { MENU_SCREEN_CLOSE, MENU_SCREEN_VISIBLE_ITEMS } from './menuScreen.constants';
 import type { MenuScreenConfig } from './menuScreen.types';
 
-export class MenuScreen<T extends BaseOption> extends GameObject {
+export class MenuScreen<T extends BaseOption = BaseOption> extends GameObject {
   protected itemsList: T[] = [];
   protected currentIndex = 0;
   // Handles the index of the first visible element in the viewport
