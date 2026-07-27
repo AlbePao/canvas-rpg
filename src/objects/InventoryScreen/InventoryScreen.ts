@@ -5,6 +5,7 @@ import { Inventory } from '../../lib/Inventory';
 import type { Line } from '../../lib/Text';
 import { createSpriteTextLines, drawTextLine } from '../../lib/Text';
 import { MenuScreen } from '../MenuScreen';
+import { MENU_SCREEN_GO_BACK_KEY } from '../MenuScreen/menuScreen.constants';
 import {
   SELECTION_BOX_CLOSE,
   SELECTION_BOX_OPEN,
@@ -16,17 +17,8 @@ import {
 } from '../SelectionBox';
 import type { InventoryItem, InventoryItemActionsValue } from './inventoryScreen.types';
 
-const VISIBLE_ITEMS = 8;
-const GO_BACK_KEY = 'goBack';
-
-export class InventoryScreen extends MenuScreen {
-  private _itemsList: InventoryItem[] = [];
-  private _itemsListLines: Line[] = [];
-  private _currentIndex = 0;
-  // Handles the index of the first visible element in the viewport
-  private _scrollOffset = 0;
-
-  private _isIndicatorLocked = false;
+export class InventoryScreen extends MenuScreen<InventoryItem> {
+  private _listLines: Line[] = [];
 
   constructor() {
     super({
@@ -46,7 +38,7 @@ export class InventoryScreen extends MenuScreen {
         if (key === 'useItem') {
           console.log('use item...');
         } else if (key === 'throwItem') {
-          Inventory.remove(this._itemsList[this._currentIndex].key);
+          Inventory.remove(this.itemsList[this.currentIndex].key);
 
           // Regenerate synced items list and lines with the new inventory state
           this._generateItemsList();
@@ -59,7 +51,7 @@ export class InventoryScreen extends MenuScreen {
   }
 
   override step(_delta: number): void {
-    if (this._isIndicatorLocked) {
+    if (this.isIndicatorLocked) {
       return;
     }
 
@@ -74,60 +66,30 @@ export class InventoryScreen extends MenuScreen {
       this.onItemSelect();
     } else if (userPressDirectionKeys('up')) {
       // Move arrow up
-      this._currentIndex = (this._currentIndex - 1 + this._itemsList.length) % this._itemsList.length;
-      this._updateScrollOffset();
+      this.currentIndex = (this.currentIndex - 1 + this.itemsList.length) % this.itemsList.length;
+      this.updateScrollOffset();
     } else if (userPressDirectionKeys('down')) {
       // Move arrow down
-      this._currentIndex = (this._currentIndex + 1) % this._itemsList.length;
-      this._updateScrollOffset();
+      this.currentIndex = (this.currentIndex + 1) % this.itemsList.length;
+      this.updateScrollOffset();
     }
   }
 
   private _generateItemsList(): void {
-    this._itemsList = [
+    this.itemsList = [
       ...Inventory.getAll().map(({ itemKey, name, quantity }) => ({
         key: itemKey,
         text: name,
         quantity,
       })),
       // Close screen option
-      { key: GO_BACK_KEY, text: 'Go back', quantity: 0 },
+      { key: MENU_SCREEN_GO_BACK_KEY, text: 'Go back', quantity: 0 },
     ];
 
-    this._itemsListLines = createSpriteTextLines(
-      this._itemsList.map(({ text }) => text),
+    this._listLines = createSpriteTextLines(
+      this.itemsList.map(({ text }) => text),
       this.id,
     );
-  }
-
-  // Update scroll shift
-  private _updateScrollOffset(): void {
-    const maxScrollOffset = Math.max(0, this._itemsList.length - VISIBLE_ITEMS);
-    const relativeIndex = this._currentIndex - this._scrollOffset;
-
-    /**
-     * If the relative index reaches or exceeds the last visible slot (VISIBLE_ITEMS - 1), force
-     * the scrollOffset to move to put the cursor back on the second-to-last slot (VISIBLE_ITEMS - 2)
-     */
-    if (relativeIndex >= VISIBLE_ITEMS - 1) {
-      this._scrollOffset = this._currentIndex - VISIBLE_ITEMS + 2;
-    }
-
-    /**
-     * To ensure the same visual cleanliness when going up, go down with the
-     * offset if touch the first slot (relativeIndex 0), keeping the cursor on the second slot (relativeIndex 1)
-     */
-    if (relativeIndex <= 0 && this._currentIndex > 0) {
-      this._scrollOffset = this._currentIndex - 1;
-    }
-
-    // Head-to-tail jump
-    if (this._currentIndex < this._scrollOffset) {
-      this._scrollOffset = this._currentIndex;
-    }
-
-    // Apply physical limits: the offset cannot be negative nor exceed the maximum possible
-    this._scrollOffset = Math.max(0, Math.min(this._scrollOffset, maxScrollOffset));
   }
 
   override drawImage(ctx: CanvasRenderingContext2D, drawPosX: number, drawPosY: number): void {
@@ -135,7 +97,7 @@ export class InventoryScreen extends MenuScreen {
     this.backdrop.drawImage(ctx, drawPosX, drawPosY);
 
     // Draw the indicator to the relative index to the visible viewport
-    const relativeIndex = this._currentIndex - this._scrollOffset;
+    const relativeIndex = this.currentIndex - this.scrollOffset;
     this.indicator.drawImage(
       ctx,
       drawPosX + SELECTION_INDICATOR_OFFSET,
@@ -143,7 +105,7 @@ export class InventoryScreen extends MenuScreen {
     );
 
     // Draw visible options text lines
-    const visibleLines = this._itemsListLines.slice(this._scrollOffset, this._scrollOffset + VISIBLE_ITEMS);
+    const visibleLines = this._listLines.slice(this.scrollOffset, this.scrollOffset + this.visibleItems);
 
     visibleLines.forEach(({ words }, index) => {
       const cursorX = drawPosX + SELECTION_INDICATOR_X_OFFSET;
@@ -155,11 +117,11 @@ export class InventoryScreen extends MenuScreen {
     });
   }
 
-  protected onItemSelect(): void {
-    const { key } = this._itemsList[this._currentIndex];
+  protected override onItemSelect(): void {
+    const { key } = this.itemsList[this.currentIndex];
 
     // Close screen if player selects Go Back option
-    if (key === GO_BACK_KEY) {
+    if (key === MENU_SCREEN_GO_BACK_KEY) {
       this.close();
       return;
     }
@@ -180,14 +142,6 @@ export class InventoryScreen extends MenuScreen {
 
     // Change selection box position to be next to the screen
     itemHandlingBox.position.x = this.position.x + GRID_SIZE;
-    itemHandlingBox.position.y = this.position.y + toGridSize(this._currentIndex); // Add 10px padding to align with the text
-  }
-
-  protected lockIndicator(): void {
-    this._isIndicatorLocked = true;
-  }
-
-  protected unlockIndicator(): void {
-    this._isIndicatorLocked = false;
+    itemHandlingBox.position.y = this.position.y + toGridSize(this.currentIndex); // Add 10px padding to align with the text
   }
 }
