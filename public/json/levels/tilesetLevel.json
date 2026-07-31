@@ -510,7 +510,7 @@
             "battle": {
               "background": "bgWoods",
               "addsFlag": "DEFEATED_NPC5",
-              "winData": {
+              "rewardsData": {
                 "text": [
                   "You won the battle!"
                 ],

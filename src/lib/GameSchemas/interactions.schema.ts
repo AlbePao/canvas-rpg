@@ -19,6 +19,41 @@ export const createInteractionConfigSchema = (itemKeysSchema: z.ZodType<string>)
     })
     .strict() satisfies z.ZodType<SelectionOption>;
 
+  const InteractionBattleConfigSchema = z
+    .object({
+      background: z.string(),
+      addsFlag: z.string(),
+      team: z.array(
+        z.object({
+          id: z.string(),
+          order: z.number().int(),
+          name: z.string(),
+          level: z.number().int(),
+          hp: z.number().int(),
+          maxHp: z.number().int(),
+          xp: z.number().int(),
+          maxXp: z.number().int(),
+          mana: z.number().int(),
+          equipment: z.object({
+            weapon: z.string(),
+            head: z.string(),
+            body: z.string(),
+            legs: z.string(),
+            feet: z.string(),
+          }),
+        }),
+      ),
+      rewardsData: z
+        .object({
+          text: z.array(z.string()),
+          money: z.number().int(),
+          itemKeys: z.array(itemKeysSchema),
+          experience: z.number().int(),
+        })
+        .strict(),
+    })
+    .strict() satisfies z.ZodType<InteractionBattleConfig>;
+
   const InteractionContentConfigSchema = z
     .object({
       text: z.array(z.string()),
@@ -43,25 +78,7 @@ export const createInteractionConfigSchema = (itemKeysSchema: z.ZodType<string>)
           battle: z.never().optional(),
         }),
         // Branch 3: battle
-        z.object({
-          options: z.never().optional(),
-          addsFlag: z.never().optional(),
-          itemKey: z.never().optional(),
-          battle: z
-            .object({
-              background: z.string(),
-              addsFlag: z.string(),
-              winData: z
-                .object({
-                  text: z.array(z.string()),
-                  money: z.number().int(),
-                  itemKeys: z.array(itemKeysSchema),
-                  experience: z.number().int(),
-                })
-                .strict(),
-            })
-            .strict() satisfies z.ZodType<InteractionBattleConfig>,
-        }),
+        InteractionBattleConfigSchema,
       ]),
     ) satisfies z.ZodType<InteractionContentConfig>;
 
