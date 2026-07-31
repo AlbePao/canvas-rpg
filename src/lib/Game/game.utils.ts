@@ -11,3 +11,16 @@ export function toGridSize(value: number): number {
 export function fromGridSize(value: number): number {
   return value / GRID_SIZE;
 }
+
+export function checkDuplicateIds(gameObjects: { id: string }[]): boolean {
+  const seenIds = new Set<string>();
+  const hasDuplicatedIds = gameObjects.some(({ id }) => {
+    if (seenIds.has(id)) {
+      return true;
+    }
+    seenIds.add(id);
+    return false;
+  });
+
+  return hasDuplicatedIds;
+}

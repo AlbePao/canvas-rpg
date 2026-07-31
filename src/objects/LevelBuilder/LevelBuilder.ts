@@ -1,5 +1,5 @@
 import { Events } from '../../lib/Events';
-import { Game, objectKeys, toGridSize } from '../../lib/Game';
+import { checkDuplicateIds, Game, objectKeys, toGridSize } from '../../lib/Game';
 import type { GameObject } from '../../lib/GameObject';
 import { GameRegistry } from '../../lib/GameRegistry';
 import { Inventory } from '../../lib/Inventory';
@@ -74,17 +74,10 @@ export class LevelBuilder extends Level {
       this.walls.add(`${toGridSize(x)},${toGridSize(y)}`);
     }
 
-    const seenIds = new Set<string>();
-    const hasDuplicatedIds = gameObjects.some(({ id: gameObjectId }) => {
-      if (seenIds.has(gameObjectId)) {
-        return true;
-      }
-      seenIds.add(gameObjectId);
-      return false;
-    });
+    const hasDuplicatedIds = checkDuplicateIds(gameObjects);
 
     if (hasDuplicatedIds) {
-      throw new Error('LevelBuilder: two or more game objects have the same id');
+      throw new Error('LevelBuilder: two or more objects have the same id');
     }
 
     // Add game objects
