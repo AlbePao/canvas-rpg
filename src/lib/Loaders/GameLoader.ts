@@ -28,9 +28,9 @@ class GameLoaderSingleton extends Singleton<GameLoaderSingleton>() {
 
       // 3. Process level loading results and handle any warnings or errors
       this._processLevelResults(levelResults, levelSchemas.levelsIds.length);
-    } catch (criticalError) {
-      console.error('Critical initialization error in GameLoader:', criticalError);
-      throw criticalError;
+    } catch (error) {
+      console.error('Critical initialization error in GameLoader:', error);
+      throw error;
     }
   }
 
