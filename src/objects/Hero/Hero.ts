@@ -89,8 +89,7 @@ export class Hero extends MovableObject {
       const [x, y] = this.position.toNeighborCoords(this.facingDirection);
 
       // Look for an object at the next space (according to where Hero is facing)
-      const objectsAtPosition = Game.level?.getObjectsAt(x, y) ?? [];
-      const objectAtPosition = objectsAtPosition[0];
+      const objectAtPosition = Game.level?.getFirstObjectAt(x, y);
 
       if (objectAtPosition) {
         Events.emit<GameObject>(HERO_REQUESTS_ACTION, objectAtPosition);
@@ -167,9 +166,7 @@ export class Hero extends MovableObject {
     // Validation that the next destination is free
     const spaceIsFree = isSpaceFree(nextX, nextY, level?.walls);
     // If there's an object in the cell where I want to go (that isn't the floor), it's blocked
-    const objectsAtNextStep = level?.getObjectsAt(nextX, nextY) ?? [];
-    // Filter to exclude any walkable objects (e.g., tall grass) if necessary
-    const isBlocked = objectsAtNextStep.some((obj) => obj.isSolid);
+    const isBlocked = level?.hasSolidObjectAt(nextX, nextY);
 
     if (spaceIsFree && !isBlocked) {
       this.setNewDestination(nextX, nextY); // O(1) automatic grid update

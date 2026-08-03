@@ -86,8 +86,7 @@ export class HeroSnappedMovement extends Hero {
 
     // Validation that the next destination is free
     const spaceIsFree = isSpaceFree(nextGridX, nextGridY, level?.walls);
-    const objectsAtNextStep = level?.getObjectsAt(nextGridX, nextGridY) ?? [];
-    const isBlocked = objectsAtNextStep.some((obj) => obj.isSolid);
+    const isBlocked = level?.hasSolidObjectAt(nextGridX, nextGridY);
 
     if (spaceIsFree && !isBlocked) {
       this.setNewDestination(nextCharacterX, nextCharacterY); // O(1) automatic grid update

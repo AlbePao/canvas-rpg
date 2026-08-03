@@ -249,8 +249,7 @@ export class Npc extends MovableObject {
       this.facingDirection = direction;
 
       // Validate the walk target is free
-      const objectsAtNextStep = Game.level?.getObjectsAt(nextX, nextY) ?? [];
-      const isBlocked = objectsAtNextStep.some((obj) => obj.isSolid);
+      const isBlocked = Game.level?.hasSolidObjectAt(nextX, nextY);
 
       if (isBlocked) {
         this.changeFacingDirection(direction);

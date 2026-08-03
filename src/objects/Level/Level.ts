@@ -59,8 +59,35 @@ export class Level extends GameObject {
     this.registerPosition(newX, newY, gameObject);
   }
 
-  getObjectsAt(x: number, y: number): GameObject[] {
+  getFirstObjectAt(x: number, y: number): GameObject | null {
     const key: GridCoords = `${x},${y}`;
-    return Array.from(this._spatialGrid.get(key) ?? []);
+    const cell = this._spatialGrid.get(key);
+
+    if (!cell) {
+      return null;
+    }
+
+    for (const gameObject of cell) {
+      return gameObject;
+    }
+
+    return null;
+  }
+
+  hasSolidObjectAt(x: number, y: number): boolean {
+    const key: GridCoords = `${x},${y}`;
+    const cell = this._spatialGrid.get(key);
+
+    if (!cell) {
+      return false;
+    }
+
+    for (const gameObject of cell) {
+      if (gameObject.isSolid) {
+        return true;
+      }
+    }
+
+    return false;
   }
 }
