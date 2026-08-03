@@ -510,6 +510,26 @@
             "battle": {
               "background": "bgWoods",
               "addsFlag": "DEFEATED_NPC5",
+              "team": [
+                {
+                  "id": "npc5",
+                  "order": 1,
+                  "name": "NPC 5",
+                  "level": 10,
+                  "hp": 100,
+                  "maxHp": 100,
+                  "xp": 50,
+                  "maxXp": 50,
+                  "mana": 30,
+                  "equipment": {
+                    "weapon": "sword",
+                    "head": "helmet",
+                    "body": "armor",
+                    "legs": "pants",
+                    "feet": "boots"
+                  }
+                }
+              ],
               "rewardsData": {
                 "text": [
                   "You won the battle!"
