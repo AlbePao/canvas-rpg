@@ -1,6 +1,5 @@
 import { Events } from '../../lib/Events';
 import { checkDuplicateIds, Game, objectKeys, toGridSize } from '../../lib/Game';
-import type { GameObject } from '../../lib/GameObject';
 import { GameRegistry } from '../../lib/GameRegistry';
 import { Inventory } from '../../lib/Inventory';
 import { LevelStateManager } from '../../lib/LevelStateManager';
@@ -89,30 +88,19 @@ export class LevelBuilder extends Level {
         continue; // Skip this object if it has been removed
       }
 
-      let object: GameObject | null = null;
-
       if (type === 'CollectibleItem') {
-        object = new CollectibleItem(gameObject);
-      }
-
-      if (type === 'Chest') {
-        object = new Chest({ ...gameObject, status: objectState?.status });
-      }
-
-      if (type === 'Npc') {
-        object = new Npc(gameObject);
-      }
-
-      if (type === 'Decoration') {
-        object = new Decoration(gameObject);
-      }
-
-      if (type === 'Exit') {
-        object = new Exit(gameObject);
-      }
-
-      if (object) {
-        this.addChild(object);
+        this.addChild(new CollectibleItem(gameObject));
+      } else if (type === 'Chest') {
+        this.addChild(new Chest({ ...gameObject, status: objectState?.status }));
+      } else if (type === 'Npc') {
+        this.addChild(new Npc(gameObject));
+      } else if (type === 'Decoration') {
+        this.addChild(new Decoration(gameObject));
+      } else if (type === 'Exit') {
+        this.addChild(new Exit(gameObject));
+      } else {
+        const exhaustiveCheck: never = type;
+        throw new Error(`LevelBuilder: unhandled game object type "${String(exhaustiveCheck)}"`);
       }
     }
 
