@@ -2,7 +2,7 @@ import type { Animations } from '../../lib/Animations';
 import { GRID_SIZE } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
 import type { AssetResource } from '../../lib/GameRegistry';
-import { Vector2, type Coords2D } from '../../lib/Vector2';
+import { Vector2 } from '../../lib/Vector2';
 import type { SpriteConfig } from './sprite.types';
 
 export class Sprite extends GameObject {
@@ -51,14 +51,13 @@ export class Sprite extends GameObject {
     this.frame = this.animations.frame;
   }
 
-  // Calculate frame coordinates on-the-fly without allocations
-  private _getFrameCoordinates(frameIndex: number): Coords2D {
-    const frameX = frameIndex % this._hFrames;
-    const frameY = Math.floor(frameIndex / this._hFrames);
-    return {
-      x: frameX * this._frameOriginSize.x,
-      y: frameY * this._frameOriginSize.y,
-    };
+  // Calculate frame X/Y origin on-the-fly without allocating an intermediate object
+  private _frameOriginX(frameIndex: number): number {
+    return (frameIndex % this._hFrames) * this._frameOriginSize.x;
+  }
+
+  private _frameOriginY(frameIndex: number): number {
+    return Math.floor(frameIndex / this._hFrames) * this._frameOriginSize.y;
   }
 
   override drawImage(ctx: CanvasRenderingContext2D, drawPosX: number, drawPosY: number): void {
@@ -66,8 +65,8 @@ export class Sprite extends GameObject {
       return;
     }
 
-    // Calculate frame coordinates without allocating Vector2
-    const { x, y } = this._getFrameCoordinates(this.frame);
+    const x = this._frameOriginX(this.frame);
+    const y = this._frameOriginY(this.frame);
 
     const frameSizeX = this._frameSize.x;
     const frameSizeY = this._frameSize.y;
