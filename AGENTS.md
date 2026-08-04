@@ -15,12 +15,14 @@ A TypeScript-based 2D RPG game built with HTML5 Canvas and Vite. This document h
 
 **Essential Directories**:
 
-- `src/objects/` - All game objects (Hero, NPCs, Items, etc.)
-- `src/lib/` - Core game systems (Game, GameLoop, Events, Input, etc.)
-- `src/constants/` - Items registry and standing directions (events live in feature directories)
-- `src/helpers/` - Utilities (text rendering, typed `Object.keys`)
-- `public/json/` - Level definitions (JSON-based levels)
+- `src/objects/` - All game objects (Hero, NPCs, Items, Battle, menus, etc.)
+- `src/lib/` - Core game systems (Game, GameLoop, Events, Input, GameRegistry, Loaders, GameSchemas, etc.)
+- `src/types/` - Shared cross-cutting types (`directions.ts`, `baseOption.ts`, `readonlyRecord.ts`)
+- `public/json/config/` - Data-driven config JSON (assets, animations, items, frame maps) validated by [GameSchemas](src/lib/GameSchemas/) and loaded into [GameRegistry](src/lib/GameRegistry/GameRegistry.ts)
+- `public/json/levels/` - One JSON file per level, validated by [levelMap.schema.ts](src/lib/GameSchemas/levelMap.schema.ts)
 - `public/sprites/` - Sprite sheet assets
+
+**No `src/constants/` or `src/helpers/` directories anymore** — item registries, frame maps, and standing directions are all data-driven through `GameRegistry` (see [Data-Driven Architecture](#data-driven-architecture-configlevels)).
 
 **For New Agents**:
 
@@ -36,14 +38,14 @@ A TypeScript-based 2D RPG game built with HTML5 Canvas and Vite. This document h
 
 The game uses a **fixed timestep (16.67ms/frame)** update/render cycle:
 
-1. **main.ts**: Entry point — calls `Game.initializeGame()`
-2. **[Game.ts](src/lib/Game/Game.ts)**: High-level singleton — loads levels, creates canvas, sets up `Main`, starts `GameLoop`
+1. **main.ts**: Entry point — calls `Game.initializeGame({ containerId })` (async)
+2. **[Game.ts](src/lib/Game/Game.ts)**: High-level singleton — awaits [GameLoader](src/lib/Loaders/GameLoader.ts) (which loads+validates all config/level JSON into [GameRegistry](src/lib/GameRegistry/GameRegistry.ts)), then creates the canvas, sets up `Main`, starts `GameLoop`
 3. **[GameLoop.ts](src/lib/GameLoop.ts)**: Low-level frame scheduler — drives fixed-timestep updates and render
 4. **[Main.ts](src/objects/Main/Main.ts)**: Root scene — manages levels, camera, HUD, pause, dialogue, title screen
 
-**Flow**: `main.ts → Game.initializeGame() → GameLoop → Main.stepEntry()` each frame.
+**Flow**: `main.ts → Game.initializeGame() → GameLoader (async config/level load) → GameLoop → Main.stepEntry()` each frame.
 
-**Pattern**: Every frame calls `step(delta, root)` on all GameObjects for deterministic gameplay.
+**Pattern**: Every frame calls `step(delta)` on all GameObjects for deterministic gameplay. GameObjects no longer receive a `root`/`Main` argument — reach shared state through singletons (`Events`, `GameRegistry`, `Game`, `StoryFlags`, etc.) instead.
 
 ### Entity System (ECS-inspired)
 
@@ -51,19 +53,23 @@ All game objects extend [GameObject](src/lib/GameObject/GameObject.ts):
 
 ```typescript
 class GameObject {
-  id: string;
+  readonly id: string;
   position: Vector2; // 16px grid cells
   children: GameObject[] = []; // Composition > inheritance
+  parent: GameObject | null = null;
   isSolid = false; // Affects collision
-  drawLayer: GameObjectDrawLayer | null = null; // 'HUD', 'FLOOR', or null
+  drawLayer: GameObjectDrawLayer | null = null; // 'floor' | 'worldTop' | 'hud' | null
 
   ready(): void; // Called once on first frame
-  step(delta: number, root: Main): void; // Called every frame
+  step(delta: number): void; // Called every frame — NO root/Main param, use singletons
   drawImage(ctx: CanvasRenderingContext2D, x: number, y: number): void;
+  protected scheduleTimeout(callback: () => void, delay: number): number; // auto-cleared on destroy()
 }
 ```
 
 **Key principle**: Composition over inheritance. Nest GameObjects to build complex behaviors.
+
+**Base class hierarchy for interactive/movable objects**: `GameObject` → [InteractiveObject](src/objects/InteractiveObject/InteractiveObject.ts) (dialogue/content via `interactionConfig`, used by `Npc`/`Chest`) → [MovableObject](src/objects/MovableObject/MovableObject.ts) (adds `facingDirection`, `destinationPosition`, optional `behaviorConfig` patrol loop, used by `Hero`/`Npc`).
 
 ### Event System (Singleton)
 
@@ -77,7 +83,9 @@ Events.on(HERO_EXITS, this, (data: { newLevelId: string }) => { ... });
 Events.emit(HERO_POSITION, { x, y });
 ```
 
-**Important**: `Events.on()` requires `this` (the calling GameObject) as the second argument. This enables automatic cleanup when the object is destroyed.
+**Important**: `Events.on()` requires `this` (the calling GameObject) as the second argument. This enables automatic cleanup when the object is destroyed. `Events.on()` returns a listener `id` you can pass to `Events.off(id)` to unsubscribe a single listener manually (rarely needed — `destroy()` handles the common case).
+
+Events live in [src/lib/Events/Events.ts](src/lib/Events/Events.ts) (a directory, not a single file).
 
 Common events (each defined in the relevant feature's `*.constants.ts` file):
 
@@ -94,22 +102,21 @@ Events auto-cleanup when `GameObject.destroy()` is called.
 
 ### Grid System
 
-**Grid size**: 16px cells (defined in [game.constants.ts](src/lib/Game/game.constants.ts))
+**Grid size**: 16px cells (`GRID_SIZE` in [game.constants.ts](src/lib/Game/game.constants.ts))
 
-Grid/movement utilities live on the **[Game singleton](src/lib/Game/Game.ts)**:
+Grid/movement utilities are **plain exported functions**, not methods on a `Game` instance — import them from where they're defined:
 
-- `Game.instance.toGridSize(n)` - Converts grid cells to pixels (n × GRID_SIZE)
-- `Game.instance.fromGridSize(n)` - Converts pixels back to grid cells
-- `Game.instance.isSpaceFree(walls, x, y)` - Collision detection against wall set
-- `Game.instance.detectOverlap(heroPos, objPos)` - Positional overlap check
-- `Game.instance.moveTowards(obj, dest, speed)` - Smooth lerp toward destination
-- [Vector2.ts](src/lib/Vector2.ts) - Position math and neighbor coordinate helpers
+- `toGridSize(n)` / `fromGridSize(n)` - [src/lib/Game/game.utils.ts](src/lib/Game/game.utils.ts) — convert grid cells ⇄ pixels
+- `isSpaceFree(x, y, walls)` - [src/objects/Level/level.utils.ts](src/objects/Level/level.utils.ts) — collision detection against a `Walls` (`Set<string>`) set
+- `moveTowards(gameObject, destinationPosition, speed)` - [src/objects/MovableObject/movableObject.utils.ts](src/objects/MovableObject/movableObject.utils.ts) — smooth lerp toward destination, returns remaining distance
+- [Vector2.ts](src/lib/Vector2/Vector2.ts) - Position math and neighbor coordinate helpers
 
 Movement uses **destination-based interpolation** (not frame-by-frame):
 
 ```typescript
-const dest = new Vector2(target.x, target.y);
-Game.instance.moveTowards(hero, dest, speed); // Smooth lerp
+import { moveTowards } from '../MovableObject';
+
+const distance = moveTowards(this, this.destinationPosition, this.walkingSpeed); // Smooth lerp
 ```
 
 ## File Organization Conventions
@@ -155,7 +162,7 @@ Complete walkthrough of adding a `Trap` object that damages the hero:
 import type { GameObjectConfig } from 'src/lib/GameObject';
 
 export interface TrapConfig extends GameObjectConfig {
-  spriteId: string; // Sprite key in Resources
+  spriteId: string; // Key in GameRegistry.assets (see public/json/config/assets.json)
   damageAmount: number;
 }
 ```
@@ -165,7 +172,9 @@ export interface TrapConfig extends GameObjectConfig {
 ```typescript
 import { Events } from 'src/lib/Events';
 import { GameObject } from 'src/lib/GameObject';
+import { GameRegistry } from 'src/lib/GameRegistry';
 import { HERO_POSITION } from '../Hero/hero.constants';
+import { HERO_DAMAGED } from './trap.constants';
 import type { TrapConfig } from './trap.types';
 
 export class Trap extends GameObject {
@@ -186,14 +195,10 @@ export class Trap extends GameObject {
     });
   }
 
-  override step(_delta: number, _root: Main): void {
-    // Could add animation/state updates here
-  }
-
   override drawImage(ctx: CanvasRenderingContext2D, x: number, y: number): void {
-    const sprite = Resources.instance.getSpriteImage(this._spriteId);
-    if (sprite) {
-      ctx.drawImage(sprite, x + this.position.x * 16, y + this.position.y * 16, 16, 16);
+    const { resource } = GameRegistry.assets.get(this._spriteId);
+    if (resource.isLoaded) {
+      ctx.drawImage(resource.image, x + this.position.x, y + this.position.y, 16, 16);
     }
   }
 
@@ -219,10 +224,10 @@ export type { TrapConfig } from './trap.types';
 export const HERO_DAMAGED = 'HERO_DAMAGED';
 ```
 
-**Step 5: Use it in a level** (in [src/objects/Level/Level.ts](src/objects/Level/Level.ts)):
+**Step 5: Use it in a level** (in [src/objects/LevelBuilder/LevelBuilder.ts](src/objects/LevelBuilder/LevelBuilder.ts), or as a `gameObjects` entry in a level JSON file once registered there):
 
 ```typescript
-const trap = new Trap(5, 8, { spriteId: 'spike-trap', damageAmount: 10 });
+const trap = new Trap({ id: 'trap1', x: 5, y: 8, spriteId: 'spike-trap', damageAmount: 10 });
 this.addChild(trap);
 ```
 
@@ -240,15 +245,15 @@ this.addChild(trap);
 ```typescript
 // src/objects/MyThing/MyThing.ts
 export class MyThing extends GameObject {
-  ready() {
+  override ready(): void {
     // One-time setup
   }
 
-  step(delta: number, root: Main) {
-    // Update logic
+  override step(delta: number): void {
+    // Update logic — reach shared state via singletons (Events, GameRegistry, Game), no root param
   }
 
-  drawImage(ctx: CanvasRenderingContext2D, x: number, y: number) {
+  override drawImage(ctx: CanvasRenderingContext2D, x: number, y: number): void {
     // Render logic
   }
 }
@@ -256,102 +261,118 @@ export class MyThing extends GameObject {
 
 ### 2. Adding NPCs with Dialogue
 
-[Npc.ts](src/objects/Npc/Npc.ts) handles:
+[Npc.ts](src/objects/Npc/Npc.ts) extends [MovableObject](src/objects/MovableObject/MovableObject.ts) and handles:
 
 - Solid collision (blocks hero movement)
-- Dialogue triggered by Hero pressing Space
-- Story flag conditions (`requires`, `bypass`, `addsFlag`)
-- NPC animations via frame patterns
+- Dialogue triggered by Hero pressing Space (via inherited `InteractiveObject.getContent()`)
+- Story flag conditions (`requires`, `bypass`, `addsFlag`) matched by `StoryFlags.getRelevantScenario()`
+- Optional patrol/walk `behaviorConfig` loop and NPC animations via frame patterns
 
 **Usage**:
 
 ```typescript
-new Npc(5, 10, {
+new Npc({
+  id: 'npc-name',
+  x: 5,
+  y: 10,
   spriteId: 'npc-name',
-  scenarios: [
-    {
-      requires: [], // Only show if these flags are set
-      bypass: ['flag_talked_npc'], // Skip if this flag is set
-      content: [...], // SpriteTextBox content (dialogue)
-      addsFlag: 'flag_talked_npc', // Set this flag after dialogue
-    },
-  ],
+  interactionConfig: {
+    content: [
+      {
+        text: ['Hello there!'],
+        requires: [], // Only show if these flags are set
+        bypass: ['flag_talked_npc'], // Skip if this flag is set
+        addsFlag: 'flag_talked_npc', // Set this flag after dialogue
+      },
+    ],
+  },
 });
 ```
 
-**Important**: Always define flags in [storyFlags.constants.ts](src/lib/StoryFlags/storyFlags.constants.ts) first.
+**Important**: Always define flags in [storyFlags.constants.ts](src/lib/StoryFlags/storyFlags.constants.ts) first. A content entry can carry `addsFlag`, `itemKey`, `options` (opens a `SelectionBox`), or `battle` (starts a `Battle`) — these are mutually exclusive per the `InteractionContentConfig` union.
 
 ### 3. Adding Collectible Items
 
 Use [CollectibleItem.ts](src/objects/Item/CollectibleItem.ts) or [Item.ts](src/objects/Item/Item.ts):
 
 ```typescript
-const rod = new CollectibleItem({ spriteId: 'rod' });
+const rod = new CollectibleItem({ id: 'rod1', x: 3, y: 3, itemKey: 'rod' });
 level.addChild(rod);
 
 // Listen for item collection events
-Events.on(HERO_COLLECTS_ITEM, this, (itemKey: ItemKey) => {
+Events.on(HERO_COLLECTS_ITEM, this, (itemKey: string) => {
   Inventory.add(itemKey);
 });
 ```
 
+Item definitions themselves (name, type, frame) live in [public/json/config/items.json](public/json/config/items.json) and are loaded into `GameRegistry.items` — there is no `itemsRegistry.ts` file anymore.
+
 ### 4. Adding Animations
 
-Animation system uses frame patterns from [FrameIndexPattern](src/lib/FrameIndexPattern/FrameIndexPattern.ts):
+Animations are **data-driven**, not defined per-object in TypeScript files:
 
-1. Define keyframes in animation config (e.g., [heroAnimations.ts](src/objects/Hero/heroAnimations.ts))
-2. Create [Animations](src/lib/Animations/Animations.ts) object
-3. Pass to [Sprite](src/objects/Sprite/Sprite.ts)
-4. Call `animations.play('name')` to switch
-
-**Frame pattern example**:
-
-```typescript
-// In heroAnimations.ts
-export const WALK_DOWN = new FrameIndexPattern(
-  [0, 1, 0, 2], // Frame indices in sprite sheet
-  8, // Duration (in frames) per frame
-);
-export const WALK_UP = new FrameIndexPattern([4, 5, 4, 6], 8);
-
-// In Hero.ts
-this.sprite.animations.play('WALK_DOWN');
-
-// After 0.5s, play idle
-this.sprite.animations.play('IDLE_DOWN');
-```
+1. Add/edit keyframes in [public/json/config/animations.json](public/json/config/animations.json) (validated by `createAnimationsSchema()` in [config.schema.ts](src/lib/GameSchemas/config.schema.ts))
+2. `ConfigLoader` loads this into `GameRegistry`'s animation registry at startup
+3. GameObjects with a body `Sprite` create an [Animations](src/lib/Animations/Animations.ts) object from `GameRegistry`-provided [FrameIndexPattern](src/lib/FrameIndexPattern/FrameIndexPattern.ts) data
+4. Call `this.body.animations.play('name')` to switch
 
 **Tips**:
 
 - Frame indices refer to positions in the sprite sheet (top-left = 0)
 - Duration is in frames (60fps = 16.67ms per frame)
 - Create separate animations for each direction to support 4-directional movement
+- There is no more `heroAnimations.ts`-style per-object animation file — edit the JSON config instead
 
 ### 5. Adding JSON-based Levels
 
-Level system uses [LevelsMapper](src/lib/LevelsMapper/LevelsMapper.ts) for JSON loading:
+Levels are loaded automatically at startup — there is no `LevelsMapper` class anymore:
 
-1. Create JSON file in `public/json/{levelName}.json`
-2. Register in `LevelsMapper._levelFiles`
-3. Create level with `new LevelBuilder({ id: 'levelName' })`
+1. Create one JSON file per level: `public/json/levels/{levelId}.json`
+2. Add `"{levelId}"` to [public/json/config/levelsIds.json](public/json/config/levelsIds.json)
+3. On boot, `GameLoader` → `LevelLoader` reads every ID in `levelsIds.json`, fetches the matching file, and validates it against `createLevelMapSchema()` ([levelMap.schema.ts](src/lib/GameSchemas/levelMap.schema.ts)) before registering it in `GameRegistry.levels`
+4. Instantiate the level anywhere with `new LevelBuilder({ id: 'levelId' })` — it reads the validated data straight from `GameRegistry.levels.get(id)`
 
-**JSON structure** (see existing levels in `public/json/`):
+**JSON structure** (see [public/json/levels/tilesetLevel.json](public/json/levels/tilesetLevel.json) for a full example):
 
 ```json
 {
   "id": "levelName",
+  "heroDefaultPosition": { "x": 1, "y": 5 },
+  "background": { "resource": "bgWoods" },
   "tiles": {
-    "0,0": { "spriteId": "grass", "collider": false },
-    "1,0": null
+    "0,0": "grassCliffBorderUpperLeft",
+    "1,0": "grass"
   },
   "walls": ["0,1", "1,1"],
   "gameObjects": [
-    { "type": "Decoration", "x": 5, "y": 5, "spriteId": "tree" },
-    { "type": "CollectibleItem", "x": 3, "y": 3, "spriteId": "rod" }
-  ],
-  "exits": [{ "x": 10, "y": 10, "newLevelId": "otherLevel" }]
+    { "type": "Decoration", "id": "tree1", "x": 5, "y": 5, "spriteId": "treeSmGreenLower" },
+    {
+      "type": "Chest",
+      "id": "chest1",
+      "x": 2,
+      "y": 0,
+      "interactionConfig": { "content": [{ "text": [], "itemKey": "slingshot2" }] }
+    },
+    { "type": "Exit", "id": "exit1", "x": 1, "y": 4, "newLevelId": "otherLevel", "newHeroPosition": { "x": 0, "y": 0 } }
+  ]
 }
 ```
+
+Note: `tiles` values are plain tile-registry key strings (looked up in `GameRegistry.tiles`), not `{ spriteId, collider }` objects; exits are `gameObjects` entries of `"type": "Exit"`, not a separate top-level `exits` array.
+
+## Data-Driven Architecture (Config/Levels)
+
+Asset/level/animation data is no longer hardcoded in TypeScript — it flows through a load → validate → register pipeline:
+
+1. **[Loaders](src/lib/Loaders/)**: `GameLoader` (singleton, called by `Game.initializeGame()`) orchestrates loading:
+   - `ConfigLoader.loadAll()` fetches and validates all `public/json/config/*.json` files in parallel (animations, assets, items, frame maps, `levelsIds.json`)
+   - `AssetLoader` turns validated asset entries into `Image` objects (`{ resource: { image, isLoaded } }`), loaded asynchronously
+   - `LevelLoader.loadLevels()` fetches + validates each level listed in `levelsIds.json` from `public/json/levels/{id}.json`
+   - `ResourceFetcher` is the underlying `fetchJson(url)` HTTP abstraction
+2. **[GameSchemas](src/lib/GameSchemas/)**: Zod schemas validate every config/level file at load time (errors are logged, not silently ignored) — see `config.schema.ts` (one `createXSchema()` per config file) and `levelMap.schema.ts`/`levelObjects.schema.ts`/`interactions.schema.ts` for level data
+3. **[GameRegistry](src/lib/GameRegistry/GameRegistry.ts)**: Singleton holding one `Registry<T>` ([Registry.ts](src/lib/Registry/Registry.ts), a generic keyed data container with `load()`/`get()`/`getOptional()`/`has()`) per data type: `levels`, `assets`, `items`, `tiles`, `chars`, `chestStatuses`, `decorations`, `arrowDirections`, plus a private animations registry. All game objects read data through `GameRegistry`, e.g. `GameRegistry.assets.get('hero')`, `GameRegistry.items.get(itemKey)`.
+
+**There is no `Resources` singleton and no `LevelsMapper` class anymore** — both were replaced by the Loaders + GameRegistry pipeline above.
 
 ## Undocumented Systems
 
@@ -381,8 +402,8 @@ Events.emit(HERO_POSITION, { x: 5, y: 10 });
 Singleton that tracks collected items by `ItemKey`. Not a rendered GameObject.
 
 - **Methods**: `Inventory.add(itemKey)`, `Inventory.get(itemKey)`, `Inventory.getAll()`
-- **Items registry**: [src/constants/itemsRegistry.ts](src/constants/itemsRegistry.ts) maps `ItemKey → ItemStat`
-- **UI rendering**: [src/objects/InventoryMenu/](src/objects/InventoryMenu/) (pause sub-screen)
+- **Item definitions**: loaded from [public/json/config/items.json](public/json/config/items.json) into `GameRegistry.items` (no more `itemsRegistry.ts` file)
+- **UI rendering**: [src/objects/InventoryScreen/](src/objects/InventoryScreen/) (pause sub-screen; renamed from the old "InventoryMenu")
 
 **Usage**:
 
@@ -445,31 +466,33 @@ In-game pause overlay. Extends `SelectionBox`.
 
 ### Behavior System
 
-GameObjects support sequenced async behaviors via `behaviorConfig: GameObjectBehavior[]`.
+`scheduleTimeout()` (protected method on `GameObject`, tracked and auto-cleared on `destroy()`) underlies delayed actions. On top of it, [MovableObject](src/objects/MovableObject/MovableObject.ts) (not every `GameObject`) supports a sequenced patrol loop via `behaviorConfig: MovableObjectBehavior[]` in its constructor config.
 
-- **Define**: Pass `behaviorConfig` array in the constructor config
-- **Delays**: Use `scheduleTimeout()` (protected method on GameObject) — tracked and cleared on `destroy()`
-- **Completion**: Emits `BEHAVIOR_END` ([gameObject.constants.ts](src/lib/GameObject/gameObject.constants.ts)) when the full sequence finishes
-- **Usage**: NPCs use this for walk/stand/patrol behavior loops
+- **Define**: Pass `behaviorConfig` array to `Npc`'s constructor (Hero explicitly omits it via `Omit<MovableObjectConfig, 'behaviorConfig'>`)
+- **Completion**: Emits `BEHAVIOR_END` ([movableObject.constants.ts](src/objects/MovableObject/movableObject.constants.ts)) when the full sequence finishes
+- **Usage**: NPCs use this for walk/stand/patrol behavior loops (see [Npc.ts](src/objects/Npc/Npc.ts))
 
-### Resource Loading
+### Battle, Combatant & TeamMembers (work in progress)
 
-**File**: [src/lib/Resources/Resources.ts](src/lib/Resources/Resources.ts)
+- **[Battle](src/objects/Battle/Battle.ts)**: Turn-based battle scene — background sprite, opponent/player `Combatant[]` teams, `ArrowIndicator` for selection. Started via an `InteractionContentConfig.battle` entry in NPC/Chest dialogue.
+- **[Combatant](src/objects/Combatant/Combatant.ts)**: A single battle participant (hp/maxHp/xp/maxXp, `side: 'player' | 'opponent'`). Does **not** yet render on the battlefield — see [Known TODOs](#known-todos--blockers).
+- **[TeamMembers](src/lib/TeamMembers/TeamMembers.ts)** (lib singleton): Tracks party member order/positions for battle team initialization; has no backing registry yet (TODO).
+- **[TeamScreen](src/objects/TeamScreen/TeamScreen.ts)**: Pause sub-menu for viewing party composition; extends `MenuScreen`.
 
-Singleton that loads and caches sprite images.
+### Menu System
 
-- **Assets mapping**: [main.ts line 44+](src/main.ts#L44) defines `ASSETS_TO_LOAD`
-- **Loading**: Synchronous after image `onload` event
-- **Caveat**: No preload confirmation—race condition possible if accessing before load completes
+- **[MenuScreen](src/objects/MenuScreen/MenuScreen.ts)** (abstract base): Generic menu shell with `SelectionBox` navigation, item list, and close-transition animation. `PauseMenu`, `InventoryScreen`, `TeamScreen`, and `SettingsMenu` all extend it.
+- **[SelectionBox](src/objects/SelectionBox/SelectionBox.ts)** (abstract base): Arrow-indicator-driven menu selection UI (up/down/left/right navigation, open/close/selection events). Used directly by `TitleScreen`/`PauseMenu` and indirectly via `MenuScreen`.
+- **[SettingsMenu](src/objects/SettingsMenu/SettingsMenu.ts)**: Options sub-menu (fills the old "Options menu not implemented" gap — see [Known TODOs](#known-todos--blockers) for what's still missing).
+- **[BoxBackdrop](src/objects/BoxBackdrop/BoxBackdrop.ts)**: Procedural 3×3 sprite compositor for UI box borders + tiled center, used by menus/dialogue boxes.
+- **[ArrowIndicator](src/objects/ArrowIndicator/ArrowIndicator.ts)**: Directional pointer sprite, used for menu selection and Battle team targeting.
 
-**Usage**:
+### Interaction Base Classes
 
-```typescript
-const sprite = Resources.instance.getSpriteImage('hero');
-ctx.drawImage(sprite, x, y, 16, 16);
-```
-
-**Warning**: Always check `if (sprite)` before drawing.
+- **[InteractiveObject](src/objects/InteractiveObject/InteractiveObject.ts)**: Base for anything with dialogue (`interactionConfig`), used by `Npc` and `Chest`. `getContent()` resolves the active scenario via `StoryFlags.getRelevantScenario()`.
+- **[MovableObject](src/objects/MovableObject/MovableObject.ts)**: Extends `InteractiveObject`; adds `facingDirection`, `destinationPosition`, `walkingSpeed`, and the optional patrol `behaviorConfig`. Shared base for `Hero` and `Npc` — see [Grid System](#grid-system) for `moveTowards`.
+- **[Chest](src/objects/Chest/Chest.ts)**: Extends `InteractiveObject`; opens on interaction (frame swap via `GameRegistry.chestStatuses`), emits `HERO_OPENS_CHEST`, optionally removed after loot.
+- **[LevelTile](src/objects/LevelTile/LevelTile.ts)**: Renders a single map tile (optionally animated) from `GameRegistry.tiles`; instantiated per-cell by `LevelBuilder`.
 
 ## Events vs Direct References
 
@@ -510,15 +533,15 @@ console.log(`Current: ${this.position.x}, Destination: ${this.destinationPositio
 
 **Check**:
 
-1. [Resources.ts](src/lib/Resources/Resources.ts) - Is the sprite ID registered?
-2. [main.ts](src/main.ts#L44) - Is it in `ASSETS_TO_LOAD`?
+1. [GameRegistry.ts](src/lib/GameRegistry/GameRegistry.ts) - Is the sprite ID registered in `assets`?
+2. [public/json/config/assets.json](public/json/config/assets.json) - Is the sprite defined there?
 3. Frame indices in animation - Are they within sprite sheet bounds?
 
 **Solution**:
 
 ```typescript
-console.log(Resources.instance.getSpriteImage('your-sprite-id'));
-// Should log Image object, not undefined
+console.log(GameRegistry.assets.get('your-sprite-id'));
+// Should log { resource: { image, isLoaded: true }, ... }, not throw
 ```
 
 ### Issue: Animation stutters or loops wrong
@@ -542,8 +565,8 @@ console.log(this.sprite.animations.currentFrame);
 **Check**:
 
 1. Set `isSolid = true` on blocking objects
-2. Walls registered in level
-3. `isSpaceFree()` called with correct parameters
+2. Walls registered in level (`walls` array in the level JSON)
+3. `isSpaceFree()` ([level.utils.ts](src/objects/Level/level.utils.ts)) called with correct parameters
 
 **Solution**:
 
@@ -589,10 +612,12 @@ this.removeChild(gameObject);
 
 These are documented TODOs in the codebase that may affect development:
 
-| File                                                                   | Issue                                          | Impact                                 | Status         |
-| ---------------------------------------------------------------------- | ---------------------------------------------- | -------------------------------------- | -------------- |
-| [LevelStateManager.ts](src/lib/LevelStateManager/LevelStateManager.ts) | Save hero data in state for battle transitions | Battle system can't restore hero state | 📋 Enhancement |
-| [TitleScreen.ts](src/objects/TitleScreen/TitleScreen.ts)               | Options menu not implemented                   | Options unavailable                    | 📋 Enhancement |
+| File                                                                 | Issue                                                             | Impact                                        | Status         |
+| -------------------------------------------------------------------- | ----------------------------------------------------------------- | --------------------------------------------- | -------------- |
+| [TeamMembers.ts](src/lib/TeamMembers/TeamMembers.ts)                 | Needs a backing registry of team members                          | Party members are effectively hardcoded/empty | 📋 Enhancement |
+| [Battle.ts](src/objects/Battle/Battle.ts)                            | Selection box doesn't auto-open when battle/turn starts (2 TODOs) | Combat can't be driven through to completion  | 🚧 WIP         |
+| [Combatant.ts](src/objects/Combatant/Combatant.ts)                   | Should carry full combat state and render on the battlefield      | Combatants are invisible during battle        | 🚧 WIP         |
+| [InventoryScreen.ts](src/objects/InventoryScreen/InventoryScreen.ts) | Should draw item icon/quantity next to text                       | Inventory list is text-only                   | 📋 Enhancement |
 
 ## Testing Strategy
 
@@ -624,20 +649,23 @@ describe('StoryFlags', () => {
 
 ### What to Test First
 
-1. **Collision detection** (`Game.instance.isSpaceFree()`) - Critical game logic
-2. **Event system** ([Events.ts](src/lib/Events.ts)) - Core architecture
-3. **Movement math** (`Game.instance.moveTowards()`) - Determinism required
+1. **Collision detection** (`isSpaceFree()` in [level.utils.ts](src/objects/Level/level.utils.ts)) - Critical game logic
+2. **Event system** ([Events.ts](src/lib/Events/Events.ts)) - Core architecture
+3. **Movement math** (`moveTowards()` in [movableObject.utils.ts](src/objects/MovableObject/movableObject.utils.ts)) - Determinism required
 4. **Animation timing** ([FrameIndexPattern.ts](src/lib/FrameIndexPattern/FrameIndexPattern.ts)) - Frame accuracy
 5. **Story flags** ([StoryFlags.ts](src/lib/StoryFlags/StoryFlags.ts)) - State correctness
+6. **Schema validation** ([GameSchemas](src/lib/GameSchemas/)) - Malformed config/level JSON should fail loudly, not silently
 
 ## TypeScript & Code Quality
 
 ### Strict Settings Enforced
 
-- `strict: true` - All null/undefined safety
+- `strict: true` / `strictNullChecks` - All null/undefined safety
 - `noUnusedLocals` / `noUnusedParameters` - Dead code detection
 - `noImplicitReturns` - All code paths must return
 - `noImplicitOverride` - Methods must explicitly use `override`
+- `noPropertyAccessFromIndexSignature` / `noFallthroughCasesInSwitch` - stricter object/switch handling
+- ESLint (`eslint.config.mjs`) additionally enforces: `@typescript-eslint/naming-convention` (private members require `_` prefix), `explicit-function-return-type`, `no-explicit-any`, `consistent-type-imports`, `prefer-readonly`, `curly`, `eqeqeq`
 
 **When modifying code**: Clean up unused variables, add explicit return types, handle all cases.
 
@@ -669,7 +697,7 @@ import type { GameObjectConfig } from 'src/lib/GameObject';
 
 // 3. Constants and helpers
 import { HERO_POSITION } from '../Hero/hero.constants'; // feature-scoped constants
-import { objectKeys } from 'src/helpers/objectKeys';
+import { objectKeys } from 'src/lib/Game'; // grid/object utilities now live in src/lib/Game/game.utils.ts
 
 // 4. Relative imports (from same directory or parents)
 import type { MyThingConfig } from './myThing.types';
@@ -688,8 +716,8 @@ export class MyThing extends GameObject {
     Events.on(SOME_EVENT, this, () => this._onEvent());
   }
 
-  override step(delta: number, root: Main): void {
-    // Update state, move, animate
+  override step(delta: number): void {
+    // Update state, move, animate — reach shared state via singletons, no root param
     if (this._state === 'moving') {
       // ...
     }
@@ -751,32 +779,34 @@ Events and constants are **scoped to their feature directory** — not centraliz
 - [src/objects/Level/level.constants.ts](src/objects/Level/level.constants.ts) - Level events
 - [src/objects/TextBox/textBox.constants.ts](src/objects/TextBox/textBox.constants.ts) - Dialogue events
 - [src/objects/PauseMenu/pauseMenu.constants.ts](src/objects/PauseMenu/pauseMenu.constants.ts) - Pause events
+- [src/objects/MovableObject/movableObject.constants.ts](src/objects/MovableObject/movableObject.constants.ts) - Behavior end / lock-source events
 - [src/lib/StoryFlags/storyFlags.constants.ts](src/lib/StoryFlags/storyFlags.constants.ts) - Global story flags
-- [src/lib/GameObject/gameObject.constants.ts](src/lib/GameObject/gameObject.constants.ts) - Behavior end event
-- [src/constants/itemsRegistry.ts](src/constants/itemsRegistry.ts) - Items registry (ItemKey → ItemStat)
-- [src/constants/standingDirections.ts](src/constants/standingDirections.ts) - Direction constants
+- [public/json/config/items.json](public/json/config/items.json) - Item definitions (loaded into `GameRegistry.items`, no more `itemsRegistry.ts`)
+- [src/types/directions.ts](src/types/directions.ts) - Direction constants (`DIRECTIONS`, `Directions`)
 
 ### Helpers
 
-- [src/helpers/objectKeys.ts](src/helpers/objectKeys.ts) - Type-safe `Object.keys()` wrapper
-- [src/helpers/spriteText.ts](src/helpers/spriteText.ts) - Character frame/width mapping for text
+- [src/lib/Game/game.utils.ts](src/lib/Game/game.utils.ts) - `toGridSize`/`fromGridSize`/`objectKeys`/`checkDuplicateIds` (no more `src/helpers/` directory)
+- [src/lib/Text/text.utils.ts](src/lib/Text/text.utils.ts) - Sprite-text width calculation and line/word wrapping
 
 ### Singletons
 
-- `Events` ([src/lib/Events.ts](src/lib/Events.ts)) - Global event bus
-- `Game` ([src/lib/Game/Game.ts](src/lib/Game/Game.ts)) - Game init, grid/movement utilities
-- `Resources` ([src/lib/Resources/Resources.ts](src/lib/Resources/Resources.ts)) - Sprite image loader
+- `Events` ([src/lib/Events/Events.ts](src/lib/Events/Events.ts)) - Global event bus
+- `Game` ([src/lib/Game/Game.ts](src/lib/Game/Game.ts)) - Game init and canvas container sizing
+- `GameRegistry` ([src/lib/GameRegistry/GameRegistry.ts](src/lib/GameRegistry/GameRegistry.ts)) - Central data registry (assets, levels, items, tiles, animations, etc.)
+- `GameLoader` ([src/lib/Loaders/GameLoader.ts](src/lib/Loaders/GameLoader.ts)) - Orchestrates config/level loading + validation into `GameRegistry`
 - `StoryFlags` ([src/lib/StoryFlags/StoryFlags.ts](src/lib/StoryFlags/StoryFlags.ts)) - Game state flags
 - `Inventory` ([src/lib/Inventory/Inventory.ts](src/lib/Inventory/Inventory.ts)) - Item collection
 - `Progress` ([src/lib/Progress/Progress.ts](src/lib/Progress/Progress.ts)) - Save/load to localStorage
 - `LevelStateManager` ([src/lib/LevelStateManager/LevelStateManager.ts](src/lib/LevelStateManager/LevelStateManager.ts)) - Per-level object state
+- `TeamMembers` ([src/lib/TeamMembers/TeamMembers.ts](src/lib/TeamMembers/TeamMembers.ts)) - Party member tracking for Battle (WIP)
 
 ### Debugging Tips
 
 ### Logging Position/State
 
 ```typescript
-override step(delta: number, root: Main): void {
+override step(delta: number): void {
   console.log(`Hero at (${this.position.x}, ${this.position.y})`);
 }
 ```
@@ -805,7 +835,7 @@ Events.on('*', this, (eventName: string) => {
 1. **Forgot `type` keyword**: Always use `import type { ... }` for types
 2. **Wrong Events API**: Use `Events.on(event, this, cb)` with `this` as caller — not `Events.instance.on(event, cb)`
 3. **Wrong events import**: Import event constants from the feature's `*.constants.ts`, not a central `events.ts`
-4. **Hardcoded pixel positions**: Use `Game.instance.toGridSize(n)` for grid-to-pixel conversion
+4. **Hardcoded pixel positions**: Use `toGridSize(n)` (from [src/lib/Game](src/lib/Game/game.utils.ts)) for grid-to-pixel conversion
 5. **Missing grid coordinates**: Store positions as grid cells (0-indexed), render as pixels
 6. **Forgetting `.types.ts`**: Always extract types to separate file
 7. **Non-deterministic logic**: Fixed timestep expects reproducible behavior; use fixed deltas
@@ -824,16 +854,16 @@ Events.on('*', this, (eventName: string) => {
 ### For New Features
 
 - **New game object**: Add in [src/objects/](src/objects/)
-- **New animation**: Add to respective animations file (e.g., `heroAnimations.ts`)
+- **New animation**: Add keyframes to [public/json/config/animations.json](public/json/config/animations.json) (no per-object animation file anymore)
 - **New event**: Define in the feature's `*.constants.ts` and emit/listen as needed
-- **New level**: Create JSON in `public/json/`, add ID to `public/json/levelsIds.json`
+- **New level**: Create JSON in `public/json/levels/{levelId}.json`, add the ID to [public/json/config/levelsIds.json](public/json/config/levelsIds.json)
 
 ### For Optimization
 
 - Profile rendering in [Main.ts](src/objects/Main/Main.ts) draw method
-- Check collision detection via `Game.instance.isSpaceFree()`
+- Check collision detection via `isSpaceFree()` ([level.utils.ts](src/objects/Level/level.utils.ts))
 - Optimize sprite batching in [Sprite.ts](src/objects/Sprite/Sprite.ts)
 
 ## Architecture Documentation
 
-For deeper architectural details, see [memories/repo/canvas-rpg-architecture.md](/memories/repo/canvas-rpg-architecture.md).
+For deeper architectural details (MovableObject inheritance decisions, data flow examples, decoration tiling constraints), see [ARCHITECTURE.md](ARCHITECTURE.md).

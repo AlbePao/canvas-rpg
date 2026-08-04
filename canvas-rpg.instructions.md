@@ -19,14 +19,15 @@ You are an expert in TypeScript, game development, and 2D Canvas graphics. Write
 
 See [AGENTS.md](AGENTS.md#core-game-loop) for complete architecture overview.
 
-**Quick reference**: The game uses an **ECS-inspired GameObject hierarchy** with a fixed 16.67ms (60fps) timestep loop. Every GameObject implements `ready()` (once), `step(delta)` (every frame), and `drawImage()` (every frame).
+**Quick reference**: The game uses an **ECS-inspired GameObject hierarchy** with a fixed 16.67ms (60fps) timestep loop. Every GameObject implements `ready()` (once), `step(delta)` (every frame, no `root`/`Main` param — use singletons like `Events`/`GameRegistry`/`Game` instead), and `drawImage()` (every frame).
 
 Key principles:
 
 - Composition over inheritance: nest GameObjects via `addChild()`
 - Deterministic gameplay: same inputs = same outputs
-- Grid-based movement: store positions as grid cells (integers), render as pixels via `Game.instance.toGridSize(n)`
+- Grid-based movement: store positions as grid cells (integers), render as pixels via `toGridSize(n)` (plain function from `src/lib/Game`)
 - Event-driven communication: use `Events.on(eventName, this, callback)` — requires `this` as caller for auto-cleanup
+- Data-driven config: assets/animations/items/levels live in `public/json/config/` and `public/json/levels/`, validated by Zod schemas in `src/lib/GameSchemas/` and loaded into `GameRegistry`
 
 ## File Organization
 
@@ -88,7 +89,7 @@ See [AGENTS.md - Troubleshooting Guide](AGENTS.md#troubleshooting-guide) for det
 
 - Minimize redraws: only draw within camera viewport
 - Batch collision checks: check once per step, cache results
-- Lazy load assets: use `Resources.instance` for caching
+- Lazy load assets: assets are preloaded once at startup via `GameLoader`/`AssetLoader` into `GameRegistry.assets` — read them with `GameRegistry.assets.get(id)`, don't re-fetch
 - Profile rendering: monitor `Main.ts` draw performance
 - Avoid allocations: reuse Vector2 instances when possible
 
@@ -100,7 +101,7 @@ Before committing code:
 - ✅ No unused variables or imports
 - ✅ All functions have explicit return types
 - ✅ Events are unsubscribed in cleanup
-- ✅ No hardcoded pixel values (use `Game.instance.toGridSize(n)`)
+- ✅ No hardcoded pixel values (use `toGridSize(n)` from `src/lib/Game`)
 - ✅ All types extracted to `.types.ts` file
 - ✅ Deterministic gameplay (no time-dependent logic)
 - ✅ Memory leaks addressed (event cleanup, child disposal)
@@ -112,18 +113,18 @@ See [AGENTS.md - Troubleshooting Guide](AGENTS.md#troubleshooting-guide) for com
 **Quick reference**:
 
 - **Movement issues**: Check `Input.ts` (`HOLD_THRESHOLD`, hold vs tap logic), `Hero.ts` (`destinationPosition`)
-- **Sprite problems**: Verify sprite ID in `ASSETS_TO_LOAD`, check frame indices bounds
+- **Sprite problems**: Verify sprite ID exists in `GameRegistry.assets` / [public/json/config/assets.json](public/json/config/assets.json), check frame indices bounds
 - **Event not firing**: Confirm event name in the feature's `*.constants.ts`, subscriber in `ready()` (not constructor), `this` passed as caller
 - **Memory leaks**: Ensure `destroy()` called, event subscribers cleaned up
-- **Collision issues**: Check `isSolid = true`, walls in level, `Game.instance.isSpaceFree()` logic
+- **Collision issues**: Check `isSolid = true`, walls in level JSON, `isSpaceFree()` ([src/objects/Level/level.utils.ts](src/objects/Level/level.utils.ts)) logic
 
 ## Where to Find Things
 
-| Need                | Location                                                                                   |
-| ------------------- | ------------------------------------------------------------------------------------------ |
-| Full architecture   | [AGENTS.md](AGENTS.md)                                                                     |
-| GameObject examples | [AGENTS.md - Adding Game Content](AGENTS.md#adding-game-content)                           |
-| Event constants     | Feature's `*.constants.ts` (e.g., [hero.constants.ts](src/objects/Hero/hero.constants.ts)) |
-| Level structure     | [public/json/](public/json/)                                                               |
-| Story flags         | [src/lib/StoryFlags/storyFlags.constants.ts](src/lib/StoryFlags/storyFlags.constants.ts)   |
-| Animations          | [src/objects/Hero/heroAnimations.ts](src/objects/Hero/heroAnimations.ts) (example)         |
+| Need                | Location                                                                                                               |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| Full architecture   | [AGENTS.md](AGENTS.md)                                                                                                 |
+| GameObject examples | [AGENTS.md - Adding Game Content](AGENTS.md#adding-game-content)                                                       |
+| Event constants     | Feature's `*.constants.ts` (e.g., [hero.constants.ts](src/objects/Hero/hero.constants.ts))                             |
+| Level structure     | [public/json/levels/](public/json/levels/) (validated by [levelMap.schema.ts](src/lib/GameSchemas/levelMap.schema.ts)) |
+| Story flags         | [src/lib/StoryFlags/storyFlags.constants.ts](src/lib/StoryFlags/storyFlags.constants.ts)                               |
+| Animations          | [public/json/config/animations.json](public/json/config/animations.json) (data-driven, no per-object animation file)   |
