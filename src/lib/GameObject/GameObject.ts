@@ -1,7 +1,7 @@
 import { Animations } from '../Animations';
 import { Events } from '../Events';
 import { FrameIndexPattern } from '../FrameIndexPattern';
-import { toGridSize } from '../Game';
+import { isUnsafeObjectKey, toGridSize } from '../Game';
 import { GameRegistry, type AnimationObjectType } from '../GameRegistry';
 import { Vector2 } from '../Vector2';
 import type { GameObjectConfig, GameObjectDrawLayer } from './gameObject.types';
@@ -157,6 +157,10 @@ export class GameObject {
       const patterns: Record<string, FrameIndexPattern> = {};
 
       for (const [key, value] of Object.entries(animationConfig)) {
+        if (isUnsafeObjectKey(key)) {
+          continue;
+        }
+
         patterns[key] = new FrameIndexPattern(value);
       }
 

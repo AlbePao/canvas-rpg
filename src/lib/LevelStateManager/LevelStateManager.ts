@@ -1,3 +1,4 @@
+import { isUnsafeObjectKey } from '../Game';
 import { Singleton } from '../Singleton';
 import type { LevelObjectState, LevelsState, LevelsStateMap, LevelStateMap } from './levelStateManager.types';
 
@@ -6,6 +7,10 @@ class LevelStateManagerSingleton extends Singleton<LevelStateManagerSingleton>()
     const serialized: LevelsState = {};
 
     this._state.forEach((levelMap, levelId) => {
+      if (isUnsafeObjectKey(levelId)) {
+        return;
+      }
+
       serialized[levelId] = Object.fromEntries(levelMap.entries());
     });
 
@@ -13,7 +18,9 @@ class LevelStateManagerSingleton extends Singleton<LevelStateManagerSingleton>()
   }
   set state(state: LevelsState) {
     this._state = new Map(
-      Object.entries(state).map(([levelId, levelObj]) => [levelId, new Map(Object.entries(levelObj))]),
+      Object.entries(state)
+        .filter(([levelId]) => !isUnsafeObjectKey(levelId))
+        .map(([levelId, levelObj]) => [levelId, new Map(Object.entries(levelObj))]),
     );
   }
   private _state: LevelsStateMap = new Map();

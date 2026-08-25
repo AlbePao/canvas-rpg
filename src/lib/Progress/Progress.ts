@@ -1,3 +1,4 @@
+import { safeJsonParse } from '../Game';
 import { Singleton } from '../Singleton';
 import type { ProgressData } from './progress.types';
 
@@ -12,7 +13,7 @@ class ProgressSingleton extends Singleton<ProgressSingleton>() {
 
   get saveFile(): ProgressData | null {
     const saveFile = this._storage.getItem(SAVE_FILE_KEY);
-    return saveFile ? (JSON.parse(saveFile) as ProgressData) : null;
+    return saveFile ? safeJsonParse<ProgressData>(saveFile) : null;
   }
 }
 

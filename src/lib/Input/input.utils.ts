@@ -3,7 +3,7 @@ import { Game } from '../Game';
 import { KEY_TO_DIRECTION } from './input.constants';
 
 export function getDirectionFromCode(code: string): Directions | null {
-  return KEY_TO_DIRECTION[code] ?? null;
+  return Object.prototype.hasOwnProperty.call(KEY_TO_DIRECTION, code) ? KEY_TO_DIRECTION[code] : null;
 }
 
 export function userPressEnterKeys(): boolean {

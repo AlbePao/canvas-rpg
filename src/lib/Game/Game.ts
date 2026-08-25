@@ -10,6 +10,7 @@ import {
   GAME_SETTINGS_STORAGE_KEY,
 } from './game.constants';
 import type { GameCanvasSize, GameConfig, GameSettings, GameSettingsKey } from './game.types';
+import { safeJsonParse } from './game.utils';
 
 class GameSingleton extends Singleton<GameSingleton>() {
   get settings(): GameSettings {
@@ -128,7 +129,7 @@ class GameSingleton extends Singleton<GameSingleton>() {
 
     if (savedSettings) {
       // If settings exist in localStorage, parse and load them
-      this._settings = JSON.parse(savedSettings) as GameSettings;
+      this._settings = safeJsonParse<GameSettings>(savedSettings);
     } else {
       // If no saved settings, save default settings
       localStorage.setItem(GAME_SETTINGS_STORAGE_KEY, JSON.stringify(this._settings));

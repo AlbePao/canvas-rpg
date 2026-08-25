@@ -1,3 +1,4 @@
+import { isUnsafeObjectKey } from '../Game';
 import type { AssetLoaded, AssetsRegistry, AssetsToLoad } from '../GameRegistry';
 import { Vector2 } from '../Vector2';
 
@@ -5,6 +6,10 @@ export function loadAssetResources(data: AssetsToLoad): AssetsRegistry {
   const result: Record<string, AssetLoaded> = {};
 
   for (const [key, assetData] of Object.entries(data)) {
+    if (isUnsafeObjectKey(key)) {
+      continue;
+    }
+
     const { src, frameSize, position, ...otherData } = assetData;
     const img = new Image();
 
