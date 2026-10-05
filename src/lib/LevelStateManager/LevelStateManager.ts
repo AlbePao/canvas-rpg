@@ -23,13 +23,13 @@ class LevelStateManagerSingleton extends Singleton<LevelStateManagerSingleton>()
         .map(([levelId, levelObj]) => [levelId, new Map(Object.entries(levelObj))]),
     );
   }
-  private _state: LevelsStateMap = new Map();
+  private _state: LevelsStateMap = new Map<string, LevelStateMap>();
 
   private _getLevel(levelId: string): LevelStateMap {
     let level = this._state.get(levelId);
 
     if (!level) {
-      level = new Map();
+      level = new Map<string, LevelObjectState>();
       this._state.set(levelId, level);
     }
 

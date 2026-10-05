@@ -1,7 +1,7 @@
-import { Animations } from '../Animations';
+import { Animations, isAnimationFrameKey, type AnimationFrame } from '../Animations';
 import { Events } from '../Events';
 import { FrameIndexPattern } from '../FrameIndexPattern';
-import { isUnsafeObjectKey, toGridSize } from '../Game';
+import { toGridSize } from '../Game';
 import { GameRegistry, type AnimationObjectType } from '../GameRegistry';
 import { Vector2 } from '../Vector2';
 import type { GameObjectConfig, GameObjectDrawLayer } from './gameObject.types';
@@ -154,14 +154,12 @@ export class GameObject {
     let animations: Animations | null = null;
 
     if (animationConfig && Object.keys(animationConfig).length > 0) {
-      const patterns: Record<string, FrameIndexPattern> = {};
+      const patterns = new Map<AnimationFrame, FrameIndexPattern>();
 
       for (const [key, value] of Object.entries(animationConfig)) {
-        if (isUnsafeObjectKey(key)) {
-          continue;
+        if (isAnimationFrameKey(key)) {
+          patterns.set(key, new FrameIndexPattern(value));
         }
-
-        patterns[key] = new FrameIndexPattern(value);
       }
 
       animations = new Animations(patterns);

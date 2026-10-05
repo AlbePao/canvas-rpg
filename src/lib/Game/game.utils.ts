@@ -1,3 +1,4 @@
+import type { GameObjectConfig } from '../GameObject';
 import { GRID_SIZE } from './game.constants';
 
 // Keys that must never be used in `obj[key] = value` assignments built from external/JSON-sourced
@@ -9,7 +10,7 @@ const UNSAFE_OBJECT_KEYS = new Set(['__proto__', 'constructor', 'prototype']);
  * keys to prevent prototype pollution when the source is untrusted (e.g. browser storage).
  */
 export function safeJsonParse<T>(value: string): T {
-  return JSON.parse(value, (key, val: unknown) => (UNSAFE_OBJECT_KEYS.has(key) ? undefined : val)) as T;
+  return JSON.parse(value, (key, val: unknown) => (isUnsafeObjectKey(key) ? undefined : val)) as T;
 }
 
 export function isUnsafeObjectKey(key: string): boolean {
@@ -28,7 +29,7 @@ export function fromGridSize(value: number): number {
   return value / GRID_SIZE;
 }
 
-export function checkDuplicateIds(gameObjects: { id: string }[]): boolean {
+export function checkDuplicateIds(gameObjects: GameObjectConfig[]): boolean {
   const seenIds = new Set<string>();
   const hasDuplicatedIds = gameObjects.some(({ id }) => {
     if (seenIds.has(id)) {

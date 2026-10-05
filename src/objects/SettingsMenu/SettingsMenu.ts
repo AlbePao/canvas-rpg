@@ -17,7 +17,7 @@ import { SETTINGS_MENU_ITEMS } from './settingsMenu.constants';
 export class SettingsMenu extends GameObject {
   private readonly _settingsList = SETTINGS_MENU_ITEMS;
   private readonly _settingsListLines: Line[] = [];
-  private readonly _optionsTextCache: Record<string, Line> = {};
+  private readonly _optionsTextCache = new Map<string, Line>();
   private _currentIndex = 0;
   private readonly _width: number;
   private readonly _longestOptionTextWidth: number;
@@ -61,7 +61,7 @@ export class SettingsMenu extends GameObject {
     for (const { key, options } of this._settingsList.filter(({ key }) => key !== 'goBack')) {
       options.forEach(({ text }, index) => {
         const lines = createSpriteTextLines([text], key);
-        this._optionsTextCache[`${key}_${index}`] = lines[0];
+        this._optionsTextCache.set(`${key}_${index}`, lines[0]);
       });
 
       const longestForSetting = options.reduce((max, { text }) => Math.max(max, calculateTextWidth(text)), 0) + 5;
@@ -153,8 +153,13 @@ export class SettingsMenu extends GameObject {
 
       // Now draw the current selected option value for this setting item
       optionX += SELECTION_INDICATOR_X_OFFSET;
-      const { words } = this._optionsTextCache[`${key}_${selectedIndex}`];
-      const optionTextWidth = drawTextLine(ctx, words, optionX, cursorY);
+      const cachedLine = this._optionsTextCache.get(`${key}_${selectedIndex}`);
+
+      if (!cachedLine) {
+        throw new Error(`SettingsMenu: missing cached option text for "${key}_${selectedIndex}"`);
+      }
+
+      const optionTextWidth = drawTextLine(ctx, cachedLine.words, optionX, cursorY);
       optionX += optionTextWidth + SELECTION_INDICATOR_X_OFFSET;
 
       if (index === this._currentIndex) {

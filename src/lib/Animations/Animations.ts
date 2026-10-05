@@ -1,5 +1,4 @@
 import type { FrameIndexPattern } from '../FrameIndexPattern';
-import { objectKeys } from '../Game';
 import type { AnimationFrame, AnimationPattern } from './animations.types';
 
 export class Animations {
@@ -7,7 +6,8 @@ export class Animations {
   private _isPaused = false;
 
   constructor(private readonly _patterns: AnimationPattern) {
-    this._activeKey = objectKeys(this._patterns)[0];
+    const [firstKey] = this._patterns.keys();
+    this._activeKey = firstKey;
   }
 
   get frame(): number {
@@ -42,7 +42,7 @@ export class Animations {
   }
 
   private _getCurrentFramePattern(): FrameIndexPattern {
-    const currentFramePattern = this._patterns[this._activeKey];
+    const currentFramePattern = this._patterns.get(this._activeKey);
 
     if (!currentFramePattern) {
       throw new Error('Animations: selected frame pattern does not exist');

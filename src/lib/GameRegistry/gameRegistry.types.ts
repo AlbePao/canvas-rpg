@@ -36,7 +36,7 @@ export interface AssetResource {
 }
 
 export type AssetsToLoad = ReadonlyRecord<string, AssetData>;
-export type AssetsRegistry = Record<string, AssetLoaded>;
+export type AssetsRegistry = Map<string, AssetLoaded>;
 
 export type CharsFrameMapRegistry = ReadonlyRecord<string, CharFrameData>;
 export interface CharFrameData {
