@@ -1,4 +1,4 @@
-import { Animations, isAnimationFrameKey, type AnimationFrame } from '../Animations';
+import { Animations } from '../Animations';
 import { Events } from '../Events';
 import { FrameIndexPattern } from '../FrameIndexPattern';
 import { toGridSize } from '../Game';
@@ -154,12 +154,11 @@ export class GameObject {
     let animations: Animations | null = null;
 
     if (animationConfig && Object.keys(animationConfig).length > 0) {
-      const patterns = new Map<AnimationFrame, FrameIndexPattern>();
+      const patterns = new Map<string, FrameIndexPattern>();
 
+      // Keys are already validated by the animations schema (character frames or tile names)
       for (const [key, value] of Object.entries(animationConfig)) {
-        if (isAnimationFrameKey(key)) {
-          patterns.set(key, new FrameIndexPattern(value));
-        }
+        patterns.set(key, new FrameIndexPattern(value));
       }
 
       animations = new Animations(patterns);

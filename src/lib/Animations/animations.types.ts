@@ -1,6 +1,6 @@
 import type { FrameIndexPattern } from '../FrameIndexPattern';
 
-export type AnimationPattern = ReadonlyMap<AnimationFrame, FrameIndexPattern>;
+export type AnimationPattern = ReadonlyMap<string, FrameIndexPattern>;
 
 export const ANIMATION_STANDING_FRAMES = ['standDown', 'standLeft', 'standRight', 'standUp'] as const;
 export type StandingFrame = (typeof ANIMATION_STANDING_FRAMES)[number];

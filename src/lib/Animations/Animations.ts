@@ -1,8 +1,8 @@
 import type { FrameIndexPattern } from '../FrameIndexPattern';
-import type { AnimationFrame, AnimationPattern } from './animations.types';
+import type { AnimationPattern } from './animations.types';
 
 export class Animations {
-  private _activeKey: AnimationFrame;
+  private _activeKey: string;
   private _isPaused = false;
 
   constructor(private readonly _patterns: AnimationPattern) {
@@ -14,7 +14,7 @@ export class Animations {
     return this._getCurrentFramePattern().frame;
   }
 
-  play(key: AnimationFrame, startAtTime = 0): void {
+  play(key: string, startAtTime = 0): void {
     // Already playing this one
     if (this._activeKey === key) {
       return;
