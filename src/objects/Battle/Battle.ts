@@ -1,19 +1,21 @@
 import { Events } from '../../lib/Events';
-import { checkDuplicateIds, Game } from '../../lib/Game';
+import { checkDuplicateIds, fromGridSize, Game, toGridSize } from '../../lib/Game';
 import { GameObject } from '../../lib/GameObject';
 import { GameRegistry } from '../../lib/GameRegistry';
 import { userPressExitKeys } from '../../lib/Input';
 import { ScreenTransition } from '../../lib/ScreenTransition';
 import { StoryFlags } from '../../lib/StoryFlags';
 import { TeamMembers } from '../../lib/TeamMembers';
-import { Vector2 } from '../../lib/Vector2';
+import { Vector2, type Coords2D } from '../../lib/Vector2';
 import { ArrowIndicator } from '../ArrowIndicator';
 import { Combatant } from '../Combatant';
 import type { InteractiveObject } from '../InteractiveObject';
+import { LevelTile } from '../LevelTile';
 import { SELECTION_BOX_CLOSE, SELECTION_BOX_OPEN, SelectionBox, type SelectionOption } from '../SelectionBox';
 import { Sprite } from '../Sprite';
 import { BATTLE_END } from './battle.constants';
 import type { BattleActionsValue, BattleConfig, BattleRewardsData } from './battle.types';
+import { createStartingPosition } from './battle.utils';
 
 export class Battle extends GameObject {
   protected readonly indicator = new ArrowIndicator({
@@ -64,6 +66,8 @@ export class Battle extends GameObject {
       vFrames,
       position,
     });
+
+    this._generateBattlefield();
   }
 
   override ready(): void {
@@ -81,9 +85,7 @@ export class Battle extends GameObject {
           console.log('use item...');
         } else if (key === 'flee') {
           // Attempt to flee from battle. If successful, return to the previous screen. If not, the enemy gets a free attack and the player loses their turn
-          new ScreenTransition(() => {
-            Events.emit(BATTLE_END);
-          });
+          Events.emit(BATTLE_END);
         }
 
         Events.off(endingSub);
@@ -111,6 +113,35 @@ export class Battle extends GameObject {
 
     if (!this._areCombatantsMoving) {
       this.indicator.drawImage(ctx, drawPosX, drawPosY);
+    }
+  }
+
+  private _generateBattlefield(): void {
+    const { canvasWidth } = Game.containerSizes;
+
+    const startingPositions: Coords2D[] = [
+      // Player team starting positions
+      { x: 1, y: 2 },
+      { x: 1, y: 4.5 },
+      { x: 1, y: 7 },
+      // Opponent team starting positions
+      { x: fromGridSize(canvasWidth - toGridSize(2)), y: 2 },
+      { x: fromGridSize(canvasWidth - toGridSize(2)), y: 4.5 },
+      { x: fromGridSize(canvasWidth - toGridSize(2)), y: 7 },
+    ];
+
+    for (const { x, y } of startingPositions) {
+      this.addChild(createStartingPosition(`${this.id}-starting-position-${x}-${y}`, x, y));
+    }
+
+    for (const y of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]) {
+      this.addChild(
+        new LevelTile({
+          id: `${this.id}-battle-tile`,
+          tileName: 'ice',
+          position: new Vector2(toGridSize(canvasWidth / 2), toGridSize(y)),
+        }),
+      );
     }
   }
 
