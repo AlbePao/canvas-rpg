@@ -44,6 +44,14 @@ export class Registry<V> {
     return this._map.has(key);
   }
 
+  keys(): string[] {
+    return [...this._map.keys()];
+  }
+
+  delete(key: string): boolean {
+    return this._map.delete(key);
+  }
+
   clear(): void {
     this._map.clear();
     this._isLoaded = false;
