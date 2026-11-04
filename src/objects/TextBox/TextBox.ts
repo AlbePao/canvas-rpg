@@ -108,7 +108,7 @@ export class TextBox extends GameObject {
     this._currentLineIndex = 0;
 
     // Create a portrait
-    if (portraitFrame) {
+    if (Number.isSafeInteger(portraitFrame) && portraitFrame !== null) {
       const { hFrames, vFrames, frameSize, position, resource } = GameRegistry.assets.get('portraits');
 
       this.portrait = new Sprite({
