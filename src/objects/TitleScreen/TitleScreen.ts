@@ -68,8 +68,8 @@ export class TitleScreen extends SelectionBox<TitleScreenOptionValue> {
       StoryFlags.add(flag);
     }
 
-    for (const { itemKey } of inventory) {
-      Inventory.add(itemKey);
+    for (const { itemKey, quantity } of inventory) {
+      Inventory.add(itemKey, quantity);
     }
 
     this._startGame({

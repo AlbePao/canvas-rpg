@@ -5,15 +5,23 @@ import type { InventoryItem } from './inventory.types';
 class InventorySingleton extends Singleton<InventorySingleton>() {
   private readonly _itemsMap = new Map<string, InventoryItem>();
 
-  add(itemKey: string): void {
+  add(itemKey: string, quantity = 1): void {
+    if (!Number.isSafeInteger(quantity) || quantity < 1) {
+      throw new RangeError(`Inventory: quantity must be a positive safe integer, received ${quantity}`);
+    }
+
     const existing = this._itemsMap.get(itemKey);
 
     if (existing) {
-      existing.quantity += 1;
+      if (!Number.isSafeInteger(existing.quantity + quantity)) {
+        throw new RangeError(`Inventory: quantity for "${itemKey}" exceeds the safe integer range`);
+      }
+
+      existing.quantity += quantity;
     } else {
       this._itemsMap.set(itemKey, {
         ...GameRegistry.items.get(itemKey),
-        quantity: 1,
+        quantity,
       });
     }
   }
