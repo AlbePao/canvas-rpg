@@ -2,9 +2,20 @@ import { Sprite } from '../../objects/Sprite';
 import { GameRegistry } from '../GameRegistry';
 import type { Line, Word } from './text.types';
 
+const CHAR_SPACING = 1;
+const WORD_SPACING = 3;
+
 // Shared by any UI that needs to size a box around rendered sprite-text
 export const calculateTextWidth = (text: string): number =>
-  text.split('').reduce((lineWidth, char) => lineWidth + GameRegistry.chars.get(char).width, 0);
+  text
+    .split(' ')
+    .reduce(
+      (lineWidth, word) =>
+        lineWidth +
+        word.split('').reduce((wordWidth, char) => wordWidth + GameRegistry.chars.get(char).width + CHAR_SPACING, 0) +
+        WORD_SPACING,
+      0,
+    );
 
 export function createSpriteTextLines(strings: string[], idPrefix: string): Line[] {
   const { chars, assets } = GameRegistry;
@@ -67,11 +78,11 @@ export function drawTextLine(
       sprite.draw(ctx, currentX - 5, drawPositionY);
 
       // Add width of the character we just printed to cursor pos, plus 1px between character
-      currentX += width + 1;
+      currentX += width + CHAR_SPACING;
     }
 
     // Move the cursor over
-    currentX += 3;
+    currentX += WORD_SPACING;
   }
 
   return currentX - drawPositionX;
