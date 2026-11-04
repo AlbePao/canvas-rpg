@@ -56,8 +56,8 @@ export class LevelBuilder extends Level {
       const [x, y] = coords.split(',').map(Number);
       const tileName = tiles[coords];
 
-      if (!tileName) {
-        return;
+      if (tileName === null) {
+        continue;
       }
 
       const worldTileSprite = new LevelTile({
