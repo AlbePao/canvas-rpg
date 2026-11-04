@@ -51,17 +51,12 @@ src/objects/MyObject/
 
 ### Import Organization
 
-Group imports in this order:
-
-1. Absolute imports from `src/lib`, `src/types`, `src/constants`
-2. Absolute imports from `src/helpers`
-3. Relative imports from same or parent directories
-4. Type imports at the end (with `import type`)
+Follow the repository's existing relative-import conventions and use `import type` for type-only dependencies. Prettier's organize-imports plugin and ESLint are the authoritative automated formatting checks; do not hand-sort imports into a separate convention.
 
 ```typescript
-import { Events } from 'src/lib/Events';
-import { GameObject } from 'src/lib/GameObject';
-import { HERO_POSITION } from '../Hero/hero.constants'; // import from the feature's *.constants.ts
+import { Events } from '../../lib/Events';
+import { GameObject } from '../../lib/GameObject';
+import { HERO_POSITION } from '../Hero/hero.constants';
 import { HeroAnimations } from './heroAnimations';
 import type { HeroConfig } from './hero.types';
 ```
@@ -73,7 +68,7 @@ See [AGENTS.md - Adding Game Content](AGENTS.md#adding-game-content) for compreh
 **Quick checklist** for every GameObject:
 
 1. ✅ Define config type in `.types.ts` extending `GameObjectConfig`
-2. ✅ Implement `ready()`, `step(delta, root)`, and `drawImage(ctx, x, y)`
+2. ✅ Implement `ready()`, `step(delta)`, and `drawImage(ctx, x, y)`
 3. ✅ Unsubscribe from events in cleanup to prevent memory leaks
 4. ✅ Store positions as grid cells (integers), not pixels
 5. ✅ Set `isSolid = true` only if object blocks movement

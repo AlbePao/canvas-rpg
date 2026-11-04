@@ -146,7 +146,7 @@ Frame 1 → ready() [once] → step(delta) → drawImage(ctx, x, y) → Frame 2 
 ```
 
 - **`ready()`**: Called once on first frame. Subscribe to events, initialize animations, set initial state.
-- **`step(delta, root)`**: Called every frame (delta=16.67ms). Update position, state, collision checks.
+- **`step(delta)`**: Called every frame (delta=16.67ms). Update position and state; shared state is accessed through the existing singletons.
 - **`drawImage(ctx, x, y)`**: Called every frame for rendering. Draw sprite at (x + position.x, y + position.y).
 - **`destroy()`**: Called on cleanup. Auto-unsubscribes from all events, removes from parent.
 
@@ -685,21 +685,13 @@ describe('StoryFlags', () => {
 
 ### Imports Organization
 
-Always organize imports in this order:
+Use type-only imports with `import type`. Follow the relative-import patterns used by neighboring modules, and let the configured Prettier organize-imports plugin and ESLint formatting rules apply consistently; do not add a separate manual ordering convention.
 
 ```typescript
-// 1. External packages
 import type { SomeType } from 'zod';
-
-// 2. Absolute imports from lib/
-import { Events } from 'src/lib/Events';
-import type { GameObjectConfig } from 'src/lib/GameObject';
-
-// 3. Constants and helpers
-import { HERO_POSITION } from '../Hero/hero.constants'; // feature-scoped constants
-import { objectKeys } from 'src/lib/Game'; // grid/object utilities now live in src/lib/Game/game.utils.ts
-
-// 4. Relative imports (from same directory or parents)
+import { Events } from '../../lib/Events';
+import { HERO_POSITION } from '../Hero';
+import { GameObject } from './GameObject';
 import type { MyThingConfig } from './myThing.types';
 ```
 

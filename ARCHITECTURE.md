@@ -9,7 +9,7 @@ This file covers implementation details and design decisions that are too deep f
 Introduced to deduplicate identical logic between `Hero.ts` and `Npc.ts`. Houses:
 
 - `facingDirection: Directions` (mutable, default `'down'`)
-- `destinationPosition: Vector2` (mutable, NOT readonly — Hero swaps the whole reference on item pickup; Npc only mutates `.x`/`.y`)
+- `destinationPosition: Vector2` (exposed through a getter; mutate it only through `setNewDestination()` so the level spatial grid stays synchronized)
 - `protected abstract readonly body: Sprite` — subclasses must supply their own body sprite
 - `protected isLocked` / `protected walkingSpeed` (mutable — Npc changes `walkingSpeed` per behavior)
 - `override ready()`: subscribes to `PAUSE_ON/OFF`, `TEXT_BOX_OPEN/CLOSE`, `SCREEN_TRANSITION_START/END` to toggle `isLocked` and pause/resume `body.animations`. Subclasses MUST call `super.ready()` first.
