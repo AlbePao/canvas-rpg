@@ -1,5 +1,5 @@
 import { Events } from '../../lib/Events';
-import { Game } from '../../lib/Game/Game';
+import { Game } from '../../lib/Game';
 import { GameRegistry } from '../../lib/GameRegistry';
 import type { Vector2 } from '../../lib/Vector2';
 import type { Directions } from '../../types/directions';

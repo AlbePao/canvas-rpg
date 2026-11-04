@@ -2,7 +2,7 @@ import type { DecorationFrames } from '../../objects/Decoration';
 import type { LevelMap } from '../../objects/LevelBuilder';
 import type { ReadonlyRecord } from '../../types/readonlyRecord';
 import type { AnimationConfig } from '../FrameIndexPattern';
-import { Registry } from '../Registry/Registry';
+import { Registry } from '../Registry';
 import { Singleton } from '../Singleton';
 import type {
   AnimationObjectType,
