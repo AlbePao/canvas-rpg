@@ -8,12 +8,12 @@ import {
   SCREEN_TRANSITION_START,
   SCREEN_TRANSITION_STYLES_ID,
 } from './screenTransition.constants';
-import type { ScreenTransitionConfig } from './screenTransition.types';
+import type { ScreenTransitionCallback, ScreenTransitionConfig } from './screenTransition.types';
 
 export class ScreenTransition {
   private readonly _element: HTMLDivElement;
 
-  constructor(callback: () => void, config: ScreenTransitionConfig = { transition: 'fadeWhite' }) {
+  constructor(callback: ScreenTransitionCallback, config: ScreenTransitionConfig = { transition: 'fadeWhite' }) {
     const { transition } = config;
 
     // Remove existing style if present (from previous incomplete transition)
@@ -34,11 +34,20 @@ export class ScreenTransition {
     this._element.addEventListener(
       'animationend',
       () => {
-        callback();
-        this._stop();
+        void this._runCallback(callback);
       },
       { once: true },
     );
+  }
+
+  private async _runCallback(callback: ScreenTransitionCallback): Promise<void> {
+    try {
+      await callback();
+    } catch (error) {
+      console.error('ScreenTransition callback failed:', error);
+    } finally {
+      this._stop();
+    }
   }
 
   private _stop(): void {

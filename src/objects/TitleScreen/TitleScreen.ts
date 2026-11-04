@@ -3,6 +3,7 @@ import { fromGridSize, Game, GRID_SIZE } from '../../lib/Game';
 import { GameRegistry } from '../../lib/GameRegistry';
 import { Inventory } from '../../lib/Inventory';
 import { LevelStateManager } from '../../lib/LevelStateManager';
+import { GameLoader } from '../../lib/Loaders';
 import { Progress, type ProgressData } from '../../lib/Progress';
 import { ScreenTransition } from '../../lib/ScreenTransition';
 import { StoryFlags } from '../../lib/StoryFlags';
@@ -14,6 +15,7 @@ import type { TitleScreenOption, TitleScreenOptionValue } from './titleScreen.ty
 
 export class TitleScreen extends SelectionBox<TitleScreenOptionValue> {
   private readonly _saveFile: ProgressData | null = null;
+  private _isStarting = false;
 
   constructor() {
     const { saveFile } = Progress;
@@ -78,10 +80,22 @@ export class TitleScreen extends SelectionBox<TitleScreenOptionValue> {
   }
 
   private _startGame(config: LevelBuilderConfig): void {
+    if (this._isStarting) {
+      return;
+    }
+
+    this._isStarting = true;
+
     new ScreenTransition(
-      () => {
-        Events.emit<LevelBuilder>(CHANGE_LEVEL, new LevelBuilder(config));
-        this.destroy();
+      async () => {
+        try {
+          await GameLoader.retainLevelNeighborhood(config.id);
+          Events.emit<LevelBuilder>(CHANGE_LEVEL, new LevelBuilder(config));
+          this.destroy();
+        } catch (error) {
+          this._isStarting = false;
+          throw error;
+        }
       },
       { transition: 'fadeBlack' },
     );

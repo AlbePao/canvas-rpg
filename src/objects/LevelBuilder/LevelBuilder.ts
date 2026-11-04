@@ -3,8 +3,9 @@ import { checkDuplicateIds, Game, objectKeys, toGridSize } from '../../lib/Game'
 import { GameRegistry } from '../../lib/GameRegistry';
 import { Inventory } from '../../lib/Inventory';
 import { LevelStateManager } from '../../lib/LevelStateManager';
+import { GameLoader } from '../../lib/Loaders';
 import { ScreenTransition } from '../../lib/ScreenTransition';
-import { Vector2 } from '../../lib/Vector2';
+import { Vector2, type Coords2D } from '../../lib/Vector2';
 import { Chest } from '../Chest';
 import { Decoration } from '../Decoration';
 import type { ExitData } from '../Exit';
@@ -18,6 +19,8 @@ import { Sprite } from '../Sprite';
 import type { LevelBuilderConfig } from './levelBuilder.types';
 
 export class LevelBuilder extends Level {
+  private _isTransitioning = false;
+
   constructor(config: LevelBuilderConfig) {
     const { levels, assets } = GameRegistry;
     const level = levels.get(config.id);
@@ -133,7 +136,19 @@ export class LevelBuilder extends Level {
     });
 
     Events.on<ExitData>(HERO_EXITS, this, ({ newLevelId, newHeroPosition }) => {
-      new ScreenTransition(() => {
+      if (this._isTransitioning) {
+        return;
+      }
+
+      this._isTransitioning = true;
+      this._transitionToLevel(newLevelId, newHeroPosition);
+    });
+  }
+
+  private _transitionToLevel(newLevelId: string, newHeroPosition: Coords2D): void {
+    new ScreenTransition(async () => {
+      try {
+        await GameLoader.prepareLevelTransition(this.id, newLevelId);
         Events.emit<LevelBuilder>(
           CHANGE_LEVEL,
           new LevelBuilder({
@@ -141,7 +156,10 @@ export class LevelBuilder extends Level {
             heroStartPosition: newHeroPosition,
           }),
         );
-      });
+      } catch (error) {
+        this._isTransitioning = false;
+        throw error;
+      }
     });
   }
 }

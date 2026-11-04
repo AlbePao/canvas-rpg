@@ -1,7 +1,10 @@
 import type { Level } from '../../objects/Level';
 import { Main } from '../../objects/Main';
 import { GameLoop } from '../GameLoop';
+import { GameRegistry } from '../GameRegistry';
 import { Input } from '../Input';
+import { GameLoader } from '../Loaders';
+import { Progress } from '../Progress';
 import { Singleton } from '../Singleton';
 import {
   DEFAULT_CANVAS_HEIGHT,
@@ -45,9 +48,11 @@ class GameSingleton extends Singleton<GameSingleton>() {
     this._containerSizes.canvasHeight = canvasHeight;
 
     try {
-      // Load all game data JSON before starting the game
-      const { GameLoader } = await import('../Loaders');
       await GameLoader.loadData();
+      await GameLoader.prepareLevelsFromTitleScreen([
+        ...(Progress.saveFile?.levelId ?? []),
+        GameRegistry.getFirstLevelId(),
+      ]);
     } catch (error) {
       console.error('Game initialization failed:', error);
       throw error;

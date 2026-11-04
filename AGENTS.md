@@ -39,11 +39,11 @@ A TypeScript-based 2D RPG game built with HTML5 Canvas and Vite. This document h
 The game uses a **fixed timestep (16.67ms/frame)** update/render cycle:
 
 1. **main.ts**: Entry point — calls `Game.initializeGame({ containerId })` (async)
-2. **[Game.ts](src/lib/Game/Game.ts)**: High-level singleton — awaits [GameLoader](src/lib/Loaders/GameLoader.ts) (which loads+validates all config/level JSON into [GameRegistry](src/lib/GameRegistry/GameRegistry.ts)), then creates the canvas, sets up `Main`, starts `GameLoop`
+2. **[Game.ts](src/lib/Game/Game.ts)**: High-level singleton — awaits [GameLoader](src/lib/Loaders/GameLoader.ts) (which loads+validates global config and preloads only the starting maps and their exits into [GameRegistry](src/lib/GameRegistry/GameRegistry.ts)), then creates the canvas, sets up `Main`, starts `GameLoop`
 3. **[GameLoop.ts](src/lib/GameLoop.ts)**: Low-level frame scheduler — drives fixed-timestep updates and render
 4. **[Main.ts](src/objects/Main/Main.ts)**: Root scene — manages levels, camera, HUD, pause, dialogue, title screen
 
-**Flow**: `main.ts → Game.initializeGame() → GameLoader (async config/level load) → GameLoop → Main.stepEntry()` each frame.
+**Flow**: `main.ts → Game.initializeGame() → GameLoader (async config and on-demand map load) → GameLoop → Main.stepEntry()` each frame.
 
 **Pattern**: Every frame calls `step(delta)` on all GameObjects for deterministic gameplay. GameObjects no longer receive a `root`/`Main` argument — reach shared state through singletons (`Events`, `GameRegistry`, `Game`, `StoryFlags`, etc.) instead.
 
@@ -325,11 +325,11 @@ Animations are **data-driven**, not defined per-object in TypeScript files:
 
 ### 5. Adding JSON-based Levels
 
-Levels are loaded automatically at startup — there is no `LevelsMapper` class anymore:
+Levels are loaded on demand — there is no `LevelsMapper` class anymore:
 
 1. Create one JSON file per level: `public/json/levels/{levelId}.json`
 2. Add `"{levelId}"` to [public/json/config/levelsIds.json](public/json/config/levelsIds.json)
-3. On boot, `GameLoader` → `LevelLoader` reads every ID in `levelsIds.json`, fetches the matching file, and validates it against `createLevelMapSchema()` ([levelMap.schema.ts](src/lib/GameSchemas/levelMap.schema.ts)) before registering it in `GameRegistry.levels`
+3. On boot, `GameLoader` → `LevelLoader` reads the saved-game level (if present) and the first level used by New Game, then fetches and validates those maps and the maps referenced by their `Exit` objects against `createLevelMapSchema()` ([levelMap.schema.ts](src/lib/GameSchemas/levelMap.schema.ts)). During play, it loads the current map's exits and retains the current map plus the map just left.
 4. Instantiate the level anywhere with `new LevelBuilder({ id: 'levelId' })` — it reads the validated data straight from `GameRegistry.levels.get(id)`
 
 **JSON structure** (see [public/json/levels/tilesetLevel.json](public/json/levels/tilesetLevel.json) for a full example):
@@ -367,9 +367,9 @@ Asset/level/animation data is no longer hardcoded in TypeScript — it flows thr
 1. **[Loaders](src/lib/Loaders/)**: `GameLoader` (singleton, called by `Game.initializeGame()`) orchestrates loading:
    - `ConfigLoader.loadAll()` fetches and validates all `public/json/config/*.json` files in parallel (animations, assets, items, frame maps, `levelsIds.json`)
    - `AssetLoader` turns validated asset entries into `Image` objects (`{ resource: { image, isLoaded } }`), loaded asynchronously
-   - `LevelLoader.loadLevels()` fetches + validates each level listed in `levelsIds.json` from `public/json/levels/{id}.json`
+   - `LevelLoader` fetches + validates maps on demand from `public/json/levels/{id}.json`; it preloads title-screen choices and their exits, then maintains only the current map, the previous map, and current exits in memory
    - `ResourceFetcher` is the underlying `fetchJson(url)` HTTP abstraction
-2. **[GameSchemas](src/lib/GameSchemas/)**: Zod schemas validate every config/level file at load time (errors are logged, not silently ignored) — see `config.schema.ts` (one `createXSchema()` per config file) and `levelMap.schema.ts`/`levelObjects.schema.ts`/`interactions.schema.ts` for level data
+2. **[GameSchemas](src/lib/GameSchemas/)**: Zod schemas validate config files at startup and each level map when it is loaded (errors are logged, not silently ignored) — see `config.schema.ts` (one `createXSchema()` per config file) and `levelMap.schema.ts`/`levelObjects.schema.ts`/`interactions.schema.ts` for level data
 3. **[GameRegistry](src/lib/GameRegistry/GameRegistry.ts)**: Singleton holding one `Registry<T>` ([Registry.ts](src/lib/Registry/Registry.ts), a generic keyed data container with `load()`/`get()`/`getOptional()`/`has()`) per data type: `levels`, `assets`, `items`, `tiles`, `chars`, `chestStatuses`, `decorations`, `arrowDirections`, plus a private animations registry. All game objects read data through `GameRegistry`, e.g. `GameRegistry.assets.get('hero')`, `GameRegistry.items.get(itemKey)`.
 
 **There is no `Resources` singleton and no `LevelsMapper` class anymore** — both were replaced by the Loaders + GameRegistry pipeline above.

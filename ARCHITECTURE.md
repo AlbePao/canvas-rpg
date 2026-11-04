@@ -22,6 +22,12 @@ Npc keeps its own `_isWalking`, `_isAwaitingTextBoxClose` fields and `step()`/`s
 
 ## Data Flow Examples
 
+### On-demand Map Loading
+
+1. Startup loads global configuration, then preloads the saved level (when available) and the New Game starting level, together with each map referenced by their `Exit` objects.
+2. Entering a map loads its direct exits before creating the next level. The registry then retains the current map, the map just left, and the current map's exits; unrelated maps are removed.
+3. `LevelLoader` validates every fetched map using the configured level schema and coalesces concurrent requests for the same map.
+
 ### Player Input → Movement
 
 1. `Input.keydown` → direction queue updated

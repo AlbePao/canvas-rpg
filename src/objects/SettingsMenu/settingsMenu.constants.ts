@@ -1,6 +1,6 @@
 import type { SettingItem } from './settingsMenu.types';
 
-export const SETTINGS_MENU_ITEMS: SettingItem[] = [
+export const SETTINGS_MENU_ITEMS = [
   {
     key: 'battleAnimations',
     text: 'Battle animations',
@@ -22,4 +22,4 @@ export const SETTINGS_MENU_ITEMS: SettingItem[] = [
     ],
   },
   { key: 'goBack', text: 'Go back', selectedIndex: 0, options: [] },
-] as const;
+] satisfies SettingItem[];
