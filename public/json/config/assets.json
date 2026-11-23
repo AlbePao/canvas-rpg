@@ -178,7 +178,8 @@
   },
   "portraits": {
     "src": "/sprites/portraits-sheet.png",
-    "hFrames": 4
+    "hFrames": 4,
+    "vFrames": 1
   },
   "shadow": {
     "src": "/sprites/shadow.png",

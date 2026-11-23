@@ -1,14 +1,12 @@
 import { GameObject } from '../../lib/GameObject';
 import { GameRegistry } from '../../lib/GameRegistry';
 import { Sprite } from '../Sprite';
-import type { LevelTileConfig, LevelTileHeroBehavior } from './levelTile.types';
+import type { LevelTileConfig } from './levelTile.types';
 
+// TODO: implement hero behavior when is stepping on the tile
 export class LevelTile extends GameObject {
-  readonly body: Sprite;
-  readonly heroBehavior?: LevelTileHeroBehavior;
-
   constructor(config: LevelTileConfig) {
-    const { id, tileName, position, heroBehavior } = config;
+    const { id, tileName, position } = config;
 
     super({
       id,
@@ -17,7 +15,7 @@ export class LevelTile extends GameObject {
     const { assets, tiles } = GameRegistry;
     const { hFrames, vFrames, frameSize, resource } = assets.get('tileset');
 
-    this.body = new Sprite({
+    const body = new Sprite({
       id,
       resource,
       frameSize,
@@ -27,8 +25,6 @@ export class LevelTile extends GameObject {
       position,
       animations: this.createAnimations('tiles', tileName),
     });
-    this.addChild(this.body);
-
-    this.heroBehavior = heroBehavior;
+    this.addChild(body);
   }
 }

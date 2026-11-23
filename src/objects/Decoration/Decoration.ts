@@ -6,8 +6,6 @@ import { Sprite } from '../Sprite';
 import type { DecorationConfig } from './decoration.types';
 
 export class Decoration extends GameObject {
-  readonly body: Sprite;
-
   constructor(config: DecorationConfig) {
     const { id, key, isSolid = false, drawLayer = null, x = 0, y = 0 } = config;
 
@@ -23,7 +21,7 @@ export class Decoration extends GameObject {
     const { baseFrame, size } = decorations.get(key);
     const { hFrames, vFrames, frameSize, position, resource } = assets.get('tileset');
 
-    this.body = new Sprite({
+    const body = new Sprite({
       id,
       resource,
       frameSize: frameSize ?? new Vector2(toGridSize(size?.x ?? 1), toGridSize(size?.y ?? 1)),
@@ -36,7 +34,7 @@ export class Decoration extends GameObject {
       // collision (both based on this GameObject's own position) at ground level.
       position: position ?? new Vector2(0, size ? toGridSize(-(size.y - 1)) : 0),
     });
-    this.addChild(this.body);
+    this.addChild(body);
 
     // Mark decorations to render on top or bottom of characters
     this.drawLayer = drawLayer;

@@ -10,7 +10,6 @@ export class Sprite extends GameObject {
   private readonly _frameSize: Vector2;
   private readonly _frameOriginSize: Vector2;
   private readonly _hFrames: number;
-  readonly vFrames: number;
   frame: number;
   private readonly _scale: number;
   readonly animations: Animations | null;
@@ -21,7 +20,7 @@ export class Sprite extends GameObject {
     frameSize = new Vector2(GRID_SIZE, GRID_SIZE), // size of the crop of the image
     frameOriginSize = frameSize, // size of the grid cell used to locate `frame`'s top-left corner
     hFrames = 1, // how the sprite arranged horizontally
-    vFrames = 1, // how the sprite arranged vertically
+    vFrames, // how the sprite arranged vertically
     frame = 0, // which frame we want to show
     scale = 1, // how large to draw this image
     position = new Vector2(0, 0), // where to draw it (from top left corner)
@@ -31,11 +30,22 @@ export class Sprite extends GameObject {
       id,
     });
 
+    if (
+      !Number.isSafeInteger(hFrames) ||
+      hFrames < 1 ||
+      (vFrames !== undefined && (!Number.isSafeInteger(vFrames) || vFrames < 1))
+    ) {
+      throw new RangeError(`Sprite "${id}": frame counts must be positive safe integers`);
+    }
+
+    if (!Number.isSafeInteger(frame) || frame < 0 || (vFrames !== undefined && frame >= hFrames * vFrames)) {
+      throw new RangeError(`Sprite "${id}": initial frame ${frame} is out of bounds`);
+    }
+
     this._resource = resource;
     this._frameSize = frameSize;
     this._frameOriginSize = frameOriginSize;
     this._hFrames = hFrames;
-    this.vFrames = vFrames;
     this.frame = frame;
     this._scale = scale;
     this.position = position;

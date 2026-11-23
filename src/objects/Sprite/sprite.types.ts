@@ -16,7 +16,7 @@ export type SpriteConfig = {
    */
   frameOriginSize: Vector2;
   hFrames: number;
-  vFrames: number;
+  vFrames: number; // When supplied, bounds the initial frame to hFrames * vFrames entries.
   frame: number;
   scale: number;
   position: Vector2;
