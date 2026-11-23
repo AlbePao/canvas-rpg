@@ -1,11 +1,11 @@
 import type { FrameIndexPattern } from '../FrameIndexPattern';
-import type { AnimationPattern } from './animations.types';
+import type { AnimationsPatterns } from './animations.types';
 
 export class Animations {
   private _activeKey: string;
   private _isPaused = false;
 
-  constructor(private readonly _patterns: AnimationPattern) {
+  constructor(private readonly _patterns: AnimationsPatterns) {
     const [firstKey] = this._patterns.keys();
     this._activeKey = firstKey;
   }

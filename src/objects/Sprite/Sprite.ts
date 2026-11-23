@@ -65,16 +65,16 @@ export class Sprite extends GameObject {
       return;
     }
 
-    const x = this._frameOriginX(this.frame);
-    const y = this._frameOriginY(this.frame);
+    const frameCoordX = this._frameOriginX(this.frame);
+    const frameCoordY = this._frameOriginY(this.frame);
 
     const frameSizeX = this._frameSize.x;
     const frameSizeY = this._frameSize.y;
 
     ctx.drawImage(
       this._resource.image,
-      x, // Top X corner of frame
-      y, // Top Y corner of frame
+      frameCoordX, // Top X corner of frame
+      frameCoordY, // Top Y corner of frame
       frameSizeX, // How much to crop from the sprite sheet (X)
       frameSizeY, // How much to crop from the sprite sheet (Y)
       drawPosX, // Where to place this on canvas tag X (0)
