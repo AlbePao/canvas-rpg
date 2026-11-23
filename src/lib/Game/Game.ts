@@ -151,4 +151,4 @@ class GameSingleton extends Singleton<GameSingleton>() {
 }
 
 // Singleton instance
-export const Game = new GameSingleton();
+export const Game = GameSingleton.getInstance();

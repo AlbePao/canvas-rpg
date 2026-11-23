@@ -33,4 +33,4 @@ class GameLoaderSingleton extends Singleton<GameLoaderSingleton>() {
 }
 
 // Singleton instance
-export const GameLoader = new GameLoaderSingleton();
+export const GameLoader = GameLoaderSingleton.getInstance();

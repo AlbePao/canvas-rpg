@@ -71,4 +71,4 @@ class GameRegistrySingleton extends Singleton<GameRegistrySingleton>() {
   }
 }
 
-export const GameRegistry = new GameRegistrySingleton();
+export const GameRegistry = GameRegistrySingleton.getInstance();
