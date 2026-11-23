@@ -26,21 +26,21 @@ class GameRegistrySingleton extends Singleton<GameRegistrySingleton>() {
 
   loadLevelsIdsRegistry(levelIds: string[]): void {
     if (this._levelsIdsRegistry.size > 0) {
-      throw new Error('Levels IDs registry has already been loaded.');
+      throw new DOMException('Levels IDs registry has already been loaded.', 'InvalidStateError');
     }
     this._levelsIdsRegistry = new Set(levelIds);
   }
 
   loadAnimationsRegistry(data: AnimationRegistry): void {
     if (this._animationsRegistry !== null) {
-      throw new Error('Animations registry has already been loaded.');
+      throw new DOMException('Animations registry has already been loaded.', 'InvalidStateError');
     }
     this._animationsRegistry = data;
   }
 
   getFirstLevelId(): string {
     if (this._levelsIdsRegistry.size === 0) {
-      throw new Error('No levels have been loaded into the registry.');
+      throw new DOMException('No levels have been loaded into the registry.', 'NotFoundError');
     }
 
     return Array.from(this._levelsIdsRegistry)[0];

@@ -92,7 +92,7 @@ export class Main extends GameObject {
       const { id, hero } = Game.level ?? {};
 
       if (!id || !hero) {
-        throw new Error('No level is currently loaded when starting a battle');
+        throw new DOMException('No level is currently loaded when starting a battle', 'InvalidStateError');
       }
 
       // Save level id and hero position before battle starts so we can restore it after battle ends

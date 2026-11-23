@@ -156,7 +156,10 @@ export class SettingsMenu extends GameObject {
       const cachedLine = this._optionsTextCache.get(`${key}_${selectedIndex}`);
 
       if (!cachedLine) {
-        throw new Error(`SettingsMenu: missing cached option text for "${key}_${selectedIndex}"`);
+        throw new DOMException(
+          `SettingsMenu: missing cached option text for "${key}_${selectedIndex}"`,
+          'InvalidStateError',
+        );
       }
 
       const optionTextWidth = drawTextLine(ctx, cachedLine.words, optionX, cursorY);

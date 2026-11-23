@@ -26,7 +26,7 @@ export class LevelBuilder extends Level {
     const level = levels.get(config.id);
 
     if (!level) {
-      throw new Error(`LevelBuilder: level "${config.id}" not found in GameRegistry`);
+      throw new DOMException(`LevelBuilder: level "${config.id}" not found in GameRegistry`, 'NotFoundError');
     }
 
     const { id, background, heroDefaultPosition, tiles, walls, gameObjects } = level;
@@ -79,7 +79,7 @@ export class LevelBuilder extends Level {
     const hasDuplicatedIds = checkDuplicateIds(gameObjects);
 
     if (hasDuplicatedIds) {
-      throw new Error('LevelBuilder: two or more objects have the same id');
+      throw new TypeError('LevelBuilder: two or more objects have the same id');
     }
 
     // Add game objects
@@ -103,7 +103,7 @@ export class LevelBuilder extends Level {
         this.addChild(new Exit(gameObject));
       } else {
         const exhaustiveCheck: never = type;
-        throw new Error(`LevelBuilder: unhandled game object type "${String(exhaustiveCheck)}"`);
+        throw new TypeError(`LevelBuilder: unhandled game object type "${String(exhaustiveCheck)}"`);
       }
     }
 

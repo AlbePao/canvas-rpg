@@ -69,7 +69,7 @@ export class LevelLoader {
         const validatedLevel = this._getLevelMapSchema().parse(rawLevelData);
 
         if (validatedLevel.id !== levelId) {
-          throw new Error(`Level ID mismatch: JSON has "${validatedLevel.id}" but expected "${levelId}"`);
+          throw new TypeError(`Level ID mismatch: JSON has "${validatedLevel.id}" but expected "${levelId}"`);
         }
 
         this._levels.load({ [levelId]: validatedLevel });
@@ -85,7 +85,7 @@ export class LevelLoader {
 
   private _getLevelMapSchema(): z.ZodType<LevelMap> {
     if (!this._levelMapSchema) {
-      throw new Error('LevelLoader has not been initialized with level schemas.');
+      throw new DOMException('LevelLoader has not been initialized with level schemas.', 'InvalidStateError');
     }
 
     return this._levelMapSchema;

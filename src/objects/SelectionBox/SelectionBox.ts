@@ -45,7 +45,7 @@ export class SelectionBox<K extends string = string> extends GameObject {
     });
 
     if (options.length < 1) {
-      throw new Error('SelectionBox: options array must have at least one element');
+      throw new RangeError('SelectionBox: options array must have at least one element');
     }
 
     const { containerSizes } = Game;

@@ -14,7 +14,7 @@ export class Registry<V> {
     }
 
     if (this._isLoaded) {
-      throw new Error(`Registry "${this._name}" has already been loaded.`);
+      throw new DOMException(`Registry "${this._name}" has already been loaded.`, 'InvalidStateError');
     }
 
     if (data instanceof Map) {
@@ -30,7 +30,7 @@ export class Registry<V> {
     const value = this._map.get(key);
 
     if (!value && value !== 0) {
-      throw new Error(`Key "${key}" does not exist in registry "${this._name}".`);
+      throw new DOMException(`Key "${key}" does not exist in registry "${this._name}".`, 'NotFoundError');
     }
 
     return value;

@@ -62,7 +62,7 @@ class GameSingleton extends Singleton<GameSingleton>() {
     const gameContainer = document.querySelector<HTMLDivElement>(this._containerId);
 
     if (!gameContainer) {
-      throw new Error('Game: game container not found');
+      throw new DOMException('Game: game container not found', 'NotFoundError');
     }
 
     gameContainer.style.width = `${canvasWidth * 3.5}px`;
@@ -83,7 +83,7 @@ class GameSingleton extends Singleton<GameSingleton>() {
     const ctx = canvas.getContext('2d');
 
     if (!ctx) {
-      throw new Error('Game: canvas context is not defined');
+      throw new DOMException('Game: canvas context is not defined', 'NotSupportedError');
     }
 
     // Load game settings from localStorage or set defaults
