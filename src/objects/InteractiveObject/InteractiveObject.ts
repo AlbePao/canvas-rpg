@@ -2,7 +2,7 @@ import { GameObject } from '../../lib/GameObject';
 import { StoryFlags } from '../../lib/StoryFlags';
 import type { InteractionContent, InteractionContentConfig, InteractiveObjectConfig } from './interactiveObject.types';
 
-export class InteractiveObject extends GameObject {
+export abstract class InteractiveObject extends GameObject {
   private readonly _textContent: InteractionContentConfig[];
   private readonly _textPortraitFrame: number | null;
 
@@ -16,7 +16,7 @@ export class InteractiveObject extends GameObject {
     this._textPortraitFrame = portraitFrame;
   }
 
-  getContent(): InteractionContent | null {
+  protected getContent(): InteractionContent | null {
     if (this._textContent.length === 0) {
       return null;
     }

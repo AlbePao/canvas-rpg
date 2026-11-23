@@ -6,7 +6,7 @@ import { Item } from './Item';
 import type { CollectibleItemConfig, CollectibleItemData } from './item.types';
 
 export class CollectibleItem extends Item {
-  override data: CollectibleItemData;
+  readonly data: CollectibleItemData;
 
   constructor(config: CollectibleItemConfig) {
     super(config);
@@ -31,7 +31,7 @@ export class CollectibleItem extends Item {
     });
   }
 
-  onCollideWithHero(): void {
+  protected onCollideWithHero(): void {
     // Remove this instance from the scene
     this.destroy();
 

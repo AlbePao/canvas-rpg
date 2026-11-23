@@ -16,7 +16,7 @@ import { getStandingFrame } from './movableObject.utils';
  * optional sequenced `behaviorConfig` loop (walk/stand steps used by Npc patrols).
  */
 export abstract class MovableObject extends InteractiveObject {
-  readonly defaultFacingDirection: Directions = 'down';
+  protected readonly defaultFacingDirection: Directions = 'down';
   facingDirection = this.defaultFacingDirection;
   protected abstract readonly body: Sprite;
   protected isLocked = false;

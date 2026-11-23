@@ -192,8 +192,8 @@ export class Main extends GameObject {
       Game.level.destroy();
     }
 
-    Game.level = newLevelInstance;
-    this.addChild(Game.level);
+    Game.setLevel(newLevelInstance);
+    this.addChild(newLevelInstance);
   }
 
   drawBackground(ctx: CanvasRenderingContext2D): void {

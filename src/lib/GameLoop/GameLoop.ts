@@ -8,11 +8,11 @@ export class GameLoop {
   private _isRunning = false;
 
   constructor(
-    readonly update: UpdateCallback,
-    readonly render: RenderCallback,
+    private readonly _update: UpdateCallback,
+    private readonly _render: RenderCallback,
   ) {}
 
-  mainLoop = (timestamp: number): void => {
+  private readonly _mainLoop = (timestamp: number): void => {
     if (!this._isRunning) {
       return;
     }
@@ -28,14 +28,14 @@ export class GameLoop {
 
     // Fixed time step updates if there's enough accumulated time to run one or more fixed updates
     while (this._accumulatedTime >= this._timeStep) {
-      this.update(this._timeStep); // Here we pass the fixed time step
+      this._update(this._timeStep); // Here we pass the fixed time step
       this._accumulatedTime -= this._timeStep;
     }
 
     // Render
-    this.render();
+    this._render();
 
-    this._rafId = requestAnimationFrame(this.mainLoop);
+    this._rafId = requestAnimationFrame(this._mainLoop);
   };
 
   start(): void {
@@ -45,7 +45,7 @@ export class GameLoop {
 
     this._isRunning = true;
     this._lastFrameTime = performance.now();
-    this._rafId = requestAnimationFrame(this.mainLoop);
+    this._rafId = requestAnimationFrame(this._mainLoop);
   }
 
   stop(): void {

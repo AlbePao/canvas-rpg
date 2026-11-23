@@ -27,14 +27,22 @@ class GameSingleton extends Singleton<GameSingleton>() {
   private _containerId = '';
 
   // Canvas size is set once at init and never changes afterwards, so it's cached to avoid unnecessary new allocations
-  get containerSizes(): GameCanvasSize {
+  get containerSizes(): Readonly<GameCanvasSize> {
     return this._containerSizes;
   }
   private readonly _containerSizes: GameCanvasSize = { canvasWidth: 0, canvasHeight: 0 };
 
   // Shared keyboard state, and the currently active level - exposed here so GameObjects can read them directly
   readonly input = new Input();
-  level: Level | null = null;
+
+  get level(): Level | null {
+    return this._level;
+  }
+  private _level: Level | null = null;
+
+  setLevel(level: Level | null): void {
+    this._level = level;
+  }
 
   /**
    * Initialize the game: load levels, set up the scene, and start the game loop

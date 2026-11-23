@@ -9,10 +9,25 @@ import type { GameObjectConfig, GameObjectDrawLayer } from './gameObject.types';
 export class GameObject {
   readonly id: string;
   position: Vector2;
-  children: GameObject[] = [];
-  parent: GameObject | null = null;
+  private _children: GameObject[] = [];
+  private _parent: GameObject | null = null;
   isSolid = false;
-  drawLayer: GameObjectDrawLayer | null = null;
+
+  get drawLayer(): GameObjectDrawLayer | null {
+    return this._drawLayer;
+  }
+  set drawLayer(drawLayer: GameObjectDrawLayer | null) {
+    if (this._drawLayer === drawLayer) {
+      return;
+    }
+
+    if (this._parent) {
+      throw new DOMException('GameObject: drawLayer cannot be changed after adding to a parent.', 'InvalidStateError');
+    }
+
+    this._drawLayer = drawLayer;
+  }
+  private _drawLayer: GameObjectDrawLayer | null = null;
 
   private _hasReadyBeenCalled = false;
   private readonly _pendingTimeouts = new Set<number>();
@@ -30,7 +45,7 @@ export class GameObject {
 
   stepEntry(delta: number): void {
     // Call updates on all children first
-    this.children.forEach((child) => {
+    this._children.forEach((child) => {
       child.stepEntry(delta);
     });
 
@@ -105,23 +120,27 @@ export class GameObject {
 
     Events.unsubscribe(this);
 
-    for (const child of this.children) {
+    for (const child of this._children) {
       child.destroy();
     }
-    this.parent?.removeChild(this);
+    this._parent?.removeChild(this);
   }
 
   // Other Game Objects are nestable inside this one
   addChild(gameObject: GameObject): void {
-    gameObject.parent = this;
-    this.children.push(gameObject);
+    gameObject._parent = this;
+    this._children.push(gameObject);
     this._addToLayerBucket(gameObject);
   }
 
   removeChild(gameObject: GameObject): void {
     Events.unsubscribe(gameObject);
-    this.children = this.children.filter((g) => gameObject !== g);
+    this._children = this._children.filter((g) => gameObject !== g);
     this._removeFromLayerBucket(gameObject);
+
+    if (gameObject._parent === this) {
+      gameObject._parent = null;
+    }
   }
 
   private _addToLayerBucket(child: GameObject): void {
